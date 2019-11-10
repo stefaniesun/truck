@@ -1,0 +1,119 @@
+<template>
+  <div class="user-center" ref="userCenter">
+    <header>
+      <h2>个人中心</h2>
+      <i class="back iconfont icon-fanhui" @click="goBack()"></i>
+      <i class="home iconfont icon-shouye" @click="goHome()"></i>
+    </header>
+
+    <div class="avatar-wrap">
+      <div class="content">
+        <div class="avatar-img">
+          <img :src="userImage" alt="avatar">
+        </div>
+        <h4 class="username">用户名：{{userName}}</h4>
+      </div>
+    </div>
+      <div class="container">
+        <tab></tab>
+      </div>
+      <router-view></router-view>
+    <footer class="footer"></footer>
+  </div>
+</template>
+
+<script>
+  let vm;
+  import Tab from '@/components/tab'
+  export default {
+    name: 'userCenter',
+    components: {
+      Tab
+    },
+    data() {
+      return {
+        isFixed: 'fixed',
+        userName: '',
+        userImage: ''
+      }
+    },
+
+    mounted() {
+      vm = this;
+      if(process.env.NODE_ENV !== 'development'){
+        let parame = {
+          outkey: sessionStorage.getItem('outkey'),
+          openid: sessionStorage.getItem('openid')
+        }
+        vm.axios.post(this.api + this.urlApi.getUserInfo,parame).then((response) => {
+          if(response.status){
+          	let content = response.content;
+            vm.userName = content.nickname;
+            vm.userImage = content.headimgurl;
+          }
+        })
+      }else {
+        vm.userName = '测试用户';
+        vm.userImage = require('../assets/img/baseImg.png');
+      }
+    },
+
+    methods: {
+      goBack() {
+        vm.$router.goBack();
+      },
+      goHome() {
+        vm.$router.push('/productQuery')
+      },
+    }
+  }
+</script>
+
+<style lang="less" scoped>
+  @import "../assets/css/common.less";
+
+  .avatar-wrap{
+    height: 250*@basePX;
+    background: #fff url(../assets/img/user_bg.png);
+    background-size: 100% 100%;
+    text-align: center;
+    .content{
+      height: 100%;
+      padding-top: 88*@basePX;
+      h4{
+        font-weight: normal;
+        font-size: 32*@basePX;
+        color: #4c4c4c;
+      }
+      .avatar-img{
+        width: 120*@basePX;
+        height: 120*@basePX;
+        border: 2px solid #fff;
+        .borderRadius(50%);
+        overflow: hidden;
+        margin: 48*@basePX auto 10*@basePX;
+        img{
+          width: 100%;
+          height: 100%;
+          max-height: 100%;
+          max-width: 100%;
+        }
+      }
+    }
+  }
+  .footer{
+    height: 24*@basePX;
+    background-color: @topBg;
+    bottom: 0;
+    width: 100%;
+    position: fixed;
+  }
+
+    .container{
+      padding-top: 30*@basePX;
+      width: 92%;
+      margin: 0 auto;
+
+    }
+
+</style>

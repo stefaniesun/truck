@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>产品SKU日历库存管理</title>
+<link rel="stylesheet" type="text/css" href="../css/xieyaozhong.css"></link>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/bootstrap/easyui.css"></link>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/icon.css"></link>
+
+<link rel="stylesheet" type="text/css" href="../css/simple-calendar.css"></link>
+<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"></link>
+
+<script type="text/javascript" src="../js/library/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="../js/library/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/library/simple-calendar.js"></script>
+<script type="text/javascript" src="../js/library/cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="../js/library/common/cookie2.js"></script>
+<script type="text/javascript" src="../js/library/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../js/library/common/common.js"></script>
+<script type="text/javascript" src="../js/library/common/customUi.js" defer="defer"></script>
+
+<script type="text/javascript" src="../js/js_ptview/ptviewSkuStock.js" defer="defer"></script>
+</head>
+
+<body style="width:100%;text-align:left;background-color:white;">
+<div style="width:100%;">
+	<div id="skuStockButton" style="float:left;"></div>
+	<div style="float:left;margin-left:10px;">
+		<msg id="tkviewTypeDiv" style="display:block;"></msg>
+	</div>
+</div>
+ <br>
+<div id="dateTabs" style="width:600px;height:30px;margin-top:8px;" class="easyui-tabs"></div>
+  <div id='container'></div>
+  
+  <div class="bs-example" style="width:640px;height:450px;margin-top:-44px">
+	  <p><code id="tkviewStockCode"></code></p>
+	  <p id="noneMsg" style="margin-top:30px;margin-left:20px;display:none;">暂无关联单品库存信息</p>
+	  <div id="tableDiv" class="table-bordered" style="height:220px;overflow:auto;">
+		  	<table class="table table-bordered price-table" style="display:none;">
+		      <thead>
+		        <tr>
+		          <th>单品名称</th>
+		          <th>供应商</th>
+		          <th>成本价</th>
+		          <th>库存</th>
+		          <th>成本说明</th>
+		        </tr>
+		      </thead>
+		      <tbody id="stockTbody"></tbody>
+		    </table>
+	  	</div>
+
+	    <form class="form-inline" style="position:absolute;bottom:15px;display:none;">
+		    <div class="form-group">
+		    <label>库存</label>
+		    <input type="text" class="form-control" id="stockForm" style="width:80px;"/>&nbsp;
+		  </div>
+		  <div class="form-group">
+		    <label>分销价</label>
+		    <input type="text" class="form-control" id="bPriceForm" style="width:80px;"/>&nbsp;
+		  </div>
+		  <div class="form-group">
+		    <label>&nbsp;&nbsp;散客价</label>
+		    <input type="text" class="form-control" id="cPriceForm" style="width:80px;"/>&nbsp;
+		  </div>
+		  <div class="form-group aPrice">
+		    <label>单人分销价</label>
+		    <input type="text" class="form-control" id="aBPriceForm" style="width:80px;"/>&nbsp;
+		  </div>
+		  <br/>
+		  <div class="form-group aPrice">
+		    <label>单人散客价</label>
+		    <input type="text" class="form-control" id="aCPriceForm" style="width:80px;"/>&nbsp;
+		  </div>
+		  <div class="form-group price">
+		    <label>1/2分销价</label>
+		    <input type="text" class="form-control" id="sBPriceForm" style="width:80px;"/>&nbsp;
+		  </div>
+		  <div class="form-group price">
+		    <label>1/2散客价</label>
+		    <input type="text" class="form-control" id="sCPriceForm" style="width:80px;"/>&nbsp;
+		  </div>
+		  <div class="form-group price">
+		    <label>3/4分销价</label>
+		    <input type="text" class="form-control" id="mBPriceForm" style="width:80px;"/>&nbsp;
+		  </div>
+		  <div class="form-group price" id="mcPriceDiv">
+		    <label>3/4散客价</label>
+		    <input type="text" class="form-control" id="mCPriceForm" style="width:80px;"/>&nbsp;
+		  </div>
+		  <button type="button" class="btn btn-warning" id="submit_btn">保存</button>
+	</form>
+  </div>
+</body>
+</html>

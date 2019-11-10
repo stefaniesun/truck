@@ -1,0 +1,327 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+html{
+    height: 100%;
+}
+body{
+    height: 100%;
+    background-image: url('../image/cruise_contentBackground.png');
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    padding: 35px 0;
+    font-family: 微软雅黑;
+}
+.clear{
+    clear: both;
+}
+.pull-left{
+    float: left;
+}
+.pull-right{
+    float: right;
+}
+.cruise-content{
+    height: 100%;
+    width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 3px;
+    position: relative;
+    padding-top: 70px;
+    box-sizing: border-box;
+}
+.cruise-contentHeader{
+    height: 70px;
+    line-height: 70px;
+    font-size: 20px;
+    color: #000;
+    position: fixed;
+    top: 35px;
+    left: 0;
+    width: 100%;
+    padding: 0 42px;
+    z-index: 100;
+    text-align: center;
+}
+.cruise-contentHeader>div{
+    width: 1182px;
+    background-color: #fff;
+    z-index: 100;
+    padding: 0 40px 0 40px;
+    margin-left: -16px;
+    display: inline-block;
+}
+
+
+
+.the-OuterLayer{
+	position:relative;
+	z-index:10;
+}
+.fill-inInformation{
+    border-radius: 7px;
+    padding: 70px;
+    position: absolute;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    height: 100%;
+    margin-top: -70px;
+    z-index: 29;
+}
+.border-ddd{
+    min-width: 1099px;
+    max-width: 1200px;
+    height: 500px;
+    border: 1px solid #cccccc;
+    position: fixed;
+    margin-left: -25px;
+    z-index: 6;
+    border-radius: 10px;
+    text-align: center;
+}
+.commodity-information{
+    font-size: 20px;
+    color:#000;
+}
+.commodity-information>div{
+    margin-top: 15px;
+}
+.commodity-information>div:nth-of-type(2){
+    width: 330px;
+}
+.commodity-information>div:nth-of-type(3){
+    width: 222px;
+}
+.commodity-information>div:nth-of-type(4){
+    width: 270px;
+}
+.commodity-information>div:nth-of-type(5){
+    width: 212px;
+}
+.fill-inContent{
+    padding-top:80px;
+    position: relative;
+    width: 1070px;
+}
+.border-ddd-border-top{
+    border-top: 1px solid #cccccc;
+    z-index: 100;
+    height: 1px;
+    width: 1059px;
+    display: inline-block;
+    position: absolute;
+    left: 55px;
+    margin-top: 0;
+}
+.border-ddd-border-bottom{
+    border-top: 1px solid #cccccc;
+    z-index: 100;
+    height: 1px;
+    width: 1059px;
+    display: inline-block;
+    position: absolute;
+    left: 55px;
+    bottom:35px;
+}
+input{
+    appearance:none;
+}
+.fill-inContent>div:nth-of-type(1){
+    width: 148px;
+    height: 53px;
+    background-image: url('../image/travel_person_background.png');
+    text-align: center;
+    line-height: 46px;
+    font-size: 20px;
+    color:#fff;
+    position: absolute;
+    left: -65px;
+    top:27px;
+}
+.direct-input{
+    width: 240px;
+    font-size: 18px;
+    color:#333;
+    margin-right: 25px;
+    position: relative;
+    margin-bottom: 20px;
+}
+.direct-input>p{
+    height: 30px;
+}
+.drop-downBtn{
+    width: 40px;
+    height: 30px;
+    position: absolute;
+    right:0;
+    top:35px;
+    border-left: 1px solid #ccc;
+    text-align: center;
+    line-height: 30px;
+}
+.btn{
+	border:0!important;
+	border-left:1px solid #ccc!important;
+}
+.direct-input>div>img{
+    width: 12px;
+    height: 10px;
+}
+.direct-input input{
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 10px;
+    border:1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    background-color:#fff;
+}
+.direct-input>div{
+	 width: 100%;
+    height: 40px;
+    line-height: 40px;
+    /* padding-left: 10px; */
+    border:1px solid #ccc;
+    border-radius: 5px;
+}
+.direct-input>div>input{
+	border:0;
+	background-color:#fff!important;
+}
+.passport-input{
+    width: 325px;
+    margin-right: 31px;
+    font-size: 18px;
+    color:#333;
+    position: relative;
+    margin-bottom: 20px;
+}
+.passport-input>p{
+    height: 30px;
+}
+.passport-input>div{
+    width: 100%;
+    height: 40px;
+    border: 1px solid #ccc;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 5px!important;
+}
+.passport-input>div input{
+    border:0;
+ 	width: 100%;
+    height: 38px;
+    outline: none;
+}
+.passport-input>div>img{
+    width: 16px;
+    height: 15px;
+}
+.passport-input>input{
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 10px;
+    border:1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+
+
+
+
+.cruise-contentFooter{
+    width: 100%;
+    text-align: center;
+    margin-top: 70px;
+    position: relative;
+    z-index: 7;
+}
+.cruise-contentFooter>div{
+    width:150px;
+    height: 42px;
+    line-height: 42px;
+    background-color: #03418d;
+    display: inline-block;
+    border-radius: 5px;
+    font-size: 20px;
+    color:#fff;
+    cursor: pointer;
+}
+
+
+.border-bottom{
+    width: 100%;
+    height: 35px;
+    position: fixed;
+    bottom:35px;
+    left: 0;
+    text-align: center;
+    z-index: 500;
+}
+.border-bottom>div{
+    width: 1200px;
+    height: 35px;
+    display: inline-block;
+    position: relative;
+}
+.border-bottom>div>div{
+    width: 1170px;
+    position: absolute;
+    height: 35px;
+    left: 5px;
+    background-color: #fff;
+}
+
+
+
+
+
+
+/*预约成功*/
+.appointment-success{
+    width: 605px;
+    height: 345px;
+    background-color: #fff;
+    border-radius: 3px;
+    text-align: center;
+    display: none;
+}
+.appointment-successText{
+    text-align: center;
+    font-size: 30px;
+    color:#4c4c4c;
+    height: 30px;
+    line-height: 30px;
+    margin-top: 123px;
+    display: inline-block;
+}
+.appointment-successText>img{
+    width: 36px;
+    height: 36px;
+    float: left;
+}
+.appointment-successText>span{
+   float: left;
+}
+.then-aboutBtn{
+    width: 180px;
+    height: 40px;
+    font-size: 20px;
+    border-radius: 7px;
+    line-height: 40px;
+    color:#fff;
+    background-color: #03418d;
+    display: inline-block;
+    margin-top: 105px;
+    cursor: pointer;
+}

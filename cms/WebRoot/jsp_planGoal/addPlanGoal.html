@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>新增计划目标</title>
+</head>
+<body>
+<center>
+	<form>
+		<table cellpadding="4" cellspacing="4">
+			<tr>
+				<th style="text-align:right;">类型</th>
+				<td>
+					<input id="typeForm" type="text" class="easyui-combobox" style="width:300px;"
+						value="" data-options="panelHeight:'auto',required:true,
+					    valueField:'value',textField:'text',
+						data: [{value: '0',text: '需求'},
+						{value: '1',text: 'bug'},
+						{value: '2',text: '优化'},
+						{value: '3',text: '其他'}]" /> 
+				</td>
+			</tr>
+			<tr>
+				<th style="text-align:right;">状态</th>
+				<td>
+				 	<input value="1" type="radio" name="radioState" checked="checked"/>未完成
+					<input value="0" type="radio" name="radioState"/>完成
+					<input type="hidden" id="stateForm" value="1"/>
+				</td>
+			</tr>
+			<tr>
+				<th style="text-align:right;">是否延迟 </th>
+				<td>
+				 	<input value="1" type="radio" name="radioDelay" checked="checked"/>否
+					<input value="0" type="radio" name="radioDelay"/>是
+					<input type="hidden" id="delayForm" value="1"/>
+				</td>
+			</tr>
+			<tr>
+				<th style="text-align:right;">内容</th>
+				<td>
+					<textarea id="goalForm" style="width:294px;height:100px;resize:none;" class="easyui-validatebox" 
+					data-options="required:true,validType:'length[1,99999]'"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<th style="text-align:right;">发布人</th>
+				<td>
+					<input id="founderForm" type="text" style="width:300px;" />
+				</td>
+			</tr>
+			<tr>
+				<th style="text-align:right;">负责人</th>
+				<td>
+					<input id="personForm" type="text" style="width:300px;" />
+				</td>
+			</tr>
+			<tr>
+				<th style="text-align:right;">完成时间</th>
+				<td>
+					<input id="endTimeForm" type="text" style="width:300px;" class="easyui-datetimebox" data-options="required:true" />
+				</td>
+			</tr>
+			<tr>  
+				<th style="text-align:right;">备注</th>
+				<td>
+					<textarea id="remarkForm" style="width:294px;height:30px;resize:none;" class="easyui-validatebox" data-options="validType:'length[1,150]'"></textarea>
+				</td>
+			</tr>
+		</table>
+	</form>
+</center>
+</body>
+</html>

@@ -1,0 +1,484 @@
+<template>
+  <div id="travelInstructions">
+    <div class="content-display" v-if="list.length > 0">
+      <div class="print" @click="print">打 印</div>
+      <div class="checkBox distribution-display"><input type="checkbox" :checked="checked.distribution" @click="checked.distribution = !checked.distribution"/>显示同业价</div>
+      <div class="checkBox visaInfo-display"><input type="checkbox" :checked="checked.visaInfo" @click="checked.visaInfo = !checked.visaInfo"/>签证信息</div>
+      <div class="checkBox reserve-display"><input type="checkbox" :checked="checked.reserve" @click="checked.reserve = !checked.reserve"/>预订须知</div>
+      <div class="checkBox back-display"><input type="checkbox" :checked="checked.back" @click="checked.back = !checked.back"/>退改说明</div>
+      <div class="checkBox cost-display"><input type="checkbox" :checked="checked.cost" @click="checked.cost = !checked.cost"/>费用说明</div>
+      <div class="content-title">{{title}}</div>
+      <div class="price-details">价格详情<span>（以下价格仅限{{date}}当天有效）</span></div>
+      <div class="details-content">
+        <div class="details-title">
+          <div>舱型</div>
+          <div>可住</div>
+          <div v-if="checked.distribution">同业价</div>
+          <div :class="checked.distribution ? '':'checked'">直客价</div>
+        </div>
+        <ul class="clearfloat">
+          <li class="clearfloat" v-for="num in content">
+            <div>{{num.name}}</div>
+            <div>{{num.num}}</div>
+            <div v-if="checked.distribution">&yen{{num.price}}</div>
+            <div :class="checked.distribution ? '':'checked'">&yen{{num.salePrice}}</div>
+          </li>
+        </ul>
+      </div>
+      <div class="price-details">行程介绍</div>
+      <div class="detail-content">
+        <div class="voyage-group">
+          <div class="left-line"></div>
+          <div class="voyage-list" v-for="(item, index) in tripPlanList">
+            <div class="voyage-title">
+              <span class="icon-circle"></span>
+              <span class="day">Day{{item.sort}}</span>
+              <span class="date">{{item.date}} {{item.weekday}} ,</span>
+              <span v-if="item.planType === 'START_PORT'"> 出发日 ,</span>
+              <span>{{item.nameCn}}</span>
+            </div>
+
+            <div class="repast">
+              <div class="repast-content">
+                <div class="diet">
+                  <svg class="icon">
+                    <use xlink:href="#icon-canju"></use>
+                  </svg>
+                  早餐: {{item.breakfast}} /
+                  午餐: {{item.lunch}} /
+                  晚餐: {{item.dinner}}
+                </div>
+                <div class="accom">
+                  <svg class="icon">
+                    <use xlink:href="#icon-icon1"></use>
+                  </svg>
+                  住宿: {{item.putUp}}
+                </div>
+              </div>
+            </div>
+
+            <div class="voyage-content">
+              <div class="portNameCn" v-if="index===0">{{item.portNameCn}}</div>
+              <div class="detail clearfloat">
+                <div class="text" v-html="item.detail">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tips">
+          <span>提示 : </span>
+          <span>以上行程日期和时间均为当地时间，可能会因为天气、路况等原因做相应调整，请以最终的行程安排为准。</span>
+        </div>
+      </div>
+      <div class="price-details" v-if="checked.cost">费用说明</div>
+      <div class="explain-details" v-html="voyage.infoCost" v-if="checked.cost"></div>
+      <div class="price-details" v-if="checked.visaInfo">签证信息</div>
+      <div class="explain-details" v-html="voyage.infoVisa" v-if="checked.visaInfo"></div>
+      <div class="price-details" v-if="checked.reserve">预定须知</div>
+      <div class="explain-details" v-html="voyage.infoNotice" v-if="checked.reserve"></div>
+      <div class="price-details" v-if="checked.back">退改说明</div>
+      <div class="explain-details" v-html="voyage.infoRefund" v-if="checked.back"></div>
+    </div>
+    <div class="blank" v-if="list.length == 0">
+      <div class="no-content">
+        <img src="../assets/img/noContent.png">
+        <div>暂时没有相关内容</div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+  let vm;
+  import common from '../assets/js/common'
+  export default{
+    name: 'travelInstructions',
+    data(){
+      return {
+        date: '',//当前时间
+        title: '',
+        content: [],
+        list: [],
+        tripPlanList: [],
+        travelDate: '',
+        checked: {
+          distribution:false,
+          visaInfo:false,
+          reserve:false,
+          back:false,
+          cost:false,
+        },
+        voyage:{},
+      }
+    },
+    mounted(){
+      vm = this;
+      let numberCode = sessionStorage.numberCode;
+      vm.axios.post(this.api + this.urlApi.getVoyageDetail, {
+        numberCode: numberCode
+      }).then((response) => {
+        if (response.status) {
+          let voyage = response.content.voyage;
+          vm.voyage = voyage;
+          vm.date = new Date(voyage.date).Format("yyyy-MM-dd");
+          vm.title = voyage.name;
+          vm.content = [];
+          if (response.content.tripPlanList.length > 0) {
+            vm.setVoyage(response.content.tripPlanList)
+          }
+          for (let num in response.content.cabiList) {
+            let json = response.content.cabiList[num]
+            let obj = {};
+            let level = sessionStorage.saleLevel;
+            let distributionPrice = 0;
+            for (let i in json.cabinPriceList) {
+              if (json.cabinPriceList[i].level == level) {
+                if (json.cabinPriceList[i].price) {
+                  distributionPrice = json.price - json.cabinPriceList[i].price;
+                } else {
+                  distributionPrice = json.price;
+                }
+                break;
+              }
+            }
+            obj = {
+              name: json.name,
+              num: json.volume + '人',
+              price: json.price,
+              salePrice: json.salePrice
+            };
+            vm.content.push(obj);
+          }
+          vm.list = [];
+          for (let o in response.content.tripPlanList) {
+            let json = response.content.tripPlanList[o];
+            if (json.detail) {
+              vm.list.push(json.detail);
+            }
+          }
+        }
+      })
+    },
+    methods: {
+      print: function () {
+        window.print();
+      },
+      setVoyage(voyage) {
+        let weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+        let date = vm.date;
+        for (let i in voyage) {
+          date = vm.getTransDate(vm.date, i);
+          voyage[i] = Object.assign(voyage[i], {
+            date: new Date(date).Format("yyyy/MM/dd"),
+            weekday: weekdays[new Date(date).getDay()]
+          });
+          voyage[i].images = voyage[i].images.split(',');
+        }
+        vm.tripPlanList = voyage;
+      },
+      getTransDate(date, num) {
+        let trans_day = "";
+        let cur_date = new Date(date);
+        let cur_year = new Date(date).getFullYear();
+        let cur_month = cur_date.getMonth() + 1;
+        let real_date = cur_date.getDate();
+        cur_month = cur_month > 9 ? cur_month : ("0" + cur_month);
+        real_date = real_date > 9 ? real_date : ("0" + real_date);
+        let eT = cur_year + "-" + cur_month + "-" + real_date;
+        trans_day = vm.transDate(eT, num);
+
+        return trans_day;
+      },
+      transDate(dateParameter, num) {
+        let translateDate = "", dateString = "", monthString = "", dayString = "";
+        translateDate = dateParameter.replace("-", "/").replace("-", "/");
+        let newDate = new Date(translateDate);
+        newDate = newDate.valueOf();
+        newDate = newDate + num * 24 * 60 * 60 * 1000;
+        newDate = new Date(newDate);
+        if ((newDate.getMonth() + 1).toString().length === 1) {
+          monthString = 0 + "" + (newDate.getMonth() + 1).toString();
+        } else {
+          monthString = (newDate.getMonth() + 1).toString();
+        }
+        if (newDate.getDate().toString().length === 1) {
+          dayString = 0 + "" + newDate.getDate().toString();
+        } else {
+          dayString = newDate.getDate().toString();
+        }
+        dateString = newDate.getFullYear() + "-" + monthString + "-" + dayString;
+        return dateString;
+      },
+    }
+  }
+</script>
+<style lang="less">
+  @import "../assets/css/common.less";
+
+  @media print {
+    .noprint {
+      display: none
+    }
+
+    .print {
+      display: none;
+    }
+
+    .checkBox {
+      display: none;
+    }
+
+    .content-display {
+      margin-top: 0;
+    }
+  }
+
+  #travelInstructions {
+    padding: 20px 30px;
+    background-color: #eff4f7;
+    color: #333;
+    .content-display {
+      width: 1040px;
+      margin: 40px auto 0;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      text-align: center;
+      position: relative;
+      .print {
+        width: 100px;
+        height: 30px;
+        background-color: #6aadff;
+        border-radius: 8px;
+        text-align: center;
+        line-height: 30px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 16px;
+        position: absolute;
+        right: 0;
+        top: -46px;
+      }
+      .checkBox {
+        position: absolute;
+        top: -46px;
+        float: right;
+        font-size: 16px;
+        margin-right: 20px;
+        height: 30px;
+        line-height: 30px;
+        input {
+          float: left;
+          margin: 9px 5px 0 0;
+        }
+      }
+      .distribution-display{
+        right: 100px;
+      }
+      .cost-display{
+        right:220px;
+      }
+      .visaInfo-display{
+        right:320px;
+      }
+      .reserve-display{
+        right:420px;
+      }
+      .back-display{
+        right:520px;
+      }
+      .content-title {
+        height: 70px;
+        border-bottom: 1px solid #ccc;
+        line-height: 70px;
+        font-size: 24px;
+      }
+      .price-details {
+        font-size: 24px;
+        text-align: left;
+        padding-left: 30px;
+        height: 50px;
+        line-height: 50px;
+        border-bottom: 1px solid #ccc;
+        span {
+          font-size: 18px;
+        }
+      }
+      .details-content {
+        .details-title {
+          height: 40px;
+          line-height: 40px;
+          font-size: 18px;
+          font-weight: 600;
+          border-bottom: 1px solid #ccc;
+          div {
+            float: left;
+          }
+          div:nth-of-type(1) {
+            width: 410px;
+          }
+          div:nth-of-type(2) {
+            width: 100px;
+          }
+          div:nth-of-type(3), div:nth-of-type(4) {
+            width: 264px;
+          }
+          .checked {
+            width: 528px !important;
+          }
+        }
+        ul {
+          li {
+            height: 40px;
+            line-height: 40px;
+            font-size: 16px;
+            border-bottom: 1px solid #ccc;
+            width: 100%;
+            div {
+              float: left;
+              border-right: 1px solid #ccc;
+            }
+            div:nth-of-type(1) {
+              width: 410px;
+            }
+            div:nth-of-type(2) {
+              width: 100px;
+            }
+            div:nth-of-type(3), div:nth-of-type(4) {
+              width: 264px;
+            }
+            .checked {
+              width: 528px !important;
+            }
+            div:last-child {
+              border-right: 0;
+            }
+          }
+        }
+      }
+      .explain-details {
+        font-size: 14px;
+        text-align: left;
+        padding: 16px 20px 16px 40px;
+        border-bottom: 1px solid #ccc;
+      }
+      .trip-introduce {
+        font-size: 18px;
+        color: #333;
+        ul {
+          li {
+            min-height: 50px;
+            line-height: 30px;
+            border-bottom: 1px solid #ccc;
+            float: none;
+            text-align: left;
+            padding: 15px 50px;
+          }
+          li:last-child {
+            border-bottom: 0;
+          }
+        }
+      }
+      .detail-content {
+        text-align: left;
+        padding: 18px 0 20px 27px;
+        position: relative;
+        border-bottom: 1px solid #ccc;
+        .voyage-group {
+          padding-left: 14px;
+          position: relative;
+          .left-line {
+            position: absolute;
+            left: 0;
+            top: 20px;
+            width: 2px;
+            height: 99%;
+            background-color: #daebff;
+          }
+          .voyage-list {
+            font-size: 14px;
+            color: #333;
+
+            &:not(:last-child) {
+              padding-bottom: 35px;
+            }
+
+            .voyage-title {
+              border-bottom: 1px solid #daebff;
+              padding-left: 14px;
+              font-size: 16px;
+              width: 960px;
+              position: relative;
+              .icon-circle {
+                position: absolute;
+                top: 10px;
+                left: -23px;
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                .borderRadius(50%);
+                background-color: #daebff;
+                &:after {
+                  top: 50%;
+                  left: 50%;
+                  -webkit-transform: translate(-50%, -50%);
+                  -moz-transform: translate(-50%, -50%);
+                  -ms-transform: translate(-50%, -50%);
+                  -o-transform: translate(-50%, -50%);
+                  transform: translate(-50%, -50%);
+                  content: "";
+                  position: absolute;
+                  width: 16px;
+                  height: 16px;
+                  .borderRadius(50%);
+                  background-color: #daebff;
+                  border: 3px solid #fff;
+                }
+              }
+              .day {
+                font-size: 28px;
+                color: #aed2ff;
+              }
+            }
+            .repast {
+              padding-left: 14px;
+              padding-top: 5px;
+              .repast-content {
+                display: inline-block;
+                border-bottom: 1px solid #add2ff;
+                line-height: 28px;
+                .diet, .accom {
+                  display: inline-block;
+                  .icon {
+                    color: #add2ff;
+                    font-size: 20px;
+                    margin-right: 5px;
+                  }
+                }
+                .accom {
+                  margin-left: 34px;
+                }
+              }
+            }
+            .voyage-content {
+              padding-left: 14px;
+              margin-top: 12px;
+              .detail {
+                .text {
+                  width: 900px;
+                }
+              }
+            }
+          }
+        }
+        .tips {
+          span:first-child{
+            color: #ff9b0b;
+          }
+          text-align: left;
+          font-size: 14px;
+          padding: 30px 0 10px 30px;
+        }
+      }
+    }
+  }
+</style>

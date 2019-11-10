@@ -1,0 +1,1242 @@
+<template>
+  <div class="cruiseDetails" :onmousewheel="'return ' + !(toRoll||imgIsShow)">
+    <Mheader isHeader="0" currentPage="5"></Mheader>
+    <div class="main">
+      <div class="content-display">
+        <div class="content-title" v-if="dataList.cru">
+          <div class="content-titleTop">
+            <img :src="dataList.companyImage" v-if="dataList.companyImage"/>
+            <img src="../assets/img/baseImg.png" v-if="!dataList.companyImage"/>
+            {{dataList.cru.nameCn}}
+          </div>
+          <div class="cruise-img">
+            <img :src="dataList.images.split(',')[0]" v-if="dataList.images.split(',')[0]"/>
+            <img src="../assets/img/baseImg.png" v-if="!dataList.images.split(',')[0]"/>
+          </div>
+        </div>
+        <div class="nav-group" ref="subNavContainer">
+          <div class="nav-item" v-for="(item,index) in navList" :class="{active: navItem === index}" @click="jump('section',index)" v-if="item.isShow">
+            <span class="top-border"></span>
+            <span >{{item.name}}</span>
+          </div>
+        </div>
+        <section class="overview" id="overview" v-if="dataList.presentation != '' && dataList.cru">
+          <div class="cruiseIntroduce">{{dataList.presentation}}</div>
+          <div class="cruiseInfo" v-if="dataList.cru.tonnage">
+            <div>
+              <div>总吨位数：<span>{{dataList.cru.tonnage}}吨</span></div>
+              <div>甲板楼层：<span>{{dataList.cru.floor}}层舱房</span></div>
+              <div>舱房数量：<span>{{dataList.cru.totalCabin}}间</span></div>
+            </div>
+            <div>
+              <div>邮轮长度：<span>{{dataList.cru.length}}米</span></div>
+              <div>邮轮宽度：<span>{{dataList.cru.wide}}米</span></div>
+              <div>平均航速：<span>{{dataList.cru.avgSpeed}}节</span></div>
+            </div>
+            <div>
+              <div>满载客数：<span>{{dataList.cru.busload}}人</span></div>
+              <div>首航时间：<span>{{dataList.cru.maidenDate.split('-')[0] + '年' + dataList.cru.maidenDate.split('-')[1] + '月'}}</span></div>
+            </div>
+            <div class="clearfloat"></div>
+          </div>
+        </section>
+        <div class="detailedInfo">
+          <section class="voyageNumber" id="voyageNumber" v-if="month.length > 0">
+            <div class="voyageTitle">航次日历>></div>
+            <svg class="icon wave" aria-hidden="true">
+              <use xlink:href="#icon-shishihailang"></use>
+            </svg>
+            <div class="dateChoice">
+              <svg class="no-select icon leftButton" aria-hidden="true" :class="month[0].yearHide == currentYear ? 'noClick':''" @click="dateLoad('left')">
+                <use xlink:href="#icon-shangyixiang"></use>
+              </svg>
+              <div class="currentMonth" v-for="(num,index) in month" :class="index == 0 ? 'pull-left':'pull-right'">
+                <p>{{num.year}}</p>
+                <ul>
+                  <li v-for="i in num.propeller"></li>
+                  <li v-for="o in num.date">
+                    <div v-if="!o.isSetOut">{{o.value}}</div>
+                    <svg class="icon wave" aria-hidden="true" v-if="o.isSetOut" @click="jumpDetails(o)">
+                      <use xlink:href="#icon-youlun"></use>
+                    </svg>
+                  </li>
+                </ul>
+              </div>
+              <div class="segmentingLine"></div>
+              <div class="clearfloat"></div>
+              <svg class="no-select icon rightButton" aria-hidden="true" @click="dateLoad('right')">
+                <use xlink:href="#icon-xiayixiang"></use>
+              </svg>
+            </div>
+          </section>
+          <section class="facilitiesService" id="facilitiesService" v-if="facilitiesService.length > 1 || facilitiesService[0].list.length > 0">
+            <div class="voyageTitle">设施服务>></div>
+            <div class="serviceDisplay" v-for="(i,index) in facilitiesService" :class="index==facilitiesService.length-1?'marginRight':''" v-if="i.isExistence" @click="clickJump(index)">
+              <img :src="i.bgImg">
+              <div class="mask"></div>
+              <div class="serviceRecommendation">
+                <svg class="icon wave" :style="'font-size:'+i.fontSize + 'px'" aria-hidden="true">
+                  <use :xlink:href="i.img"></use>
+                </svg>
+                <div>{{i.name}}</div>
+              </div>
+            </div>
+            <div class="clearfloat"></div>
+          </section>
+          <section class="deck" id="deck" v-if="arrangementList.length >0 ">
+            <div class="voyageTitle">甲板>></div>
+            <div class="deckContent">
+              <div class="cruiseImg" @mouseenter="imgDisplay = true" @mouseleave="imgDisplay = false" @click="toRoll = true">
+                <img :src="arrangementList[index].image">
+                <div class="deckMask" :class="imgDisplay ? 'imgDisplay':''"></div>
+                <div class="fontDisplay" :class="imgDisplay ? 'imgDisplay':''">查看更多</div>
+              </div>
+              <div class="bigPicture" v-if="toRoll">
+                <div class="mask"></div>
+                <div class="cruiseBigPicture" @click="toRoll = false">
+                  <img :src="arrangementList[index].image">
+                  <div class="deleteButton" >
+                    <svg class="icon wave" aria-hidden="true">
+                      <use xlink:href="#icon-cha1"></use>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div class="cabin">
+                <div @mouseenter="dropDown = true" @mouseleave="dropDown = false">
+                  <div class="cabinTitle">第{{arrangement}}层</div>
+                  <div class="cabinContent" v-if="dropDown">
+                    <ul>
+                      <li v-for="(num,index) in arrangementList" @click="floorChoice(num,index)">第{{num.floor}}层</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="entertainment" v-for="num in content" v-if="num.list.length > 0">
+                  <div class="entertainmentTitle">{{num.title}}</div>
+                  <ul>
+                    <li v-for="list in num.list" :class="!list.isShow ? 'border':''">
+                      <div class="dot"></div>
+                      <div @click="seeDetails(num.list,list)">{{list.name}}</div>
+                      <div class="room-introduction" v-if="list.isShow">
+                        <img :src="list.image">
+                        <div class="basicInfo">
+                          <div v-for="i in list.detailedInfo">{{i.name}}：<span>{{i.value}}</span></div>
+                        </div>
+                        <div class="clearfloat"></div>
+                        <div class="info">{{list.presentation}}</div>
+                      </div>
+                      <div class="clearfloat"></div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="cabinImg">
+                <img src="../assets/img/cruiseMap.png">
+              </div>
+              <div class="clearfloat"></div>
+            </div>
+          </section>
+          <section class="album" id="album" v-if="facilitiesService.length > 1 || facilitiesService[0].list.length > 0">
+            <div class="voyageTitle">相册>></div>
+            <div class="albumContent" v-for="(num,index) in facilitiesService" v-if="num.isExistence">
+              <div class="contentDisplay" v-if="facilitiesService[0].list.length > 0 ? index%2 == 0 : index%2 == 1" :class="index==facilitiesService.length-1?'marginRight':''">
+                <div class="albumInfo" v-if="num.list.length > 0">{{num.list[0].presentation}}</div>
+                <div class="albumTitle">{{num.name}}</div>
+                <div class="albumImg" @mouseenter="num.isShow = true" @mouseleave="num.isShow = false">
+                  <img :src="num.bgImg">
+                  <div class="triangle_border_down"></div>
+                  <div class="mask" :class="num.isShow ? 'move':''" @click="imgLoad(num)"></div>
+                  <div class="albumFont" :class="num.isShow ? 'move':''" @click="imgLoad(num)">查看更多</div>
+                </div>
+              </div>
+              <div class="contentDisplayTow" v-if="facilitiesService[0].list.length > 0 ? index%2 == 1 : index%2 == 0" :class="index==facilitiesService.length-1?'marginRight':''">
+                <div class="albumImg" @mouseenter="num.isShow = true" @mouseleave="num.isShow = false">
+                  <img :src="num.bgImg">
+                  <div class="triangle_border_up"></div>
+                  <div class="mask" :class="num.isShow ? 'move':''" @click="imgLoad(num)"></div>
+                  <div class="albumFont" :class="num.isShow ? 'move':''" @click="imgLoad(num)">查看更多</div>
+                </div>
+                <div class="albumTitle">{{num.name}}</div>
+                <div class="albumInfo" v-if="num.list.length > 0">{{num.list[0].presentation}}</div>
+              </div>
+            </div>
+            <div class="clearfloat"></div>
+          </section>
+        </div>
+      </div>
+      <div class="imgSlide" @click.self.stop="imgIsShow = false" v-if="imgIsShow && imgList.length > 0">
+        <Carousel autoplay class="imgDisplay">
+          <Carousel-item v-for="(num,index) in imgList" :key="index">
+            <div class="demo-carousel" @click.self.stop="imgIsShow = false"><img :src="num"></div>
+          </Carousel-item>
+        </Carousel>
+      </div>
+      <div v-if="!dataList.cru" class="no-content">
+        <img src="../assets/img/noContent.png" alt="">
+        <div>暂时没有相关内容</div>
+      </div>
+    </div>
+    <m-footer></m-footer>
+  </div>
+</template>
+<script>
+  let vm;
+  import common from "@/assets/js/common.js";
+  import Mheader from "@/components/header.vue";
+  import MFooter from '@/components/footer'
+  export default{
+    name : 'cruiseDetails',
+    components :{
+      Mheader,
+      MFooter,
+    },
+    data(){
+        return{
+          navList: [
+            {anchor: '/#overview', name: '总览',isShow:false},
+            {anchor: '/#voyageNumber', name: '航次日历',isShow:false},
+            {anchor: '/#facilitiesService', name: '设施服务',isShow:false},
+            {anchor: '/#deck', name: '甲板',isShow:false},
+            {anchor: '/#album', name: '相册',isShow:false}
+          ],
+          navItem : 0,
+          facilitiesService : [
+            {
+              bgImg : '',
+              name : '舱房',
+              img : '#icon-cangfang1',
+              fontSize : 60,
+              isShow:false,
+              isExistence : false,
+              type : 'seascape',
+              list : []
+            }
+          ],
+          imgDisplay : false,
+          dropDown : false,
+          content:[
+            {
+              title : '舱房',
+              type : 'seascape',
+              list : []
+            },
+            {
+              title : '娱乐',
+              type : 'AMUSEMENT',
+              list : []
+            }
+          ],
+          arrangement:0,
+          isScroll:true,
+          toRoll : false,
+          dataList : {},
+          arrangementList:[],
+          index : 0,//当前楼层下标
+          imgList : [],
+          imgIsShow: false,
+          month:[],
+          departureDate :  [],
+          currentYear : '',
+        }
+    },
+    mounted(){
+      vm = this;
+      let cruise = sessionStorage.cruise;
+      vm.axios.post(this.api + this.urlApi.queryCuriseIntroductionList,{
+        cruise: cruise
+      }).then((response) => {
+        if(response.status) {
+          vm.dataList = response.content[0];
+          vm.dataList.companyImage = vm.dataList.companyImage ? vm.dataList.companyImage:require('../assets/img/baseImg.png');
+          if(response.content[0].cruiseFloorList.length > 0){
+            let listArr = [];
+            if(vm.dataList.cruiseVoyageList.length > 0){
+              for (let b = 0; b < vm.dataList.cruiseVoyageList.length; b++) {
+                let json = vm.dataList.cruiseVoyageList[b];
+                let jsonArr = {
+                  date: json.date,
+                  numberCode: json.numberCode
+                };
+                vm.departureDate.push(jsonArr);
+              }
+            }
+            for (let i = 0; i < vm.dataList.cruiseFloorList.length; i++) {
+              let list = vm.dataList.cruiseFloorList[i];
+              for (let num = 0; num < list.cruiseServiceList.length; num++) {
+                listArr.push(list.cruiseServiceList[num]);
+              }
+              for (let n = 0; n < list.cabinList.length; n++) {
+                listArr.push(list.cabinList[n]);
+              }
+            }
+            listArr = common.distinctObjArray(listArr);
+            for (let n = 0; n < listArr.length; n++) {
+              let isAdd = true;
+              let obj = listArr[n];
+              let detailedInfo = [];
+              if (obj.type == 'seascape') {
+                obj.presentation = obj.remark;
+                detailedInfo = [
+                  {
+                    name: '费用说明',
+                    value: obj.coseIntroduced ? obj.coseIntroduced : '暂无说明'
+                  },
+                  {
+                    name: '可住',
+                    value: obj.capacity + '人'
+                  },
+                  {
+                    name: '面积',
+                    value: obj.area
+                  }, {
+                    name: '位于楼层',
+                    value: obj.floor
+                  }
+                ];
+              } else {
+                detailedInfo = [
+                  {
+                    name: '费用说明',
+                    value: obj.coseIntroduced ? obj.coseIntroduced : '暂无说明'
+                  },
+                  {
+                    name: '位于楼层',
+                    value: obj.floor + '层'
+                  }
+                ];
+              }
+              vm.$set(obj, 'detailedInfo', detailedInfo);
+              for (let o = 0; o < vm.facilitiesService.length; o++) {
+                let json = vm.facilitiesService[o];
+                if (obj.type == json.type) {
+                  json.isExistence = true;
+                  isAdd = false;
+                  json.list.push(obj);
+                  if (!json.bgImg) {
+                      if(obj.image){
+                        json.bgImg = obj.image.split(',')[0];
+                      }else {
+                        json.bgImg = require('../assets/img/baseImg.png');
+                      }
+
+                  }
+                }
+              }
+              if (isAdd) {
+                let json = {};
+                let list = [];
+                list.push(obj);
+                vm.$set(json, 'list', list);
+                let bgImg = obj.image ?obj.image.split(',')[0]:require('../assets/img/baseImg.png');
+                vm.$set(json, 'bgImg', bgImg);
+                vm.$set(json, 'type', obj.type);
+                vm.$set(json, 'isShow', false);
+                vm.$set(json, 'isExistence', true);
+                if (obj.type == 'DININGROOM') {
+                  vm.$set(json, 'img', '#icon-canting');
+                  vm.$set(json, 'fontSize', 46);
+                  vm.$set(json, 'name', '餐厅');
+                } else if (obj.type == 'SHOPOING') {
+                  vm.$set(json, 'img', '#icon-gouwu');
+                  vm.$set(json, 'fontSize', 64);
+                  vm.$set(json, 'name', '购物');
+                } else if (obj.type == 'AMUSEMENT') {
+                  vm.$set(json, 'img', '#icon-yule');
+                  vm.$set(json, 'fontSize', 68);
+                  vm.$set(json, 'name', '娱乐');
+                } else if (obj.type == 'CHILDERN') {
+                  vm.$set(json, 'img', '#icon-ertong');
+                  vm.$set(json, 'fontSize', 60);
+                  vm.$set(json, 'name', '儿童');
+                }
+                vm.facilitiesService.push(json);
+              }
+            }
+            vm.arrangementList = vm.dataList.cruiseFloorList;
+            console.log(vm.arrangementList);
+            for(let n=0;n<vm.arrangementList.length; n++){
+                vm.arrangementList[n].image = vm.arrangementList[n].image ? vm.arrangementList[n].image :require('../assets/img/baseImg.png');
+            }
+            vm.arrangement = vm.arrangementList[0].floor;
+            vm.addFloorData();
+            window.addEventListener("scroll", vm.listenScroll);
+          }
+          if(vm.dataList.presentation != '' && vm.dataList.cru.tonnage){
+              vm.navList[0].isShow = true;
+          }
+          if(vm.departureDate.length >0){
+            vm.navList[1].isShow = true;
+          }
+          if(vm.facilitiesService.length > 1 || vm.facilitiesService[0].list.length > 0){
+            vm.navList[2].isShow = true;
+            vm.navList[4].isShow = true;
+          }
+          if(vm.arrangementList.length >0){
+            vm.navList[3].isShow = true;
+          }
+        }
+      });
+      let date = new Date();
+      vm.currentYear = date.getFullYear() + '-' + (date.getMonth()+1);
+    },
+    methods:{
+      seeDetails(list,obj){
+          let isShow = !obj.isShow;
+          for(let i=0; i<list.length; i++){
+              list[i].isShow = false;
+          }
+          obj.isShow = isShow;
+      },
+      jump(el,index) {
+        let navArr = [];
+        let currentIndex = 0;
+        for(let i=0;i<vm.navList.length;i++){
+            if(vm.navList[i].isShow){
+              navArr.push(vm.navList[i]);
+              if(i == index){
+                  currentIndex = navArr.length - 1;
+              }
+            }
+        }
+        if(currentIndex == navArr.length - 1){
+          vm.isScroll = false;
+          let time = setTimeout(function(){
+            vm.isScroll = true;
+            clearTimeout(time);
+          },500);
+        }else {
+          vm.isScroll = true;
+        }
+        vm.navItem = index;
+        let distance = vm.getScrollTop();
+        let slcItem = document.querySelectorAll(el);
+        let total = slcItem[currentIndex].getBoundingClientRect().top;
+        let top = distance + total -50;
+
+        document.body.scrollTop = top;
+        document.documentElement.scrollTop = top;
+        window.pageYOffset = top;
+      },
+      getScrollTop() {
+        return document.documentElement.scrollTop || document.body.scrollTop;
+      },
+      listenScroll() {
+        if(!vm.isScroll){
+          return false;
+        }
+        let mh = document.querySelector('.content-title').offsetHeight + document.querySelector('#header').offsetHeight;
+        if(vm.getScrollTop() >= mh) {
+          vm.setPostion(vm.$refs.subNavContainer, 'fixed', 0);
+          vm.$refs.subNavContainer.style.marginTop = 0;
+          vm.scrollAnchor('section','nav');
+        }else{
+          vm.setPostion(vm.$refs.subNavContainer, 'static', 0);
+          vm.$refs.subNavContainer.style.marginTop = 40 + 'px';
+        }
+
+        vm.scrollTop = vm.getScrollTop();
+        vm.scrollTop >= 600 ? vm.showBackTop = true : vm.showBackTop = false;
+      },
+      scrollAnchor(el,type) {
+        let section = document.querySelectorAll(el);
+
+        for (let i = 0; i < section.length ; i++) {
+          let bTop = section[i].getBoundingClientRect().top - 40;
+
+          let offsetHeight = section[i].getBoundingClientRect().height;
+          if ( bTop <= 0 && Math.abs(bTop) <= offsetHeight) {
+            let id = section[i].id;
+            for(let o=0;o<vm.navList.length;o++){
+                if(vm.navList[o].anchor.indexOf(id)>-1){
+                  vm.navItem = o;
+                  break;
+                }
+            }
+            break;
+          }
+        }
+      },
+      setPostion(el, postion, top, left) {
+        el.style.position = postion;
+        el.style.top = top + 'px';
+        el.style.left = left + 'px';
+      },
+      addFloorData(){
+        let listArr = JSON.parse(JSON.stringify(vm.arrangementList[vm.index]));
+        for(let o=0;o<vm.content.length;o++){
+          vm.content[o].list = [];
+          let list;
+          if(vm.content[o].type == 'seascape'){
+            list = listArr.cabinList;
+          }else {
+            list = listArr.cruiseServiceList;
+          }
+          for(let n=0;n<list.length;n++) {
+            let json = list[n];
+            if(json.type == vm.content[o].type){
+              vm.$set(json,'isShow',false);
+              vm.content[o].list.push(json);
+              let detailedInfo = [];
+              if(json.type == 'seascape'){
+                json.presentation = json.remark;
+                detailedInfo = [
+                  {
+                    name :'可住',
+                    value:json.capacity + '人'
+                  },
+                  {
+                    name :'面积',
+                    value:json.area
+                  },{
+                    name :'位于楼层',
+                    value:json.floor
+                  }
+                ];
+              }else {
+                detailedInfo = [
+                  {
+                    name :'费用说明',
+                    value:json.coseIntroduced ? json.coseIntroduced : '暂无说明'
+                  },
+                  {
+                    name :'位于楼层',
+                    value:json.floor + '层'
+                  }
+                ];
+              }
+              vm.content[o].list[vm.content[o].list.length - 1].detailedInfo = detailedInfo;
+            }
+          }
+        }
+      },
+      floorChoice(obj,num){
+        vm.arrangement = obj.floor;
+        vm.index = num;
+        vm.dropDown = false;
+        vm.addFloorData();
+      },
+      imgLoad(obj){
+          vm.imgList = [];
+          vm.imgIsShow = true;
+          for(let i=0;i<obj.list.length; i++){
+              let images = obj.list[i].image.split(',');
+              for(let o=0;o<images.length;o++){
+                  vm.imgList.push(images[o]);
+              }
+          }
+      },
+      clickJump(num){
+        sessionStorage.currentSubscript = num;
+        sessionStorage.currentContent = JSON.stringify(vm.facilitiesService);
+        vm.$router.push('/facilitiesDetails');
+      },
+      calculationDate(date,index){
+//          console.log(date);
+        let year = date.split('-')[0];
+        let month = parseInt(date.split('-')[1]);
+        let week = new Date(date + '-1').getDay();
+        let currentMonth = new Date(year,month,1).getTime() - (24*60*60*1000);
+        let dateNum = new Date(currentMonth).getDate();
+        let setOutArr = [];
+        for(let num=0;num<vm.departureDate.length;num++){
+            let json = vm.departureDate[num];
+            let jsonYear = json.date.split('-')[0];
+            let jsonMonth = json.date.split('-')[1];
+            if(jsonYear == year && jsonMonth == month){
+              setOutArr.push(json);
+            }
+        }
+        let dateArr = [];
+        for(let n=1;n<=dateNum;n++){
+          let dateJson = {
+            value : n,
+            isSetOut : false,
+          };
+          for(let i=0;i<setOutArr.length;i++){
+            let day = setOutArr[i].date.split(' ')[0].split('-')[2];
+            if(parseInt(day) === n){
+              dateJson.numberCode = setOutArr[i].numberCode;
+              dateJson.isSetOut = true;
+            }
+          }
+          dateArr.push(dateJson);
+        }
+
+        let json = {};
+        json = {
+          yearHide : year + '-' + month,
+          year : year + '年' + month + '月',
+          propeller : week,
+          date : dateArr
+        };
+        vm.$set(vm.month,index,json);
+      },
+      jumpDetails(obj){
+        sessionStorage.setItem('numberCode',obj.numberCode);
+        vm.$router.push('/productDetail');
+      },
+      dateLoad(val){
+        if(val == 'left'){
+            if(vm.month[0].yearHide == vm.currentYear){
+                return;
+            }
+            for(let i=0;i<vm.month.length;i++){
+                let json = vm.month[i];
+                let year = json.yearHide.split('-')[0];
+                let month = parseInt(json.yearHide.split('-')[1]) - 2;
+                if(month <= 0){
+                    year = parseInt(year) - 1;
+                    month = 12 - month == 0 ? '12':12 + month;
+                }
+                vm.calculationDate(year + '-' + month,i)
+            }
+        }else {
+          for(let n=0;n<vm.month.length;n++){
+            let json = vm.month[n];
+            let year = json.yearHide.split('-')[0];
+            let month = parseInt(json.yearHide.split('-')[1]) + 2;
+            if(month > 12){
+              year = parseInt(year) + 1;
+              month = month - 12;
+            }
+            vm.calculationDate(year + '-' + month,n)
+          }
+        }
+
+      }
+    },
+    destroyed() {
+      window.removeEventListener("scroll", vm.listenScroll);
+    },
+    watch:{
+      departureDate(){
+        let date = new Date();
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        vm.calculationDate(year + '-' + month,0);
+        if(month == 12){
+          vm.calculationDate(year + 1 + '-' + 1,1);
+        }else {
+          vm.calculationDate(year + '-' + parseInt(month + 1),1);
+        }
+      }
+    }
+  }
+</script>
+<style lang="less" scoped>
+  @import "../assets/css/common.less";
+  .cruiseDetails{
+    background-color: @appBg;
+    .main{
+      width: 1200px;
+      min-height: 700px;
+      background-color: #fff;
+      margin:20px auto 40px;
+      .borderRadius();
+    }
+    .content-display{
+      width: 1200px;
+      background-color: #fff;
+      box-shadow: 0 0 24px rgba(0,0,0,.13);
+      margin: 40px auto;
+      padding: 15px 0 40px 0;
+      .content-title{
+        padding: 0 30px;
+        .content-titleTop{
+          font-size: 24px;
+          color:#333333;
+          line-height: 56px;
+          height: 56px;
+          border-bottom: 2px solid #6aadff;
+          img{
+            width: 71px;
+            height: 41px;
+            margin-right: 10px;
+            float: left;
+          }
+        }
+        .cruise-img{
+          padding: 20px 70px;
+          text-align: center;
+          img{
+          }
+        }
+      }
+      .nav-group{
+        height: 50px;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        background-color: #fafafa;
+        z-index: 10;
+        width: 1200px;
+        .nav-item{
+          float: left;
+          width: 156px;
+          text-align: center;
+          line-height: 49px;
+          font-size: 20px;
+          position: relative;
+          cursor: pointer;
+          .top-border{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            border-top: 4px solid @topBg;
+            display: none;
+          }
+          a{
+            color: #808080;
+
+          }
+          &:hover,
+          &.active{
+            background-color: #fff;
+            color: @topBg;
+            border-right: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+            &:first-child{
+              border-left: 0;
+            }
+            a{
+              color: @topBg;
+            }
+            .top-border{
+              display: inline-block;
+            }
+          }
+        }
+      }
+
+    }
+    .overview{
+      .cruiseIntroduce{
+        padding: 40px;
+        font-size: 14px;
+        color:#333333;
+        line-height: 20px;
+        border-bottom: 1px solid #e5e5e5;
+      }
+      .cruiseInfo{
+        font-size: 14px;
+        color:#999999;
+        text-align: center;
+        padding: 14px 40px;
+        line-height: 26px;
+        div{
+          text-align: left;
+          span{
+            color:#333333;
+          }
+        }
+        >div:nth-of-type(1){
+          float: left;
+        }
+        >div:nth-of-type(2){
+          display: inline-block;
+        }
+        >div:nth-of-type(3){
+          float: right;
+        }
+      }
+    }
+    .detailedInfo{
+      padding: 20px 40px 0 40px;
+      .voyageNumber,.facilitiesService,.deck,.album{
+        text-align: center;
+        .voyageTitle{
+          font-size: 16px;
+          color:#6aadff;
+          border-bottom: 1px solid #6aadff;
+          text-align: left;
+        }
+        .wave{
+          font-size: 102px;
+          color:#6aadff;
+        }
+        .dateChoice{
+          margin: 40px 0 20px 0;
+          text-align: center;
+          padding: 0 115px;
+          position: relative;
+          height: 327px;
+          .currentMonth{
+            width: 340px;
+            text-align: center;
+            p{
+              font-size: 18px;
+              color:#999999;
+            }
+            ul{
+              li{
+                font-size: 16px;
+                color:#999;
+                width: 48px;
+                line-height: 50px;
+                height: 50px;
+                .wave{
+                  color:#6aadff;
+                  font-size: 20px;
+                  cursor: pointer;
+                }
+                .wave:hover{
+                  color:#ff9600;
+                }
+              }
+            }
+          }
+          .segmentingLine{
+            width: 1px;
+            height: 260px;
+            background-color: #e5e5e5;
+            position: absolute;
+            top:23px;
+            left:50%;
+          }
+          .leftButton,.rightButton{
+            font-size: 24px;
+            color:#6aadff;
+            position: absolute;
+            top:130px;
+            cursor: pointer;
+          }
+          .leftButton{
+            left:17px;
+          }
+          .rightButton{
+            right:0;
+          }
+          .noClick{
+            color:#e5e5e5;
+            cursor: auto;
+          }
+        }
+        .choiceButton{
+          width: 110px;
+          height: 34px;
+          border-radius: 17px;
+          background-color: #6aadff;
+          color:#fff;
+          margin: 0 auto;
+          font-size: 16px;
+          cursor: pointer;
+          line-height: 34px;
+        }
+      }
+      .facilitiesService{
+        margin-top: 40px;
+        .voyageTitle{
+          margin-bottom: 20px;
+        }
+          .serviceDisplay{
+            width: 216px;
+            height: 267px;
+            margin-right: 10px;
+            float: left;
+            position: relative;
+            cursor: pointer;
+            margin-top: 20px;
+            >img{
+              width: 100%;
+              height: 100%;
+            }
+            .mask{
+              position: absolute;
+              top:0;
+              left:0;
+              width: 100%;
+              height: 100%;
+              background-color: #000;
+              opacity: 0.3;
+            }
+            .serviceRecommendation{
+              position: absolute;
+              top:50%;
+              left: 50%;
+              transform: translate(-50%,-50%);
+              font-size: 20px;
+              color:#fff;
+              .wave{
+                color:#fff;
+              }
+            }
+          }
+          .marginRight{
+            margin-right: 0;
+          }
+      }
+      .deck{
+        margin-top: 40px;
+        text-align: center;
+        .deckContent{
+          padding: 0 131px;
+          .cruiseImg{
+            display: inline-block;
+            margin: 72px 0 40px 0;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            height: 117px;
+            width: 100%;
+            >img{
+              width: 100%;
+              height: 117px;
+            }
+            .deckMask{
+              background-color: #000;
+              opacity: 0.3;
+              line-height: 117px;
+              height: 117px;
+              position: absolute;
+              top:117px;
+              left: 0;
+              width: 100%;
+            }
+            .fontDisplay{
+              font-size: 18px;
+              text-align: center;
+              color:#333;
+              width: 100px;
+              height: 40px;
+              line-height: 40px;
+              border-radius: 5px;
+              background-color: #fff;
+              position: absolute;
+              top:117px;
+              left: 50%;
+              margin-top: 40px;
+              margin-left: -50px;
+              display: inline-block;
+            }
+            .imgDisplay{
+              top:0;
+            }
+          }
+          .bigPicture{
+            .mask{
+              position: fixed;
+              top:0;
+              left:0;
+              width: 100%;
+              height: 100%;
+              background-color: #000;
+              opacity: 0.3;
+              z-index: 11;
+            }
+            .cruiseBigPicture{
+              width: 100%;
+              height: 256px;
+              position: fixed;
+              top:50%;
+              left: 0;
+              z-index: 12;
+              margin-top: -128px;
+              padding: 0 1%;
+              img:nth-of-type(1){
+                width: 100%;
+                height: 100%;
+              }
+              .deleteButton{
+                width: 42px;
+                height: 42px;
+                cursor: pointer;
+                background-color: #fff;
+                position: absolute;
+                right:1%;
+                top:-62px;
+                border-radius: 50%;
+                .wave{
+                  font-size: 30px;
+                  color:#a7aaac;
+                  position: absolute;
+                  top:50%;
+                  left:50%;
+                  transform:translate(-50%,-50%);
+                }
+              }
+            }
+          }
+          .cabin{
+            width: 330px;
+            cursor: pointer;
+            position: relative;
+            float: left;
+            .cabinTitle{
+              height: 38px;
+              line-height: 38px;
+              background-color: #6aadff;
+              color:#fff;
+              font-size: 16px;
+              text-align: center;
+            }
+            .cabinContent{
+              font-size: 16px;
+              color:#333;
+              text-align: center;
+              line-height: 38px;
+              position: absolute;
+              top:38px;
+              left:0;
+              width: 100%;
+              background-color: #fff;
+              z-index: 5;
+              ul{
+                box-shadow: 0 0 10px rgba(0,0,0,.3);
+                margin-top: 5px;
+                li{
+                  height: 38px;
+                  float: none;
+                  line-height: 38px;
+                  border-bottom: 1px solid #ccc;
+                  cursor: pointer;
+                }
+                li:hover{
+                  background-color: #6aadff;
+                  color:#fff;
+                }
+              }
+            }
+            .entertainment{
+              .entertainmentTitle{
+                height: 22px;
+                line-height: 22px;
+                border-left: 3px solid #6aadff;
+                padding-left: 10px;
+                font-size: 16px;
+                color:#333333;
+                margin-top: 17px;
+                text-align: left;
+                margin-bottom: 14px;
+              }
+              ul{
+                padding-left: 10px;
+                li{
+                  min-height: 32px;
+                  line-height: 32px;
+                  font-size: 14px;
+                  color:#333333;
+                  width: 100%;
+                  float: none;
+                  text-align: left;
+                  position: relative;
+                  padding-left: 15px;
+                  cursor: pointer;
+                  .dot{
+                    width: 4px;
+                    height: 4px;
+                    border-radius: 2px;
+                    background-color: #6aadff;
+                    position: absolute;
+                    top:15px;
+                    left: 0;
+                  }
+                  .room-introduction{
+                    background-color: #f7f7f7;
+                    padding: 6px 10px;
+                    font-size: 12px;
+                    color:#999999;
+                    line-height: 20px;
+                    cursor: auto;
+                    width: 315px;
+                    margin-left: -15px;
+                    img{
+                      width: 105px;
+                      height: 63px;
+                      float: left;
+                    }
+                    .basicInfo{
+                      width: 160px;
+                      display: inline-block;
+                      margin-left: 10px;
+                      float: left;
+                      margin-top: -5px;
+                      span{
+                        color:#333333;
+                      }
+                    }
+                    .info{
+                      margin-top: 5px;
+                    }
+                  }
+                }
+                li:last-child{
+                  border-bottom: 0;
+                }
+                li:hover{
+                  background-color: #f7f7f7;
+                }
+                .border{
+                  border-bottom: 1px solid #e5e5e5;
+                }
+              }
+            }
+          }
+          .cabinImg{
+            width: 528px;
+            float: left;
+            padding: 70px 0 0 125px;
+            img{
+              width: 406px;
+              height: 92px;
+              float: left;
+            }
+          }
+        }
+      }
+      .album{
+        margin-top: 30px;
+        .albumContent{
+          margin-top: 40px;
+          .contentDisplay,.contentDisplayTow{
+            width: 216px;
+            float: left;
+            margin-right: 10px;
+            height: 600px;
+            position: relative;
+            .albumInfo{
+              font-size: 14px;
+              color:#333333;
+              position: absolute;
+              top:25%;
+              left: 0;
+              transform:translateY(-50%);
+            }
+            .albumTitle{
+              position: absolute;
+              top:257px;
+              left: 0;
+              line-height: 30px;
+              border-top: 1px solid #e5e5e5;
+            }
+            .albumImg{
+              height: 300px;
+              margin-top: 300px;
+              cursor: pointer;
+              position: relative;
+              overflow: hidden;
+              img{
+                width: 216px;
+                height: 300px;
+              }
+              .mask,.albumFont{
+                position: absolute;
+                top:300px;
+                left:0;
+                width: 100%;
+              }
+              .mask{
+                height: 300px;
+                background-color: #000;
+                opacity: 0.3;
+                z-index: 6;
+              }
+              .move{
+                top:0;
+                transition: 0.3s;
+              }
+              .albumFont{
+                margin-top: 138px;
+                color:#fff;
+                z-index: 7;
+                text-align: center;
+                font-size: 20px;
+              }
+              .triangle_border_down{
+                width:0;
+                height:0;
+                border-width:12px 12px 0;
+                border-style:solid;
+                border-color:#fff transparent transparent;/*灰 透明 透明 */
+                position:absolute;
+                top:0;
+                left:10px;
+                z-index: 5;
+              }
+              .triangle_border_up{
+                width:0;
+                height:0;
+                border-width:0 12px 12px;
+                border-style:solid;
+                border-color:transparent transparent #fff;/*透明 透明  灰*/
+                position:absolute;
+                top:100%;
+                left:10px;
+                margin-top: -12px;
+                z-index: 5;
+              }
+            }
+          }
+          .contentDisplayTow{
+            .albumImg{
+              height: 300px;
+              cursor: pointer;
+              position: relative;
+              overflow: hidden;
+              margin-top: 0;
+              img{
+                width: 265px;
+                height: 300px;
+              }
+              .mask,.albumFont{
+                position: absolute;
+                top:300px;
+                left:0;
+                width: 100%;
+              }
+              .mask{
+                height: 300px;
+                background-color: #000;
+                opacity: 0.3;
+              }
+              .move{
+                top:0;
+                transition: 0.5s;
+              }
+              .albumFont{
+                margin-top: 138px;
+                color:#fff;
+                z-index: 6;
+                text-align: center;
+                font-size: 20px;
+              }
+            }
+            .albumTitle{
+              top:313px;
+              border-top: 0;
+              border-bottom: 1px solid #e5e5e5;
+            }
+            .albumInfo{
+              top:75%;
+            }
+          }
+          .marginRight{
+            margin-right: 0;
+          }
+        }
+      }
+    }
+    .footer-wrapper{
+      margin-top: 40px;
+    }
+    .imgSlide{
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top:0;
+      left: 0;
+      background-color: rgba(0,0,0,.3);
+      z-index: 19;
+      .imgDisplay{
+        position: absolute;
+        top:50%;
+        left:0;
+        width: 100%;
+        height: 600px;
+        transform: translateY(-50%);
+        z-index: 12;
+        text-align: center;
+      }
+    }
+  }
+</style>

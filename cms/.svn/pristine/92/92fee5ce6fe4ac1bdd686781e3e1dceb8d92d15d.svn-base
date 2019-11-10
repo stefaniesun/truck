@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/xieyaozhong.css"></link>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/bootstrap/easyui.css"></link>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/icon.css"></link>
+
+<link rel="stylesheet" type="text/css" href="../css/simple-calendar.css"></link>
+<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"></link>
+
+<script type="text/javascript" src="../js/library/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="../js/library/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/library/simple-calendar/simple-calendar.js"></script>
+<script type="text/javascript" src="../js/library/cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="../js/library/common/cookie2.js"></script>
+<script type="text/javascript" src="../js/library/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../js/library/common/common.js"></script>
+<script type="text/javascript" src="../js/library/common/customUi.js" defer="defer"></script>
+
+<script type="text/javascript" src="../js/js_taobao/taobaoSkuCalendar.js" defer="defer"></script>
+</head>
+
+<body style="margin-top:8px;margin-left:10px;">
+<div id="skuStockButton"></div>
+
+<msg id="tkviewTypeDiv" style="display:block"></msg>
+ 
+<div id="dateTabs" style="width:600px;height:30px;" class="easyui-tabs"></div>
+  <div id='container'> </div>
+  
+  <div class="bs-example" style="height:520px;width:600px;margin-top:-70px">
+	  <p><code id="tkviewStockCode"></code></p>
+	  <p id="noneMsg" style="margin-top:30px;margin-left:20px;display:none;">暂无关联单品库存信息</p>
+	  <div id="tableDiv" class="table-bordered" style="height:330px;overflow:auto;">
+		  	<table class="table table-bordered price-table" style="display:none;">
+		      <thead>
+		        <tr>
+		          <th>单品名称</th>
+		          <th>供应商</th>
+		          <th>成本价</th>
+		           <th>库存</th>
+		           <th>成本说明</th>
+		        </tr>
+		      </thead>
+		      <tbody id="stockTbody"></tbody>
+		    </table>
+	  	</div>
+
+	    <form class="form-inline" style="position:absolute;bottom:20px;display:none;">
+		    <p><code id="plusPriceMsg" style="display:none;"></code></p>
+			  <div class="form-group">
+			    <label>价格类型</label>
+			     <select class="form-control m-b" name="account" id="priceTypeForm">
+			       <option value="1">成人</option>   
+				   <option value="2">儿童</option>   
+				   <option value="3">单房差</option>   
+			   </select>
+			  </div>
+		    
+			  <div class="form-group">
+			    <label>价格</label>
+			    <input type="text" class="form-control" id="priceForm" style="width:90px;"/>&nbsp;
+			  </div>
+			  <div class="form-group">
+			    <label>库存</label>
+			    <input type="text" class="form-control" id="stockForm" style="width:80px;"/>人&nbsp;
+			  </div>
+			  <button type="button" class="btn btn-warning" id="submitBtn">保存</button>
+		</form>
+  </div>
+</body>
+</html>

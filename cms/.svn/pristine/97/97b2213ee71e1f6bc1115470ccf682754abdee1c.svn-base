@@ -1,0 +1,379 @@
+<template>
+  <div id="placeOrder">
+    <Mheader></Mheader>
+    <div class="main">
+      <div class="main-inner">
+        <div class="title">
+          <h3>
+            舱型及价格>>
+            <span class="pull-right" @click="goBack">返回详情</span>
+          </h3>
+        </div>
+        <div class="product-box clearfloat">
+          <div class="product-img">
+            <img :src="content.cruiseImg" alt="">
+          </div>
+          <div class="product-desc">
+            <p class="name">{{content.ptviewName}}</p>
+            <p class="date">出发日期：{{content.travelDate}}</p>
+            <p class="cabin-type">
+              舱型：<span v-for="cabinName in content.cabinArr">{{cabinName.cabinType}}&nbsp;&nbsp;</span>
+            </p>
+          </div>
+          <div class="order-confirm">
+            <span class="price">总金额<br>¥&nbsp;{{content.totalPrice}}</span>
+          </div>
+        </div>
+        <div class="list">
+          <table border="0" cellspacing="0" cellpadding="0">
+            <thead>
+            <tr>
+              <th>舱型</th>
+              <th>描述</th>
+              <th>单价</th>
+              <th>数量</th>
+              <th>总金额</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(item,index) in cabContent">
+              <td>{{item.cabinType}}</td>
+              <td>
+                <span class="cabin-name">可住人数：{{item.volume}}人</span>
+              </td>
+              <td>&yen{{item.price}}/人</td>
+              <td>{{item.roomNum}}</td>
+              <td>
+                <div>&yen{{item.totalPrice}}</div>
+                <div class="backNow" v-if="item.rebatePrice">返现{{item.rebatePrice}}/人</div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="title">
+          <h3>联系人信息填写>></h3>
+        </div>
+        <div class="link-info">
+          <ul>
+            <li class="item">
+              <span>统一联系人姓名</span>
+              <input v-model="linkMan" type="text">
+            </li>
+            <li class="item">
+              <span>统一联系人手机号</span>
+              <input v-model="linkPhone" type="text">
+            </li>
+          </ul>
+        </div>
+        <div class="order-btn">
+          <button @click="goOrderSuccess()">确认下单</button>
+        </div>
+      </div>
+    </div>
+    <Mfooter></Mfooter>
+  </div>
+</template>
+
+<style lang="less" scoped="">
+  @import "../assets/css/common";
+  #placeOrder{
+    width: 100%;
+    min-width: 1200px;
+    background-color: #eff4f7;
+    .main{
+      min-height: 541px;
+      .main-inner{
+        width: 1200px;
+        margin: 40px auto 40px;
+        background-color: #fff;
+        padding: 40px;
+        .borderRadius;
+        .title{
+          border-bottom: 1px solid #6aadff;
+          padding-bottom: 5px;
+          width: 1113px;
+          margin-bottom: 20px;
+          h3{
+            color: @topBg;
+            font-size: 20px;
+            line-height: 21px;
+            font-weight: normal;
+            text-indent: 10px;
+            .pull-right{
+              display: block;
+              width: 90px;
+              height: 30px;
+              line-height: 30px;
+              .borderRadius(30px);
+              text-align: center;
+              background-color: @tipsColor;
+              cursor: pointer;
+              padding-right: 10px;
+              color: #fff;
+              font-size: 14px;
+              margin-top: -6px;
+            }
+          }
+        }
+        .product-box{
+          width: 100%;
+          .product-img{
+            width: 206px;
+            height: 144px;
+            padding: 1px;
+            border: 1px solid #ccc;
+            text-align: center;
+            .borderRadius;
+            float: left;
+            img{
+              width: 100%;
+              height: 100%;
+              .borderRadius;
+            }
+          }
+          .product-desc{
+            float: left;
+            padding-left: 24px;
+            width: 58%;
+            .name{
+              font-size: 28px;
+              color: #333;
+              margin: 20px 0 17px 0;
+            }
+            .date,.cabin-type{
+              font-size: 16px;
+              color: #999;
+              margin-bottom: 10px;
+            }
+          }
+          .order-confirm{
+            float: right;
+            text-align: center;
+            margin: 20px 48px 0 0;
+            span{
+              color: @clickBtnBg;
+              font-size: 28px;
+              display: block;
+            }
+          }
+        }
+        .list{
+          width: 100%;
+          border:1px solid @lineColor;
+          margin: 38px 0 40px 0;
+          table{
+            width: 100%;
+            text-align: left;
+            thead{
+              th{
+                width: 20%;
+                height: 41px;
+                color: @topBg;
+                font-size: 20px;
+                font-weight: normal;
+                border-bottom: 1px solid @lineColor;
+                background-color: #f0f7ff;
+              }
+              th:nth-of-type(1){
+                padding-left: 36px;
+              }
+            }
+            tbody{
+              tr{
+                height: 60px;
+                vertical-align: middle;
+              }
+              tr:last-child{
+                td{
+                  border:0;
+                }
+              }
+              td:nth-child(1){
+                width: 224px;
+                padding-left: 36px;
+              }
+              td:nth-of-type(2){
+                width: 320px;
+              }
+              td:nth-of-type(3){
+                width: 235px;
+              }
+              td:nth-of-type(4){
+                width: 205px;
+              }
+              td:last-child{
+                width: 130px;
+                color:@clickBtnBg;
+                font-size: 20px;
+                .backNow{
+                  width: 93px;
+                  height: 16px;
+                  line-height: 16px;
+                  background-color: @clickBtnBg;
+                  color:#fff;
+                  text-align: center;
+                  font-size: 12px;
+                }
+              }
+              td{
+                border-bottom: 1px solid @lineColor;
+                position: relative;
+                font-size: 16px;
+                color:#333;
+                img{
+                  width: 120px;
+                  height: 80px;
+                }
+                .cabin-name{
+                  color: #999;
+                  font-size: 18px;
+                }
+              }
+            }
+          }
+        }
+        .link-info{
+          width: 100%;
+          height: 82px;
+          padding: 6px 0;
+          background-color: #f0f7ff;
+          .item{
+            width: 240px;
+            height: 100%;
+            margin: 4px 40px;
+            span{
+              font-size: 16px;
+            }
+            input{
+              width: 100%;
+              height: 32px;
+              line-height: 32px;
+              padding: 3px 0;
+              text-indent: 8px;
+              .borderRadius;
+              outline: none;
+              border: 1px solid @lineColor;
+              transition: all .3s;
+              &:focus{
+                box-shadow: 0 0 7px rgba(36, 106, 191, 0.38);
+              }
+            }
+          }
+        }
+        .order-btn{
+          width: 224px;
+          height: 56px;
+          margin: 16px auto 0;
+          button{
+              width: 224px;
+              height: 56px;
+              border:0;
+              .borderRadius(@radius: 30px);
+              margin-top: 10px;
+              background-color: @clickBtnBg;
+              color: #fff;
+              cursor: pointer;
+              font-size: 26px;
+              outline: none;
+            }
+        }
+      }
+    }
+  }
+</style>
+
+<script>
+  import Mheader from "@/components/header.vue";
+  import Mfooter from "@/components/footer.vue";
+  let vm;
+  export default {
+    name:'placeOrder',
+    components:{
+      Mheader,
+      Mfooter,
+    },
+    data(){
+      return{
+        content:[],
+        cabContent:[],
+        linkMan: '',
+        linkPhone: '',
+      }
+    },
+    mounted:function(){
+      vm = this;
+      vm.getData();
+    },
+    methods:{
+      getData:function () {
+        vm.content=[];
+        vm.cabContent = [];
+        if(sessionStorage.ptOrder){
+          let content = JSON.parse(sessionStorage.ptOrder);
+          vm.content = content;
+          for(let i=0; i<content.cabinArr.length; i++){
+              let json = content.cabinArr[i];
+              vm.cabContent.push(json);
+          }
+        }else {
+          vm.$router.replace('/');
+        }
+      },
+      goOrderSuccess:function () {
+        let tel = /^1[34578][0-9]{9}$/;
+        if( !vm.linkMan ){
+          vm.dialog.showDialog('请填写统一联系人姓名');
+          return;
+        }
+        if( !vm.linkPhone || !(tel.test(vm.linkPhone)) ){
+          vm.dialog.showDialog('请正确填写统一联系人手机号');
+          return;
+        }
+        let orderJson = new Array;
+        let cabinArr = vm.content.cabinArr;
+      	let cruiseVoyage;
+        let cabinType = new Array;
+      	for(let i=0;i<cabinArr.length;i++){
+          cruiseVoyage = cabinArr[0].cruiseVoyage;
+      		let orderObj = new Object;
+          orderObj.cabin = cabinArr[i].numberCode;
+          orderObj.count = cabinArr[i].roomNum;
+          orderObj.stock = cabinArr[i].stock;
+          orderJson.push(orderObj);
+          if( cabinArr[i].stockType ){
+            cabinType.push(cabinArr[i].cabinType)
+          }
+        }
+        if(cabinType.length){
+          let msg = cabinType.length > 1 ? cabinType.join('、') : cabinType[0];
+          vm.dialog.showDialog({
+            close: true,
+            btnText: '确定',
+            msg: '【' + msg + '】的资源紧张，本次下单不进行支付，需后台资源确认后在订单管理中进行二次付款操作，给您带来的不便敬请谅解。'
+          }, function (flag) {
+            if(flag){
+              vm.upData(cruiseVoyage,orderJson);
+            }
+          })
+        }else {
+          vm.upData(cruiseVoyage,orderJson);
+        }
+      },
+      upData(cruiseVoyage,orderJson){
+        let parame = {
+          voyage: cruiseVoyage,
+          orderJson: JSON.stringify(orderJson),
+          linkMan: vm.linkMan,
+          linkPhone: vm.linkPhone,
+        };
+        vm.axios.post(this.api+this.urlApi.createCruiseOrderOper,parame).then(function (response) {
+          if(response.status) vm.$router.push('/orderSuccess');
+        })
+      },
+      goBack(){
+        vm.$router.goBack();
+      }
+    }
+  }
+</script>

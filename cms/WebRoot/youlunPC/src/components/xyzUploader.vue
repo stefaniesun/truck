@@ -1,0 +1,390 @@
+<template>
+  <div class="xyzDropzone-uploader-main">
+    <ul class="xyzDropzone-uploader-list clearfloat">
+      <li v-for="(url,idx) in urls" class="xyzDropzone-uploader-item xyzDropzone-uploader-struts">
+        <img @click="showImage(urls)" :src="getImg(url,'mid')" :alt="url"/>
+        <div class="xyzDropzone-uploader-struts-content">
+          <i v-if="showUploadBtn" class="icon-wram" @click="removeItem(url,idx)"></i>
+        </div>
+      </li>
+      <li v-if="urls.length==0" class="xyzDropzone-uploader-item xyzDropzone-uploader-struts"></li>
+    </ul>
+    <div v-if="showUploadBtn" :class="urls.length==1?'change':urls.length==2?'dis':''" class="xyzDropzone-uploader-form">
+      <input v-if="urls.length<2" class="upload-input" type="file" :accept="accept.join(',')" :multiple="multiple" @change="fileChange($event)"/>
+      <span>{{urls.length==1?'继续上传':'点击上传'}}</span>
+    </div>
+  </div>
+</template>
+
+<script>
+  window.xyzUploader = {};
+  xyzUploader.version = 'v0.0.1';
+  xyzUploader.versionTime = '20170728';
+  var qiniuUrl = (window.location.protocol.indexOf('https')>=0) ? 'https://upload.qbox.me' : 'http://upload.qiniu.com';
+  var errCodeMsg = {
+    'code400' : '报文构造不正确或者没有完整发送。',
+    'code401' : '上传凭证无效。',
+    'code403' : '上传文件格式不正确。',
+    'code413' : '上传文件过大。',
+    'code579' : '回调业务服务器失败。',
+    'code599' : '服务端操作失败。',
+    'code614' : '目标资源已存在。'
+  };
+  var accept = [
+    'image/jpg',
+    'image/jpeg',
+    'image/png',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  ];
+//  var accept = typeof window.xyzUploader_accept === 'array' ? window.xyzUploader_accept : accept;
+  export default{
+  	name: 'xyzUploader',
+    props : {
+      'id':{},//父组件传入的识别标致，每次自定义事件触发，id都是第一个参数
+      'accept':{//允许用户上传的文件mimeType
+        'type': Array,
+        'default': function(){
+          return accept;
+        }
+      },
+      'urls':{//赋初始值
+        'type': Array,
+        'default':function(){
+          return new Array();
+        }
+      },
+      'count' : {//组件允许上传的最大文件数量限制
+        'type' : Number,
+        'default' : 1000
+      },
+      'size' : {//组件允许上传的单个文件最大文件尺寸限制
+        'type' : Number,
+        'default' : 5 * 1024 * 1024
+      },
+      'directory' : {//文件分组目录（根据情况，可以是项目名，模块名[仅允许英文大小写字母]）
+        'type' : String,
+        'default' : 'default'
+      },
+      'filename' : {},//自定义上传后的文件名（1、若传入字符串[fileName]将自动匹配文件本身文件名。 2、传入任意字符串[请带上文件后缀名]）
+      'multiple' : {//是否允许一次选择多个文件
+        'type' : Boolean,
+        'default' : false
+      },
+      'repeat' : {//是否允许出现重复的url
+        'type' : Boolean,
+        'default' : false
+      },
+      'showUploadBtn' : { // 是否显示上传按钮
+        'type' : Boolean,
+        'default' : true
+      }
+    },
+    data : function(){
+      return {
+        'token' : '',
+        'fileList' : [],
+      };
+    },
+    methods : {
+      'getImg' : function(url, suf){
+        if('mid'==suf && url.indexOf('file.duanyi.com.cn')>=0){
+          var urlStart = url.substring(0, url.lastIndexOf('/'));
+          var urlEnd = url.substring(url.lastIndexOf('/') + 1, url.length);
+          return (urlStart + "/mid_" + urlEnd);
+        }else if('small'==suf && url.indexOf('file.duanyi.com.cn')>=0){
+          var urlStart = url.substring(0, url.lastIndexOf('/'));
+          var urlEnd = url.substring(url.lastIndexOf('/') + 1, url.length);
+          return (urlStart + "/small_" + urlEnd);
+        }else if('mid'==suf){
+          return url+'-mid';
+        }else if('small'==suf){
+          return url+'-small';
+        }
+        return url;
+      },
+      'complete' : function(resultData){//上传完成通知
+        if(this.repeat && resultData.status==1){//检查重复url
+          var url = resultData.content.url;
+          for(var u in this.urls){
+            if(this.urls[u] == url){
+              this.fail('不能添加重复的文件');
+              return ;
+            }
+          }
+        }
+        if(this._events['complete']){
+          this.$emit('complete',this.id, resultData);
+        }else if(resultData.status==1){
+          this.urls.push(resultData.content.url);
+        }else{
+          alert(resultData.content.msg);
+        }
+      },
+      'fail' : function(msg, fileItem){//各种失败消息通知
+        if(this._events['fail']){
+          this.$emit('fail', this.id, msg, fileItem);
+        }else{
+          alert(msg);
+        }
+      },
+      'removeItem' : function(url, idx){//移除通知
+        if(this._events['remove-item']){
+          this.$emit('remove-item', this.id, url);
+        }else{
+          this.urls.splice(idx, 1);
+        }
+      },
+      'validFile' : function(fileItem){//文件验证
+        if(fileItem.size > this.size){//文件大小检查
+          //大于 1024 kb 把单位显示为 mb
+          if (this.size / 1000 > 1024) {
+            return ('单文件最大允许 ' + Math.floor(this.size / 1000 / 1000) + ' MB');
+          } else {
+            return ('单文件最大允许 ' + (this.size / 1000) + ' KB');
+          }
+        }
+        var acceptFlag = false;
+        for (var a = 0; a < this.accept.length; a++) {//检查文件格式
+          if (this.accept[a] == fileItem.type) {
+            acceptFlag = true;
+            break;
+          }
+        }
+        if(!acceptFlag){
+          return '不支持的文件格式';
+        }
+      },
+      'fileChange' : function(event){
+        if(!event.target || !event.target.files){
+          return ;
+        }
+        var files = event.target.files;
+        for(var i = 0; i < files.length; i++){
+          var fileItem = files[i];
+          if((this.urls.length + this.fileList.length) >= this.count){
+            event.target.value = '';
+            this.fail('最多允许上传'+this.count+'个文件', fileItem);
+            return ;
+          }
+          var validMsg = this.validFile(fileItem);
+          if(validMsg){
+            event.target.value = '';
+            this.fail(validMsg, fileItem);
+            return ;
+          }
+          this.fileList.push(fileItem);
+        }
+        event.target.value = '';
+      },
+      'uploadFile' : function(){
+        var file = this.fileList[0];
+        var vueComp = this;
+        //构建xhr上传表单参数
+        var form = new FormData();
+        form.append('file', file);
+        form.append('token', this.token);
+        form.append('x:folder', this.directory);
+        //优化自定义文件名模式
+        if(this.filename){
+          var date = new Date();
+          var month = date.getMonth()+1;
+          var day = date.getDate();
+          var dd = date.getFullYear()+(month>=10?(month):('0'+month))+(day>=10?(day):('0'+day));
+          form.append('key', this.directory +'/'+dd+'/'+(this.filename==='fileName'? file.name : this.filename));
+        }
+        //构建xhr对象
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', qiniuUrl, true);
+        xhr.setRequestHeader('Accept', 'application/json, text/javascript, */*; q=0.01');
+        //上传进度回调
+        xhr.upload.onprogress = function (event) {
+          vueComp.$emit('progress', vueComp.id, parseInt(event.loaded / event.total * 100));
+          //console.log();
+        };
+        if (xhr.ontimeout) {//暂时不用
+          xhr.ontimeout = function (event) {
+            //console.log('上传已超时');
+          };
+        }
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+              var resultData = xhr.responseText;
+              try {
+                resultData = eval('(' + xhr.responseText + ')');
+              } catch (e) {
+                resultData = {
+                  status: 0,
+                  msg: '上传失败，返回数据异常'
+                };
+              }
+              if (resultData.content && resultData.content.suffix) {//qiniu处理
+                resultData.content.suffix = resultData.content.suffix.replace('.', '');
+              }
+              vueComp.complete(resultData);
+              vueComp.fileList.shift();//去掉第一个队列元素
+            } else {
+              var resultData = {
+                status: 0,
+                msg: errCodeMsg['code'+xhr.status] ?  errCodeMsg['code'+xhr.status] : xhr.statusText
+              };
+              vueComp.complete(resultData);
+            }
+          }
+        };
+        xhr.send(form);//发射
+      },
+      'refreshToken' : function(){//刷新token
+        var thisComp = this;
+        var xhr = new XMLHttpRequest();
+        if (!xhr) {
+          return;
+        }
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+              thisComp.token = xhr.responseText;
+            } else {
+              thisComp.token = 'get token fail';
+            }
+          }
+        };
+
+        var paramArray = new Array();
+        if (this.bucket) {
+          paramArray[paramArray.length] = (encodeURIComponent('bucket') + '=' + encodeURIComponent(this.bucket));
+        }
+        if(this.size){
+          paramArray[paramArray.length] = (encodeURIComponent('fsizeLimit') + '=' + encodeURIComponent(this.size));
+        }
+        if(this.accept){
+          var accept = this.accept.join(';');
+          paramArray[paramArray.length] = (encodeURIComponent('mimeLimit') + '=' + encodeURIComponent(accept));
+        }
+        var param = paramArray.join('&').replace('%20', '+');
+        xhr.open("POST", 'http://toolapi.maytek.cn/qt2', true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+        xhr.setRequestHeader("Accept", "application/json, text/javascript, */*; q=0.01");
+        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xhr.send(param);
+      },
+      'showImage': function (url) {
+        this.$emit('showImage',url);
+      }
+    },
+    watch : {
+      'fileList' : function(newValue){
+        if(!newValue || newValue.length<1){
+          return ;
+        }
+        this.uploadFile();
+      },
+    },
+    mounted : function(){
+      this.refreshToken();
+
+    }
+  }
+</script>
+
+<style scoped lang="less">
+  @import "../assets/css/base.less";
+  .xyzDropzone-uploader-main{
+    margin-top: 20px;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    .xyzDropzone-uploader-list{
+      text-align: center;
+      zoom: 1;
+      width: 100%;
+      height: 100%;
+      transition: all 1s;
+      .xyzDropzone-uploader-item{
+        width: 138px;
+        height: 78px;
+        float: left;
+        padding: 0;
+        border-radius: 6px;
+        overflow: hidden;
+        background: url('../assets/img/picBg.jpg') no-repeat;
+        background-size: 100%,100%;
+        border: 1px dashed #99bbe2;
+        margin-right: 18px;
+        &:last-child{
+          margin-right: 0;
+        }
+        img{
+          width: 100%;
+          height: 100%;
+          cursor: pointer;
+        }
+      }
+      .xyzDropzone-uploader-struts-content {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: #fff;
+        font-size: 17px;
+        display: none;
+        .icon-wram {
+          width: 100%;
+          height: 100%;
+          background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAANlBMVEUAAAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/FRX/1NT/////g4P/gYH/09Ofbm6+AAAAC3RSTlMA9h65p3fkWHBO10SL1SkAAACKSURBVCjPdZJZDsQgDEOTsLQzhi73v2zV1VGr+AueBYHEcslKqqr/VEy8LCtuZWf9FE463HzES+PJB2BppG0BjjOmmKfeHr5OM3Svk4HWL+dZZhHj1i9MCgjIUSSBDjmSVNAhRxUFHXJoaIRXhcXD54YfDFvybWI/mhi1PRpUPFqGAd8w+PhUxmcDC4UTqx/vOj0AAAAASUVORK5CYII=");
+          background-size: cover;
+          .borderRadius(50%);
+          display: block;
+          cursor: pointer;
+        }
+      }
+    }
+    .xyzDropzone-uploader-form {
+      width: 80px;
+      height: 28px;
+      line-height: 28px;
+      overflow: hidden;
+     .borderRadius(28px);
+      position: relative;
+      text-align: center;
+      color: #fff;
+      background-color: @changeBtnBg;
+      margin-top: 14px;
+      cursor: pointer;
+      .upload-input {
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+      }
+    }
+    .dis{
+      background-color: #ccc;
+    }
+    .change{
+      background-color: @clickBtnBg;
+    }
+  }
+  .xyzDropzone-uploader-main:after{
+    clear: both;
+    content: '';
+    visibility: hidden;
+    display: block;
+    width: 0;
+    height: 0;
+  }
+  .xyzDropzone-uploader-main .xyzDropzone-uploader-struts {
+    position: relative;
+    &:hover .xyzDropzone-uploader-struts-content{
+      display: block;
+    }
+  }
+</style>

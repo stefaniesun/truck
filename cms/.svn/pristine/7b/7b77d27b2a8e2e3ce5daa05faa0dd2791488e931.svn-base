@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>预约页面</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    
+    <link rel="stylesheet" type="text/css" href="../css/cruise_content.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    
+    <script type="text/javascript" src="../js/library/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="../js/placeholder.js"></script>
+	<script type="text/javascript" src="../js/bootstrap-datepicker.js"></script> 
+	<script type="text/javascript" src="../js/xyzui.js"></script>
+    <script type="text/javascript" src="../js/library/common/common.js"></script>
+    
+    <script type="text/javascript" src="../js/js_reserve/cruise_content.js" defer="defer"></script>
+</head>
+<body>
+<div class="cruise-content">
+    <div class="cruise-contentHeader">
+        <div>
+            <div class="pull-left">订单编号：<span id="tidSpan"></span></div>
+            <div class="pull-right">创建时间：<span id="createdSpan"></span></div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="border-ddd-border-top"></div>
+
+    <div class="fill-inInformation">
+        <div class="border-ddd"></div>
+        <div id="failDiv" style="font-size:20px;color:red;"></div>
+	    <div id="reserveDataDiv" class="the-OuterLayer">
+	        
+        </div>
+        
+        <div class="cruise-contentFooter">
+            <div id="immediately">立即预约</div>
+        </div>
+    </div>
+    <div class="border-bottom">
+        <div>
+            <div></div>
+        </div>
+    </div>
+    <div class="border-ddd-border-bottom"></div>
+</div>
+<div class="appointment-success">
+    <div class="appointment-successText">
+        <img src="../image/success.png">
+        <span>提交成功，等待审核...</span>
+    </div>
+    <div class="clear"></div>
+    <div class="then-aboutBtn" id="againReserve">再预约一个订单</div>
+</div>
+</body>
+</html>

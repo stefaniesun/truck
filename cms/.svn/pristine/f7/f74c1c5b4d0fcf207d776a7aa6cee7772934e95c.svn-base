@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>新增单品</title>
+<style type="text/css">
+	body{
+		margin: 0;
+		padding: 0;
+		line-height: 1px;
+		font-size: 14px;
+	}
+	input,textarea{
+		display:none;
+	}
+</style>
+</head>
+<body>
+	<center>
+		<form><br/>
+			<table cellspacing="6" cellpadding="4">
+				<tr>
+					<td style="text-align:right;">选择邮轮</td>
+					<td>
+						<input type="text" id="cruiseForm" style="width:300px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">选择航期</td>
+					<td>
+						<input type="text" id="shipmentForm" style="width:300px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">选择舱型</td>
+					<td>
+						<input type="text" id="cabinForm" style="width:300px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">单品名称</td>
+					<td>
+						<input id="nameCnForm" type="text" style="width:300px;"
+					      data-options="required:true,validType:'length[1,50]'"/>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">单品代码</td>
+					<td>
+						<input id="markForm" type="text" style="width:300px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">备注</td>
+					<td>
+						<textarea id="remarkForm" style="width:296px;height:110px;resize:none;" class="easyui-validatebox" data-options="validType:'length[0,150]'"></textarea>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</center>
+</body>
+</html>

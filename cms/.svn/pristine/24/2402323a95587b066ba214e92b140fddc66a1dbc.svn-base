@@ -1,0 +1,230 @@
+<template>
+  <div class="calendar">
+    <header>
+      <h2>选择日期</h2>
+      <i class="back iconfont icon-fanhui" @click="slcDate.slcBoolean = false;bodyNoScrolling.close()"></i>
+    </header>
+
+    <div class="container">
+      <section class="month" v-for="(monthItem,monthKey) in monthDates">
+        <h2>{{monthItem.month}}</h2>
+        <div class="week">
+          <span  v-for="(value,key) in weekdays" class="weekday">{{value}}</span>
+        </div>
+
+        <div class="date-container clearfloat" ref="mouthDetail">
+          <div class="date-item trip" v-for="item in monthItem.firstWeekDay"> </div>
+          <div @click="selectDate(monthItem.month, item.date,item.minPrice)" class="date-item trip" v-for="(item,key) in monthItem.dates" :class="{active:item.minPrice && key===date && month===new Date(monthItem.month.replace(/([^\u0000-\u00FF])/gi,'-')).getMonth()+1 }">
+            <p class="date" :class="{disabled:!item.minPrice }">{{item.date }}</p>
+            <p class="price" v-if="item.minPrice">{{item.minPrice}}</p>
+          </div>
+          <div class="date-item trip" v-for="item in monthItem.lastSpace"> </div>
+        </div>
+
+      </section>
+    </div>
+  </div>
+</template>
+
+<script>
+  let vm;
+  import common from '../assets/js/common'
+
+  export default {
+    name: 'calendar',
+    props: {
+      slcDate: {
+        type: Object
+      },
+      dateList: {
+        type: Array
+      },
+      travelDate: {
+        type: String
+      }
+    },
+    data() {
+      return {
+        weekdays: ['日','一','二','三','四','五','六'],
+        monthDates: [],
+        date: 0,
+        month: 11
+      }
+    },
+    created() {
+      vm = this;
+      vm._setDates();
+      let date = vm.travelDate.replace(/([^\u0000-\u00FF])/gi,"-");
+      date = date.substr(0,date.length-1);
+      vm.date = new Date(date).getDate()-1;
+      vm.month = new Date(date).getMonth()+1;
+    },
+
+    methods: {
+
+      _setDates() {
+        let months = [];
+        for(let key in  vm.dateList ){
+          let obj = key;
+
+          let monthObj = {
+            month: 0,
+            dates: [],
+            firstWeekDay:0,
+            lastSpace: 0
+          };
+
+          let chinaDate = common.chinaDate(vm.dateList[obj].month);
+          monthObj.month = chinaDate.substr(0, chinaDate.length-4 );
+
+          let month = new Date(vm.dateList[obj].month.split('-')[0],vm.dateList[obj].month.split('-')[1],1).getMonth();
+          let fullYear = new Date(vm.dateList[obj].month.split('-')[0],vm.dateList[obj].month.split('-')[1],1).getFullYear();
+          let lastDayOfMonth = new Date(fullYear, month, 0).getDate();
+          let firstWeek = new Date(fullYear, month-1, 1).getDay();
+          monthObj.firstWeekDay = firstWeek;
+          monthObj.lastSpace = 35-lastDayOfMonth-firstWeek;
+          if(firstWeek>=5 && lastDayOfMonth === 31 || firstWeek === 6 && lastDayOfMonth === 30 || firstWeek === 1 && lastDayOfMonth === 28){
+            monthObj.lastSpace = 42-lastDayOfMonth-firstWeek;
+          }
+
+          for (let i = 0; i < lastDayOfMonth; i++) {
+            let date = {
+              date: i+1,
+              minPrice: 0
+            };
+            vm.$set(monthObj.dates,monthObj.dates.length,date)
+          }
+
+          for (let j = 0; j < vm.dateList[obj].dates.length; j++) {
+            for (let i = 0; i < monthObj.dates.length; i++) {
+              let price = 0;
+              let date = vm.dateList[obj].dates[j].travelDate.split(" ")[0];
+              let travelDate = new Date(date).getDate();
+              if (travelDate === i + 1) {
+                price = vm.dateList[obj].dates[j].minPrice;
+                monthObj.dates[i].minPrice = price;
+                break;
+              }
+            }
+          }
+          vm.$set(months, months.length, monthObj)
+        }
+        vm.monthDates = months
+      },
+
+      selectDate(Month,date,price){
+        vm.date = date-1;
+        let month = Month.replace(/([^\u0000-\u00FF])/gi,"-");
+        let travelDate = month + date;
+        month = new Date(month).getMonth()+1;
+        vm.month = month;
+        if(price){
+          vm.$emit('select',travelDate);
+        }
+      }
+    }
+  }
+</script>
+
+<style lang="less" scoped>
+  @import "../assets/css/common.less";
+  .calendar{
+
+    height: 100%;
+  }
+  header{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 88*@basePX;
+    line-height: 88*@basePX;
+    background-color: @topBg;
+    color: #fff;
+    z-index: 10;
+  }
+
+  header h2{
+    font-size: 40*@basePX;
+    text-align: center;
+    font-weight: normal;
+  }
+  header .back{
+    position: absolute;
+    top: 0;
+    font-size: 40*@basePX;
+  }
+  header .back{
+    left: 22*@basePX;
+  }
+  .container{
+    padding-top: 88*@basePX;
+    background-color: #fff;
+    section{
+      &:not(:first-of-type){
+        margin-top: 16*@basePX;
+      }
+      h2{
+        font-weight: normal;
+        text-align: center;
+        background-color: @panleBg;
+        line-height: 70*@basePX;
+        font-size: 32*@basePX;
+        color: #333;
+      }
+      .week{
+        height: 70*@basePX;
+        line-height: 70*@basePX;
+        .weekday{
+          display: inline-block;
+          width: 14.286%;
+          text-align: center;
+          color: @subTextColor;
+          font-size: 32*@basePX;
+        }
+      }
+
+      .date-container{
+        border-bottom: 1px solid @lineColor;
+        .date-item{
+          height: 104*@basePX;
+          float: left;
+          position: relative;
+          border-left: 1px solid transparent;
+          border-top: 1px solid @lineColor;
+          width: 14.25%;
+          text-align: right;
+          padding: 0.1rem 0.3rem 0.1rem 0;
+
+          font-size: 32*@basePX;
+          &+ .date-item{
+            border-left: 1px solid @lineColor;
+          }
+          &:nth-of-type(7n+1){
+            border-left: 1px solid transparent;
+          }
+
+          .price{
+            color: @tipsColor;
+            text-align: right;
+            margin-top: 0.1rem;
+          }
+          &.trip{
+            .date{
+              color: #333333;
+              &.disabled{
+                color: @subTextColor;
+              }
+            }
+          }
+
+          &.active{
+            background-color: @topBg;
+            .price,.date{
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
+  }
+</style>

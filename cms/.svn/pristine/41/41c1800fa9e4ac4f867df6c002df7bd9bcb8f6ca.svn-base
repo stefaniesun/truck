@@ -1,0 +1,198 @@
+<template>
+  <div class="counter">
+    <div class="order-btn" v-if=" !isOrder && product.holdCount" @click="isOrder = true">立即预定</div>
+    <div class="order-btn" v-if=" !isOrder && !product.holdCount" >已售罄</div>
+    <transition enter-active-class="animated slideInRight">
+      <div class="count-wrap" v-if=" isOrder">
+        <div class="content">
+          <span class="sub iconfont icon-tooldel" @click="subtraction()"></span>
+          <span class="num">{{product.counter}}</span>
+          <span class="add iconfont icon-tooladd" @click="addition()"></span>
+        </div>
+      </div>
+    </transition>
+  </div>
+</template>
+
+<script>
+
+  let vm;
+  export default {
+    name: 'counter',
+    props:{
+      product: {
+        type: Object,
+      },
+      order: {
+        type: Object
+      }
+    },
+    data() {
+      return {
+        isOrder: false,
+
+      }
+    },
+    mounted() {
+      vm = this;
+      this.isOrder = this.product.counter > 0 ? true : false;
+    },
+    methods: {
+
+      subtraction(){
+        if(this.product.counter > 0){
+          this.product.counter--;
+          this.product.realCount++;
+          this.order.total--;
+          this.order.totalPrice -= this.product.price * this.product.volume;
+          this.createOrder('reduce', this.product)
+        }
+      },
+      addition() {
+        if(!this.product.maxCount){
+          if(this.product.realCount > 0){
+            this.product.counter++;
+            this.product.realCount--;
+            this.order.total++;
+            this.order.totalPrice += this.product.price * this.product.volume;
+            this.createOrder('add', this.product);
+          }
+        }else {
+          if(this.product.counter < this.product.maxCount){
+            if(this.product.realCount > 0){
+              this.product.counter++;
+              this.product.realCount--;
+              this.order.total++;
+              this.order.totalPrice += this.product.price * this.product.volume;
+              this.createOrder('add', this.product);
+            }
+          }else {
+            vm.dialog.showDialog('单次购买最多只能买'+this.product.maxCount+'间');
+          }
+        }
+      },
+      createOrder(compute,ptObj) {
+        let cabinArr = vm.order.cabinArr;
+        switch (compute){
+          case 'reduce': {
+            for(let i = 0; i < cabinArr.length; i++) {
+              if(cabinArr[i].numberCode === ptObj.numberCode) {
+                vm.order.cabinArr[i].roomNum--;
+                vm.$set(vm.order.cabinArr[i], 'realCount', ptObj.realCount);
+                if(vm.order.cabinArr[i].roomNum === 0)  {
+                  vm.order.cabinArr.splice(i,1)
+                }
+              }
+            }
+          }; break;
+          case 'add': {
+            if(cabinArr.length === 0 || JSON.stringify(cabinArr).indexOf(JSON.stringify(ptObj.numberCode)) === -1) {
+              let cabinObj = {
+                cabinType: ptObj.name,
+                roomNum: 1,
+                price: ptObj.price*ptObj.volume,
+                stockCount: ptObj.stockCount,
+                realCount:  ptObj.realCount,
+                maxCount: ptObj.maxCount,
+                stockType: ptObj.stockType,
+                sufficientCount: ptObj.sufficientCount,
+                numberCode: ptObj.numberCode,
+                stock: ptObj.stock,
+                cruiseVoyage: ptObj.cruiseVoyage
+              };
+              vm.$set(vm.order.cabinArr, vm.order.cabinArr.length,cabinObj);
+            }else{
+              for(let i = 0; i < cabinArr.length; i++) {
+                if(cabinArr[i].numberCode === ptObj.numberCode) {
+                  vm.order.cabinArr[i].roomNum++;
+                  vm.$set(vm.order.cabinArr[i], 'realCount', ptObj.realCount);
+                }
+              }
+            }
+
+          }; break;
+        }
+        console.log(vm.order)
+        sessionStorage.ptOrderToC = JSON.stringify(vm.order);
+
+      },
+    }
+  }
+</script>
+
+<style lang="less" scoped>
+  @import "../assets/css/common.less";
+  .animated {
+    animation-duration: 1s;
+    animation-fill-mode: both;
+  }
+  @keyframes slideInRight {
+    from {
+      transform: translate3d(100%, 0, 0);
+      visibility: visible;
+    }
+
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  .slideInRight {
+    animation-name: slideInRight;
+  }
+
+  .counter{
+    background-color: @clickBtnBg;
+  }
+  .counter,
+  .order-btn,
+  .count-wrap{
+    width: 100%;
+    height: 100%;
+    font-size: 28*@basePX;
+  }
+  .order-btn{
+    background-color: @clickBtnBg;
+    color: #fff;
+    line-height:  276*@basePX;
+    text-align: center;
+  }
+
+  .count-wrap{
+    background-color: #eef6ff;
+    .content{
+      position: relative;
+      width: 80%;
+      height: 50*@basePX;
+      line-height: 50*@basePX;
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translate(-50%,-50%);
+      -moz-transform: translate(-50%,-50%);
+      -ms-transform: translate(-50%,-50%);
+      -o-transform: translate(-50%,-50%);
+      transform: translate(-50%,-50%);
+      .sub,.add,.num{
+        position: absolute;
+        color: @changeBtnBg;
+        font-size: 48*@basePX;
+      }
+      .num{
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        -moz-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        -o-transform: translateX(-50%);
+        transform: translateX(-50%);
+        color: @subTextColor;
+        font-size: 32*@basePX;
+      }
+      .sub{
+        left: 0;
+      }
+      .add{
+        right: 0;
+      }
+    }
+  }
+</style>

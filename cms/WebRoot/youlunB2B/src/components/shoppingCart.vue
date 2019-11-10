@@ -1,0 +1,500 @@
+<template>
+  <div class="shoppingCart">
+    <div class="shoppingCartOpen" v-if="shoppingCartIsShow" @click.self.stop="shoppingCartIsShow = false">
+      <div class="shoppingCartData">
+        <p>
+          <span @click="empty">
+            <span class="iconfont icon-shanchu1 item"></span>
+          清空购物车
+          </span>
+        </p>
+        <div class="dataContent">
+          <div class="cruiseData" v-for="num in order.cabinArr">
+            <div class="title">{{num.date}} {{num.cruise}}</div>
+            <ul>
+              <li v-for="(cabin,index) in num.list" :key="index">
+                <div class="cabinType">
+                  <div>{{cabin.name}}</div>
+                  <div class="toLive">可住人数：{{cabin.volume}}人</div>
+                </div>
+                <div class="addNum">
+                  <div>数量</div>
+                  <counter :product="cabin" @confirm="shoppingCareChange"></counter>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="shoppingCartHide">
+      <div class="shoppingCartContent">
+        <div class="shoppingCartImg" @click="clickIsShow">
+          <span class="iconfont icon-gouwuche2 item"></span>
+          <div ref="orderTotal" class="num" v-if="order.total > 0">{{order.total}}</div>
+        </div>
+        <div class="displayData">
+          <div v-if="order.total > 0">共<span>{{order.total}}</span>间房</div>
+          <div v-if="order.total > 0">总金额 <span>&yen {{order.totalPrice}}</span></div>
+          <div class="noOrderShow" v-if="order.total == 0">购物车是空的</div>
+        </div>
+      </div>
+      <div class="submitButton" @click="submitOrder">提交订单</div>
+    </div>
+    <div class="popup" v-if="popupIsShow" @click.self.stop="popupIsShow=false">
+      <div class="popupContent">
+        <div class="title">{{shoppingCareObj.name}}</div>
+        <div class="dataContent">
+          <p>{{shoppingCareObj.date}} {{shoppingCareObj.cruise}}</p>
+          <div class="cabinType">
+            <div>{{shoppingCareObj.name}}</div>
+            <div class="toLive">可住人数：{{shoppingCareObj.volume}}人</div>
+          </div>
+          <div class="addNum">
+            <div>数量</div>
+            <counter :product="shoppingCareObj" @confirm="confirm"></counter>
+          </div>
+          <div class="clearfloat"></div>
+        </div>
+        <div class="totalMoney">
+          总金额<span>&yen{{shoppingCareObj.volume * shoppingCareObj.counter * (userType == 'true' ? shoppingCareObj.price : shoppingCareObj.salePrice)}}</span>
+        </div>
+        <div class="button" @click="joinShoppingCart">加入购物车</div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+  let vm;
+  import counter from '@/components/counter.vue';
+  export default {
+    name: 'shoppingCart',
+    components: {
+      counter
+    },
+    data(){
+      return {
+        shoppingCartIsShow: false,
+        popupIsShow: false,
+        order: {
+          total: 0,
+          totalPrice: 0,
+          cabinArr: [],
+        },
+        userType: sessionStorage.userType,
+      }
+    },
+    props: ['popupState', 'shoppingCareObj'],
+    mounted(){
+      vm = this;
+      if (sessionStorage.order) {
+        vm.order = JSON.parse(sessionStorage.order);
+      }
+    },
+    methods: {
+      confirm(obj){
+        this.shoppingCareObj = obj;
+      },
+      joinShoppingCart(){
+        if (vm.shoppingCareObj.counter == 0) {
+          return;
+        }
+        vm.popupIsShow = false;
+
+        let cabinArr = vm.order.cabinArr;
+        let ptObj = vm.shoppingCareObj;
+        let json = {};
+        let list = [];
+        json.cruiseNumberCode = ptObj.cruiseNumberCode;
+        json.date = ptObj.date;
+        json.cruise = ptObj.cruise;
+        json.cruiseNmae = ptObj.cruiseNmae;
+        json.cruiseDate = ptObj.cruiseDate;
+        json.cruiseImage = ptObj.cruiseImage;
+        list.push(ptObj);
+        json.list = list;
+        let isCruiseExistence = false;
+        for (let i = 0; i < cabinArr.length; i++) {
+          let jsonArr = cabinArr[i];
+          if (jsonArr.cruiseNumberCode == ptObj.cruiseNumberCode && jsonArr.date == ptObj.date) {
+            isCruiseExistence = true;
+            let isCabinType = false;
+            for (let n = 0; n < jsonArr.list.length; n++) {
+              if (jsonArr.list[n].name == ptObj.name) {
+                isCabinType = true;
+                vm.order.cabinArr[i].list[n].counter = ptObj.counter;
+                vm.$set(vm.order.cabinArr[i].list[n], 'realCount', ptObj.realCount);
+                break;
+              }
+            }
+            if (!isCabinType) {
+              vm.order.cabinArr[i].list.push(ptObj);
+            }
+          }
+        }
+        if (!isCruiseExistence) {
+          vm.order.cabinArr.push(json);
+        }
+        vm.calculatingPrice();
+      },
+      shoppingCareChange(obj){
+        for (let i = 0; i < vm.order.cabinArr.length; i++) {
+          let json = vm.order.cabinArr[i];
+          if (json.cruiseNumberCode == obj.cruiseNumberCode && json.date == obj.date) {
+            for (let n = 0; n < json.list.length; n++) {
+              if (json.list[n].numberCode == obj.numberCode) {
+                if (obj.counter == 0) {
+                  vm.order.cabinArr[i].list.splice(n, 1);
+                  if (vm.order.cabinArr[i].list.length == 0) {
+                    vm.order.cabinArr.splice(i, 1);
+                  }
+                } else {
+                  if (json.list[n].name == obj.name) {
+                    json.list[n].counter = obj.counter;
+                  }
+                }
+              }
+            }
+          }
+        }
+        vm.calculatingPrice();
+      },
+      calculatingPrice(){
+        vm.order.total = 0;
+        vm.order.totalPrice = 0;
+        for (let i = 0; i < vm.order.cabinArr.length; i++) {
+          let json = vm.order.cabinArr[i];
+          for (let n = 0; n < json.list.length; n++) {
+            let obj = json.list[n];
+            vm.order.total += obj.counter;
+            let price = obj.price;
+            vm.order.totalPrice += obj.counter * price * obj.volume;
+          }
+        }
+        if (vm.order.total == 0) {
+          vm.shoppingCartIsShow = false;
+        }
+        sessionStorage.order = JSON.stringify(vm.order);
+        this.$emit('getOrder', sessionStorage.order);
+      },
+      empty(){
+        vm.order.total = 0;
+        vm.order.totalPrice = 0;
+        vm.order.cabinArr = [];
+        sessionStorage.order = '';
+        vm.shoppingCartIsShow = false;
+      },
+      clickIsShow(){
+        if (vm.order.total == 0) {
+          return;
+        }
+        vm.shoppingCartIsShow = !vm.shoppingCartIsShow
+      },
+      submitOrder(){
+        if (vm.order.total > 0) {
+          let pathName = vm.$route.name;
+          if( pathName === 'ptDetailToC' ){
+            vm.$router.push('/pOrderToC');
+          }else {
+            vm.$router.push('/placeOrder');
+          }
+        }
+      }
+    },
+    watch: {
+      popupState(newVal){
+        vm.popupIsShow = newVal;
+        if (newVal) {
+          vm.bodyNoScrolling.open();
+          let obj = vm.shoppingCareObj;
+          for (let i = 0; i < vm.order.cabinArr.length; i++) {
+            let json = vm.order.cabinArr[i];
+            if (json.cruiseNumberCode == obj.cruiseNumberCode && json.date == obj.date) {
+              for (let n = 0; n < json.list.length; n++) {
+                if (json.list[n].name == obj.name) {
+                  vm.shoppingCareObj.counter = json.list[n].counter;
+                }
+              }
+            }
+          }
+        } else {
+          vm.bodyNoScrolling.close();
+        }
+      },
+      shoppingCartIsShow(newVal){
+        if (newVal) {
+          vm.bodyNoScrolling.open();
+        } else {
+          vm.bodyNoScrolling.close();
+        }
+      },
+      popupIsShow(newVal){
+        if (!newVal) {
+          vm.$emit('confirm', newVal);
+        }
+      },
+      order:{
+        handler(newVal){
+        	if(newVal.cabinArr.length){
+            vm.$nextTick(function () {
+              vm.$refs['orderTotal'].classList.add('scale-animated');
+              setTimeout(function () {
+                vm.$refs['orderTotal'].classList.remove('scale-animated');
+              },600)
+            })
+          }
+        },
+        deep:true
+      }
+    }
+  }
+</script>
+<style lang="less">
+  @import "../assets/css/common.less";
+
+  .shoppingCart {
+    .shoppingCartOpen {
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, .35);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9;
+      .shoppingCartData {
+        position: absolute;
+        left: 0;
+        bottom: 126*@basePX;
+        width: 100%;
+        p {
+          height: 68*@basePX;
+          background-color: @topBg;
+          font-size: 28*@basePX;
+          line-height: 68*@basePX;
+          color: #fff;
+          padding-right: 22*@basePX;
+          > span {
+            float: right;
+            .item {
+              font-size: 32*@basePX;
+              color: #fff;
+              margin-right: 16*@basePX;
+            }
+          }
+        }
+        .dataContent {
+          max-height: 570*@basePX;
+          overflow: auto;
+          background-color: #fff;
+          padding: 28*@basePX 25*@basePX;
+          width: 100%;
+          .cruiseData {
+            .title {
+              height: 60*@basePX;
+              line-height: 60*@basePX;
+              font-size: 32*@basePX;
+              color: @topBg;
+              border-bottom: 1px solid @topBg;
+              padding-left: 24*@basePX;
+            }
+            > ul {
+              padding: 30*@basePX 40*@basePX 0 40*@basePX;
+              li {
+                height: 110*@basePX;
+                border-bottom: 1px solid #e7eaf0;
+                font-size: 28*@basePX;
+                color: #333;
+                padding-top: 10*@basePX;
+                .cabinType {
+                  width: 440*@basePX;
+                  padding-left: 20*@basePX;
+                  float: left;
+                  .toLive {
+                    color: #999;
+                  }
+                }
+                .addNum {
+                  float: right;
+                }
+              }
+              li:last-child {
+                border-bottom: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+    .shoppingCartHide {
+      height: 126*@basePX;
+      width: 100%;
+      background-color: rgba(65, 84, 109, .63);
+      padding: 16*@basePX 40*@basePX 0 40*@basePX;
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      z-index: 10;
+      .shoppingCartContent {
+        width: 400*@basePX;
+        float: left;
+        .shoppingCartImg {
+          width: 88*@basePX;
+          height: 88*@basePX;
+          border-radius: 50%;
+          background-color: #fff;
+          position: relative;
+          text-align: center;
+          float: left;
+          line-height: 88*@basePX;
+          .item {
+            font-size: 52*@basePX;
+            color: @topBg;
+          }
+          .num {
+            width: 30*@basePX;
+            height: 30*@basePX;
+            line-height: 30*@basePX;
+            text-align: center;
+            background-color: #ff0000;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 24*@basePX;
+            position: absolute;
+            top: 0;
+            right: 0;
+          }
+          .scale-animated {
+            animation-duration: .5s;
+            animation-fill-mode: both;
+            animation-name: scale;
+          }
+          @keyframes scale {
+            0% {
+              transform: scale(1);
+            }
+            50% {
+              transform: scale(1.7);
+            }
+            100% {
+              transform: scale(1);
+            }
+          }
+        }
+        .noOrderImg {
+          color: #ffe1cb;
+        }
+        .displayData {
+          width: 312*@basePX;
+          float: left;
+          font-size: 24*@basePX;
+          color: #fff;
+          line-height: 44*@basePX;
+          padding-left: 17*@basePX;
+          span {
+            font-size: 32*@basePX;
+            color: @clickBtnBg;
+          }
+          .noOrderShow {
+            line-height: 88*@basePX;
+            font-size: 28*@basePX;
+          }
+        }
+      }
+      .submitButton {
+        width: 262*@basePX;
+        height: 88*@basePX;
+        border-radius: 44*@basePX;
+        line-height: 88*@basePX;
+        text-align: center;
+        float: right;
+        background-color: @clickBtnBg;
+        font-size: 40*@basePX;
+        color: #fff;
+      }
+      .noOrderButton {
+        background-color: #ffe1cb;
+      }
+    }
+    .popup {
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, .35);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 11;
+      .popupContent {
+        width: 600*@basePX;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 8*@basePX;
+        border-bottom: 12*@basePX solid @changeBtnBg;
+        background-color: #fff;
+        .title {
+          height: 140*@basePX;
+          background: url("../assets/img/dialog_head.png");
+          background-size: 100% 100%;
+          padding-top: 30*@basePX;
+          text-align: center;
+          font-size: 36*@basePX;
+          color: #fff;
+        }
+        .dataContent {
+          padding-left: 78*@basePX;
+          p {
+            font-size: 36*@basePX;
+            color: @changeBtnBg;
+            margin: 10*@basePX 0 30*@basePX 0;
+          }
+          .cabinType {
+            font-size: 28*@basePX;
+            width: 290*@basePX;
+            padding-left: 20*@basePX;
+            float: left;
+            .toLive {
+              color: #999;
+            }
+          }
+          .addNum {
+            float: left;
+            .sub, .add {
+              float: left;
+              font-size: 40*@basePX;
+              color: @topBg;
+              margin-top: -5*@basePX;
+            }
+            .num {
+              float: left;
+              font-size: 32*@basePX;
+              color: #8d95a3;
+              padding: 0 10*@basePX;
+            }
+          }
+        }
+        .totalMoney {
+          font-size: 28*@basePX;
+          color: #333;
+          margin-top: 60*@basePX;
+          text-align: center;
+          span {
+            color: @tipsColor;
+            margin-left: 20*@basePX;
+          }
+        }
+        .button {
+          width: 350*@basePX;
+          height: 80*@basePX;
+          line-height: 80*@basePX;
+          text-align: center;
+          border-radius: 40*@basePX;
+          background-color: @changeBtnBg;
+          margin: 16*@basePX auto;
+          font-size: 32*@basePX;
+          color: #fff;
+        }
+      }
+    }
+  }
+</style>

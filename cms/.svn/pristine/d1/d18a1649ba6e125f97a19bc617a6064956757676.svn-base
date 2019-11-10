@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>新增员工</title>
+</head>
+<body>
+<center>
+	<form>
+		<table cellpadding="4" cellspacing="8" style="margin-top:10px;">
+			<tr>
+				<th>姓名</th>
+				<td>
+					<input id="nameCnForm" type="text" style="width:300px;"  data-options="required:true"/>
+				</td>
+			</tr>
+			<tr>
+				<th>职位</th>
+				<td>
+					<input id="postForm" class="easyui-combobox" type="text" style="width:300px;"
+						value="" data-options="panelHeight:'auto',required:true,
+					    valueField:'value',textField:'text',
+						data: [{value: '0',text: '后台'},
+						{value: '1',text: '前端'},
+						{value: '2',text: 'UI'}]"/>
+				</td>
+			</tr>
+			<tr>
+				<th>性别</th>
+				<td>
+					<input value="男" type="radio" name="radio" checked="checked"/>男
+					<input value="女" type="radio" name="radio"/>女
+					<input type="hidden" id="sexForm" value="男"/>
+				</td>
+			</tr>
+		</table>
+	</form>
+</center>
+</body>
+</html>

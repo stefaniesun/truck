@@ -1,0 +1,78 @@
+/**
+ * Created by Administrator on 2017/11/1.
+ */
+import Vue from 'vue'
+import Route from '../../router'
+import loading from '@/components/loading.vue'
+import dialog from '@/components/dialog.vue'
+import tooltip from '@/components/tooltip.vue'
+
+const LoadingConstructor = Vue.extend(loading);
+const dialogConstructor = Vue.extend(dialog);
+const tooltipConstructor = Vue.extend(tooltip);
+//加载动画
+Vue.prototype.Loading = {
+  show() {
+    let node = '#app';
+    let mountDom = document.querySelector(node);
+    let instance = new LoadingConstructor().$mount();
+    mountDom.appendChild(instance.$el);
+  },
+  hide(){
+    let loading = document.querySelector('.loading-wrapper');
+    loading && loading.remove();
+  }
+}
+//提示弹窗
+Vue.prototype.dialog = {
+  showDialog(option,callback) {
+    let oldVal,newVal;
+    if( typeof option === 'string' ){
+      if( this.option ) oldVal = this.option;
+      newVal = option;
+    }else {
+      if( this.option ) oldVal = this.option.msg;
+      newVal = option.msg;
+    }
+    if(oldVal === newVal) {
+      let dialog = document.querySelector('.dialog-wrapper');
+      dialog && dialog.remove();
+    }
+    this.option = option;
+    let node = '#app';
+    let dom = document.querySelector(node);
+    let dialog = new dialogConstructor({propsData: {option: option,callback:callback}}).$mount();
+    dom.appendChild(dialog.$el);
+  },
+  hideDialog() {
+    let dialog = document.querySelector('.dialog-wrapper');
+    dialog && dialog.remove();
+    let msg = ( typeof this.option === 'string' ) ? this.option : this.option.msg;
+    // if()
+    if(msg.indexOf('不存在有效登录信息,请重新登录！')>-1 || msg.indexOf('超过时限，请重新登录！')>-1 ){
+      sessionStorage.clear();
+      Route.push('/');
+    }
+  }
+};
+//气泡提示
+Vue.prototype.tooltip = {
+  show(msg,el) {
+    this.hide();
+    let node = 'body';
+    let dom = document.querySelector(node);
+    let targer = document.querySelector(el);
+    let height = targer.offsetHeight;
+    let rec = targer.getBoundingClientRect();
+    let tooltip = new tooltipConstructor({propsData: {msg: msg}}).$mount();
+    tooltip.$el.style.top = (rec.top - height - 10) + 'px';
+    tooltip.$el.style.left = rec.left + 'px';
+    dom.appendChild(tooltip.$el);
+  },
+  hide() {
+    let tooltip = document.querySelector('.tooltip-wrap');
+    tooltip && tooltip.remove();
+  }
+};
+
+export default new Vue

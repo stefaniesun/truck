@@ -1,0 +1,366 @@
+<template>
+  <div id="priceMarkup">
+    <!-- 头部 start -->
+    <header>
+      <h2>加价</h2>
+      <a class="back" @click="goBack()">
+        <i class="iconfont icon-fanhui"></i>
+      </a>
+      <a class="user" @click=" goUserCenter()">
+        <i class="iconfont icon-gerenzhongxin"></i>
+      </a>
+    </header>
+
+    <!-- 内容 start -->
+    <div class="main">
+      <div class="item-box" v-for="(con,index) in content">
+        <div class="cabin-title">
+          <span>{{con.cabintype}}</span>
+        </div>
+        <ul class="cabin-list" >
+            <li class="clearfloat" v-for="item in con.cabContent">
+              <div class="cabin-name">
+                <span>{{item.cabName}}</span>
+                <span class="old-price">原价：¥{{item.oldprice}}</span>
+              </div>
+              <div class="input-price">
+                <input type="number" autocomplete="off" placeholder="0" v-model="item.inputPrice" @input="item.inputPrice = parseInt(item.inputPrice)" @blur="addPrice(item)">
+                <span>加价金额</span>
+              </div>
+              <div class="new-price">
+                <span>加价后价格</span>
+                <span>¥{{item.newprice}}</span>
+              </div>
+            </li>
+        </ul>
+        <!-- 批量加价 start-->
+        <div class="batch-increase" @click="showEject(index)">
+          <span>批量加价</span>
+          <i class="iconfont icon-jia"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- 确认分享 start -->
+    <div class="confirm-share">
+      <button>确认分享</button>
+    </div>
+
+    <!-- 弹窗 -->
+    <div class="eject-box" v-if="ejectStatus">
+      <div class="eject-inner">
+        <p class="title">批量加价</p>
+        <div class="input-box">
+          <p>输入加价金额</p>
+          <input type="number" autocomplete="off" v-model="inputPrice" @input="inputPrice = parseInt(inputPrice)">
+        </div>
+        <div class="btn-box">
+          <button @click="closeEject()">确认</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</template>
+
+<style lang="less" scoped>
+  @import "../assets/css/base.less";
+  @import "../assets/css/common.less";
+
+  .small-span(@fn:26*@basePX;@col:@subTextColor){
+    font-size: @fn;
+    color: @col;
+  }
+
+  #priceMarkup{
+    width: 100%;
+    height: 100%;
+    header{
+      background-color: @topBg;
+      width: 100%;
+      height: 88*@basePX;
+      color: #fff;
+      position: fixed;
+      top:0;
+      left: 0;
+      z-index: 9;
+      h2{
+        width: 100%;
+        font-weight: normal;
+        font-size: 40*@basePX;
+        line-height:2.3;
+        text-align: center;
+      }
+      a{
+        height: 88*@basePX;
+        display: inline-block;
+        position: absolute;
+        top:0;
+        padding:0 24*@basePX;
+        text-decoration: none;
+        color: #fff;
+        .iconfont{
+          font-size:40*@basePX;
+          line-height: 2.3;
+        }
+      }
+      .back{
+        left: 0;
+      }
+      .user{
+        right: 0;
+      }
+    }
+    .main{
+      width: 100%;
+      min-height: 100%;
+      padding:88*@basePX 24*@basePX 154*@basePX;
+      background-color: @appBg;
+      .item-box{
+        width: 100%;
+        background-color: #fff;
+        margin-top: 24*@basePX;
+        padding: 40*@basePX 24*@basePX 0;
+        .borderRadius;
+        .cabin-title{
+          width: 579*@basePX;
+          height: 1px;
+          background-color: @topBg;
+          margin:auto;
+          text-align: center;
+          position: relative;
+          span{
+            display: inline-block;
+            padding:0 20*@basePX;
+            background-color: #fff;
+            position: absolute;
+            transform:translate(-42%,-50%);
+            color: @topBg;
+          }
+        }
+        .cabin-list{
+          width: 100%;
+          margin-top: 40*@basePX;
+          li{
+            width: 100%;
+            border-bottom: 1px solid @lineColor;
+            padding: 45*@basePX 0;
+            text-align: center;
+            .cabin-name{
+              float: left;
+              span{
+                display: block;
+                font-size: 32*@basePX;
+                color: #4c4c4c;
+                text-align: left;
+              }
+              .old-price{
+                .small-span;
+              }
+            }
+            .input-price{
+              display: inline-block;
+              margin: -4*@basePX auto 0;
+              input{
+                width: 220*@basePX;
+                border:0;
+                border-bottom: 2*@basePX solid @clickBtnBg;
+                text-align: center;
+                color: @clickBtnBg;
+                outline: none;
+                font-size: 60*@basePX;
+                margin-top: -8px;
+              }
+              input::-webkit-input-placeholder{
+                color:@clickBtnBg;
+              }
+              span{
+               .small-span;
+                display: block;
+                text-align: center;
+                margin-top: 14*@basePX;
+              }
+            }
+            .new-price{
+              float: right;
+              span{
+                .small-span;
+                display: block;
+                text-align: center;
+              }
+              span:nth-child(2){
+                .small-span(@col:@clickBtnBg);
+              }
+            }
+          }
+        }
+        .batch-increase{
+          width: 100%;
+          text-align: center;
+          padding: 30*@basePX 0;
+          color:@clickBtnBg;
+          span{
+            .small-span(@fn:26*@basePX;@col:@clickBtnBg);
+          }
+        }
+      }
+    }
+    .confirm-share{
+      width: 100%;
+      background-color: #fafafa;
+      position: fixed;
+      bottom: 0;
+      text-align: center;
+      padding: 24*@basePX 0;
+      button{
+        width:600*@basePX ;
+        height: 88*@basePX;
+        background-color: @clickBtnBg;
+        color:#fff;
+        .borderRadius(@radius:50*@basePX);
+        font-size: 40*@basePX;
+        border:0;
+        cursor: pointer;
+        outline: none;
+      }
+    }
+    .eject-box{
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      background-color: rgba(0,0,0,0.35);
+      z-index: 9;
+      .eject-inner{
+        width: 600*@basePX;
+        height: 800*@basePX;
+        background-image: url("../assets/img/eject-bg.png");
+        background-size: 100% 100%;
+        left: 50%;
+        margin-left: -300*@basePX;
+        position: absolute;
+        top: 130*@basePX;
+        .title{
+          text-align: center;
+          .small-span(@fn:36*@basePX;@col:#fff);
+          margin-top: 30*@basePX;
+        }
+        .input-box{
+          margin:148*@basePX auto 0;
+          width: 354*@basePX;
+          height: 354*@basePX;
+          border:1px solid @topBg;
+          .borderRadius(@radius: 50%);
+          background-color: #fafafa;
+          text-align: center;
+          p{
+            .small-span(@fn:28*@basePX;@col:#999);
+            text-align: center;
+            margin-top: 104*@basePX;
+          }
+          input{
+            width: 220*@basePX;
+            border:0;
+            border-bottom: 2*@basePX solid @clickBtnBg;
+            text-align: center;
+            color: @clickBtnBg;
+            outline: none;
+            font-size: 60*@basePX;
+            margin: 50*@basePX auto 0;
+            background-color: transparent;
+          }
+          input::-webkit-input-placeholder{
+            color:@clickBtnBg;
+          }
+        }
+        .btn-box{
+          width: 100%;
+          text-align: center;
+          margin-top: 90*@basePX;
+          button{
+            width: 348*@basePX;
+            height: 78*@basePX;
+            background-color: @topBg;
+            border:0;
+            .borderRadius(@radius:50*@basePX);
+            .small-span(@fn:32*@basePX;@col:#fff);
+            outline: none;
+          }
+        }
+      }
+    }
+  }
+</style>
+
+<script>
+
+  let vm;
+  export default{
+    name:'priceMarkup',
+    data(){
+      return{
+        ejectStatus:false,  //弹窗
+        content:[
+          {
+            cabintype:"海景房",
+            cabContent:[
+              {
+                cabName:"海景双人房",
+                oldprice:3499,
+                newprice:3499,
+                inputPrice:0,  //输入价格
+
+              },
+              {
+                cabName:"海景大床房",
+                oldprice:2099,
+                newprice:2099,
+                inputPrice:0,  //输入价格
+              }
+            ]
+          },
+          {
+            cabintype:"内舱房",
+            cabContent:[
+              {
+                cabName:"内舱双人房",
+                oldprice:2499,
+                newprice:2499,
+                inputPrice:0,  //输入价格
+              },
+            ]
+          }
+        ],
+        inputPrice:0,
+        index:0,
+      }
+    },
+    mounted:function () {
+      vm = this;
+    },
+    methods:{
+      addPrice:function (obj) {
+       obj.newprice = obj.oldprice + parseInt(obj.inputPrice);
+      },
+      showEject:function (obj) {
+        vm.ejectStatus = true;
+        vm.inputPrice = 0;
+        vm.index = obj;
+      },
+      closeEject:function () {
+        vm.ejectStatus = !vm.ejectStatus;
+        let data = vm.content[vm.index];
+        for(let i in data.cabContent){
+          let json =  data.cabContent[i];
+          json.newprice = json.oldprice + parseInt(vm.inputPrice);
+        }
+      },
+      goBack:function () {
+        vm.$router.goBack();
+      },
+      goUserCenter:function () {
+        vm.$router.push('/userCenter');
+      },
+    }
+  }
+</script>

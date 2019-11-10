@@ -1,0 +1,49 @@
+import Vue from 'vue'
+import Router from 'vue-router'
+
+Vue.use(Router)
+
+export default new Router({
+  routes: [
+    {
+      path: '/',
+      name: 'login',
+      component: resolve => { require(['@/components/login'], resolve); },
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
+    },
+    {
+      path:'/productQuery',
+      name:'productQuery',
+      component:resolve => { require(['@/components/productQuery'],resolve);},
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
+    },
+    {
+      path: '/placeOrder',
+      name: 'placeOrder',
+      component: resolve => { require(['@/components/placeOrder'], resolve); },
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
+    },
+    {
+      path: '/productDetail',
+      name: 'productDetail',
+      component: resolve =>{ require(['@/components/ptDetail'], resolve); },
+      meta: {
+        keepAlive: false // 不需要被缓存
+      }
+    },
+    {
+      path: '/orderSuccess',
+      name: 'orderSuccess',
+      component: resolve =>{ require(['@/components/orderSuccess'], resolve); },
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
+    }
+  ]
+})

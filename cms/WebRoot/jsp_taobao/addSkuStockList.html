@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>批量新增SKU库存</title>
+
+</head>
+<body>
+<center>
+	<form>
+		<table style="margin-top:16px;text-align:center;" id="stockTable">
+			 <tr>
+		  		<th style="text-align:right;height:30px;"><p>日期&nbsp;</p></th>
+		  		<td></td>
+			</tr>
+			<tr>
+		 		<th style="text-align:right;height:30px;"><p>价格类型&nbsp;</p></th>
+		 		 <td>
+		   			<p><select id="priceType_Form" name="priceTypeForm" style="width:430px;">
+		    			<option value="1">成人</option>
+		    			<option value="2">儿童</option>
+		    			<option value="3">单房差</option>
+		   			</select><p>
+		  		</td>
+		 	</tr>
+		 	<tr>
+		 		 <th style="text-align:right;height:30px;"><p>价格&nbsp;</p></th>
+		  		 <td>
+		  			 <input id="price_Form" type="text" style="width:395px;" />&nbsp; 
+		   			 <span style="float:right;height:30px;">
+		    			<img src="../image/other/unlock.png" title="点我锁定价格(锁定价格后,克隆/更新宝贝库存不会更改)" 
+		    			 id="isLockImg_Form" onclick="lockImg()"/> 
+		    			<input type="hidden" id="isLock_Form" value="0"/>
+		   			 </span>
+		 		</td>
+		 	</tr>
+		 	<tr> 
+		 		 <th style="text-align:right;height:30px;"><p>库存&nbsp;</p></th>
+		 	 	 <td>
+		   			<input id="stock_Form" type="text" style="width:414px;" />人
+		  		 </td>
+		 	</tr>
+	 	</table>
+	</form>
+</center>
+</body>
+</html>

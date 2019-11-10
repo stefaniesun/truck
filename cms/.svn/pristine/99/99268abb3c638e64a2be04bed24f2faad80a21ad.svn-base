@@ -1,0 +1,73 @@
+/**
+ * Created by Administrator on 2017/11/1.
+ */
+import Vue from 'vue'
+import loading from '@/components/loading.vue'
+import dialog from '@/components/dialog.vue'
+
+const LoadingConstructor = Vue.extend(loading);
+const dialogConstructor = Vue.extend(dialog);
+//加载动画
+Vue.prototype.Loading = {
+  show(el) {
+    let node = el || '#app';
+    let mountDom = document.querySelector(node);
+    let instance = new LoadingConstructor().$mount();
+    mountDom.appendChild(instance.$el);
+    bodyNoScrolling.open();
+  },
+  hide(){
+    bodyNoScrolling.close();
+    let loading = document.querySelector('.loading-wrapper');
+    loading && loading.remove()
+  }
+}
+//提示弹窗
+Vue.prototype.dialog = {
+  showDialog( msg) {
+    let node = '#app';
+    let dom = document.querySelector(node);
+    let dialog = new dialogConstructor({propsData: {msg: msg}}).$mount();
+    dom.appendChild(dialog.$el);
+    bodyNoScrolling.open();
+  },
+  hideDialog() {
+    bodyNoScrolling.close();
+    let dialog = document.querySelector('.dialog-wrapper');
+    dialog && dialog.remove()
+  }
+};
+
+let bodyNoScrolling = (function(bodyCls) {
+  let scrollTop;
+  let scrollBarWidth = getScrollWidth();
+  return {
+    open: function() {
+      scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+      document.body.classList.add(bodyCls);
+      document.body.style.top = -scrollTop + 'px';
+      document.body.style.paddingRight = scrollBarWidth + 'px';
+    },
+    close: function() {
+      document.body.classList.remove(bodyCls);
+      if(document.documentElement.scrollTop){
+        document.documentElement.scrollTop = scrollTop;
+      }else if(document.body.scrollTop){
+        document.body.scrollTop = scrollTop;
+      }
+      document.body.style.paddingRight = '0px';
+    }
+  };
+  function getScrollWidth() {
+    var noScroll, scroll, oDiv = document.createElement("DIV");
+    oDiv.style.cssText = "position:absolute; top:-1000px; width:100px; height:100px; overflow:hidden;";
+    noScroll = document.body.appendChild(oDiv).clientWidth;
+    oDiv.style.overflowY = "scroll";
+    scroll = oDiv.clientWidth;
+    document.body.removeChild(oDiv);
+    return noScroll-scroll;
+  }
+})('modal-open');
+
+
+export default new Vue

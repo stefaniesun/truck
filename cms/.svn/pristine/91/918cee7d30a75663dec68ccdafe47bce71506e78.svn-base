@@ -1,0 +1,1205 @@
+<template>
+  <div class="productQuery">
+    <m-header isHeader="1" currentPage="1"></m-header>
+    <!--搜索-->
+    <div class="product-input">
+      <img src="../assets/img/productLogo.png" @click="$router.push({name : 'productQuery'})"/>
+      <div class="input-search">
+        <div class="search-input">
+          <input type="text" placeholder="搜索航线/目的地等关键词" v-model="searchContent">
+          <div @click="startSearch">搜索</div>
+        </div>
+        <div class="hot-search">热门搜索：<span v-for="num in hotSearch" @click="searchContent = num">{{num}}</span></div>
+      </div>
+      <div class="clearfloat"></div>
+    </div>
+    <div class="border-top"></div>
+    <!--banner-->
+    <div class="banner">
+      <div class="banner-content">
+        <div>
+          <img src="../assets/img/erweima.png">
+          <div>扫描微信下单</div>
+        </div>
+      </div>
+    </div>
+    <!--搜索条件-->
+    <div class="search-condition">
+      <ul>
+        <li v-for="(item,index) in screenClass">
+          <div class="select-general">
+            <i class="icon-box">
+              <svg class="icon" aria-hidden="true">
+                <use :xlink:href="item.icon"></use>
+              </svg>
+            </i>
+            <span>{{item.title}}</span>
+          </div>
+          <div :style="index == 1?'width:660px':index == 2?'width:840px':''" class="choice-content">
+            <div v-if="index == 1" class="date-select select">
+              <DatePicker
+                v-model="startDate"
+                :options="dateOptions"
+                type="date"
+                :editable="false"
+                placeholder="点击选择开始日期">
+              </DatePicker>
+              <span>~</span>
+              <DatePicker
+                v-model="endDate"
+                :options="dateOptions"
+                type="date"
+                placement="bottom-end"
+                :editable="false"
+                placeholder="点击选择结束日期">
+              </DatePicker>
+              <div @click="getDateSection" class="btn">
+                确定
+              </div>
+            </div>
+            <!--<div v-if="index == 2" class="price-select select">-->
+              <!--<Input v-model.number.trim="specificPrice" type="text" style="width: 172px" placeholder="可输入具体价格"></Input>-->
+              <!--<div @click="getPrice" class="btn">-->
+                <!--确定-->
+              <!--</div>-->
+            <!--</div>-->
+            <ul>
+              <li @click="changeScreenKey(index,num)" v-for="(key,num) in  keyArr[index]" :class="key.status ? 'selected':''" >
+                <span>{{key.value}}</span>
+              </li>
+            </ul>
+          </div>
+          <div class="clearfloat"></div>
+        </li>
+        <li v-if="showScreenKeyArr">
+          <div v-if="item" v-for="(item,index) in screenKeyArr" class="already-selected">
+            {{item.value}}
+            <i class="icon-box">
+              <svg class="icon" aria-hidden="true" @click="clickDelete(index)">
+                <use xlink:href="#icon-cha"></use>
+              </svg>
+            </i>
+          </div>
+          <div class="clear-all" @click="deleteAll">清除全部</div>
+        </li>
+      </ul>
+      <div class="clearfloat"></div>
+    </div>
+    <!--内容展示-->
+    <!--<div class="content-show">-->
+      <!--<div class="content-title">-->
+        <!--<ul ref="scroll" :class="searchBarFixed ? 'isFixed':''">-->
+          <!--<li v-for="(num,index) in contentTitle">-->
+            <!--<div v-if="index != 3">{{num}}</div>-->
+            <!--<div class="price-show" v-if="index == 3">-->
+              <!--<div>{{num.title}}</div>-->
+              <!--<ul>-->
+                <!--<li v-for="i in num.content">-->
+                  <!--{{i}}-->
+                  <!--<i class="icon-box">-->
+                    <!--<svg class="icon" aria-hidden="true">-->
+                      <!--<use xlink:href="#icon-xiaosanjiao"></use>-->
+                    <!--</svg>-->
+                    <!--<svg class="icon" aria-hidden="true">-->
+                      <!--<use xlink:href="#icon-xiaosanjiao"></use>-->
+                    <!--</svg>-->
+                  <!--</i>-->
+                <!--</li>-->
+              <!--</ul>-->
+            <!--</div>-->
+          <!--</li>-->
+        <!--</ul>-->
+        <!--<div class="clearfloat"></div>-->
+        <!--<div class="whole-info">-->
+          <!--<div class="single-data" v-for="num in 70">-->
+            <!--<ul>-->
+              <!--<li v-for="item in testContent" class="">{{item}}</li>-->
+              <!--<li>-->
+                <!--<div>详情</div>-->
+              <!--</li>-->
+            <!--</ul>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="clearfloat"></div>-->
+    <!--</div>-->
+    <div class="content-display" >
+      <!--有内容-->
+      <div class="content-width" v-if="content.length > 0">
+        <div @click="goProductDetail(num.numberCode)" class="single-product" v-for="num in content">
+          <div class="cruise-img">
+            <img v-if="num.image" :src="num.image">
+            <img v-if="!num.image" src="../assets/img/baseImg.png" alt="">
+            <div>￥<span>{{num.price}}</span>起/人</div>
+          </div>
+          <div class="cruise-title">{{num.name}}<span>立减300</span></div>
+          <div class="set-outDate">
+            <i class="icon-box">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-date"></use>
+              </svg>
+            </i>
+            <span>出发日期：{{num.date.substring(0,10)}}</span>
+          </div>
+          <div class="set-outDate">
+            <i class="icon-box">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-chengshi"></use>
+              </svg>
+            </i>
+            <span>出发城市：{{num.startCity}}</span>
+          </div>
+          <div class="set-outDate">
+            <i class="icon-box">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-youlunyou1"></use>
+              </svg>
+            </i>
+            <span>邮轮号：{{num.cruiseNameCn}}</span>
+          </div>
+          <div class="view-details"><span>查看详情</span></div>
+        </div>
+        <div class="clearfloat"></div>
+      </div>
+      <!--无内容-->
+      <div class="no-content" v-if="content.length == 0">
+        <img src="../assets/img/noContent.png">
+        <div>暂时没有相关内容</div>
+      </div>
+    </div>
+    <!--分页展示-->
+    <div class="paging-display" v-if="content.length > 0">
+      <div>
+        <Page :total="total" :page-size="12" @on-change="pageChange" className="paging-style"></Page>
+      </div>
+    </div>
+    <div class="border-bottom"></div>
+    <m-footer></m-footer>
+  </div>
+</template>
+<script>
+  let vm;
+  import common from '../assets/js/common';
+  import MHeader from '@/components/header'
+  import MFooter from '@/components/footer'
+  import Vue from 'vue';
+  export default {
+    name : 'productQuery',
+    components:{
+      MHeader,
+      MFooter
+    },
+    data(){
+      return{
+        hotSearch:['哥斯达邮轮','星大王邮轮'],//热门搜索内容
+        searchContent:'',//搜索内容
+        page : 1,//当前页数
+        content:[],//当前数据内容
+        screenClass: [
+          {
+            title: '航区',
+            icon: '#icon-hangxian1'
+          },
+          {
+            title:  '日期',
+            icon: '#icon-riqi'
+          },
+          {
+            title: '价格',
+            icon: '#icon-jiage'
+          },
+          {
+            title: '邮轮',
+            icon: '#icon-youlunyou'
+          }
+        ],//筛选数据title
+        initKeyArr:[],//筛选过后的数据
+        keyArr: [],//筛选数据
+        screenKeyArr: [],//选中的筛选条件
+        showScreenKeyArr: false,//筛选框是否显示
+        screenUpData: new Object,
+        total: 1,//总数量
+        upData : {
+          page: 1,
+          rows: 12,
+          area: '',
+          date: '',
+          price:'',
+          cruise: '',
+          startDate: '',
+          endDate: ''
+        },//筛选数据接口的参数
+        contentTitle : ['日期','邮轮','航线',{title : '价格',content : ['内双','内三','内四','海双','海三','海四','阳双','阳三','阳四','套双','套三','套四']},'操作'],//数据内容展示title
+        testContent : ['17年/12月','海洋探险者号','日本航线','2199','2199','2199','2399','2399','2499','2699','2699','2699','2699','2899','2899'],//测试内容
+        searchBarFixed : false,//是否悬浮
+        offsetTop : 0,//ref为scroll距离顶部的距离
+//        specificPrice: '',
+        startDate: '',
+        endDate: '',
+        isDateSection: false,
+        dateOptions: {
+          disabledDate (date) {
+            return date && date.valueOf() < Date.now() - 86400000;
+          }
+        }
+      }
+    },
+    mounted(){
+      vm = this;
+      let parame ={
+        page: vm.page,
+        rows: 12
+      };
+//      vm.offsetTop = vm.$refs['scroll'].getBoundingClientRect().top;
+      vm.axios.post(this.api+this.urlApi.queryVoyageList,parame).then(function (data) {
+        for(let num in data.content.rows){
+          vm.content.push(data.content.rows[num]);
+        }
+        if(vm.content.length > 0){
+          vm.$nextTick(function(){
+            let prev = document.getElementsByClassName('ivu-page-prev')[0];
+            prev.innerHTML = '上一页';
+            let next = document.getElementsByClassName('ivu-page-next')[0];
+            next.innerHTML = '下一页';
+          });
+        }
+      });
+      vm.axios.post(this.api+this.urlApi.getSelectData).then(function (data) {
+        let content = data.content;
+        if(content.length>0){
+          let airwayArr = new Array;
+          let dateArr = new Array;
+          let priceArr = new Array;
+          let cruiseArr = new Array;
+          for(let i=-1;i<content.length;i++){
+            let airwayObj = {};
+            let dateObj = {};
+            let priceObj = {};
+            let cruiseObj = {};
+            let status = false;
+            if(i==-1){
+              status = true;
+              let value = '不限';
+              airwayObj.value = value;
+              dateObj.value = value;
+              priceObj.value = value;
+              cruiseObj.value = value;
+            }else {
+              let dateTempArr = content[i].dateMark;
+              let year = dateTempArr.substring(0,2);
+              let month = dateTempArr.substring(2,4);
+              content[i].dateMark = year +'年/'+ month+'月';
+              content[i].basePrice = content[i].basePrice.substring(0,4);
+              airwayObj.value = content[i].areaNameCn;
+              airwayObj.id = content[i].area;
+              dateObj.value = content[i].dateMark;
+              let priceTitle = content[i].basePrice >= 0 && content[i].basePrice < 3000 ? '3000以下' : content[i].basePrice >= 3000 && content[i].basePrice <= 5000 ? '3000-5000' : '5000以上';
+              priceObj.value = priceTitle;
+              cruiseObj.value = content[i].cruiseNameCn;
+              cruiseObj.id = content[i].cruise;
+            }
+            airwayObj.status = status;
+            airwayArr.push(airwayObj);
+            dateObj.status = status;
+            dateArr.push(dateObj);
+            priceObj.status = status;
+            priceArr.push(priceObj);
+            cruiseObj.status = status;
+            cruiseArr.push(cruiseObj);
+          }
+          vm.$set(vm.keyArr,0,vm.removeDuplicate(airwayArr));
+          vm.$set(vm.keyArr,1,vm.removeDuplicate(dateArr));
+          vm.$set(vm.keyArr,2,vm.removeDuplicate(priceArr));
+          vm.$set(vm.keyArr,3,vm.removeDuplicate(cruiseArr));
+          vm.cloneKeyArr = common.clone(vm.keyArr);
+          vm.initKeyArr = content;
+        }
+      })
+//      window.addEventListener('scroll',vm.scrollEffect);
+    },
+    methods:{
+      startSearch(){
+      	if(!vm.searchContent){
+          vm.dialog.showDialog('请先输入关键词');
+          return;
+        }
+        vm.page = 1;
+        vm.isDateSection = false;
+        vm.startDate = '';
+        vm.endDate = '';
+        if(vm.screenKeyArr){
+          for(let i=0;i<vm.screenKeyArr.length;i++){
+            vm.screenKeyArr[i] = '';
+          }
+          console.log(vm.cloneKeyArr)
+          vm.keyArr = vm.cloneKeyArr;
+        }
+        let parame = {
+          page: vm.page,
+          rows: 12,
+          keyword: vm.searchContent
+        }
+        vm.axios.post(this.api + this.urlApi.queryVoyageListByKeyword,parame).then(function (data) {
+          let content = data.content;
+          vm.total = content.total;
+          vm.content = content.rows;
+        })
+      },
+      removeDuplicate(array) {
+        let re = [array[0]];
+        let This = new Array;
+        for (let i = 1; i < array.length; i++) {
+          This.push(array[i]);
+        }
+        This.sort();
+        for (let i = 0; i < This.length; i++) {
+        	let onOff = true;
+          for(let j=0;j<re.length;j++){
+            if (This[i].value == re[j].value) {
+              onOff = false;
+            }
+          }
+          if(onOff) re.push(This[i]);
+        }
+        return re;
+      },//筛选关键词去重, 参数 array 需要去重的关键词数组
+      changeScreenKey(menuIndex,screenIndex){
+        vm.searchContent = '';
+        vm.menuIndex = menuIndex;
+        if(menuIndex == 1){
+        	vm.isDateSection = false;
+        	vm.startDate = '';
+        	vm.endDate = '';
+        }
+        let obj = vm.keyArr[menuIndex];
+        if(obj[screenIndex].status) return;
+        for (let i = 0; i < obj.length; i++) {
+          i == screenIndex ? vm.$set(obj[i],'status',true) : vm.$set(obj[i],'status',false);
+        }
+        if( screenIndex == 0 ){
+          vm.screenKeyArr[menuIndex] = '';
+          vm.resetKeyArr(false);
+        }else {
+          let keyObj = {};
+          keyObj.value = obj[screenIndex].value;
+          switch (menuIndex)
+          {
+            case 0:
+              keyObj.id = obj[screenIndex].id;
+              keyObj.key = 'areaNameCn';
+              break;
+            case 1:
+              keyObj.key = 'dateMark';
+              break;
+            case 2:
+              keyObj.key = 'basePrice';
+              let price = obj[screenIndex].value;
+              keyObj.value = price;
+              break;
+            case 3:
+              keyObj.id = obj[screenIndex].id;
+              keyObj.key = 'cruiseNameCn';
+              break;
+          }
+          vm.screenKeyArr[menuIndex] = keyObj;
+          vm.resetKeyArr(true);
+        }
+      },//组装点击的筛选数据
+      getScreenKey(){
+        let realScreenKey = new Array;
+        for(let i=0;i<vm.screenKeyArr.length;i++){
+          if(vm.screenKeyArr[i]) realScreenKey.push(vm.screenKeyArr[i]);
+        }
+        let obj = {
+          area: '',
+          areaNameCn: '',
+          dateMark: '',
+          basePrice: '',
+          cruiseNameCn: '',
+          cruise: ''
+        };
+        for(let j=0;j<realScreenKey.length;j++){
+          let key = realScreenKey[j].key;
+          switch (key)
+          {
+            case 'areaNameCn':
+              obj.areaNameCn = realScreenKey[j].value;
+              obj.area = realScreenKey[j].id;
+              break;
+            case 'dateMark':
+              obj.dateMark = realScreenKey[j].value;
+              break;
+            case 'basePrice':
+              obj.basePrice = realScreenKey[j].value;
+              break;
+            case 'cruiseNameCn':
+              obj.cruiseNameCn = realScreenKey[j].value;
+              obj.cruise = realScreenKey[j].id;
+              break;
+          }
+        }
+        let onOff = false;
+        for(let m in obj){
+          if(obj[m])onOff = true;
+        }
+        vm.showScreenKeyArr = onOff;
+        vm.screenUpData = obj;
+        return obj;
+      },//组装筛选数据
+      resetKeyArr(flag){
+        let screenKeyArr = vm.getScreenKey();
+        let keyArr = new Array;
+        for(let n=0;n<vm.initKeyArr.length;n++){
+          let A = vm.initKeyArr[n];
+          let onOff = true;
+          if(screenKeyArr.areaNameCn && A.areaNameCn !== screenKeyArr.areaNameCn ) onOff = false;
+          if( !vm.isDateSection ){
+            if(screenKeyArr.dateMark && A.dateMark !== screenKeyArr.dateMark ) onOff = false;
+          }
+          if(screenKeyArr.basePrice){
+            let realPrice =  screenKeyArr.basePrice;
+            let priceArr;
+            if(realPrice.indexOf('-')>-1){
+              priceArr = realPrice.split('-');
+              if(A.basePrice < priceArr[0] || A.basePrice > priceArr[1]) onOff = false;
+            }else if(realPrice.indexOf('以上')>-1) {
+              priceArr = realPrice.split('以上')[0];
+              if(A.basePrice < priceArr[0]) onOff = false;
+            }else if(realPrice.indexOf('以下')>-1) {
+              priceArr = realPrice.split('以下')[0];
+              if(A.basePrice > priceArr[0]) onOff = false;
+            }
+          }
+          if(screenKeyArr.cruiseNameCn && A.cruiseNameCn !== screenKeyArr.cruiseNameCn ) onOff = false;
+          if(onOff){
+            keyArr.push(A);
+          }
+        }
+        let airwayArr = new Array;
+        let dateArr = new Array;
+        let priceArr = new Array;
+        let cruiseArr = new Array;
+        for(let i=-1;i<keyArr.length;i++){
+          let airwayObj = {};
+          let dateObj = {};
+          let priceObj = {};
+          let cruiseObj = {};
+          if(i==-1){
+            let value = '不限';
+            airwayObj.value = value;
+            dateObj.value = value;
+            priceObj.value = value;
+            cruiseObj.value = value;
+          }else {
+            airwayObj.value = keyArr[i].areaNameCn;
+            airwayObj.id = keyArr[i].airway;
+            dateObj.value = keyArr[i].dateMark;
+            let priceTitle =  keyArr[i].basePrice >= 0 &&  keyArr[i].basePrice < 3000 ? '3000以下' :  keyArr[i].basePrice >= 3000 &&  keyArr[i].basePrice <= 5000 ? '3000-5000' : '5000以上';
+            priceObj.value = priceTitle;
+            cruiseObj.value = keyArr[i].cruiseNameCn;
+            cruiseObj.id = keyArr[i].cruise;
+          }
+          airwayArr.push(airwayObj);
+          dateArr.push(dateObj);
+          priceArr.push(priceObj);
+          cruiseArr.push(cruiseObj);
+        }
+        let objName = [airwayArr,dateArr,priceArr,cruiseArr];
+        for(let r=0;r<objName.length;r++){
+          if(flag){
+            if( vm.menuIndex !== r){
+              objName[r] = vm.setStatus(objName[r],r);
+              vm.$set(vm.keyArr,r,vm.removeDuplicate(objName[r]))
+            }
+          }else {
+            objName[r] = vm.setStatus(objName[r],r);
+            vm.$set(vm.keyArr,r,vm.removeDuplicate(objName[r]))
+          }
+        }
+      },
+      setStatus(arr,index){
+        let screenKeyArr = vm.getScreenKey();
+        for(let c=0;c<arr.length;c++){
+          arr[c].status = true;
+          if( c > 0){
+            let value;
+            switch (index)
+            {
+              case 0:
+                value = screenKeyArr.areaNameCn;
+                break;
+              case 1:
+                value = screenKeyArr.dateMark;
+                break;
+              case 2:
+                value = screenKeyArr.basePrice;
+                break;
+              case 3:
+                value = screenKeyArr.cruiseNameCn;
+                break;
+            }
+            if(arr[c].value !== value){
+              arr[c].status = false;
+            }else {
+              arr[0].status = false;
+            }
+          }
+          if( index == 1 && vm.isDateSection ){
+            arr[c].status = false;
+          }
+        }
+        return arr;
+      },
+      clickDelete(index){
+        vm.screenKeyArr[index] = '';
+        if(index == 1){
+          vm.isDateSection = false;
+          vm.startDate = '';
+          vm.endDate = '';
+        }
+        vm.resetKeyArr(false);
+      },
+      deleteAll(){
+        for(let i=0;i<vm.screenKeyArr.length;i++){
+          vm.screenKeyArr[i] = '';
+        }
+        vm.isDateSection = false;
+        vm.startDate = '';
+        vm.endDate = '';
+        vm.resetKeyArr(false);
+      },
+      getDateSection(){
+        let startDate,endDate;
+      	if( vm.startDate && vm.endDate && vm.startDate > vm.endDate ){
+          vm.dialog.showDialog('开始日期不能大于结束日期');
+          return
+        }else if(!vm.startDate && !vm.endDate){
+      		if(vm.isDateSection){
+            vm.isDateSection = false;
+            vm.screenKeyArr[1] = '';
+            for(let i=0;i<vm.keyArr[1].length;i++){
+              i==0 ? vm.keyArr[1][i].status = true : vm.keyArr[1][i].status = false;
+            }
+          }else {
+            vm.dialog.showDialog('请先选择日期');
+            return
+          }
+        }else {
+          startDate = vm.startDate ? new Date(vm.startDate).Format("yyyy-MM-dd") : '';
+          endDate = vm.endDate ? new Date(vm.endDate).Format("yyyy-MM-dd") : '';
+          vm.isDateSection = true;
+          vm.searchContent = '';
+          for(let i=0;i<vm.keyArr[1].length;i++){
+            vm.keyArr[1][i].status = false;
+          }
+          let value = '';
+          if(vm.startDate && vm.endDate){
+            value = startDate +' ~ '+ endDate;
+          }else if(!vm.startDate && vm.endDate){
+            value = endDate;
+          }else if(vm.startDate && !vm.endDate){
+            value = startDate;
+          }
+          if(vm.screenKeyArr[1]){
+            vm.screenKeyArr[1].value = value;
+          }else {
+          	let obj = {
+              key: 'dateMark',
+              value: value
+            }
+            vm.screenKeyArr[1] = obj;
+            vm.showScreenKeyArr = true;
+          }
+        }
+        vm.upData.page = 1;
+        vm.upData.date = '';
+        vm.upData.startDate = startDate;
+        vm.upData.endDate = endDate;
+        vm.axios.post(this.api+this.urlApi.getQueryData,vm.upData).then(function (data) {
+          let content = data.content;
+          vm.total = content.total;
+          vm.content = content.rows;
+        })
+      },
+      pageChange:function (page) {
+        vm.page = page;
+        if(!vm.showScreenKeyArr){
+          let parame ={
+            page: vm.page,
+            rows: 12
+          };
+          vm.axios.post(this.api+this.urlApi.queryVoyageList,parame).then(function (data) {
+            vm.total = data.content.total;
+            for(let num in data.content.rows){
+              vm.content.push(data.content.rows[num]);
+            }
+          });
+        }else if(vm.searchContent){
+          let parame = {
+            page: vm.page,
+            rows: 12,
+            keyword: vm.searchContent
+          }
+          vm.axios.post(this.api + this.urlApi.queryVoyageListByKeyword,parame).then(function (data) {
+            let content = data.content;
+            vm.total = content.total;
+            vm.content = vm.content.concat(content.rows);
+          })
+        }else {
+          vm.axios.post(this.api+this.urlApi.getQueryData,vm.upData).then(function (data) {
+            let content = data.content;
+            vm.total = content.total;
+            vm.content = vm.content.concat(content.rows);
+          })
+        }
+      },//分页改变
+      goProductDetail(numberCode){
+        sessionStorage.setItem('numberCode',numberCode);
+        vm.$router.push('/productDetail');
+      },
+      scrollEffect : function(){
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        if (scrollTop > vm.offsetTop) {
+          vm.searchBarFixed = true;
+        } else{
+          vm.searchBarFixed = false;
+        }
+      },//滚动条滚动效果
+    },
+    watch:{
+      screenUpData: {
+        handler(newVal){
+          let dateArr;
+          let year;
+          let month;
+          let price;
+          if(newVal.dateMark){
+          	if( newVal.dateMark.indexOf('/')>-1 ){
+              dateArr = newVal.dateMark.split('/');
+              year = dateArr[0].substring(0,2);
+              month = dateArr[1].substring(0,2);
+            }
+          }
+          if(newVal.basePrice){
+            let priceArr;
+            if( newVal.basePrice.indexOf('-')>-1){
+              priceArr =  newVal.basePrice.split('-');
+              price = priceArr[0]+','+priceArr[1];
+            }else if(newVal.basePrice.indexOf('以上')>-1) {
+              priceArr = newVal.basePrice.split('以上');
+              price = priceArr[0]+',50000';
+            }else if(newVal.basePrice.indexOf('以下')>-1) {
+              priceArr = newVal.basePrice.split('以下');
+              price = '0,'+priceArr[0];
+            }
+          }
+          vm.upData = {
+            page: 1,
+            rows: 12,
+            area: newVal.area,
+            date: vm.isDateSection ? '' : newVal.dateMark ? year+month : '',
+            price: newVal.basePrice ? price : '',
+            cruise: newVal.cruise,
+            startDate: vm.isDateSection ? vm.startDate ? new Date(vm.startDate).Format("yyyy-MM-dd") : '' : '',
+            endDate: vm.isDateSection ? vm.endDate ? new Date(vm.endDate).Format("yyyy-MM-dd") : '' : ''
+          }
+          vm.axios.post(this.api+this.urlApi.getQueryData,vm.upData).then(function (data) {
+            let content = data.content;
+            vm.total = content.total;
+            vm.content = content.rows;
+          })
+        },
+        deep: true
+      }
+    }
+  }
+</script>
+<style lang="less">
+  @import "../assets/css/common";
+  @blueColor:#6aadff;
+  @iconColor:#e6e6e6;
+  .productQuery{
+    height: 100%;
+    background-color: #fff;
+    .product-input{
+      width: 1200px;
+      margin: 0 auto;
+      padding: 18px 0;
+      img{
+        width: 151px;
+        height: 106px;
+        margin-right: 100px;
+        cursor: pointer;
+        float: left;
+      }
+      .input-search{
+        display: inline-block;
+        float: right;
+        padding-top: 23px;
+        .search-input{
+          width: 700px;
+          height: 40px;
+          border-radius: 20px;
+          border:1px solid @blueColor;
+          input{
+            width: 579px;
+            height: 38px;
+            line-height: 38px;
+            border:0;
+            outline: none;
+            border-radius: 19px 0 0 19px;
+            padding-left: 30px;
+            font-size: 14px;
+          }
+          input::placeholder{
+            color:#ccc;
+          }
+          div{
+            width: 120px;
+            height: 40px;
+            background-color: #ff9b0b;
+            float: right;
+            border-radius: 0 20px 20px 0;
+            margin: -1px -1px 0 0;
+            text-align: center;
+            line-height: 40px;
+            color:#fff;
+            cursor: pointer;
+            font-size: 16px;
+          }
+        }
+        .hot-search{
+          width: 700px;
+          padding-left: 31px;
+          font-size: 14px;
+          color:#666666;
+          line-height: 30px;
+          span{
+            cursor: pointer;
+            margin-right: 10px;
+          }
+        }
+      }
+
+    }
+    .banner{
+      width: 100%;
+      height: 300px;
+      background-image: url("../assets/img/banner.png");
+      background-size: 100% 100%;
+      min-width: 1200px;
+      .banner-content{
+        width: 1200px;
+        height: 300px;
+        margin: 0 auto;
+        >div{
+          float: right;
+          margin: 55px 115px 0 0;
+          text-align: center;
+          img{
+            width: 150px;
+            height: 150px;
+          }
+          div{
+            font-size: 18px;
+            color:#fff;
+            margin-top: 10px;
+          }
+        }
+      }
+    }
+    .border-top{
+      width: 100%;
+      height: 10px;
+      background-color: #eff4f7;
+    }
+    .search-condition{
+      width: 1200px;
+      margin: 20px auto;
+      border:1px solid @iconColor;
+      border-bottom: 0;
+      >ul{
+        >li{
+          border-bottom: 1px solid @iconColor;
+          width: 100%;
+          display: block;
+          .select-general{
+            width: 100px;
+            height: 40px;
+            line-height: 40px;
+            font-size: 16px;
+            color:#333;
+            float: left;
+            .icon-box{
+              float: left;
+              padding:2px 10px 2px 8px;
+              .icon{
+                font-size: 20px;
+              }
+            }
+          }
+          .already-selected{
+            height: 24px;
+            line-height: 22px;
+            border:1px solid #cccccc;
+            margin: 7px 10px;
+            padding: 0 5px;
+            font-size: 14px;
+            color:#333333;
+            float: left;
+            border-radius: 4px;
+            .icon-box{
+              font-size: 15px;
+              margin-left: 10px;
+              cursor: pointer;
+              color:#cccccc;
+            }
+          }
+          .already-selected:hover{
+            border-color:@blueColor;
+            .icon-box{
+              color:@blueColor;
+            }
+          }
+          .clear-all{
+            float: left;
+            height: 24px;
+            line-height: 24px;
+            margin: 7px 0;
+            font-size: 14px;
+            color:@blueColor;
+            cursor: pointer;
+          }
+          .choice-content{
+            width: 1098px;
+            float: left;
+            line-height: 40px;
+            position: relative;
+            .select{
+              height: 100%;
+              position: absolute;
+              top: 0;
+              margin: -2px 0 0 0;
+            }
+            .date-select{
+              width: 416px;
+              right: -430px;
+
+            }
+            .price-select{
+              width: 229px;
+              right: -250px;
+            }
+            .btn{
+              width: 50px;
+              height: 32px;
+              line-height: 32px;
+              text-align: center;
+              float: right;
+              border-radius: 4px;
+              background: #ff9b0b;
+              color: #fff;
+              font-size: 14px;
+              cursor: pointer;
+              margin: 6px 0 0 0;
+            }
+            ul{
+              li{
+                height: 40px;
+                line-height: 40px;
+                padding: 0 11px;
+                float: left;
+                font-size: 14px;
+                color:#999999;
+                cursor: pointer;
+              }
+              .selected{
+                color:#ff9b0b;
+                span{
+                  padding-bottom: 3px;
+                  border-bottom:2px solid #ff9b0b;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .content-display{
+      width: 100%;
+      background-color: #eff4f7;
+      min-width: 1220px;
+      padding: 20px 0;
+      .content-width{
+        width: 1220px;
+        margin: 0 auto;
+        .single-product{
+          width: 285px;
+          margin: 20px 10px;
+          background-color: #fff;
+          padding: 11px;
+          border-radius: 8px;
+          float: left;
+          transition: all .3s;
+          cursor: pointer;
+          .cruise-img{
+            width: 100%;
+            height: 182px;
+            border-radius: 8px;
+            position: relative;
+            img{
+              width: 100%;
+              height: 100%;
+            }
+            div{
+              width: 102px;
+              height: 29px;
+              background-image: url("../assets/img/money.png");
+              background-size: 100% 100%;
+              position: absolute;
+              top:10px;
+              left: -3px;
+              font-size: 12px;
+              padding-top: 2px;
+              color:#fff;
+              span{
+                font-size: 18px;
+              }
+            }
+          }
+          .cruise-title{
+            font-size: 14px;
+            color:#333333;
+            line-height: 20px;
+            margin: 8px 0 5px 0;
+            span{
+              font-size: 12px;
+              color:#fff;
+              background-color: #ff0000;
+              line-height: 18px;
+              border-radius: 10px;
+              padding: 0px 3px;
+              margin-left: 10px;
+              display: inline-block;
+            }
+          }
+          .set-outDate{
+            font-size: 14px;
+            color:#999999;
+            span{
+              margin-left: 5px;
+            }
+            .icon-box{
+              font-size: 14px;
+            }
+          }
+          .view-details{
+            font-size: 14px;
+            color:@blueColor;
+            text-align: center;
+            margin: 20px 0 5px 0;
+            span{
+              cursor: pointer;
+            }
+          }
+        }
+        .single-product:hover{
+          box-shadow: 0 0 21px rgba(74,147,236,.27);
+          transform: scale(1.1);
+        }
+      }
+      .no-content{
+        width: 1200px;
+        height: 550px;
+        background-color: #fff;
+        border-radius: 8px;
+        margin: 20px auto;
+        padding-top: 140px;
+        text-align: center;
+        img{
+          width: 200px;
+          height: 200px;
+        }
+        div{
+          font-size: 22px;
+          color:#b2b2b2;
+          margin-top: 15px;
+        }
+      }
+    }
+    .content-show{
+      width: 1200px;
+      margin: 20px auto;
+      .content-title{
+        height: 80px;
+        position: relative;
+        >ul{
+          position: absolute;
+          top:0;
+          >li{
+            border-right: 1px solid #fff;
+            float: left;
+            line-height: 80px;
+            text-align: center;
+            font-size: 14px;
+            color:#333;
+            background-color: #d9e9ff;
+            .price-show{
+              div{
+                width: 100%;
+                height: 39px;
+                line-height: 39px;
+                border-bottom: 1px solid #fff;
+              }
+              ul{
+                li{
+                  width: 66.66px;
+                  height: 40px;
+                  line-height: 40px;
+                  border-right: 1px solid #fff;
+                  float: left;
+                  position: relative;
+                  text-align: left;
+                  padding-left: 12px;
+                  .icon-box{
+                    .icon{
+                      color:#666666;
+                      font-size: 10px;
+                      position: absolute;
+                      top:10px;
+                      right:10px;
+                      cursor: pointer;
+                    }
+                    svg:nth-of-type(2){
+                      top:19px;
+                      -webkit-transform: rotateX(180deg);
+                      -moz-transform: rotateX(180deg);
+                      -o-transform: rotateX(180deg);
+                      transform: rotateX(180deg);
+                    }
+                  }
+                }
+                li:last-child{
+                  border-right: 0;
+                }
+              }
+            }
+          }
+          li:last-child{
+            border-right: 0;
+            width: 84px;
+          }
+          li:nth-of-type(1){
+            width: 105px;
+          }
+          li:nth-of-type(2){
+            width: 110px;
+          }
+          li:nth-of-type(3){
+            width: 100px;
+          }
+          li:nth-of-type(4){
+            width: 801px;
+          }
+        }
+        .whole-info{
+          padding-top: 80px;
+          .single-data{
+            height: 60px;
+            ul{
+              li{
+                float: left;
+                line-height: 60px;
+                text-align: center;
+                font-size: 14px;
+                color:#4c4c4c;
+                border-bottom: 1px solid #cbe3ff;
+                border-right: 1px solid #cbe3ff;
+                div{
+                  font-size: 15px;
+                  color:#fff;
+                  background-color: #ff9b0b;
+                  width: 54px;
+                  height: 28px;
+                  border-radius: 8px;
+                  line-height: 28px;
+                  display: inline-block;
+                  cursor: pointer;
+                }
+              }
+              li:last-child{
+                width: 83px;
+              }
+              li:nth-of-type(1){
+                width: 104px;
+                border-left: 1px solid #cbe3ff;
+              }
+              li:nth-of-type(2){
+                width: 110px;
+              }
+              li:nth-of-type(3){
+                width: 100px;
+              }
+              li:nth-of-type(4),li:nth-of-type(5),li:nth-of-type(6),li:nth-of-type(7),li:nth-of-type(8),li:nth-of-type(9),li:nth-of-type(10),li:nth-of-type(11),li:nth-of-type(12),li:nth-of-type(13),li:nth-of-type(14){
+                width: 66.66px;
+                color:#275ea2;
+              }
+              li:nth-of-type(15){
+                width: 67.5px;
+                color:#275ea2;
+              }
+              .no-inventory{
+                background-color: #f2f2f2;
+                color:#cccccc!important;
+              }
+            }
+          }
+        }
+      }
+      .isFixed{
+        position:fixed!important;
+        top:0!important;
+        z-index:999!important;
+      }
+    }
+    .paging-display{
+      height: 50px;
+      width: 100%;
+      background-color: #fff;
+      text-align: center;
+      line-height: 50px;
+      div{
+        display: inline-block;
+        margin-top: 10px;
+        .paging-style {
+          li{
+            min-width: 30px;
+            height: 30px;
+            border-radius: 0!important;
+            border-color: #e6e6e6;
+            margin: 0 2px;
+            font-size: 14px;
+            a{
+              color:#333333;
+            }
+          }
+          .ivu-page-item-active{
+            a{
+              color:#fff;
+            }
+          }
+          li:nth-of-type(1),li:last-child{
+            margin: 0 8px;
+            padding: 0 12px;
+          }
+        }
+      }
+    }
+    .border-bottom{
+      width: 100%;
+      height: 40px;
+      background-color: #eff4f7;
+      margin-top: 20px;
+    }
+  }
+</style>

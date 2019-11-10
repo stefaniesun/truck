@@ -1,0 +1,63 @@
+/**
+ * Created by Administrator on 2017/11/1.
+ */
+import Vue from 'vue'
+import loading from '@/components/loading.vue'
+import dialog from '@/components/dialog.vue'
+
+const LoadingConstructor = Vue.extend(loading);
+const dialogConstructor = Vue.extend(dialog);
+//加载动画
+Vue.prototype.Loading = {
+  show(el) {
+    let node = el || '#app';
+    let mountDom = document.querySelector(node);
+    let instance = new LoadingConstructor().$mount();
+    mountDom.appendChild(instance.$el);
+    bodyNoScrolling.open();
+  },
+  hide(){
+    bodyNoScrolling.close();
+    let loading = document.querySelector('.loading-wrapper');
+    loading && loading.remove()
+  }
+}
+//提示弹窗
+Vue.prototype.dialog = {
+  showDialog( msg) {
+    let node = '#app';
+    let dom = document.querySelector(node);
+    let dialog = new dialogConstructor({propsData: {msg: msg}}).$mount();
+    dom.appendChild(dialog.$el);
+    bodyNoScrolling.open();
+  },
+  hideDialog() {
+    bodyNoScrolling.close();
+    let dialog = document.querySelector('.dialog-wrapper');
+    dialog && dialog.remove()
+  }
+};
+
+//在有弹窗、遮罩层的情况下,调用 open方法 禁止body滚动,调用 close方法 恢复body滚动
+let bodyNoScrolling = (function(bodyCls) {
+  let scrollTop;
+  return {
+    open: function() {
+      scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+      document.body.classList.add(bodyCls);
+      document.body.style.top = -scrollTop + 'px';
+    },
+    close: function() {
+      document.body.classList.remove(bodyCls);
+      if(document.documentElement.scrollTop){
+        document.documentElement.scrollTop = scrollTop;
+      }else if(document.body.scrollTop){
+        document.body.scrollTop = scrollTop;
+      }
+    }
+  };
+})('modal-open');
+
+Vue.prototype.bodyNoScrolling = bodyNoScrolling;
+
+export default new Vue

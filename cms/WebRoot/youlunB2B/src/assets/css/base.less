@@ -1,0 +1,35 @@
+/**
+管理所有less定义的变量
+ */
+//系统主体背景
+//@appBg: #eef6ff;
+@appBg: #f2f2f2;
+//头部背景
+@topBg: #6aadff;
+//面板背景
+//@panleBg: #dee9f8;
+@panleBg: #fafafa;
+//功能按钮颜色
+@clickBtnBg: #ff9b0b;
+//按钮不可点击颜色
+@disabledBtnBg: #ffe1cb;
+//数量编辑按钮颜色
+@changeBtnBg: #6aadff;
+//要求醒目带提醒性文字颜色
+@tipsColor: #ff9b0b;
+//二级栏目文字颜色
+@subTextColor: #8d95a3;
+//普通分割线、边框颜色
+@lineColor: #e5e5e5;
+
+//圆角 默认4px
+.borderRadius(@radius:4px) {
+  border-radius: @radius;
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+}
+
+/**
+px转换rem，可直接使用psd上的px数值，宽高、边距等都可用，例：100*@basePX; 100为psd上的像素，但不能死用，灵活运用百分百%和其他适配布局
+ */
+@basePX:(640/750)/40rem;

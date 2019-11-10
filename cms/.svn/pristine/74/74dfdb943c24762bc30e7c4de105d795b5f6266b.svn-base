@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>舱型管理</title>
+<link rel="stylesheet" type="text/css" href="../css/xieyaozhong.css"></link>
+<script type="text/javascript" src="../js/library/jquery-1.7.2.js"></script>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/bootstrap/easyui.css"></link>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/icon.css"></link>
+<script type="text/javascript" src="../js/library/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/library/cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="../js/library/common/cookie2.js"></script>
+<script type="text/javascript" src="../js/library/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../js/library/common/common.js"></script>
+<script type="text/javascript" src="../js/library/common/customUi.js" defer="defer"></script>
+	
+<link href="../js/library/xyzDropzone/xyzPicPreview.css" type="text/css" rel="stylesheet"></link>
+<script type="text/javascript" src="../js/library/xyzDropzone/dropzone.min.js"></script>
+<script type="text/javascript" src="../js/library/xyzDropzone/xyzDropzone.js"></script>
+<script type="text/javascript" src="../js/library/common/xyzCkeditorUploadPlug.js"></script>
+
+<script type="text/javascript" src="../js/library/ckeditor/ckeditor.js" defer="defer"></script>
+<script type="text/javascript" src="../js/library/ckeditor/adapters/jquery.js" defer="defer"></script>
+
+<script type="text/javascript" src="../js/js_base/cabinManager.js" defer="defer"></script>
+	
+<style type="text/css">
+	*{
+		font-size : 14px;
+	}
+	.datagrid-header-row,.datagrid-row{
+		height : 35px;
+	}
+	.datagrid-header-row{
+		font-weight: bold;;
+	}
+</style>
+</head>
+<body style="width: 100%;text-align: left;background-color:white;">
+	<div style="width:99%;position:absolute;">
+	
+		<!--搜索栏 -->
+		<div class='yqqPluginBg'>
+			舱型类型<input id="type" class="easyui-combobox" style="width:76px;"
+			    value="" data-options="panelHeight:'auto',
+			    valueField:'value',textField:'text',
+				data: [{value: '0',text: '内舱'},
+				{value: '1',text: '海景'},
+				{value: '2',text: '阳台'},
+				{value: '3',text: '套房'}]" />
+			开启状态<input id="isOpen" class="easyui-combobox" style="width:70px;"
+			    value="" data-options="panelHeight:'auto',
+			    valueField:'value',textField:'text',
+				data: [{value: '开',text: '开'},
+				{value: '关',text: '关'}]" />
+			舱型名称【模】<input id="nameCn" type="text" style="width:200px;"/>  
+		</div>
+		<div >
+			<div id="cabinManagerTabs" style="width:100%;" class="easyui-tabs"></div>
+		</div>
+		<div style="z-index: 100;position: fixed;right:100px;">
+			<a href="javascript:void(0);" class="easyui-linkbutton"
+			data-options="iconCls:'icon-search'" id="cabinQueryButton">查询</a>
+		</div>
+		
+		<div>
+			<table id="cabinManagerTable"></table>
+		</div>
+		
+	</div>
+</body>
+</html>

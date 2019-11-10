@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>新增SKU日历库存</title>
+
+<link rel="stylesheet" type="text/css" href="../css/xieyaozhong.css"></link>
+<script type="text/javascript" src="../js/library/jquery-1.7.2.js"></script>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/bootstrap/easyui.css"></link>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/icon.css"></link>
+<script type="text/javascript" src="../js/library/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/library/cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="../js/library/common/cookie2.js"></script>
+<script type="text/javascript" src="../js/library/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../js/library/common/common.js"></script>
+<script type="text/javascript" src="../js/library/common/customUi.js" defer="defer"></script>
+
+<script type="text/javascript" src="../js/library/ckeditor/ckeditor.js" defer="defer"></script>
+<script type="text/javascript" src="../js/library/ckeditor/adapters/jquery.js" defer="defer"></script>
+
+</head>
+<body>
+<center>
+	<form>
+		<table style="margin-top:16px;text-align:center;">
+			<tr>
+				<th style="text-align:right;">日期</th>
+				<td>
+					<input id="dateForm" style="width:430px;" />
+				</td>
+			</tr>
+			<tr>
+				<th style="text-align:right;">单品</th>
+				<td>
+					<input id="tkviewForm" style="width:430px;" />
+				</td>
+			</tr>
+			<tr id="theahTr">
+				<td colspan="2">
+					<table style="margin-left:40px;">
+						<thead>
+							<tr>
+								<th>单品名称</th>
+								<th>供应商</th>
+								<th>库存</th>
+								<th>成本价</th>
+								<th>成本说明</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody id="tkviewTbody"></tbody>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<th style="text-align:right;">
+					价格类型
+				</th>
+				<td>
+					<select id="priceTypeAddForm" name="priceTypeForm"
+						style="width:430px;">
+						<option value="1">成人</option>
+						<option value="2">儿童</option>
+						<option value="3">单房差</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th style="text-align:right;">价格</th>
+				<td>
+					<input id="priceAddForm" type="text" style="width:395px;" />&nbsp;
+					<span style="float:right;"> 
+						<img src="../image/other/unlock.png" id="isLockForm" onclick="lockImg()" title="点我锁定价格(锁定价格后，克隆的宝贝库存价格不能更改)" /> 
+						<input type="hidden" id="isLockInputForm" value="0" />
+					</span>
+				</td>
+			</tr>
+			<tr>
+				<th style="text-align:right;">库存</th>
+				<td>
+					<input id="stockAddForm" type="text" style="width:430px;" />
+				</td>
+			</tr>
+		</table>
+	</form>
+</center>
+</body>
+</html>

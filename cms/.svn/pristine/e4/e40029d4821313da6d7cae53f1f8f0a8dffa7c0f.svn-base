@@ -1,0 +1,12 @@
+/**
+ * Created by Administrator on 2017/10/20.
+ * 统一管理请求接口，在需要的页面 require('@/assets/js/urlApi') 引入,直接使用 urlApi 对象。
+ */
+import Vue from 'vue'
+let urlApi = {
+  queryPtviewList: 'PtviewWechatWS/queryPtviewList.wx',        //首页热门产品列表
+  getSelectData: 'PtviewWechatWS/getSelectData.wx',            //筛选关键词
+  getQueryData: 'PtviewWechatWS/getQueryData.wx',              //获取筛选数据
+  getPtviewDetail: 'PtviewWechatWS/getPtviewDetail.wx'        //产品详情
+}
+Vue.prototype.urlApi = urlApi;

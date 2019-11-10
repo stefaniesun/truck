@@ -1,0 +1,78 @@
+<template>
+  <div class="orderAll">
+    <section class="clearfloat" v-for="item in 6">
+      <div class="img-wrap">
+        <img src="../assets/img/product.jpg" alt="">
+      </div>
+
+      <div class="detail">
+        <h3>星梦邮轮【世界梦号】6天5晚胡志明 市+芽庄</h3>
+        <div class="tips clearfloat">
+          <span class="start-time">出发日期：2017/10/18</span>
+          <span class="price">&yen; 3596</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script>
+  let vm;
+  export default {
+    name: 'orderAll'
+  }
+
+</script>
+
+<style scoped lang="less">
+  @import "../assets/css/base.less";
+
+  .orderAll{
+    width: 94%;
+    margin: 0 auto;
+    section{
+      padding: 40*@basePX 0 ;
+      border-bottom: 1px solid @lineColor;
+      .img-wrap{
+        float: left;
+        width: 25%;
+        height: 110*@basePX;
+        .borderRadius(4*@basePX);
+        overflow: hidden;
+        img{
+          width: 100%;
+          height: 100%;
+          max-width: 100%;
+          max-height: 100%;
+        }
+      }
+
+      .detail{
+        float: left;
+        width: 70%;
+        margin-left: 4%;
+        overflow: hidden;
+        h3{
+          font-weight: normal;
+          font-size: 28*@basePX;
+          color: #4c4c4c;
+        }
+        .tips{
+          line-height: 36*@basePX;
+          .start-time{
+            float: left;
+            font-size: 26*@basePX;
+            color: @subTextColor;
+          }
+          .price{
+            color: @tipsColor;
+
+            font-size: 28*@basePX;
+            float: right;
+          }
+        }
+      }
+    }
+  }
+
+</style>

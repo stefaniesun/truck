@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>编辑邮轮档案</title>
+</head>
+<body>
+	<center><br/>
+		<form>
+			<table cellpadding="4" cellspacing="4">
+				<tr>
+					<td style="text-align:right;">邮轮公司</td>
+					<td>
+						<input id="companyForm" type="text" style="width:350px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">邮轮名称</td>
+					<td>
+						<input id="nameCnForm" type="text" style="width:350px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">英文名</td>
+					<td>
+						<input id="nameEnForm" type="text" style="width:350px;"
+						data-options="validType:'length[1,50]'"/>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">代码</td>
+					<td>
+						<input id="markForm" type="text" style="width:350px;" 
+						data-options="validType:'length[2,3]'" />
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">邮轮宽度</td>
+					<td>
+						<input id="wideForm" type="text" style="width:350px;"
+						class="easyui-numberbox numberboxForm" 
+						data-options="min:0.00,precision:2,max:9999999999.99"/>米
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">邮轮长度</td>
+					<td>
+						<input id="lengthForm"  type="text" style="width:350px;"
+						class="easyui-numberbox numberboxForm"
+						data-options="min:0.00,precision:2,max:9999999999.99"/>米
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">邮轮吨位</td>
+					<td>
+						<input id="tonnageForm" type="text" style="width:350px;"
+						class="easyui-numberbox numberboxForm"
+						data-options="min:0.00,precision:2,max:99999999.99"/>万吨
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">甲板楼层</td>
+					<td>
+						<input id="floorForm" type="text" style="width:350px;"
+						class="easyui-numberbox numberboxForm"
+						data-options="min:0,validType:'length[1,4]'"/>层
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">载客量</td>
+					<td>
+						<input id="busloadForm" type="text" style="width:350px;"
+						class="easyui-numberbox numberboxForm"
+						data-options="min:0,validType:'length[1,10]'"/>人
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">船舱总数</td>
+					<td>
+						<input id="totalCabinForm" type="text" style="width:350px;"
+						class="easyui-numberbox numberboxForm"
+						data-options="min:0,validType:'length[1,10]'"/>间
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">平均航速</td>
+					<td>
+						<input id="avgSpeedForm" type="text" style="width:350px;"
+						class="easyui-numberbox numberboxForm"
+						data-options="min:0.00,precision:2,max:999999.99"/>节
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">电源电压</td>
+					<td>
+						<input id="voltageSourceForm" type="text" style="width:350px;"
+						value="110/220" data-options="validType:'length[1,20]'"/>V
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">自助洗衣</td>
+					<td>
+						<div style="float:left;">
+							<input id="laundromatForm" class="easyui-combobox" style="width:70px;"
+							value="1" data-options="required:true,panelHeight:'auto',valueField:'value',
+							    textField:'text',
+								data: [{value: '0',text: '无'},
+								{value: '1',text: '有'}]" />
+						</div>
+						<div style="margin-right:24px;float:right;">
+							图书馆 <input id="libraryForm" class="easyui-combobox" style="width:70px;"
+							 value="1" data-options="required:true,panelHeight:'auto',valueField:'value',
+							    textField:'text',
+								data: [{value: '0',text: '无'},
+								{value: '1',text: '有'}]" />
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">邮轮概况</td>
+					<td>
+						<textarea id="surveyForm" style="width:346px;height:100px;resize:none;" class="easyui-validatebox" data-options="validType:'length[1,500]'"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">备注</td>
+					<td>
+						<input id="remarkForm" type="text" style="width:350px;" data-options="validType:'length[1,150]'"/>
+						<!-- <textarea id="remarkForm" style="width:346px;height:50px;resize:none;" class="easyui-validatebox" data-options="validType:'length[1,150]'"></textarea> -->
+					</td>
+				</tr>
+			</table>
+		</form>
+	</center>
+</body>
+</html>

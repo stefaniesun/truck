@@ -1,0 +1,116 @@
+import Vue from 'vue'
+import Router from 'vue-router'
+
+Router.prototype.goBack = function () {  //route添加一个goBack方法，用于记录路由的前进后退状态,需要后退时调用：vm.$router.goBack();
+  this.isBack = true;
+  this.go(-1);
+}
+
+Vue.use(Router)
+
+const router = new Router({
+  routes: [
+    {
+      path: '/',
+      name: 'productQuery',
+      component: resolve => { require(['@/components/productQuery'], resolve); },
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
+    },
+    {
+      path: '/productDetail/:numberCode',
+      name: 'productDetail',
+      component: resolve => { require(['@/components/productDetail'], resolve); },
+      meta: {
+        keepAlive: false // 不需要被缓存
+      }
+    },
+    {
+      path: '/placeOrder',
+      name: 'placeOrder',
+      component: resolve => { require(['@/components/placeOrder'], resolve); },
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
+      path: '/cruiseDetail/:cruise',
+      name: 'cruiseDetail',
+      component: resolve => { require(['@/components/cruiseDetail'], resolve); },
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
+      path: '/orderSuccess',
+      name: 'orderSuccess',
+      component: resolve => { require(['@/components/orderSuccess'], resolve); },
+      meta: {
+        keepAlive: true
+      }
+    },
+    {
+      path: '/customerInfoFill',
+      name: 'customerInfoFill',
+      component: resolve => { require(['@/components/customerInfoFill'], resolve); },
+      meta: {
+        keepAlive: true
+      }
+    },
+    {
+      path: '/userCenter/',
+      name: 'userCenter',
+      component: resolve => {require (['@/components/userCenter'], resolve); },
+      meta: {
+        keepAlive: true
+      },
+      redirect: '/userCenter/orderAmount',
+      children: [
+        {
+          path: 'orderAmount',
+          name: 'orderAll',
+          component: resolve => {require (['@/components/orderAll'], resolve); },
+          meta: {
+            keepAlive: true
+          }
+        },
+        {
+          path: 'sumAmount',
+          name: 'sumAmount ',
+          component: resolve => {require (['@/components/sumAmount'], resolve); },
+          meta: {
+            keepAlive: true
+          }
+        },
+        {
+          path: 'touristAmount',
+          name: 'touristAmount ',
+          component: resolve => {require (['@/components/touristAmount'], resolve); },
+          meta: {
+            keepAlive: true
+          }
+        },
+
+      ]
+    },
+    {
+      path:'/priceMarkup/:numberCode',
+      name:'priceMarkup',
+      component: resolve => { require(['@/components/priceMarkup'],resolve);},
+    }
+  ]
+})
+
+router.beforeEach((to, form, next) => {
+  if(to.matched.length === 0) {
+    next({
+      path: '/',
+    })
+  }else{
+    next();
+  }
+  window.scrollTo(0, 0);
+});
+
+export default router;

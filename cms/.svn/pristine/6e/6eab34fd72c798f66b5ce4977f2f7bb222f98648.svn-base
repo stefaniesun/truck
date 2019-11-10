@@ -1,0 +1,386 @@
+<template>
+  <div class="cruise-detail">
+    <header>
+      <h2>邮轮详情</h2>
+      <i class="back iconfont icon-fanhui" @click="goBack()"></i>
+    </header>
+
+    <div class="container">
+      <section class="cruise-module">
+        <div class="img-wrap">
+          <div class="img">
+            <img :src="cruise.image" alt="" v-if="cruise.image">
+            <img src="../assets/img/product.jpg" alt="" v-if="!cruise.image">
+          </div>
+          <div class="title">
+            <div class="name">
+              <h3 class="zh-name">【{{cruise.nameCn}}】</h3>
+              <h3 class="eg-name">{{cruise.nameEn}}</h3>
+            </div>
+            <div class="view-icon" @click="isView = true">
+              <i class="iconfont icon-tupian"></i>
+              <span>查看图集</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-wrap">
+          <h4 class="campany">
+            <span class="tag">邮轮公司</span>
+            <span class="value">【{{cruise.numberCode}}】{{cruise.companyNameCn}}</span>
+          </h4>
+
+          <div class="info clearfloat">
+            <div class="left-side">
+              <div class="cruise-info">
+                <span class="tag">游轮宽度（米）</span>
+                <span class="value">{{cruise.wide}}</span>
+              </div>
+              <div class="cruise-info">
+                <span class="tag">吨位（万吨）</span>
+                <span class="value">{{cruise.tonnage}}</span>
+              </div>
+              <div class="cruise-info">
+                <span class="tag">载客量（人）</span>
+                <span class="value">{{cruise.busload}}</span>
+              </div>
+              <div class="cruise-info">
+                <span class="tag">平均航速（节）</span>
+                <span class="value">{{cruise.avgSpeed}}</span>
+              </div>
+
+            </div>
+            <div class="right-side">
+              <div class="cruise-info">
+                <span class="tag">游轮长度（米）</span>
+                <span class="value">{{cruise.length}}</span>
+              </div>
+              <div class="cruise-info">
+                <span class="tag">甲板楼层</span>
+                <span class="value">{{cruise.floor}}</span>
+              </div>
+              <div class="cruise-info">
+                <span class="tag">船舱总数（间）</span>
+                <span class="value">{{cruise.totalCabin}}</span>
+              </div>
+              <div class="cruise-info">
+                <span class="tag">代码</span>
+                <span class="value">{{cruise.code}}</span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="cover" @touchmove.prevent v-if="isView" @click="isView = false"></div>
+    <transition  name="custom-classes-transition"
+                 enter-active-class=" animated fadeIn"
+                 leave-active-class="animated fadeOut">
+      <div class="slider-wrapper animated" v-if="isView" >
+        <mt-swipe :auto="0">
+          <mt-swipe-item class="slider-item" :key="index" v-for="(item,index) in sliders">
+            <img v-lazy="item" alt="">
+          </mt-swipe-item>
+        </mt-swipe>
+      </div>
+    </transition>
+
+  </div>
+</template>
+
+<script>
+  let vm;
+
+  import common from '../assets/js/common.js'
+  export default {
+    name: 'cruiseDetail',
+    data() {
+      return {
+        isView: false,
+        cruise: '',
+        sliders: []
+      }
+    },
+
+    created() {
+    },
+    mounted() {
+      vm = this;
+      vm.getCruiseDetail(vm.$route.params.cruise)
+    },
+    methods: {
+      getCruiseDetail(cruise) {
+        vm.axios.post(this.api + this.urlApi.getCruiseDetail, {
+          cruise: cruise
+        }).then((response) => {
+        	if(response.status){
+            vm.cruise = response.content;
+            if(vm.cruise.images) {
+              vm.sliders = vm.cruise.images.split(',');
+            }else{
+              let img = require('../assets/img/product.jpg');
+              vm.sliders = [img,img,img,img]
+            }
+          }
+        })
+      },
+      goBack() {
+        vm.$router.goBack();
+      },
+      goPlaceOrder() {
+        vm.$router.push( '/placeOrder');
+      },
+    }
+  }
+</script>
+
+<style scoped lang="less">
+  @import "../assets/css/common.less";
+
+  .cruise-detail{
+    background-color: @appBg;
+    height: 100%;
+  }
+  header{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 88*@basePX;
+    line-height: 88*@basePX;
+    background-color: @topBg;
+    color: #fff;
+    z-index: 3;
+  }
+
+  header h2{
+    font-size: 40*@basePX;
+    text-align: center;
+    font-weight: normal;
+  }
+  header .back{
+    position: absolute;
+    top: 0;
+    font-size: 40*@basePX;
+  }
+  header .back{
+    left: 22*@basePX;
+  }
+
+  .container{
+    width: 94%;
+    margin: 0 auto;
+    padding: 24*@basePX 0;
+
+  }
+
+  .container section{
+    background-color: #fff;
+  }
+  .container section.cruise-module{
+    margin: 100*@basePX 0 0;
+    overflow: hidden;
+    .borderRadius;
+    .img-wrap{
+      height: 460*@basePX;
+      position: relative;
+      background-color: @panleBg;
+      .img{
+        height: 100%;
+        img{
+          display: block;
+          height: 100%;
+          width: 100%;
+          max-height: 100%;
+          max-width: 100%;
+          .borderRadius;
+        }
+      }
+      .title{
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background-color: rgba(3,19,39,0.61);
+        color: #fff;
+        padding-top: 10*@basePX;
+        h3,i,span{
+          font-weight: normal;
+          display: block;
+          line-height: 40*@basePX;
+        }
+        h3,span{
+          letter-spacing: 2px;
+        }
+        .name{
+          float: left;
+          width: 65%;
+          .zh-name{
+            font-size: 32*@basePX;
+            text-indent: 20*@basePX;
+          }
+          .eg-name{
+            text-indent: 40*@basePX;
+            font-size: 26*@basePX;
+          }
+        }
+        .view-icon{
+          float: right;
+          width: 25%;
+          text-align: center;
+          padding-right: 20*@basePX;
+          font-size: 24*@basePX;
+          i{
+            font-size: 40*@basePX;
+          }
+        }
+      }
+    }
+
+    .detail-wrap{
+      width: 76%;
+      margin: 55*@basePX auto;
+      font-size: 28*@basePX;
+
+      h4{
+        font-weight: normal;
+        line-height: 54*@basePX;
+      }
+      .tag{
+        color: @subTextColor;
+      }
+      .value{
+        color: #4c4c4c;
+      }
+      .info .left-side,
+      .info .right-side{
+        float: left;
+        width: 40%;
+        .cruise-info{
+          line-height: 45*@basePX;
+          padding-top: 5px;
+        }
+        span{
+          display: block;
+        }
+      }
+
+      .info .right-side{
+        float: right;
+      }
+
+    }
+  }
+
+  .btn-wrap{
+    position: fixed;
+    width: 100%;
+    height: 156*@basePX;
+    background-color: @panleBg;
+    bottom: 0;
+    text-align: center;
+    .tag{
+      font-size: 28*@basePX;
+      .depart{
+        margin-left: 25*@basePX;
+      }
+      line-height: 50*@basePX;
+      letter-spacing: 1px;
+      text-align: center;
+      .tips{
+        color: @tipsColor;
+      }
+    }
+    .order-btn{
+      font-size: 40*@basePX;
+      background-color: @disabledBtnBg;
+      color: #fff;
+      height: 88*@basePX;
+      width: 600*@basePX;
+      line-height: 88*@basePX;
+      border: 0;
+      .borderRadius(44*@basePX);
+      outline: none;
+      &.active{
+        background-color: @clickBtnBg;
+      }
+    }
+  }
+
+  .cover{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 5;
+  }
+
+  .slider-wrapper{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -o-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    width: 90%;
+    height: 430*@basePX;
+    overflow: hidden;
+    z-index: 6;
+    .borderRadius;
+    background-color: @panleBg;
+
+    .slider-item{
+      float: left;
+      height: 100%;
+      overflow: hidden;
+      box-sizing: border-box;
+      .borderRadius;
+      img{
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        .borderRadius;
+      }
+    }
+
+  }
+
+  .animated {
+    animation-duration: .5s;
+    animation-fill-mode: both;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  .fadeIn {
+    animation-name: fadeIn;
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
+
+  .fadeOut {
+    animation-name: fadeOut;
+  }
+
+</style>

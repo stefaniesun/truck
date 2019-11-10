@@ -1,0 +1,99 @@
+/**
+公用的样式
+ */
+@import "base.less";
+[v-cloak] {
+  display: none;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+body,html{
+  width: 100%;
+  height: 100%;
+  min-height:100%;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+body.modal-open {
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+ul li{
+  list-style: none;
+}
+
+input{
+  -webkit-appearance: none;
+}
+
+input:-ms-input-placeholder{
+  color: #ccc;opacity:1;
+}
+input::-webkit-input-placeholder{
+  color: #ccc;opacity:1;
+}
+
+img{
+  vertical-align: middle;
+}
+
+.text-center{
+  text-align: center !important;
+}
+
+.pull-left{
+  float:left;
+}
+
+.pull-right{
+  float: right;
+}
+
+.clearfloat:after{
+  content:"";
+  height:0px;
+  clear:both;
+  display:block;
+}
+header{
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 88*@basePX;
+  line-height: 88*@basePX;
+  background-color: @topBg;
+  color: #fff;
+  z-index: 10;
+}
+header h2{
+  font-size: 40*@basePX;
+  text-align: center;
+  font-weight: normal;
+}
+header .back,
+header .user{
+  position: absolute;
+  top: 0;
+  font-size: 40*@basePX;
+}
+header .back{
+  left: 22*@basePX;
+}
+header .user{
+  right:  22*@basePX;
+}
+header .home{
+  position: absolute;
+  top: 0;
+  font-size: 40*@basePX;
+  right:  22*@basePX;
+}

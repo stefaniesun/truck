@@ -1,0 +1,1410 @@
+<html lang="en" style="font-size: 32.2061px;"><head>
+	    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>二手车</title>
+    <link rel="stylesheet" href="css/swiper.min.css?v=ae0552c54e">
+    <link rel="stylesheet" href="css/wapCommon100.css?v=1799cfd41a"> 
+    <link rel="stylesheet" href="css/mindex.css?v=eab69346a7">
+    <link rel="stylesheet" href="css/style-base.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+<!--    <script type="text/javascript" src="http://static.hx2cars.com/resource/web/dist/static/mobpages/js/common/bigdata.js?v=a05364bd5f"></script>
+-->    <!--<script type="text/javascript" src="js/swiper.min.js"></script>-->
+    <script type="text/javascript" src="js/jsPlug.js?v=1c8899a887"></script>
+   <!-- <script type="text/javascript" src="http://static.hx2cars.com/resource/web/dist/static/mobpages/js/common/wapCommon.js?v=45b5d374ec"></script>
+    <script type="text/javascript" src="http://static.hx2cars.com/resource/web/dist/static/mobile/mindex/mindex.js?v=6fb347541e"></script>
+    <script type="text/javascript" src="http://www.hx2car.com/upload/daily/js/MobileIndexPage/1/2019/0922.js"></script>-->
+    <script type="text/javascript">
+        var STATIONPINYIN = 'quanguo';
+        var SPURL = '';
+        //userPhoneNum(用户电话号码)
+        var F = {
+            phoneNum:'',
+            depreciate:''
+        };
+        var loginstate = false
+    </script>
+</head>
+<body style="height: auto; overflow: auto;" class=""><div class="msg-bottom" style="width: 100%;height:12.2vw;position:relative;"><div class="model-bg" style="width: 100%; height: 100%; background: url(&quot;http://static.hx2cars.com/resource/web/dist/static/mobpages/images/aesbg1.jpg&quot;) center center / 100% no-repeat; position: absolute; top: 0px; z-index: 0;"></div><div class="msg-content" style="position: relative;height: 100%;"><i class="closes" style="width: 3vw;height: 3vw; position: absolute;top: 16%;right: 2vw;background: transparent;"><img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/close-org.png" style="width: 100%;margin:0;"></i><div class="right toDowloae" style="width: 20.7%;height:8vw;float: right;background: #f60;color: #fff;text-align: center;font-size: 1.25rem;line-height:8vw;margin-top:2vw;margin-right:6vw;border-radius:1rem;">快速下载</div></div></div>
+    <div class="mlTop" id="mlTop">
+            <!--<div class="station" id="changeStation"><span>全国</span><i></i></div>-->
+            <div class="mltSearch" id="mltSearch" data-hot="丰田">
+                <span>我要找车</span>
+            </div>
+        <!--<a href="/" class="mltLogo" title="华夏二手车网"></a>-->
+        <div class="mltRight">
+                <span class="login" id="mlogin">登录</span>
+        </div>
+    </div>
+<section class="mindex">
+    <section class="mSearch fly-right1" style="display: none; transition: all 0.3s; left: auto; right: 0px; position: fixed; transform: translate(100%, 0px); z-index: 100;">
+        <form class="msTop" id="searchForm" action="/quanguo/soa1?">
+            <i class="mstBack" id="mstBack"></i>
+            <div class="mstInput">
+                <span><input type="text" placeholder="我要找车" id="mstiInput" name="keyword"></span>
+            </div>
+            <button class="searchBtn" type="button">搜索</button>
+        </form>
+        <div class="msHishot" id="msHishot">
+            <div class="mshHistory">
+                <div class="mshhTitle">最近搜索 <i class="deleteHistory"></i></div>
+                <div class="mshhList" id="mshhHis"></div>
+            </div>
+            <div class="mshHistory">
+                <p class="mshhTitle">热门搜索</p>
+                <div class="mshhList" id="mshhHot"></div>
+            </div>
+        </div>
+        <div class="msCon" id="msCon"></div>
+    </section>
+    <div class="mShadow"></div>
+   <!-- <div class="mFocus">
+        <div class="swiper-container mfSwiper swiper-container-horizontal swiper-container-android" id="mfSwiper">
+        	<div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(-2000px, 0px, 0px);">
+        		<div class="swiper-slide" style="width: 400px;">
+        			<a rel="external" href="" class="mfarr">
+        				<img src="http://www.hx2car.com/upload/daily/normal/MobileIndexPage/MobileIndexTop/2019/20190710112700.jpg">
+        			</a>
+        		</div>
+        	</div>
+        </div>
+    </div>-->
+    <div class="mProgram">
+    	  <a href="javascript:;" class="mpWholesale" title="个人卖车" data-track="wap首页我要卖车">
+            <div class="mpTablepf">
+                <div class="mptTitle">我要卖车</div><i></i>
+            </div>
+        </a>
+        
+        <a href="truckList.html" class="mpBuy" title="二手车信息" data-track="wap首页我要买车">
+            <div class="mpTablebuy">
+                <div class="mptTitle">我要买车</div><i></i>
+            </div>
+        </a>
+       <!--  <a href="/4s" class="mpBuy" title="二手车信息" data-track="wap首页4s记录">
+            <div class="mpTable4s">
+                <div class="mptTitle">4S 记录</div><i></i>
+            </div>
+        </a>
+         <a href="javascript:;" class="mpBuy mtpinggu" title="二手车信息" data-track="wap首页免费评估">
+            <div class="mpTablefree">
+                <div class="mptTitle">免费评估</div><i></i>
+            </div>
+        </a>-->
+      
+    </div>
+    <div class="section">
+        <div class="mcTitle hide"><span>快速找车</span></div>
+    	<div class="mPrice">
+        <div class="mpList">
+            <a href="/quanguo/soa1j0-5" title="5万以下二手车"><span>5万以下</span></a>
+            <a href="/quanguo/soa1j5-10" title="5-10万二手车"><span>5-10万</span></a>
+            <a href="/quanguo/soa1j10-20" title="10-20万二手车"><span>10-20万</span></a>
+            <a href="/quanguo/soa1j20-999" title="20万以上二手车"><span>20万以上</span></a>
+            <a href="/quanguo/soa1b8" class="mclType3" title="跑车二手车">
+                <span class="mcltName">跑车</span>
+            </a>
+             <a href="/quanguo/soa1b1" class="mclType4" title="轿车二手车">
+                <span class="mcltName">轿车</span>
+            </a>
+             <a href="/quanguo/soa1b7" class="mclType2" title="SUV二手车">
+                <span class="mcltName">SUV</span>
+            </a>
+             <a href="/quanguo/soa1k369" class="mclType4" title="中大型二手车">
+                <span class="mcltName">中大型</span>
+            </a>
+             <a href="/quanguo/soa1b9" class="mclType4" title="商务车二手车">
+                <span class="mcltName">商务车</span>
+            </a>
+           	<a href="/quanguo/soa1k370" class="mclType1" title="豪华车二手车">
+                <span class="mcltName">豪华车</span>
+            </a>
+             <a href="/quanguo/soa1d7" class="mclType4" title="代步车二手车">
+                <span class="mcltName">代步车</span>
+            </a>
+            <a href="/quanguo/soa1d8" class="mclType4" title="家用车二手车">
+                <span class="mcltName">家用车</span>
+            </a>
+        </div>
+    </div>
+   <!-- <div class="mHot">
+    	<div class="mhList">
+	         <a href="/quanguo/dazhong/soa1t47" class="mhlBrand" title="二手大众">
+                        <span class="mhlbIcon">
+                            <img src="http://img.hx2cars.com/upload/brandlogo/carSerial/logonew/dazhong.png" alt="大众">
+                        </span>
+                        <span class="mhlbName">大众</span>
+                    </a>
+                    <a href="/quanguo/aodi/soa1t26" class="mhlBrand" title="二手奥迪">
+                        <span class="mhlbIcon">
+                            <img src="http://img.hx2cars.com/upload/brandlogo/carSerial/logonew/aodi.png" alt="奥迪">
+                        </span>
+                        <span class="mhlbName">奥迪</span>
+                    </a>
+                     <a href="/quanguo/baoma/soa1t33" class="mhlBrand" title="二手宝马">
+                        <span class="mhlbIcon">
+                            <img src="http://img.hx2cars.com/upload/brandlogo/carSerial/logonew/baoma.png" alt="宝马">
+                        </span>
+                        <span class="mhlbName">宝马</span>
+                    </a>
+                    
+                    <a href="/quanguo/benchi/soa1t34" class="mhlBrand" title="二手奔驰">
+                        <span class="mhlbIcon">
+                            <img src="http://img.hx2cars.com/upload/brandlogo/carSerial/logonew/benchi.png" alt="奔驰">
+                        </span>
+                        <span class="mhlbName">奔驰</span>
+                    </a>
+                    <a href="/quanguo/bentian/soa1t30" class="mhlBrand biglogo" title="二手本田">
+                        <span class="mhlbIcon">
+                            <img src="http://img.hx2cars.com/upload/brandlogo/carSerial/logonew/bentian.png" alt="本田">
+                        </span>
+                        <span class="mhlbName">本田</span>
+                    </a>
+                    <a href="/quanguo/xiandai/soa1t128" class="mhlBrand biglogo" title="二手现代">
+                        <span class="mhlbIcon">
+                            <img src="http://img.hx2cars.com/upload/brandlogo/carSerial/logonew/xiandai.png" alt="现代">
+                        </span>
+                        <span class="mhlbName">现代</span>
+                    </a>
+                    <a href="/quanguo/fengtian/soa1t54" class="mhlBrand" title="二手丰田">
+                        <span class="mhlbIcon">
+                            <img src="http://img.hx2cars.com/upload/brandlogo/carSerial/logonew/fengtian.png" alt="丰田">
+                        </span>
+                        <span class="mhlbName">丰田</span>
+                    </a>
+				<a class="more_brand mhlBrand" href="/quanguo/soa1?flag=brand"><span class="mhlbIcon">
+                            <img src="http://static.hx2cars.com/resource/web/dist/static/mobile/mindex/images/more.png">
+                        </span>
+                        <span class="mhlbName">更多</span></a>
+	        
+        </div>
+    </div>-->
+    </div>
+  
+   
+<!--<div class="appDownloae" id="appDownloae" data-track="首页中部APP下载">
+	<img src="http://static.hx2cars.com/resource/web/dist/static/mobile/mindex/images/Banner.jpg"/>
+</div>-->
+    <!--<div class="mHot" id="mHot">
+        <div class="mcTitle" id="mhTitle">
+            <p><span>热门车系</span><a class="mhtMore" id="mhtMore">更多</a></p>
+        </div>
+
+        <div class="mhList">
+                <a href="/quanguo/bentian/crv/soa1t180" class="mhlStyle" title="东风商用车">
+                    <span class="mhlbName">东风商用车</span>
+                </a>
+                <a href="/quanguo/benchi/cji/soa1t386" class="mhlStyle" title="二手C级">
+                    <span class="mhlbName">福田奥铃</span>
+                </a>
+                <a href="/quanguo/baoma/x5/soa1t232" class="mhlStyle" title="二手宝马X5">
+                    <span class="mhlbName">江淮帅铃</span>
+                </a>
+                <a href="/quanguo/bentian/yage/soa1t186" class="mhlStyle" title="二手雅阁">
+                    <span class="mhlbName">东风多利卡</span>
+                </a>
+                <a href="/quanguo/gqbentian/aodesai/soa1t183" class="mhlStyle" title="二手奥德赛">
+                    <span class="mhlbName">中国重汽</span>
+                </a>
+                <a href="/quanguo/aodi/a4/soa1t148" class="mhlStyle" title="二手奥迪A4L">
+                    <span class="mhlbName">福田欧曼</span>
+                </a>
+                <a href="/quanguo/aodi/a6/soa1t149" class="mhlStyle" title="二手奥迪A6L">
+                    <span class="mhlbName">乘龙h7</span>
+                </a>
+                <a href="/quanguo/gqfengtian/hanlanda/soa1t573" class="mhlStyle" title="二手汉兰达">
+                    <span class="mhlbName">东风天锦</span>
+                </a>
+                <a href="/quanguo/baoma/7xi/soa1t227" class="mhlStyle" title="二手宝马7系">
+                    <span class="mhlbName">奥铃捷运</span>
+                </a>
+                <a href="/quanguo/baoma/5xi2/soa1t220" class="mhlStyle" title="二手宝马5系">
+                    <span class="mhlbName">欧马可s3</span>
+                </a>
+                <a href="/quanguo/hcbaoma/3xi2/soa1t219" class="mhlStyle" title="二手宝马3系">
+                    <span class="mhlbName">欧曼gtl</span>
+                </a>
+                <a href="/quanguo/qiruiqiche/ruihu/soa1t935" class="mhlStyle" title="二手瑞虎">
+                    <span class="mhlbName">解放j6p</span>
+                </a>
+        </div>
+    </div>-->
+
+
+    <div class="mFourcar">
+        <div class="mfTitle">
+            <p class="select"><span>最新</span></p>
+            <!--<p class=""><span>最新</span></p>-->
+            <!--<p class=""><span>视频看车</span></p>
+            <p class=""><span>批发</span></p>-->
+            <i id="fCar" style="width: 28px; left: 36px;"></i>
+        </div>
+        <div class="mfCarlist" style="display: block;">
+                    <div class="mfcCar" data-position="wapSale">
+                        <a href="/details/171830255?position=013900" title="二手自卸车 重汽豪沃(HOWO) 380马力">
+                            <p class="mfccPic"><img src="img/1.png" alt="2011年5月 大众 途锐  3.0TSI 豪华型">
+                                
+                            </p>
+                            <h1 class="mfccName">二手自卸车 重汽豪沃(HOWO) 380马力</h1>
+                            <p class="mfccInfo">
+                                <span class="mfcciPrice">￥19.5万</span>
+                                <span class="mfcciRight">上海</span>
+                            </p>
+                        </a>
+                    </div>
+                      <div class="mfcCar" data-position="wapSale">
+                        <a href="/details/171830255?position=013900" title="二手自卸车 重汽豪沃(HOWO) 380马力">
+                            <p class="mfccPic"><img src="img/1.png" alt="2011年5月 大众 途锐  3.0TSI 豪华型">
+                                
+                            </p>
+                            <h1 class="mfccName">二手自卸车 重汽豪沃(HOWO) 380马力</h1>
+                            <p class="mfccInfo">
+                                <span class="mfcciPrice">￥19.5万</span>
+                                <span class="mfcciRight">上海</span>
+                            </p>
+                        </a>
+                    </div>
+                      <div class="mfcCar" data-position="wapSale">
+                        <a href="/details/171830255?position=013900" title="二手自卸车 重汽豪沃(HOWO) 380马力">
+                            <p class="mfccPic"><img src="img/1.png" alt="2011年5月 大众 途锐  3.0TSI 豪华型">
+                                
+                            </p>
+                            <h1 class="mfccName">二手自卸车 重汽豪沃(HOWO) 380马力</h1>
+                            <p class="mfccInfo">
+                                <span class="mfcciPrice">￥19.5万</span>
+                                <span class="mfcciRight">上海</span>
+                            </p>
+                        </a>
+                    </div>
+                       <div class="mfcCar" data-position="wapSale">
+                        <a href="/details/171830255?position=013900" title="二手自卸车 重汽豪沃(HOWO) 380马力">
+                            <p class="mfccPic"><img src="img/1.png" alt="2011年5月 大众 途锐  3.0TSI 豪华型">
+                                
+                            </p>
+                            <h1 class="mfccName">二手自卸车 重汽豪沃(HOWO) 380马力</h1>
+                            <p class="mfccInfo">
+                                <span class="mfcciPrice">￥19.5万</span>
+                                <span class="mfcciRight">上海</span>
+                            </p>
+                        </a>
+                    </div>
+                       <div class="mfcCar" data-position="wapSale">
+                        <a href="/details/171830255?position=013900" title="二手自卸车 重汽豪沃(HOWO) 380马力">
+                            <p class="mfccPic"><img src="img/1.png" alt="2011年5月 大众 途锐  3.0TSI 豪华型">
+                                
+                            </p>
+                            <h1 class="mfccName">二手自卸车 重汽豪沃(HOWO) 380马力</h1>
+                            <p class="mfccInfo">
+                                <span class="mfcciPrice">￥19.5万</span>
+                                <span class="mfcciRight">上海</span>
+                            </p>
+                        </a>
+                    </div>
+                      <div class="mfcCar" data-position="wapSale">
+                        <a href="/details/171830255?position=013900" title="二手自卸车 重汽豪沃(HOWO) 380马力">
+                            <p class="mfccPic"><img src="img/1.png" alt="2011年5月 大众 途锐  3.0TSI 豪华型">
+                                
+                            </p>
+                            <h1 class="mfccName">二手自卸车 重汽豪沃(HOWO) 380马力</h1>
+                            <p class="mfccInfo">
+                                <span class="mfcciPrice">￥19.5万</span>
+                                <span class="mfcciRight">上海</span>
+                            </p>
+                        </a>
+                    </div>
+                       <div class="mfcCar" data-position="wapSale">
+                        <a href="/details/171830255?position=013900" title="二手自卸车 重汽豪沃(HOWO) 380马力">
+                            <p class="mfccPic"><img src="img/1.png" alt="2011年5月 大众 途锐  3.0TSI 豪华型">
+                                
+                            </p>
+                            <h1 class="mfccName">二手自卸车 重汽豪沃(HOWO) 380马力</h1>
+                            <p class="mfccInfo">
+                                <span class="mfcciPrice">￥19.5万</span>
+                                <span class="mfcciRight">上海</span>
+                            </p>
+                        </a>
+                    </div>
+                       <div class="mfcCar" data-position="wapSale">
+                        <a href="/details/171830255?position=013900" title="二手自卸车 重汽豪沃(HOWO) 380马力">
+                            <p class="mfccPic"><img src="img/1.png" alt="2011年5月 大众 途锐  3.0TSI 豪华型">
+                                
+                            </p>
+                            <h1 class="mfccName">二手自卸车 重汽豪沃(HOWO) 380马力</h1>
+                            <p class="mfccInfo">
+                                <span class="mfcciPrice">￥19.5万</span>
+                                <span class="mfcciRight">上海</span>
+                            </p>
+                        </a>
+                    </div>
+        </div>
+        <div class="mfCarlist" style="display: none;">
+                        <div class="mfcCar" data-position="wapNew">
+                            <a href="/details/171858665?position=013700" title="2010年8月 凯迪拉克 SRX(进口) 3.0L 豪华版">
+                                <p class="mfccPic"><img src="img/1.png" alt="2010年8月 凯迪拉克 SRX(进口) 3.0L 豪华版">
+                                    
+                                    <span class="mfcCar_time">20秒前
+ </span>
+                                </p>
+                                <h1 class="mfccName">二手自卸车 重汽豪沃(HOWO) 380马力</h1>
+                                <p class="mfccInfo">
+                                    <span class="mfcciPrice">￥11.5万</span>
+                                    <span class="mfcciRight">南阳</span>
+
+                                </p>
+                            </a>
+                        </div>
+                         <div class="mfcCar" data-position="wapNew">
+                            <a href="/details/171858665?position=013700" title="2010年8月 凯迪拉克 SRX(进口) 3.0L 豪华版">
+                                <p class="mfccPic"><img src="img/1.png" alt="2010年8月 凯迪拉克 SRX(进口) 3.0L 豪华版">
+                                    
+                                    <span class="mfcCar_time">20秒前
+ </span>
+                                </p>
+                                <h1 class="mfccName">二手自卸车 重汽豪沃(HOWO) 380马力</h1>
+                                <p class="mfccInfo">
+                                    <span class="mfcciPrice">￥11.5万</span>
+                                    <span class="mfcciRight">南阳</span>
+
+                                </p>
+                            </a>
+                        </div>
+                         <div class="mfcCar" data-position="wapNew">
+                            <a href="/details/171858665?position=013700" title="2010年8月 凯迪拉克 SRX(进口) 3.0L 豪华版">
+                                <p class="mfccPic"><img src="img/1.png" alt="2010年8月 凯迪拉克 SRX(进口) 3.0L 豪华版">
+                                    
+                                    <span class="mfcCar_time">20秒前
+ </span>
+                                </p>
+                                <h1 class="mfccName">二手自卸车 重汽豪沃(HOWO) 380马力</h1>
+                                <p class="mfccInfo">
+                                    <span class="mfcciPrice">￥11.5万</span>
+                                    <span class="mfcciRight">南阳</span>
+
+                                </p>
+                            </a>
+                        </div>
+                         <div class="mfcCar" data-position="wapNew">
+                            <a href="/details/171858665?position=013700" title="2010年8月 凯迪拉克 SRX(进口) 3.0L 豪华版">
+                                <p class="mfccPic"><img src="img/1.png" alt="2010年8月 凯迪拉克 SRX(进口) 3.0L 豪华版">
+                                    
+                                    <span class="mfcCar_time">20秒前
+ </span>
+                                </p>
+                                <h1 class="mfccName">二手自卸车 重汽豪沃(HOWO) 380马力</h1>
+                                <p class="mfccInfo">
+                                    <span class="mfcciPrice">￥11.5万</span>
+                                    <span class="mfcciRight">南阳</span>
+
+                                </p>
+                            </a>
+                        </div>
+                         <div class="mfcCar" data-position="wapNew">
+                            <a href="/details/171858665?position=013700" title="2010年8月 凯迪拉克 SRX(进口) 3.0L 豪华版">
+                                <p class="mfccPic"><img src="img/1.png" alt="2010年8月 凯迪拉克 SRX(进口) 3.0L 豪华版">
+                                    
+                                    <span class="mfcCar_time">20秒前
+ </span>
+                                </p>
+                                <h1 class="mfccName">二手自卸车 重汽豪沃(HOWO) 380马力</h1>
+                                <p class="mfccInfo">
+                                    <span class="mfcciPrice">￥11.5万</span>
+                                    <span class="mfcciRight">南阳</span>
+
+                                </p>
+                            </a>
+                        </div>
+                         <div class="mfcCar" data-position="wapNew">
+                            <a href="/details/171858665?position=013700" title="2010年8月 凯迪拉克 SRX(进口) 3.0L 豪华版">
+                                <p class="mfccPic"><img src="img/1.png" alt="2010年8月 凯迪拉克 SRX(进口) 3.0L 豪华版">
+                                    
+                                    <span class="mfcCar_time">20秒前
+ </span>
+                                </p>
+                                <h1 class="mfccName">二手自卸车 重汽豪沃(HOWO) 380马力</h1>
+                                <p class="mfccInfo">
+                                    <span class="mfcciPrice">￥11.5万</span>
+                                    <span class="mfcciRight">南阳</span>
+
+                                </p>
+                            </a>
+                        </div>
+                         <div class="mfcCar" data-position="wapNew">
+                            <a href="/details/171858665?position=013700" title="2010年8月 凯迪拉克 SRX(进口) 3.0L 豪华版">
+                                <p class="mfccPic"><img src="img/1.png" alt="2010年8月 凯迪拉克 SRX(进口) 3.0L 豪华版">
+                                    
+                                    <span class="mfcCar_time">20秒前
+ </span>
+                                </p>
+                                <h1 class="mfccName">二手自卸车 重汽豪沃(HOWO) 380马力</h1>
+                                <p class="mfccInfo">
+                                    <span class="mfcciPrice">￥11.5万</span>
+                                    <span class="mfcciRight">南阳</span>
+
+                                </p>
+                            </a>
+                        </div>
+                          <div class="mfcCar" data-position="wapNew">
+                            <a href="/details/171858665?position=013700" title="2010年8月 凯迪拉克 SRX(进口) 3.0L 豪华版">
+                                <p class="mfccPic"><img src="img/1.png" alt="2010年8月 凯迪拉克 SRX(进口) 3.0L 豪华版">
+                                    
+                                    <span class="mfcCar_time">20秒前
+ </span>
+                                </p>
+                                <h1 class="mfccName">二手自卸车 重汽豪沃(HOWO) 380马力</h1>
+                                <p class="mfccInfo">
+                                    <span class="mfcciPrice">￥11.5万</span>
+                                    <span class="mfcciRight">南阳</span>
+
+                                </p>
+                            </a>
+                        </div>
+        </div>
+        
+        <div class="mfCarlist" style="display: none;">
+                    <div class="mfcCar" data-position="wapBoutique">
+                        <a href="/details/170354377?position=013800" title="2012年4月  雪佛兰萨博曼75周年限量版 ">
+                            <p class="mfccPic"><img src="http://img.hx2cars.com/upload//newimg1/M07/FE/19/Clo8w11SGjCAKicRAAHrzvkT1_M104_small_400_300.jpg" alt="2012年4月  雪佛兰萨博曼75周年限量版 ">
+                                
+                                <i class="icon_bf"></i>
+                            </p>
+                            <h1 class="mfccName">2012年4月  雪佛兰萨博曼75周年限量版 </h1>
+                            <p class="mfccInfo">
+                                <span class="mfcciPrice">55.8万</span>
+                                <span class="mfcciRight">上海</span>
+                            </p>
+                        </a>
+                    </div>
+                    <div class="mfcCar" data-position="wapBoutique">
+                        <a href="/details/171858201?position=013801" title="2007年1月 海马 福美来 1.6L 手动舒适GLX">
+                            <p class="mfccPic"><img src="http://img.hx2cars.com/upload//newimg1/M06/12/3F/Clo8w12HcuiAasXgAAXMuqhyOnE102_small_400_300.jpg" alt="2007年1月 海马 福美来 1.6L 手动舒适GLX">
+                                
+                                <i class="icon_bf"></i>
+                            </p>
+                            <h1 class="mfccName">2007年1月 海马 福美来 1.6L 手动舒适GLX</h1>
+                            <p class="mfccInfo">
+                                <span class="mfcciPrice">8600.0万</span>
+                                <span class="mfcciRight">珠海</span>
+                            </p>
+                        </a>
+                    </div>
+                    <div class="mfcCar" data-position="wapBoutique">
+                        <a href="/details/171765351?position=013802" title="2012年8月 比亚迪 F0 1.0L 铉酷型">
+                            <p class="mfccPic"><img src="http://img.hx2cars.com/upload//newimg1/M07/10/89/Clo8w12EgV-AZXHxAADy0oEo7oY847_small_400_300.jpg" alt="2012年8月 比亚迪 F0 1.0L 铉酷型">
+                                
+                                <i class="icon_bf"></i>
+                            </p>
+                            <h1 class="mfccName">2012年8月 比亚迪 F0 1.0L 铉酷型</h1>
+                            <p class="mfccInfo">
+                                <span class="mfcciPrice">1.25万</span>
+                                <span class="mfcciRight">台州</span>
+                            </p>
+                        </a>
+                    </div>
+                    <div class="mfcCar" data-position="wapBoutique">
+                        <a href="/details/169289973?position=013803" title="2011年6月 宝马 宝马3系 320i 豪华型">
+                            <p class="mfccPic"><img src="http://img.hx2cars.com/upload//newimg2/M03/EE/DA/Clo8xF0oR4mAaqdAAAElSllIz28852_small_400_300.jpg" alt="2011年6月 宝马 宝马3系 320i 豪华型">
+                                
+                                <i class="icon_bf"></i>
+                            </p>
+                            <h1 class="mfccName">2011年6月 宝马 宝马3系 320i 豪华型</h1>
+                            <p class="mfccInfo">
+                                <span class="mfcciPrice">9.8万</span>
+                                <span class="mfcciRight">郑州</span>
+                            </p>
+                        </a>
+                    </div>
+                    <div class="mfcCar" data-position="wapBoutique">
+                        <a href="/details/171442931?position=013804" title="2019年9月 陆风 X5 Plus 1.5T 手动创领版">
+                            <p class="mfccPic"><img src="http://img.hx2cars.com/upload//newimg2/M04/0E/F6/Clo8xF2DQJeAF68KAAMNv39RyxU623_small_400_300.jpg" alt="2019年9月 陆风 X5 Plus 1.5T 手动创领版">
+                                
+                                <i class="icon_bf"></i>
+                            </p>
+                            <h1 class="mfccName">2019年9月 陆风 X5 Plus 1.5T 手动创领版</h1>
+                            <p class="mfccInfo">
+                                <span class="mfcciPrice">6.89万</span>
+                                <span class="mfcciRight">南昌</span>
+                            </p>
+                        </a>
+                    </div>
+                    <div class="mfcCar" data-position="wapBoutique">
+                        <a href="/details/171857505?position=013805" title="2016年9月 奔驰 奔驰GLC GLC 260 4MATIC 豪华型">
+                            <p class="mfccPic"><img src="http://img.hx2cars.com/upload//newimg2/M07/EF/9D/Clo8xF0pZwuAZU0MAAEFgP2QAno951_small_400_300.jpg" alt="2016年9月 奔驰 奔驰GLC GLC 260 4MATIC 豪华型">
+                                
+                                <i class="icon_bf"></i>
+                            </p>
+                            <h1 class="mfccName">2016年9月 奔驰 奔驰GLC GLC 260 4MATIC 豪华型</h1>
+                            <p class="mfccInfo">
+                                <span class="mfcciPrice">31.8万</span>
+                                <span class="mfcciRight">青岛</span>
+                            </p>
+                        </a>
+                    </div>
+                    <div class="mfcCar" data-position="wapBoutique">
+                        <a href="/details/171857501?position=013806" title="2012年11月 奔驰 奔驰S级(进口) S 300 L 商务型 Grand Edition">
+                            <p class="mfccPic"><img src="http://img.hx2cars.com/upload//newimg2/M01/DE/84/Clo8xFz-WUOAB1trAAD95xDDg80425_small_400_300.jpg" alt="2012年11月 奔驰 奔驰S级(进口) S 300 L 商务型 Grand Edition">
+                                
+                                <i class="icon_bf"></i>
+                            </p>
+                            <h1 class="mfccName">2012年11月 奔驰 奔驰S级(进口) S 300 L 商务型 Grand Edition</h1>
+                            <p class="mfccInfo">
+                                <span class="mfcciPrice">31.8万</span>
+                                <span class="mfcciRight">青岛</span>
+                            </p>
+                        </a>
+                    </div>
+                    <div class="mfcCar" data-position="wapBoutique">
+                        <a href="/details/171857486?position=013807" title="2014年11月 宝马 宝马X5(进口) xDrive35i 领先型">
+                            <p class="mfccPic"><img src="http://img.hx2cars.com/upload//newimg2/M02/EF/9D/Clo8xF0pZsyAWw6IAAEFt8rt_XA048_small_400_300.jpg" alt="2014年11月 宝马 宝马X5(进口) xDrive35i 领先型">
+                                
+                                <i class="icon_bf"></i>
+                            </p>
+                            <h1 class="mfccName">2014年11月 宝马 宝马X5(进口) xDrive35i 领先型</h1>
+                            <p class="mfccInfo">
+                                <span class="mfcciPrice">40.0万</span>
+                                <span class="mfcciRight">青岛</span>
+                            </p>
+                        </a>
+                    </div>
+        </div>
+        <div class="mfCarlist" style="display: none;">
+                    <div class="mfcCar pfclick" data-position="wapIndexWholesale">
+                        <a href="/tradedetails/170231333?position=014000" title="2011年10月 Cayenne 保时捷 S 4.8L">
+                            <p class="mfccPic"><img src="http://img.hx2cars.com/upload/newimg2/M00/FA/96/Clo8xF1NZxqAVjTAAANIj8aw64A769_small_400_300.jpg" alt="2011年10月 Cayenne 保时捷 S 4.8L">
+                                
+                            </p>
+                            <h1 class="mfccName">2011年10月 Cayenne 保时捷 S 4.8L</h1>
+                            <p class="mfccInfo">
+                            <span class="mfcciPrice ">
+                                批发价
+                            </span>
+                                <span class="mfcciRight">泉州市</span>
+                            </p>
+                        </a>
+                    </div>
+                    <div class="mfcCar pfclick" data-position="wapIndexWholesale">
+                        <a href="/tradedetails/171065396?position=014001" title="2015年10月 CX20 长安 1.4L 手动天窗导航版 国V">
+                            <p class="mfccPic"><img src="http://img.hx2cars.com/upload/newimg2/M06/06/62/Clo8xF1s0GmAKZ16AADy0bINz84460_small_400_300.jpg" alt="2015年10月 CX20 长安 1.4L 手动天窗导航版 国V">
+                                
+                            </p>
+                            <h1 class="mfccName">2015年10月 CX20 长安 1.4L 手动天窗导航版 国V</h1>
+                            <p class="mfccInfo">
+                            <span class="mfcciPrice ">
+                                批发价
+                            </span>
+                                <span class="mfcciRight">金华市</span>
+                            </p>
+                        </a>
+                    </div>
+                    <div class="mfcCar pfclick" data-position="wapIndexWholesale">
+                        <a href="/tradedetails/170170774?position=014002" title="2012年6月 宝马Z4 宝马 Z4 2.0L 领先型硬顶敞篷">
+                            <p class="mfccPic"><img src="http://img.hx2cars.com/upload/newimg1/M03/FC/29/Clo8w11LdPSAaifrAAYRnLwxL_w942_small_400_300.jpg" alt="2012年6月 宝马Z4 宝马 Z4 2.0L 领先型硬顶敞篷">
+                                
+                            </p>
+                            <h1 class="mfccName">2012年6月 宝马Z4 宝马 Z4 2.0L 领先型硬顶敞篷</h1>
+                            <p class="mfccInfo">
+                            <span class="mfcciPrice ">
+                                批发价
+                            </span>
+                                <span class="mfcciRight">宁波市</span>
+                            </p>
+                        </a>
+                    </div>
+                    <div class="mfcCar pfclick" data-position="wapIndexWholesale">
+                        <a href="/tradedetails/170764807?position=014003" title="2007年10月 兰德酷路泽 丰田 4.7L 自动VX-R">
+                            <p class="mfccPic"><img src="http://img.hx2cars.com/upload/newimg2/M07/03/0D/Clo8xF1igAGABCc9AAE91L-k-oY117_small_400_300.jpg" alt="2007年10月 兰德酷路泽 丰田 4.7L 自动VX-R">
+                                
+                            </p>
+                            <h1 class="mfccName">2007年10月 兰德酷路泽 丰田 4.7L 自动VX-R</h1>
+                            <p class="mfccInfo">
+                            <span class="mfcciPrice ">
+                                批发价
+                            </span>
+                                <span class="mfcciRight">大连市</span>
+                            </p>
+                        </a>
+                    </div>
+                    <div class="mfcCar pfclick" data-position="wapIndexWholesale">
+                        <a href="/tradedetails/168926084?position=014004" title="2007年12月 普拉多 丰田 4.0L 自动VX">
+                            <p class="mfccPic"><img src="http://img.hx2cars.com/upload/newimg2/M04/EA/89/Clo8xF0avcWACSGZAAEpwb5eJhY731_small_400_300.jpg" alt="2007年12月 普拉多 丰田 4.0L 自动VX">
+                                
+                            </p>
+                            <h1 class="mfccName">2007年12月 普拉多 丰田 4.0L 自动VX</h1>
+                            <p class="mfccInfo">
+                            <span class="mfcciPrice ">
+                                批发价
+                            </span>
+                                <span class="mfcciRight">大连市</span>
+                            </p>
+                        </a>
+                    </div>
+                    <div class="mfcCar pfclick" data-position="wapIndexWholesale">
+                        <a href="/tradedetails/170876035?position=014005" title="2016年8月 奔驰C级 奔驰 C 180 L 运动型">
+                            <p class="mfccPic"><img src="http://img.hx2cars.com/upload/newimg1/M01/05/1A/Clo8w11ma7mAPzqQAAEkOK_sV2s652_small_400_300.jpg" alt="2016年8月 奔驰C级 奔驰 C 180 L 运动型">
+                                
+                            </p>
+                            <h1 class="mfccName">2016年8月 奔驰C级 奔驰 C 180 L 运动型</h1>
+                            <p class="mfccInfo">
+                            <span class="mfcciPrice ">
+                                批发价
+                            </span>
+                                <span class="mfcciRight">大连市</span>
+                            </p>
+                        </a>
+                    </div>
+                    <div class="mfcCar pfclick" data-position="wapIndexWholesale">
+                        <a href="/tradedetails/170122310?position=014006" title="2012年3月 红杉 丰田 5.7 白金版">
+                            <p class="mfccPic"><img src="http://img.hx2cars.com/upload/newimg1/M04/FB/BA/Clo8w11JdbiAWejWAAERGbCy96M380_small_400_300.jpg" alt="2012年3月 红杉 丰田 5.7 白金版">
+                                
+                            </p>
+                            <h1 class="mfccName">2012年3月 红杉 丰田 5.7 白金版</h1>
+                            <p class="mfccInfo">
+                            <span class="mfcciPrice ">
+                                批发价
+                            </span>
+                                <span class="mfcciRight">大连市</span>
+                            </p>
+                        </a>
+                    </div>
+                    <div class="mfcCar pfclick" data-position="wapIndexWholesale">
+                        <a href="/tradedetails/171001340?position=014007" title="2010年3月 IS 雷克萨斯 300 炫动版">
+                            <p class="mfccPic"><img src="http://img.hx2cars.com/upload/newimg1/M06/06/F7/Clo8w11qbwKANwvgAAFTAnYIpPg836_small_400_300.jpg" alt="2010年3月 IS 雷克萨斯 300 炫动版">
+                                
+                            </p>
+                            <h1 class="mfccName">2010年3月 IS 雷克萨斯 300 炫动版</h1>
+                            <p class="mfccInfo">
+                            <span class="mfcciPrice ">
+                                批发价
+                            </span>
+                                <span class="mfcciRight">大连市</span>
+                            </p>
+                        </a>
+                    </div>
+        </div>
+        <div class="mfCarlist" style="display:none;">
+           
+        </div>
+        <a class="mfMorecar" id="mfMorecar">查看更多 &gt;</a>
+    </div>
+</section>
+
+
+
+
+
+<section class="mMoretool fly-right4" style="display: none; transition: all 0.3s; left: auto; right: 0px; position: fixed; transform: translate(100%, 0px); z-index: 100;">
+    <div class="mmTop"><i class="mmtBack" id="mmtBack"></i>更多功能</div>
+    <div class="mmHelplist">
+        <div class="mcTitle"><span>二手车买卖</span></div>
+        <a href="/quanguo/soa1" class="mmBuyCar" title="我要买车">
+            <span class="mmhIcon"></span>
+            <span class="mmhName">我要买车</span>
+        </a>
+        <a href="/quanguo/soa6" class="mmpfCar" title="批发">
+            <span class="mmhIcon"></span>
+            <span class="mmhName">批发</span>
+        </a>
+        <a class="mmSellCar" title="个人卖车">
+            <span class="mmhIcon"></span>
+            <span class="mmhName">个人卖车</span>
+        </a>
+    </div>
+     <div class="mmHelplist">
+        <div class="mcTitle"><span>华夏服务</span></div>
+        <a href="/examine/index.htm" class="mmhCheck" title="华夏检测">
+            <span class="mmhIcon"></span>
+            <span class="mmhName">华夏检测</span>
+        </a>
+        <a href="/tools/tycar.htm" class="mmhTy" title="托运服务">
+            <span class="mmhIcon"></span>
+            <span class="mmhName">托运服务</span>
+        </a>
+        <a href="/4s" class="mmh4S" title="4S查询">
+            <span class="mmhIcon"></span>
+            <span class="mmhName">4S查询</span>
+        </a>
+        <a href="/wap/carfinds.htm" class="mmFindCar" title="找车服务">
+            <span class="mmhIcon"></span>
+            <span class="mmhName">找车服务</span>
+        </a>
+         <a href="/mobile/claimindex.htm" class="chxRecord" title="出险记录">
+             <span class="mmhIcon"></span>
+             <span class="mmhName">出险记录</span>
+         </a>
+    </div>
+     <div class="mmHelplist">
+        <div class="mcTitle"><span>工具</span></div>
+         <button class="mmhAssess" title="车辆评估" data-track="wap-首页-评估">
+            <span class="mmhIcon"></span>
+            <span class="mmhName">免费评估</span>
+        </button>
+        <button class="mmhRule" title="违章查询">
+            <span class="mmhIcon"></span>
+            <span class="mmhName">违章查询</span>
+        </button>
+        <button class="mmhInsurance" title="保险">
+            <span class="mmhIcon"></span>
+            <span class="mmhName">保险计算</span>
+        </button>
+        <button class="mmhLoan" title="贷款">
+            <span class="mmhIcon"></span>
+            <span class="mmhName">购车贷款</span>
+        </button>
+    </div>
+     <div class="mmHelplist">
+        <div class="mcTitle"><span>频道</span></div>
+         <button class="mmhData" title="数据中心">
+            <span class="mmhIcon"></span>
+            <span class="mmhName">数据中心</span>
+        </button>
+        <a href="/car/news.htm" class="mmhAsk" title="资讯">
+            <span class="mmhIcon"></span>
+            <span class="mmhName">华夏资讯</span>
+        </a>
+    </div>
+</section>
+<section class="coolbrandselect fly-right3" style="display: none; transition: all 0.3s; left: auto; right: 0px; position: fixed; transform: translate(100%, 0px); z-index: 100;">
+    <div class="mmTop"><i class="mmtBack" id="coolArrow"></i>选择品牌</div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb1.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">A</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="12817" data-dirname="acschnitzer">ACSchnitzer</a>
+                        <a data-pid="11307" data-dirname="alpina">ALPINA</a>
+                        <a data-pid="26" data-dirname="aodi">奥迪</a>
+                        <a data-pid="12921" data-dirname="ankaikeche">安凯客车</a>
+                        <a data-pid="29" data-dirname="aeflmo">阿尔法·罗密欧</a>
+                        <a data-pid="27" data-dirname="asdmd">阿斯顿·马丁</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb2.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">B</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="38" data-dirname="baoshijie">保时捷</a>
+                        <a data-pid="31" data-dirname="biake">别克</a>
+                        <a data-pid="12727" data-dirname="beijing">北京</a>
+                        <a data-pid="12854" data-dirname="beiqizhizao">北汽制造</a>
+                        <a data-pid="2822" data-dirname="weiwang">北汽威旺</a>
+                        <a data-pid="2953" data-dirname="huansu">北汽幻速</a>
+                        <a data-pid="12908" data-dirname="beiqixinnengyuan">北汽新能源</a>
+                        <a data-pid="46" data-dirname="changhe">北汽昌河</a>
+                        <a data-pid="2931" data-dirname="shenbao">北汽绅宝</a>
+                        <a data-pid="13001" data-dirname="beiqidaoda">北汽道达</a>
+                        <a data-pid="36" data-dirname="benteng">奔腾</a>
+                        <a data-pid="34" data-dirname="benchi">奔驰</a>
+                        <a data-pid="11962" data-dirname="baowuo">宝沃</a>
+                        <a data-pid="33" data-dirname="baoma">宝马</a>
+                        <a data-pid="1531" data-dirname="baojun">宝骏</a>
+                        <a data-pid="39" data-dirname="binli">宾利</a>
+                        <a data-pid="11273" data-dirname="babosi">巴博斯</a>
+                        <a data-pid="40" data-dirname="bujiadi">布加迪</a>
+                        <a data-pid="30" data-dirname="bentian">本田</a>
+                        <a data-pid="35" data-dirname="biaozhi">标致</a>
+                        <a data-pid="32" data-dirname="biyadi">比亚迪</a>
+                        <a data-pid="12058" data-dirname="bisu">比速</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb3.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">C</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="12896" data-dirname="chenggongqiche">成功</a>
+                        <a data-pid="42" data-dirname="changcheng">长城</a>
+                        <a data-pid="43" data-dirname="changan">长安</a>
+                        <a data-pid="12863" data-dirname="changanoushang">长安欧尚</a>
+                        <a data-pid="12999" data-dirname="changankuayue">长安跨越</a>
+                        <a data-pid="12994" data-dirname="changanqingxingche">长安轻型车</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb4.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">D</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="3004" data-dirname="ds">DS</a>
+                        <a data-pid="48" data-dirname="dongnan">东南</a>
+                        <a data-pid="50" data-dirname="dongfeng">东风</a>
+                        <a data-pid="13026" data-dirname="dongfengruitaite">东风·瑞泰特</a>
+                        <a data-pid="12842" data-dirname="dongfengxiaokang">东风小康</a>
+                        <a data-pid="12959" data-dirname="dongfengfengguang">东风风光</a>
+                        <a data-pid="11817" data-dirname="dffengdu">东风风度</a>
+                        <a data-pid="51" data-dirname="fengshen">东风风神</a>
+                        <a data-pid="57" data-dirname="fengxin">东风风行</a>
+                        <a data-pid="13041" data-dirname="dachengqiche">大乘</a>
+                        <a data-pid="47" data-dirname="dazhong">大众</a>
+                        <a data-pid="12792" data-dirname="dafa">大发</a>
+                        <a data-pid="12980" data-dirname="dianka">电咖</a>
+                        <a data-pid="52" data-dirname="daoqi">道奇</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb5.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">F</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="54" data-dirname="fengtian">丰田</a>
+                        <a data-pid="56" data-dirname="falali">法拉利</a>
+                        <a data-pid="2952" data-dirname="qiteng">福汽启腾</a>
+                        <a data-pid="55" data-dirname="fute">福特</a>
+                        <a data-pid="58" data-dirname="futian">福田</a>
+                        <a data-pid="12982" data-dirname="futianchengyongche">福田乘用车</a>
+                        <a data-pid="60" data-dirname="fudi">福迪</a>
+                        <a data-pid="59" data-dirname="feiyate">菲亚特</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb6.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">G</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="62" data-dirname="gmc">GMC</a>
+                        <a data-pid="63" data-dirname="guanggang">光冈</a>
+                        <a data-pid="13004" data-dirname="guojinqiche">国金</a>
+                        <a data-pid="1534" data-dirname="chuanqi1">广汽传祺</a>
+                        <a data-pid="82" data-dirname="jiao">广汽吉奥</a>
+                        <a data-pid="13029" data-dirname="guangqijituan">广汽集团</a>
+                        <a data-pid="11233" data-dirname="guanzhi">观致</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb7.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">H</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="12945" data-dirname="huakai">华凯</a>
+                        <a data-pid="12937" data-dirname="huali">华利</a>
+                        <a data-pid="69" data-dirname="huapu">华普</a>
+                        <a data-pid="76" data-dirname="huatai">华泰</a>
+                        <a data-pid="12960" data-dirname="huataixinnengyuan">华泰新能源</a>
+                        <a data-pid="11823" data-dirname="huasong">华颂</a>
+                        <a data-pid="12884" data-dirname="huazuo">华骐</a>
+                        <a data-pid="2935" data-dirname="hafu1">哈弗</a>
+                        <a data-pid="66" data-dirname="hafei">哈飞</a>
+                        <a data-pid="2936" data-dirname="hengtian">恒天</a>
+                        <a data-pid="67" data-dirname="hanma">悍马</a>
+                        <a data-pid="11997" data-dirname="hanten">汉腾</a>
+                        <a data-pid="2937" data-dirname="haige">海格</a>
+                        <a data-pid="65" data-dirname="haima">海马</a>
+                        <a data-pid="70" data-dirname="honqi">红旗</a>
+                        <a data-pid="13036" data-dirname="hongxingqiche">红星</a>
+                        <a data-pid="1537" data-dirname="huanghai">黄海</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb8.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">I</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="12888" data-dirname="icona">Icona</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb9.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">J</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="77" data-dirname="jeep">Jeep</a>
+                        <a data-pid="2941" data-dirname="jiulong1">九龙</a>
+                        <a data-pid="75" data-dirname="jili">吉利</a>
+                        <a data-pid="12081" data-dirname="junma">君马</a>
+                        <a data-pid="80" data-dirname="jiebao">捷豹</a>
+                        <a data-pid="12445" data-dirname="xdjietu">捷途</a>
+                        <a data-pid="74" data-dirname="jianghuai">江淮</a>
+                        <a data-pid="79" data-dirname="jiangling">江铃</a>
+                        <a data-pid="12970" data-dirname="jianglingjituanxinnengyuan">江铃新能源</a>
+                        <a data-pid="12910" data-dirname="jianglingjituanqingqi">江铃轻汽</a>
+                        <a data-pid="12875" data-dirname="jinlv">金旅</a>
+                        <a data-pid="78" data-dirname="jinbei">金杯</a>
+                        <a data-pid="12845" data-dirname="jinlong">金龙</a>
+                        <a data-pid="13056" data-dirname="juntian">钧天</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb10.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">K</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="12809" data-dirname="ktm">KTM</a>
+                        <a data-pid="88" data-dirname="kelaisile">克莱斯勒</a>
+                        <a data-pid="11840" data-dirname="kaiyi">凯翼</a>
+                        <a data-pid="85" data-dirname="kaidilake">凯迪拉克</a>
+                        <a data-pid="12924" data-dirname="kasheng">卡升</a>
+                        <a data-pid="2954" data-dirname="kawei">卡威</a>
+                        <a data-pid="3002" data-dirname="kaersen">卡尔森</a>
+                        <a data-pid="1555" data-dirname="kairui">开瑞</a>
+                        <a data-pid="87" data-dirname="kenisaike">科尼赛克</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb11.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">L</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="13035" data-dirname="lite">LITE</a>
+                        <a data-pid="12941" data-dirname="localmotors">LOCALMOTORS</a>
+                        <a data-pid="4090" data-dirname="laolunshi">Lorinser</a>
+                        <a data-pid="92" data-dirname="lanbojini">兰博基尼</a>
+                        <a data-pid="93" data-dirname="lifan">力帆</a>
+                        <a data-pid="95" data-dirname="laosilaisi">劳斯莱斯</a>
+                        <a data-pid="98" data-dirname="linken">林肯</a>
+                        <a data-pid="11866" data-dirname="leibao">猎豹</a>
+                        <a data-pid="2861" data-dirname="linian">理念</a>
+                        <a data-pid="13046" data-dirname="luofuhate">罗夫哈特</a>
+                        <a data-pid="96" data-dirname="lianhua">莲花</a>
+                        <a data-pid="866" data-dirname="lutesi">路特斯</a>
+                        <a data-pid="90" data-dirname="luhu">路虎</a>
+                        <a data-pid="89" data-dirname="lingmu">铃木</a>
+                        <a data-pid="12904" data-dirname="ludifangzhou">陆地方舟</a>
+                        <a data-pid="94" data-dirname="lufeng">陆风</a>
+                        <a data-pid="13018" data-dirname="lingpaoqiche">零跑</a>
+                        <a data-pid="91" data-dirname="leikesasi">雷克萨斯</a>
+                        <a data-pid="97" data-dirname="leinuo">雷诺</a>
+                        <a data-pid="12087" data-dirname="lingke">领克</a>
+                        <a data-pid="13043" data-dirname="lingtuqiche">领途</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb12.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">M</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="102" data-dirname="minii">MINI</a>
+                        <a data-pid="101" data-dirname="mg">名爵</a>
+                        <a data-pid="12083" data-dirname="mogen">摩根</a>
+                        <a data-pid="104" data-dirname="mashaladi">玛莎拉蒂</a>
+                        <a data-pid="11116" data-dirname="maikailun">迈凯伦</a>
+                        <a data-pid="103" data-dirname="maibahe">迈巴赫</a>
+                        <a data-pid="100" data-dirname="mazida">马自达</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb1.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">N</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="12913" data-dirname="nanjingjinlong">南京金龙</a>
+                        <a data-pid="13034" data-dirname="nazuoqiche">哪吒</a>
+                        <a data-pid="106" data-dirname="nazhijie">纳智捷</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb2.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">O</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="108" data-dirname="oubao">欧宝</a>
+                        <a data-pid="13032" data-dirname="oushangqiche">欧尚</a>
+                        <a data-pid="13031" data-dirname="oula">欧拉</a>
+                        <a data-pid="12846" data-dirname="oulang">欧朗</a>
+                        <a data-pid="107" data-dirname="ouge">讴歌</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb3.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">P</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="13008" data-dirname="polestarjixing">Polestar极星</a>
+                        <a data-pid="3003" data-dirname="pajiani">帕加尼</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb4.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">Q</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="12030" data-dirname="qzbadun">乔治·巴顿</a>
+                        <a data-pid="111" data-dirname="quanqiuying">全球鹰</a>
+                        <a data-pid="12935" data-dirname="qiantu">前途</a>
+                        <a data-pid="11108" data-dirname="qichen">启辰</a>
+                        <a data-pid="109" data-dirname="qirui">奇瑞</a>
+                        <a data-pid="112" data-dirname="qingling">庆铃</a>
+                        <a data-pid="110" data-dirname="qiya">起亚</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb5.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">R</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="3007" data-dirname="ruf">如虎</a>
+                        <a data-pid="13037" data-dirname="rongdazhizao">容大智造</a>
+                        <a data-pid="113" data-dirname="richan">日产</a>
+                        <a data-pid="12996" data-dirname="ruichixinnengyuan">瑞驰</a>
+                        <a data-pid="115" data-dirname="ruiqii">瑞麒</a>
+                        <a data-pid="114" data-dirname="rongwei">荣威</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb6.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">S</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="1556" data-dirname="smart">smart</a>
+                        <a data-pid="13006" data-dirname="srmzuoyuan">SRM鑫源</a>
+                        <a data-pid="12011" data-dirname="siwei">SWM斯威</a>
+                        <a data-pid="117" data-dirname="sanling">三菱</a>
+                        <a data-pid="2839" data-dirname="datong">上汽大通MAXUS</a>
+                        <a data-pid="123" data-dirname="shijue">世爵</a>
+                        <a data-pid="120" data-dirname="shuanghuan">双环</a>
+                        <a data-pid="119" data-dirname="shuanglong">双龙</a>
+                        <a data-pid="2838" data-dirname="siming1">思铭</a>
+                        <a data-pid="118" data-dirname="sibalu">斯巴鲁</a>
+                        <a data-pid="116" data-dirname="sikeda">斯柯达</a>
+                        <a data-pid="12938" data-dirname="sidataike">斯达泰克</a>
+                        <a data-pid="122" data-dirname="sabo">萨博</a>
+                        <a data-pid="12905" data-dirname="saizuo">赛麟</a>
+                        <a data-pid="2951" data-dirname="sqtj1">陕汽通家</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb7.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">T</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="12085" data-dirname="taikate">泰卡特</a>
+                        <a data-pid="11287" data-dirname="tesila">特斯拉</a>
+                        <a data-pid="2955" data-dirname="tengshi1">腾势</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb8.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">W</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="12089" data-dirname="weipai">WEY</a>
+                        <a data-pid="11794" data-dirname="wushiling">五十铃</a>
+                        <a data-pid="125" data-dirname="wulin">五菱</a>
+                        <a data-pid="4087" data-dirname="weiziman">威兹曼</a>
+                        <a data-pid="12991" data-dirname="weimaqiche">威马</a>
+                        <a data-pid="127" data-dirname="weilin">威麟</a>
+                        <a data-pid="126" data-dirname="woerwo">沃尔沃</a>
+                        <a data-pid="11715" data-dirname="yingzhi">潍柴英致</a>
+                        <a data-pid="12079" data-dirname="wlqc">蔚来</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb9.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">X</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="12975" data-dirname="xiaopengqiche">小鹏</a>
+                        <a data-pid="131" data-dirname="xinkai">新凯</a>
+                        <a data-pid="13024" data-dirname="xinteqiche">新特</a>
+                        <a data-pid="128" data-dirname="xiandai">现代</a>
+                        <a data-pid="24" data-dirname="xiyate">西雅特</a>
+                        <a data-pid="129" data-dirname="xuefolan">雪佛兰</a>
+                        <a data-pid="130" data-dirname="xuetielong">雪铁龙</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb10.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">Y</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="134" data-dirname="yiqi">一汽</a>
+                        <a data-pid="12986" data-dirname="yundu">云度</a>
+                        <a data-pid="1849" data-dirname="yunque1">云雀</a>
+                        <a data-pid="1238" data-dirname="yiweike1">依维柯</a>
+                        <a data-pid="12998" data-dirname="yutongkeche">宇通客车</a>
+                        <a data-pid="12932" data-dirname="yujie">御捷</a>
+                        <a data-pid="135" data-dirname="yongyuan">永源</a>
+                        <a data-pid="136" data-dirname="yingfeinidi">英菲尼迪</a>
+                        <a data-pid="13007" data-dirname="yulu">裕路</a>
+                        <a data-pid="138" data-dirname="yema1">野马</a>
+                        <a data-pid="12963" data-dirname="yusheng">驭胜</a>
+                </div>
+            </div>
+        </div>
+        <div class="cbList">
+            <div class="cblBox">
+                <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mindex/coolb11.jpg" alt="" class="cblBg">
+                <div class="cblTheme">
+                    <p class="cbltLetter">Z</p>
+                    <p class="cbltHotbrand">Hot Brand</p>
+                </div>
+            </div>
+            <div class="cblOpenlist">
+                <div class="cbloBox">
+                        <a data-pid="143" data-dirname="zhongxing">中兴</a>
+                        <a data-pid="1239" data-dirname="zhonghua1">中华</a>
+                        <a data-pid="12882" data-dirname="zhinuo">之诺</a>
+                        <a data-pid="142" data-dirname="zhongtai">众泰</a>
+                        <a data-pid="11982" data-dirname="zhidou">知豆</a>
+                </div>
+            </div>
+        </div>
+</section>
+<section class="coolstyle fly-bottom2" style="display: none; transition: all 0.3s; top: auto; bottom: 0px; position: fixed; transform: translate(0px, 100%); z-index: 100;">
+    <div class="csTitle" id="csBack">
+        <i class="cstArrow" id="cstArrow"></i>
+        <span>选择车系</span>
+        <i class="cstAffirm" id="cstAffirm">确认</i>
+    </div>
+    <div class="csList" id="csList"></div>
+</section>
+<!--地区选择-->
+<section class="mzarea fly-right5" style="display: none; transition: all 0.3s; left: auto; right: 0px; position: fixed; transform: translate(100%, 0px); z-index: 100;">
+    <div class="mzBox">
+        <ul class="areaNav">
+            <li><a href="#A">A</a></li>
+            <li><a href="#B">B</a></li>
+            <li><a href="#C">C</a></li>
+            <li><a href="#F">F</a></li>
+            <li><a href="#G">G</a></li>
+            <li><a href="#H">H</a></li>
+            <li><a href="#J">J</a></li>
+            <li><a href="#L">L</a></li>
+            <li><a href="#N">N</a></li>
+            <li><a href="#Q">Q</a></li>
+            <li><a href="#S">S</a></li>
+            <li><a href="#T">T</a></li>
+            <li><a href="#X">X</a></li>
+            <li><a href="#Y">Y</a></li>
+            <li><a href="#Z">Z</a></li>
+        </ul>
+        <div class="mzbAll">
+            <div class="mzaTop"><i class="leftArrow" id="areaArrow"></i>地区选择</div>
+            <!--重庆市-->
+            <div class="mzaLocation">
+                <!--当前定位城市：-->
+                <p class="location_title">定位城市</p>
+                <div class="location_city">
+                    <a href="/chongqing"><i></i>重庆市</a>
+                </div>
+            </div>
+            <div class="mzaHistory">
+                <p class="history_title">历史记录</p>
+                <div class="history_content">
+                        <a class="history" href="/quanguo">全国</a>
+                </div>
+            </div>
+            <div class="mzaHot">
+                <p class="hot_title">热门城市</p>
+                <div class="hot_content">
+                    <a class="hot" href="/quanguo">全国</a>
+                        <a class="hot" href="/beijing">北京</a>
+                        <a class="hot" href="/shanghai">上海</a>
+                        <a class="hot" href="/guangzhou">广州</a>
+                        <a class="hot" href="/shenzhen">深圳</a>
+                        <a class="hot" href="/hangzhou">杭州</a>
+                        <a class="hot" href="/nanjing">南京</a>
+                        <a class="hot" href="/tianjin">天津</a>
+                        <a class="hot" href="/chongqing">重庆</a>
+                        <a class="hot" href="/suzhou">苏州</a>
+                        <a class="hot" href="/changsha">长沙</a>
+                        <a class="hot" href="/haerbin">哈尔滨</a>
+                </div>
+            </div>
+            <div class="mzaProvince" id="mzaProvince">
+                    <p class="mbbaLetter" id="A">A</p>
+                                <p class="mbbaBrand" data-procode="340000" data-dirname="anhui"><span>安徽省</span></p>
+                    <p class="mbbaLetter" id="B">B</p>
+                                <a class="zxs" href="/beijing">北京市</a>
+                    <p class="mbbaLetter" id="C">C</p>
+                                <a class="zxs" href="/chongqing">重庆市</a>
+                    <p class="mbbaLetter" id="F">F</p>
+                                <p class="mbbaBrand" data-procode="350000" data-dirname="fujian"><span>福建省</span></p>
+                    <p class="mbbaLetter" id="G">G</p>
+                                <p class="mbbaBrand" data-procode="440000" data-dirname="guangdong"><span>广东省</span></p>
+                                <p class="mbbaBrand" data-procode="620000" data-dirname="gansu"><span>甘肃省</span></p>
+                                <p class="mbbaBrand" data-procode="450000" data-dirname="guangxi"><span>广西</span></p>
+                                <p class="mbbaBrand" data-procode="520000" data-dirname="guizhou"><span>贵州省</span></p>
+                    <p class="mbbaLetter" id="H">H</p>
+                                <p class="mbbaBrand" data-procode="460000" data-dirname="hainan"><span>海南省</span></p>
+                                <p class="mbbaBrand" data-procode="420000" data-dirname="hubei"><span>湖北省</span></p>
+                                <p class="mbbaBrand" data-procode="430000" data-dirname="hunan"><span>湖南省</span></p>
+                                <p class="mbbaBrand" data-procode="230000" data-dirname="hlj"><span>黑龙江省</span></p>
+                                <p class="mbbaBrand" data-procode="130000" data-dirname="hebei"><span>河北省</span></p>
+                                <p class="mbbaBrand" data-procode="410000" data-dirname="henan"><span>河南省</span></p>
+                    <p class="mbbaLetter" id="J">J</p>
+                                <p class="mbbaBrand" data-procode="220000" data-dirname="jl"><span>吉林省</span></p>
+                                <p class="mbbaBrand" data-procode="320000" data-dirname="jiangsu"><span>江苏省</span></p>
+                                <p class="mbbaBrand" data-procode="360000" data-dirname="jiangxi"><span>江西省</span></p>
+                    <p class="mbbaLetter" id="L">L</p>
+                                <p class="mbbaBrand" data-procode="210000" data-dirname="liaoning"><span>辽宁省</span></p>
+                    <p class="mbbaLetter" id="N">N</p>
+                                <p class="mbbaBrand" data-procode="640000" data-dirname="ningxia"><span>宁夏</span></p>
+                                <p class="mbbaBrand" data-procode="150000" data-dirname="nmg"><span>内蒙古</span></p>
+                    <p class="mbbaLetter" id="Q">Q</p>
+                                <p class="mbbaBrand" data-procode="630000" data-dirname="qinghai"><span>青海省</span></p>
+                    <p class="mbbaLetter" id="S">S</p>
+                                <p class="mbbaBrand" data-procode="370000" data-dirname="shandong"><span>山东省</span></p>
+                                <p class="mbbaBrand" data-procode="610000" data-dirname="shanxi"><span>陕西省</span></p>
+                                <p class="mbbaBrand" data-procode="510000" data-dirname="sichuan"><span>四川省</span></p>
+                                <a class="zxs" href="/shanghai">上海市</a>
+                                <p class="mbbaBrand" data-procode="140000" data-dirname="sx"><span>山西省</span></p>
+                    <p class="mbbaLetter" id="T">T</p>
+                                <a class="zxs" href="/tianjin">天津市</a>
+                                <p class="mbbaBrand" data-procode="710000" data-dirname="tw"><span>台湾省</span></p>
+                    <p class="mbbaLetter" id="X">X</p>
+                                <p class="mbbaBrand" data-procode="540000" data-dirname="xizang"><span>西藏</span></p>
+                                <p class="mbbaBrand" data-procode="650000" data-dirname="xinjiang"><span>新疆</span></p>
+                                <p class="mbbaBrand" data-procode="999077" data-dirname="xianggang"><span>香港特别行政区</span></p>
+                    <p class="mbbaLetter" id="Y">Y</p>
+                                <p class="mbbaBrand" data-procode="530000" data-dirname="yunnan"><span>云南省</span></p>
+                    <p class="mbbaLetter" id="Z">Z</p>
+                                <p class="mbbaBrand" data-procode="330000" data-dirname="zhejiang"><span>浙江省</span></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mzcity fly-right6" style="display: none; transition: all 0.3s; left: auto; right: 0px; position: fixed; transform: translate(100%, 0px); z-index: 100;">
+    <div class="mzcBox">
+        <div class="mzaTop"><i class="leftArrow" id="cityArrow"></i><span>地区名称</span></div>
+        <div class="mzcbAll" id="mzcbAll"></div>
+    </div>
+</section>
+
+
+<div class="c-footer-con br-t">
+        <a href="/" class="icon-home">首页</a>
+    <a href="/list/" class="icon-price">
+        <!-- <span></span> -->买车</a>
+        <a href="/truck/publish" rel="nofollow" class="icon-truck-btn truck">
+        <i class="car">
+            <img src="https://s.kcimg.cn/ershouche/images/home_tab_icon@2x.png" alt="icon">
+        </i>卖车
+    </a>
+        <a href="/personal/message/" rel="nofollow" class="icon-msg login-check">
+        消息</a>
+    <a href="/personal/" rel="nofollow" class="icon-bottom-user active login-check">我的</a>
+</div>
+
+
+<div id="qb-sougou-search" style="display: none; opacity: 0;"><p>搜索</p><p class="last-btn">复制</p><iframe src=""></iframe></div></body></html>

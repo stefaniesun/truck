@@ -1,0 +1,638 @@
+package xyz.work.menu.svc.imp;
+
+
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.hibernate.SQLQuery;
+import org.hibernate.transform.Transformers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import xyz.dao.CommonDao;
+import xyz.filter.ReturnUtil;
+import xyz.util.Constant;
+import xyz.util.DateUtil;
+import xyz.util.PossessorUtil;
+import xyz.util.StringTool;
+import xyz.work.base.model.Airway;
+import xyz.work.base.model.Cabin;
+import xyz.work.base.model.Company;
+import xyz.work.base.model.Cruise;
+import xyz.work.base.model.Shipment;
+import xyz.work.menu.svc.QueryResourcesSvc;
+import xyz.work.resources.model.Provider;
+import xyz.work.resources.model.ShipmentData;
+import xyz.work.resources.model.Stock;
+import xyz.work.resources.model.Tkview;
+
+
+@Service
+public class QueryResourcesSvcImp implements QueryResourcesSvc {
+	
+	
+    
+    @Autowired
+    private CommonDao commonDao;
+    
+    @Autowired
+    private PossessorUtil possessorUtil;
+
+    @Override
+    public Map<String, Object> queryTkviewStockList(BigDecimal minPrice , BigDecimal maxPrice ,
+                                                    String startDate , String endDate ,
+                                                    String startPlace , String toPlace ,
+                                                    String cruise , String airway , String cabin ,
+                                                    BigDecimal days , BigDecimal nights , String provider) {
+        /*价格转换*/
+        BigDecimal minCost = new BigDecimal(-1);  //最小成本价
+        BigDecimal maxCost = new BigDecimal(-1);  //最大成本价
+        if(minPrice.compareTo(BigDecimal.ZERO) == 1 || maxPrice.compareTo(BigDecimal.ZERO) == 1){
+            String priceSql = "SELECT CASE WHEN (p.min_price+p.price_markup) <= 0 THEN 0 ";
+            priceSql += "ELSE (p.min_price+p.price_markup) END AS minPrice, ";
+            priceSql += "(p.max_price+p.price_markup) AS maxPrice, ";
+            priceSql += "p.min_price AS minCost, ";
+            priceSql += "p.max_price AS maxCost ";
+            priceSql += "FROM price_strategy p ";
+            @SuppressWarnings("unchecked")
+            List<Object[]> priceList = commonDao.getSqlQuery(priceSql).list();
+            
+            for(Object[] obj : priceList){
+                Object[] arry = obj;
+                BigDecimal min_price = (BigDecimal)arry[0];
+                BigDecimal max_price = (BigDecimal)arry[1];
+                BigDecimal min_cost = (BigDecimal)arry[2];
+                BigDecimal max_cost = (BigDecimal)arry[3];
+                
+                if(minCost.compareTo(new BigDecimal(-1)) == 1 && maxCost.compareTo(new BigDecimal(-1)) == 1){
+                    break;
+                }
+                
+                if(minPrice.compareTo(BigDecimal.ZERO) == 1 && 
+                   minCost.compareTo(new BigDecimal(-1)) == 0 && minPrice.compareTo(min_price) >= 0){
+                    minCost = min_cost;
+                }
+                if(maxPrice.compareTo(BigDecimal.ZERO) == 1 && 
+                   maxCost.compareTo(new BigDecimal(-1)) == 0 && maxPrice.compareTo(max_price) <= 0){
+                    maxCost = max_cost;
+                }
+            }
+        }
+        
+         String stockSql = "SELECT k.tkview AS tkview, ";
+         stockSql += "k.number_code AS numberCode, ";
+         stockSql += "k.provider AS provider, ";
+         stockSql += "k.stock AS stock, ";
+         stockSql += "k.cost AS cost, ";
+         stockSql += "k.cost_remark AS costRemark, ";
+         stockSql += "k.use_stock AS useStock, ";
+         stockSql += "k.use_surpass AS useSurpass, ";
+         stockSql += "k.iidd AS iidd, ";
+         stockSql += "k.add_date AS addDate, ";
+         stockSql += "k.alter_date AS alterDate ";
+         stockSql += "FROM stock k WHERE 1=1 ";
+         if(minCost.compareTo(new BigDecimal(-1)) == 1){  //最小成本价
+             stockSql += "AND k.cost >= "+minCost.multiply(new BigDecimal(100));
+         }
+         if(maxCost.compareTo(new BigDecimal(-1)) == 1){  //最大成本价
+             stockSql += "AND k.cost <= "+ maxCost.multiply(new BigDecimal(100));
+         }
+         if(StringTool.isNotNull(provider)){     //供应商
+             stockSql += "AND k.provider = '"+ provider +"' ";
+         }
+         stockSql += "AND k.tkview IN ( ";
+         stockSql += " SELECT t.number_code FROM tkview t WHERE 1=1 ";
+         stockSql += possessorUtil.getRelatesWhereSql("tkview", "t");
+         stockSql += " AND t.shipment_travel_date >= NOW() ";
+         if(StringTool.isNotNull(startDate)){   //最小出发日期
+             stockSql += " AND t.shipment_travel_date >= '"+ startDate +"' ";
+         }
+         if(StringTool.isNotNull(endDate)){     //最大出发日期
+             stockSql += " AND t.shipment_travel_date <= '"+ endDate +"' ";
+         }
+         if(StringTool.isNotNull(cruise)){     //邮轮
+             stockSql += " AND t.cruise = '"+ cruise +"' ";
+             if(StringTool.isNotNull(cabin)){  //舱型
+                 stockSql += " AND t.cabin = '"+ cabin +"' ";
+             }
+         }
+         stockSql += " AND t.shipment IN ( ";
+         stockSql += "  SELECT s.number_code FROM shipment s ";
+         stockSql += "  LEFT JOIN airway a ON s.airway = a.number_code WHERE 1=1 ";
+         stockSql += " AND s.travel_date >= NOW() ";
+         if(StringTool.isNotNull(startPlace)){  //出发地
+             stockSql += " AND s.start_place = '"+ startPlace +"' ";
+         }
+         stockSql += "  AND s.number_code IN ( ";
+         stockSql += "   SELECT v.shipment FROM voyage v ";
+         if(StringTool.isNotNull(toPlace)){    //目的地
+             stockSql += "  WHERE v.`port` = '"+ toPlace +"' ";
+         }
+         stockSql += "  GROUP BY v.shipment ) ";
+         if(days.compareTo(BigDecimal.ZERO) == 1){    //几天
+             stockSql += "  AND a.days = "+days;
+         }
+         if(nights.compareTo(BigDecimal.ZERO) >= 0){  //几晚
+             stockSql += " AND a.nights = "+nights;
+         }
+         if(StringTool.isNotNull(cruise)){        //邮轮
+             stockSql += "  AND s.cruise = '"+ cruise +"' ";
+             if(StringTool.isNotNull(airway)){    //航线
+                 stockSql += "  AND s.airway = '"+ airway +"' ";
+             }
+         }
+         stockSql += "  ORDER BY s.cruise,s.travel_date ) ";
+         stockSql += " ORDER BY t.cruise,t.number_code ) ";
+         stockSql += "ORDER BY k.tkview ";
+         
+         SQLQuery query = commonDao.getSqlQuery(stockSql);
+         query.addScalar("tkview").addScalar("numberCode")
+         .addScalar("provider").addScalar("stock")
+         .addScalar("cost").addScalar("costRemark")
+         .addScalar("useStock").addScalar("useSurpass")
+         .addScalar("iidd").addScalar("addDate").addScalar("alterDate")
+         .setResultTransformer(Transformers.aliasToBean(Stock.class));
+         @SuppressWarnings("unchecked")
+         List<Stock> stockList = query.list();
+         if(stockList.size() < 1){
+             return ReturnUtil.returnMap(0, "没有相关的资源信息!");
+         }
+         
+         List<String> tkivewNumber = new ArrayList<>();
+         for(Stock stockObj : stockList){
+             tkivewNumber.add(stockObj.getTkview());
+         }
+         
+         /*单品*/
+         String tkviewHql = "from Tkview  ";
+         tkviewHql += "where numberCode in ("+ StringTool.listToSqlString(tkivewNumber) +") ";
+         tkviewHql += possessorUtil.getRelatesWhereHql("tkview");
+         tkviewHql += "order by shipmentTravelDate ";
+         @SuppressWarnings("unchecked")
+         List<Tkview> tkviewList = commonDao.queryByHql(tkviewHql);
+         
+         /*年-月*/
+         String mothSql = "SELECT DATE_FORMAT(t.shipment_travel_date,'%Y-%m') AS travelDate ";
+         mothSql += "FROM tkview t ";
+         mothSql += "WHERE t.number_code IN ("+ StringTool.listToSqlString(tkivewNumber) +") ";
+         mothSql += possessorUtil.getRelatesWhereSql("tkview", "t");
+         mothSql += "GROUP BY DATE_FORMAT(t.shipment_travel_date,'%Y-%m') ";
+         mothSql += "ORDER BY DATE_FORMAT(t.shipment_travel_date,'%Y-%m') ";
+         @SuppressWarnings("unchecked")
+         List<Object> mothList = commonDao.getSqlQuery(mothSql).list();
+         
+         /*出发日期:年-月-日*/
+         String dateSql = "SELECT DATE_FORMAT(t.shipment_travel_date,'%Y-%m-%d') AS travelDate ";
+         dateSql += "FROM tkview t ";
+         dateSql += "WHERE t.number_code IN ("+ StringTool.listToSqlString(tkivewNumber) +") ";
+         dateSql += possessorUtil.getRelatesWhereSql("tkview", "t");
+         dateSql += "GROUP BY DATE_FORMAT(t.shipment_travel_date,'%Y-%m-%d') ";
+         dateSql += "ORDER BY DATE_FORMAT(t.shipment_travel_date,'%Y-%m-%d') ";
+         @SuppressWarnings("unchecked")
+         List<Object> dateList = commonDao.getSqlQuery(dateSql).list();
+         
+         for(Stock stockObj : stockList){
+             for(Tkview tkviewObj : tkviewList){
+                 if(stockObj.getTkview().equals(tkviewObj.getNumberCode())){
+                     tkviewObj.getStocks().add(stockObj);
+                     break;
+                 }
+             }
+         }
+         
+        /* List<Tkview> tkviews = new ArrayList<Tkview>();
+         for(Tkview t : tkviewList){
+             if(t.getStocks().size()>0){
+                 Collections.sort(t.getStocks());
+                 t.setCost(t.getStocks().get(0).getCost());
+                 t.setStock(t.getStocks().get(0).getStock());
+                 tkviews.add(t);
+             }
+         }
+         Collections.sort(tkviews);*/
+         
+         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+         for(Object obj : dateList){
+             Date date = DateUtil.shortStringToDate((String)obj);    //出发日期
+             
+             Map<String, Object> numberMap = new HashMap<String, Object>();
+             List<String> tkviewStr = new ArrayList<>();  //单品编号
+             List<String> stockStr = new ArrayList<>();   //库存编号
+             List<Stock> tempStocks = new ArrayList<>();  //临时库存集合
+             BigDecimal min_price = BigDecimal.ZERO;      //最小成本价
+             BigDecimal max_price = BigDecimal.ZERO;      //最大成本价
+             BigDecimal min_stock = BigDecimal.ZERO;      //最小库存
+             //BigDecimal max_stock = BigDecimal.ZERO;      //最大库存
+             
+             for(Tkview tkviewObj : tkviewList){
+                 Date travelDate = tkviewObj.getShipmentTravelDate();
+                 if(date.getTime()-travelDate.getTime() == 0){//日期相等
+                    tkviewStr.add(tkviewObj.getNumberCode());
+                    for(Stock stockObj : tkviewObj.getStocks()){
+                        tempStocks.add(stockObj);
+                    }
+                    /*for(Stock stockObj : stockList){
+                        if(stockObj.getTkview().equals(tkviewObj.getNumberCode())){
+                            tempStocks.add(stockObj);
+                        }
+                    }*/
+                 }
+             }
+             for(int k = 0; k < tempStocks.size(); k++){
+                 Stock stockObj = tempStocks.get(k);
+                 stockStr.add(stockObj.getNumberCode());
+                 BigDecimal cost = stockObj.getCost();
+                 BigDecimal stock = stockObj.getStock();
+                 if(k == 0){
+                     min_price = cost;
+                     max_price = cost;
+                     min_stock = stock;
+                     //max_stock = stock;
+                     continue;
+                 }
+                 if(min_price.compareTo(cost) == 1){
+                     min_price = cost;
+                 }
+                 if(max_price.compareTo(cost) == -1){
+                     max_price = cost;
+                 }
+                 if(min_stock.compareTo(stock) == 1){
+                     min_stock = stock;
+                 }
+                /* if(max_stock.compareTo(stock) == -1){
+                     max_stock = stock;
+                 }*/
+             }
+             numberMap.put("date", date);        //出发日期
+             numberMap.put("minPrice", min_price);  //最小成本价
+             numberMap.put("maxPrice", max_price);  //最大成本价
+             numberMap.put("minStock", min_stock);  //最小库存
+             //numberMap.put("maxStock", max_stock);  //最大库存
+             numberMap.put("tkviewStr", tkviewStr); //单品编号
+             numberMap.put("stockStr", stockStr);   //库存编号
+             resultList.add(numberMap);
+         }
+         
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("mothList", mothList);      //年-月 集合
+        resultMap.put("dateList", dateList);      //出发日期 集合
+        resultMap.put("resultList", resultList);  //结果集
+        
+        return ReturnUtil.returnMap(1, resultMap);
+    }
+
+    @Override
+    public Map<String, Object> clickDateOper(String tkviewJson , String stockJson , String date) {
+        if(StringTool.isEmpty(date)){
+            return ReturnUtil.returnMap(0, "请选择日期!");
+        }
+        if(StringTool.isEmpty(tkviewJson)){
+            return ReturnUtil.returnMap(0, "请选择有出行数据的日期!");
+        }
+        
+        String tkivewSql = "SELECT s.tkview,t.cruise FROM stock s ";
+        tkivewSql += "LEFT JOIN tkview t ";
+        tkivewSql += "ON s.tkview = t.number_code ";
+        tkivewSql += "WHERE 1=1 ";
+        tkivewSql += possessorUtil.getRelatesWhereSql("tkview", "t");
+        tkivewSql += "AND t.shipment_travel_date = '"+ date +"' ";
+        tkivewSql += "AND t.number_code IN ("+ StringTool.StrToSqlString(tkviewJson) +") ";
+        if(StringTool.isNotNull(stockJson)){
+            tkivewSql += "AND s.number_code IN ("+ StringTool.StrToSqlString(stockJson)  +") ";
+        }
+        tkivewSql += "GROUP BY s.tkview ";
+        tkivewSql += "ORDER BY MIN(s.cost) ";
+        @SuppressWarnings("unchecked")
+        List<Object[]> tkviewNumber = commonDao.getSqlQuery(tkivewSql).list();
+        
+        String tkviewHql = "from Tkview t where 1=1 ";
+        tkviewHql += possessorUtil.getRelatesWhereHql("tkview");
+        tkviewHql += "and t.shipmentTravelDate = '"+ date +"' ";
+        tkviewHql += "and t.numberCode in ("+ StringTool.StrToSqlString(tkviewJson) +") ";
+        @SuppressWarnings("unchecked")
+        List<Tkview> tkviewList = commonDao.queryByHql(tkviewHql);
+        
+        String cruiseSql = "SELECT t.cruise FROM tkview t WHERE 1=1 ";
+        cruiseSql += "AND t.shipment_travel_date = '"+ date +"' ";
+        cruiseSql += possessorUtil.getRelatesWhereSql("tkview", "t");
+        tkviewHql += "AND t.number_code IN ("+ StringTool.StrToSqlString(tkviewJson) +") ";
+        cruiseSql += "GROUP BY t.cruise ";
+        @SuppressWarnings("unchecked")
+        List<String> cruiseNumber = commonDao.getSqlQuery(cruiseSql).list();
+        
+        String cruiseHql = "from Cruise";
+        @SuppressWarnings("unchecked")
+        List<Cruise> cruiseList = commonDao.queryByHql(cruiseHql);
+        for(Tkview t : tkviewList){
+            for(Cruise cruiseObj : cruiseList){
+                if(t.getCruise().equals(cruiseObj.getNumberCode())){
+                    t.setCruiseNameCn(cruiseObj.getNameCn());
+                    break;
+                }
+            }
+        }
+        
+        String stockHql = "from Stock s where 1=1 ";
+        stockHql += "and s.tkview in ("+ StringTool.StrToSqlString(tkviewJson) +") ";
+        if(StringTool.isNotNull(stockJson)){
+            stockHql += "and s.numberCode in ("+ StringTool.StrToSqlString(stockJson) +") ";
+        }
+        stockHql += "order by s.cost ";
+        @SuppressWarnings("unchecked")
+        List<Stock> stockList = commonDao.queryByHql(stockHql);
+        
+        String providerHql = "from Provider where 1=1 ";
+        providerHql += possessorUtil.getRelatesWhereHql("provider");
+        @SuppressWarnings("unchecked")
+        List<Provider> providerList = commonDao.queryByHql(providerHql);
+        for(Stock stockObj : stockList){
+            for(Provider providerObj : providerList){
+                if(stockObj.getProvider().equals(providerObj.getNumberCode()) ){
+                    stockObj.setProviderNameCn(providerObj.getNameCn());
+                    stockObj.setProviderMark(providerObj.getMark());
+                    break;
+                }
+            }
+        }
+        
+        for(Stock stockObj : stockList){
+            for(Tkview tkviewObj : tkviewList){
+                if(stockObj.getTkview().equals(tkviewObj.getNumberCode())){
+                    tkviewObj.getStocks().add(stockObj);
+                    break;
+                }
+            }
+        }
+        
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        for(String cruise_number : cruiseNumber){
+            Map<String, Object> map = new HashMap<>();
+            List<Tkview> tkview_list = new ArrayList<>();
+            String name = "";
+            int rowspan = 0;
+            for(Object[] tkivew_number : tkviewNumber){
+                String tkNumber = (String)tkivew_number[0];
+                String crNumber = (String)tkivew_number[1];
+                if(crNumber.equals(cruise_number)){
+                    for(Tkview tkviewObj : tkviewList){
+                        if(tkNumber.equals(tkviewObj.getNumberCode()) && cruise_number.equals(tkviewObj.getCruise())){
+                            tkview_list.add(tkviewObj);
+                            rowspan += tkviewObj.getStocks().size();
+                            if(StringTool.isEmpty(name)){
+                                name = tkviewObj.getCruiseNameCn();
+                            }
+                        }
+                    }
+                }
+            }
+            map.put("cruise", name);
+            map.put("rowspan", rowspan);
+            map.put("tkivewList", tkview_list);
+            list.add(map);
+        }
+        
+        return ReturnUtil.returnMap(1, list);
+    }
+
+	@Override
+	public Map<String, Object> getTkviewStockList() {
+		
+		String hql="from Stock where date>='"+DateUtil.dateToShortString(new Date())+"' and stock!=0 order by date,cost";
+		@SuppressWarnings("unchecked")
+		List<Stock> stocks = commonDao.queryByHql(hql);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		List<String> dateArray = new ArrayList<String>();
+		
+		@SuppressWarnings("unchecked")
+        List<Company> companyList = commonDao.queryByHql("from Company");
+		@SuppressWarnings("unchecked")
+        List<Cruise> cruiseList  = commonDao.queryByHql("from Cruise");
+		@SuppressWarnings("unchecked")
+        List<Provider> providerList = commonDao.queryByHql("from Provider");
+		@SuppressWarnings("unchecked")
+        List<Tkview> tkviewList = commonDao.queryByHql("from Tkview");
+		@SuppressWarnings("unchecked")
+        List<Cabin> cabinList = commonDao.queryByHql("from Cabin");
+		@SuppressWarnings("unchecked")
+        List<Shipment> shipmentList = commonDao.queryByHql("from Shipment");
+		@SuppressWarnings("unchecked")
+        List<Airway> airwayList = commonDao.queryByHql("from Airway");
+		
+		List<Map<String, Object>> cabinMapList = new ArrayList<Map<String,Object>>();
+		
+		Map<String, String> cruiseMap = new HashMap<String, String>();
+		for(Cruise cruise:cruiseList){
+			cruiseMap.put(cruise.getNumberCode(), cruise.getNameCn());
+			Map<String, Object> m = new HashMap<String, Object>();
+			m.put("cruise", cruise.getNumberCode());
+			m.put("cruiseCn", cruise.getNameCn());
+			List<Cabin> list = new ArrayList<Cabin>();
+			for(Cabin cabin:cabinList){
+				if(cabin.getCruise().equals(cruise.getNumberCode())){
+					list.add(cabin);
+				}
+			}
+			Collections.sort(list);
+			m.put("cabinList", list);
+			cabinMapList.add(m);
+		}
+		
+		Map<String, String> providerMap = new HashMap<String, String>();
+		for(Provider provider:providerList){
+			providerMap.put(provider.getNumberCode(),provider.getNameCn());
+		}
+		
+		Map<String, String> tkviewMap = new HashMap<String, String>();
+		
+		Map<String, String> tkviewRemarkMap = new HashMap<String, String>();
+		
+		for(Tkview tkview:tkviewList){
+			for(Cabin cabin:cabinList){
+				if(cabin.getNumberCode().equals(tkview.getCabin())){
+					tkviewMap.put(tkview.getNumberCode(), cruiseMap.get(tkview.getCruise())+","+tkview.getNameCn()+","+cabin.getNameCn());
+					break;
+				}
+			}
+			for(Shipment shipment:shipmentList){
+				if(shipment.getNumberCode().equals(tkview.getShipment())){
+					boolean flag=false;
+					for(Airway airway:airwayList){
+						if(airway.getNumberCode().equals(shipment.getAirway())){
+							tkviewMap.put(tkview.getNumberCode(),tkviewMap.get(tkview.getNumberCode())+","+airway.getNameCn()+","+airway.getDays());
+							flag=true;
+							break;
+						}
+					}
+					if(flag){
+						break;
+					}
+				}
+			}
+			if(StringTool.isNotNull(tkview.getRemark())){
+				tkviewRemarkMap.put(tkview.getNumberCode(), tkview.getRemark());
+			}
+		}
+		
+		Set<String> startPlaceSet = new HashSet<String>();
+		
+		for(Stock stock:stocks){
+			if(tkviewRemarkMap.get(stock.getTkview()) != null){
+				if(stock.getRemark() == null){
+					stock.setRemark(tkviewRemarkMap.get(stock.getTkview()));
+				}else{
+					stock.setRemark(tkviewRemarkMap.get(stock.getTkview())+"  "+stock.getRemark());
+				}
+			}
+			
+			String date=DateUtil.dateToShortString(stock.getDate());
+			if(map.get(date) == null){
+				dateArray.add(date);
+				List<Stock> stocksList = new ArrayList<Stock>();
+				stocksList.add(stock);
+				map.put(date, stocksList);
+			}else{
+				@SuppressWarnings("unchecked")
+                List<Stock> stocksList = (List<Stock>)map.get(date);
+				stocksList.add(stock);
+			}
+			stock.setProviderNameCn(providerMap.get(stock.getProvider()));
+			String[] strArray = tkviewMap.get(stock.getTkview()).split(",");
+			stock.setCruiseNameCn(strArray[0]);
+			stock.setTkviewNameCn(strArray[1]);
+			stock.setCabinNameCn(strArray[2]);
+			if(strArray.length >= 4){
+				stock.setAirwayNameCn(strArray[3]);
+				int index = strArray[3].indexOf("】");
+				if(index != -1){
+					String str = strArray[3].substring(index+1);
+					index = str.indexOf("-");
+					if(index != -1){
+						str = str.substring(0,index);
+						startPlaceSet.add(str.trim());
+					}
+				}else{
+					index = strArray[3].indexOf("-");
+					String str = strArray[3].substring(0,index);
+					startPlaceSet.add(str.trim());
+				}
+			}
+			if(strArray.length >= 5){
+				stock.setDay(new BigDecimal(strArray[4]).intValue());
+			}
+		}
+		
+		List<Map<String, Object>> dataList = new ArrayList<Map<String,Object>>();
+		for (Map.Entry<String, Object> entry : map.entrySet()) {
+			@SuppressWarnings("unchecked")
+            List<Stock> stocksList = (List<Stock>) entry.getValue();
+			
+			Map<String, Object> dataMap = new HashMap<String, Object>();
+			dataMap.put("date",  entry.getKey());
+			dataMap.put("min", stocksList.get(0).getCost());
+			dataMap.put("max", stocksList.get(stocksList.size()-1).getCost());
+			dataMap.put("stocks", stocksList);
+			dataList.add(dataMap);
+		}
+		Collections.sort(dateArray);
+		List<Map<String, Object>> resultList = new ArrayList<Map<String,Object>>();
+		for(String date:dateArray){
+			for(Map<String, Object> m:dataList){
+				if(m.get("date").toString().equals(date)){
+					resultList.add(m);
+					break;
+				}
+			}
+		}
+		
+		Map<String,Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("companyList", companyList);
+		resultMap.put("cruiseList", cruiseList);
+		resultMap.put("stockList", resultList);
+		resultMap.put("providerList", providerList);
+		resultMap.put("cabinList", cabinMapList);
+		resultMap.put("startPlaceList", startPlaceSet.toArray());
+		resultMap.put("token", Constant.QUERY_DATA_TOKEN);
+		
+		return ReturnUtil.returnMap(1, resultMap);
+	}
+
+	@Override
+	public Map<String, Object> getExcel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<String, Object> getValidateData() {
+		return ReturnUtil.returnMap(1, Constant.QUERY_DATA_TOKEN);
+	}
+
+	@Override
+	public Map<String, Object> updateShipmentDataOper() {
+		
+		String hql="from Tkview where shipmentTravelDate >= now() ";
+		
+		Map<String, ShipmentData> map=new HashMap<String, ShipmentData>();
+		
+		@SuppressWarnings("unchecked")
+		List<Tkview> tkviewList=commonDao.queryByHql(hql);
+		
+		SimpleDateFormat format=new SimpleDateFormat("yyMMdd");
+		
+		for(Tkview tkview:tkviewList){
+			
+			String type="";
+			
+			if(tkview.getNameCn().indexOf("内舱双人间")!=-1){
+				type="N2";
+			}else if(tkview.getNameCn().indexOf("内舱三人间")!=-1){
+				type="N3";
+			}else if(tkview.getNameCn().indexOf("内舱四人间")!=-1){
+				type="N4";
+			}else if(tkview.getNameCn().indexOf("海景双人间")!=-1){
+				type="H2";
+			}else if(tkview.getNameCn().indexOf("海景三人间")!=-1){
+				type="H3";
+			}else if(tkview.getNameCn().indexOf("海景四人间")!=-1){
+				type="H4";
+			}else if(tkview.getNameCn().indexOf("阳台双人间")!=-1){
+				type="Y2";
+			}else if(tkview.getNameCn().indexOf("阳台三人间")!=-1){
+				type="Y3";
+			}else if(tkview.getNameCn().indexOf("阳台四人间")!=-1){
+				type="Y4";
+			}else if(tkview.getNameCn().indexOf("套房双人间")!=-1){
+				type="T2";
+			}else if(tkview.getNameCn().indexOf("套房三人间")!=-1){
+				type="T3";
+			}else if(tkview.getNameCn().indexOf("套房四人间")!=-1){
+				type="T4";
+			}else{
+				continue;
+			}
+			
+			String numberCode=tkview.getCruise()+format.format(tkview.getShipmentTravelDate());
+			ShipmentData shipmentData=map.get(numberCode);
+			if(shipmentData==null){
+				shipmentData=new ShipmentData();
+				shipmentData.setNumberCode(numberCode);
+			}
+			
+			
+		}
+		
+		
+		return null;
+	}
+
+}

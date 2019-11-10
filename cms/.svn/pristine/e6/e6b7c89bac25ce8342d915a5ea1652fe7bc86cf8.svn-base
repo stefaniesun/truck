@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>淘宝售卖管理</title>
+<link rel="stylesheet" type="text/css" href="../css/xieyaozhong.css"></link>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/bootstrap/easyui.css"></link>
+<script type="text/javascript" src="../js/library/jquery-1.7.2.js"></script>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/icon.css"></link>
+<script type="text/javascript" src="../js/library/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/library/cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="../js/library/common/cookie2.js"></script>
+<script type="text/javascript" src="../js/library/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../js/library/common/common.js"></script>
+<script type="text/javascript" src="../js/library/common/customUi.js" defer="defer"></script>
+
+<link href="../js/library/xyzDropzone/xyzPicPreview.css" type="text/css" rel="stylesheet"></link>
+<script type="text/javascript" src="../js/library/xyzDropzone/dropzone.min.js"></script>
+<script type="text/javascript" src="../js/library/xyzDropzone/xyzDropzone.js"></script>
+<script type="text/javascript" src="../js/library/common/xyzCkeditorUploadPlug.js"></script>
+
+<script type="text/javascript" src="../js/library/ckeditor/ckeditor.js" defer="defer"></script>
+<script type="text/javascript" src="../js/library/ckeditor/adapters/jquery.js" defer="defer"></script>
+
+<script type="text/javascript" src="../js/js_taobao/taobaoManager.js" defer="defer"></script>
+
+<style type="text/css">
+	body {
+		margin: 0;
+		padding: 0;
+		border: 0;
+		font-size: 14px;
+	}
+	div {
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+	.datagrid-header-row,.datagrid-row{
+		height : 35px;
+	}
+	.datagrid-header-row{
+		font-weight: bold;
+	}
+</style>
+</head>
+<body style="width: 100%;text-align: left;background-color:white;">
+	<div style="width:99%;position:absolute;">
+	
+		<!--搜索栏 -->
+		<div class='yqqPluginBg'>
+			编号<input type="text" id="outId" style="width:100px;" /> 
+			宝贝ID<input type="text" id="itemId" style="width:100px;" /> 
+			标题【模】<input type="text" id="itemTitle" style="width:100px;" /> 
+			渠道<input id="channel" style="width:100px;"/> 
+			状态<select id="itemStatus" class="easyui-combobox" name="itemStatus" style="width:100px;">   
+			     <option value="0">正常</option>   
+			     <option value="-1">用户删除</option>   
+			     <option value="-2">用户下架</option>   
+			     <option value="-3">小二下架</option>   
+			     <option value="-4">小二删除</option>   
+			     <option value="-5">未上架</option> <!-- 有个-9，叫什么CC -->  
+			  </select>  
+			类型<select id="itemType" class="easyui-combobox" name="itemType" style="width:100px;">   
+			     <option value="1">国内跟团游</option>   
+			     <option value="2">国内自由行</option>   
+			     <option value="3">出境跟团游</option>   
+			     <option value="4">出境自由行</option>   
+			     <option value="5">境外当地玩乐</option>   
+			     <option value="6">国际邮轮</option>   
+			     <option value="9">国内邮轮</option>   
+			  </select>  
+		</div>
+		
+		<div style="z-index:100;position:fixed;right:543px;">
+			<a href="javascript:void(0);" class="easyui-linkbutton"
+			data-options="iconCls:'icon-search'" id="addProductByMafengwoButton">更新马蜂窝数据</a>
+		</div>
+		
+		<div style="z-index:100;position:fixed;right:424px;">
+			<a href="javascript:void(0);" class="easyui-linkbutton"
+			data-options="iconCls:'icon-search'" id="taobaoQueryButton">查询</a>
+		</div>
+		<div style="z-index:100;position:fixed;right:314px;">
+			<a href="javascript:void(0);" class="easyui-linkbutton"
+			data-options="iconCls:'icon-search'" id="addTaobaoAllItemButton">获取所有宝贝</a>
+		</div>
+		<div style="z-index:100;position:fixed;right:210px;">
+			<a href="javascript:void(0);" class="easyui-linkbutton"
+			data-options="iconCls:'icon-search'" id="addTaobaoItemButton">获取/更新宝贝</a>
+		</div>
+		<div style="z-index:100;position:fixed;right:100px;">
+			<a href="javascript:void(0);" class="easyui-linkbutton"
+			data-options="iconCls:'icon-search'" id="addProductButton">更新美团数据</a>
+		</div>
+		
+		<div>
+			<table id="taobaoManagerTable"></table>
+		</div>
+		
+	</div>
+</body>
+</html>

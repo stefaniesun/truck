@@ -1,0 +1,100 @@
+package xyz.work.security.svc.imp;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import xyz.dao.CommonDao;
+import xyz.filter.MyRequestUtil;
+import xyz.filter.ReturnUtil;
+import xyz.util.StringTool;
+import xyz.work.custom.model.BizSecurityLogin;
+import xyz.work.security.model.SecurityApi;
+import xyz.work.security.model.SecurityFunction;
+import xyz.work.security.model.SecurityLogin;
+import xyz.work.security.model.UserOper;
+import xyz.work.security.svc.KeySvc;
+
+@Service
+public class KeySvcImp implements KeySvc{
+	
+	@Autowired
+	CommonDao commonDao;
+	
+	@Override
+	public SecurityLogin getSecurityLogin(String apikey) {
+		String hql = "from SecurityLogin s where s.apikey = '"+apikey+"'";
+		SecurityLogin securityLogin = (SecurityLogin)commonDao.queryUniqueByHql(hql);
+		return securityLogin;
+	}
+	
+	@Override
+	public List<SecurityApi> getSecurityApi(String servletPath) {
+		String hql = "from SecurityApi s where s.url = '"+servletPath+"'";
+		@SuppressWarnings("unchecked")
+		List<SecurityApi> securityApiList = commonDao.queryByHql(hql);
+		return securityApiList;
+	}
+	
+	@Override
+	public boolean decideSecurityApi(String position,String buttons){
+		String hql = "select s.iidd from SecurityPositionButton s where s.position = '"+position+"' and s.button in ("+buttons+")";
+		int t = commonDao.queryByHql(hql).size();
+		boolean result = t>0?true:false;
+		return result;
+	}
+	
+	@Override
+	public void updateSecurityLogin(SecurityLogin securityLogin) {
+		commonDao.update(securityLogin);
+	}
+	
+	@Override
+	public void safeQuitOper() {
+		String username = MyRequestUtil.getSecurityLogin().getUsername();
+		if(username!=null && !"".equals(username)){
+			String hql = "delete SecurityLogin s where s.username = '"+username+"'";
+			commonDao.updateByHql(hql);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> decideLogin(SecurityLogin securityLogin){
+		
+		String hql = "select t.button from SecurityPositionButton t where t.position = '"+securityLogin.getPosition()+"'";
+		List<String> buttonList = commonDao.queryByHql(hql);
+		
+		hql = "select s.function from SecurityApi s where s.numberCode in ("+StringTool.listToSqlString(buttonList)+")";
+		List<String> functionList = commonDao.queryByHql(hql);
+		
+		hql = "from SecurityFunction s where s.numberCode in ("+StringTool.listToSqlString(functionList)+")";
+		List<SecurityFunction> securityFunctionList = commonDao.queryByHql(hql);
+		
+		hql = "from UserOper s where s.username = '"+securityLogin.getUsername()+"'";
+		List<UserOper> userOperList = commonDao.queryByHql(hql);
+		
+		Map<String, Object> mapContent = new HashMap<String, Object>();
+		mapContent.put("securityLogin", securityLogin);
+		mapContent.put("securityFunctionList", securityFunctionList);
+		mapContent.put("buttonList", buttonList);
+		mapContent.put("userOperList", userOperList);
+		return ReturnUtil.returnMap(1,mapContent);
+	}
+	
+	 @Override
+    public BizSecurityLogin getBizSecurityLogin(String apikey) {
+        String hql = "from BizSecurityLogin s where s.apikey = '"+apikey+"'";
+        BizSecurityLogin bizSecurityLogin = (BizSecurityLogin)commonDao.queryUniqueByHql(hql);
+        return bizSecurityLogin;
+    }
+
+    @Override
+    public void updateBizSecurityLogin(BizSecurityLogin bizSecurityLogin) {
+        commonDao.update(bizSecurityLogin);
+    }
+	
+}

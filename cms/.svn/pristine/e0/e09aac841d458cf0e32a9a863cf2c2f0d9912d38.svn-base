@@ -1,0 +1,159 @@
+<template>
+  <div id="orderSuccess">
+    <Mheader></Mheader>
+    <div class="main">
+      <!-- 下单成功 -->
+      <div class="success-wrapper">
+        <div class="struts-box">
+          <img src="../assets/img/success.png" alt="">
+          <span>恭喜您预定成功！</span>
+        </div>
+        <div class="link-box">
+          <div class="copy-link">
+            填写出行人信息：
+            <input type="text" class="link" ref="link" readonly value="sis.maytek.cn/loading.html">
+            <span class="copy-btn" @click="copyLink()">复制链接</span>
+          </div>
+          <img src="../assets/img/erwm.png" alt="">
+          <p>扫描填写出行人信息</p>
+        </div>
+      </div>
+      <!-- 下单失败 -->
+      <!--<div class="fail-wrapper clearfloat"  v-if="!struts">-->
+        <!--<img src="../assets/img/fail.png" alt="">-->
+        <!--<div class="desc-box">-->
+          <!--<h1>哎呀，预定失败了！</h1>-->
+          <!--&lt;!&ndash;<h3>您的余额不足了，请尽快充值</h3>&ndash;&gt;-->
+          <!--<router-link class="link" to="placeOrder" >返回重新下单</router-link>-->
+        <!--</div>-->
+      <!--</div>-->
+    </div>
+    <Mfooter></Mfooter>
+  </div>
+</template>
+
+<style lang="less" scoped>
+  @import "../assets/css/common";
+
+  #orderSuccess{
+    .main{
+      color: #999;
+      width: 1200px;
+      height: 541px;
+      margin: 40px auto 40px;
+      background-color: #fff;
+      .success-wrapper{
+        .struts-box{
+          width: 300px;
+          text-align: center;
+          margin:auto;
+          padding-top: 60px;
+          img{
+            width: 106px;
+            height: 106px;
+          }
+          span{
+            font-size: 24px;
+            color: #999;
+            display: block;
+            margin-top: 20px;
+            text-indent: 0.6em;
+          }
+        }
+        .link-box{
+          width: 738px;
+          height: 242px;
+          border:1px solid @lineColor;
+          margin:45px auto 0;
+          text-align: center;
+          .copy-link{
+            font-size: 16px;
+            margin-top: 30px;
+            .link{
+              resize: none;
+              border: 0;
+              color: #999;
+              font-size: 16px;
+              width: 190px;
+            }
+            .copy-btn{
+              font-size: 18px;
+              color: @topBg;
+              margin-left: 20px;
+              cursor: pointer;
+              display: inline-block;
+              vertical-align: middle;
+            }
+          }
+          img{
+            width: 108px;
+            height: 108px;
+            margin-top: 14px;
+          }
+          p{
+            margin-top: 6px;
+          }
+        }
+      }
+      /*.fail-wrapper{
+        width: 375px;
+        margin:auto;
+        padding-top: 180px;
+        img{
+          width: 132px;
+          height: 110px;
+          float: left;
+        }
+        .desc-box{
+          margin-left: 23px;
+          float: right;
+          h1{
+            font-size: 24px;
+            color: #999;
+            font-weight: normal;
+          }
+          h3{
+            color: #ccc;
+            font-size: 16px;
+            margin: 3px 0 17px;
+            font-weight: normal;
+          }
+          .link{
+            color: @topBg;
+            font-size: 16px;
+          }
+        }
+      }*/
+    }
+  }
+</style>
+
+<script>
+  import Mheader from "../components/header.vue";
+  import Mfooter from "../components/footer.vue";
+
+  let vm
+  export default{
+    name:'orderSuccess',
+    components:{
+      Mheader,
+      Mfooter
+    },
+    data(){
+      return{
+        struts: '',
+      }
+    },
+    mounted:function () {
+      vm = this;
+    },
+    methods:{
+        copyLink:function () {
+          let copyUrl=vm.$refs.link;
+          copyUrl.select();
+          document.execCommand("Copy","false",null);
+          alert("复制成功！可粘贴");
+        }
+    }
+  }
+</script>

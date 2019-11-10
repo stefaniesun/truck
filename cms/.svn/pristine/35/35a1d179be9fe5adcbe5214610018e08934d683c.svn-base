@@ -1,0 +1,384 @@
+<template>
+  <div id="placeOrder">
+    <Mheader></Mheader>
+    <div class="main">
+      <div class="main-inner">
+        <div class="title">
+          <h3>舱型及价格>></h3>
+        </div>
+        <div class="product-box clearfloat">
+          <div class="product-img">
+            <img :src="content.cruiseImg" alt="">
+          </div>
+          <div class="product-desc">
+            <p class="name">{{content.ptviewName}}</p>
+            <p class="date">出发日期：{{content.travelDate}}</p>
+            <p class="cabin-type">
+              舱型：<span v-for="cabinName in content.cabinArr">{{cabinName.cabinType}}&nbsp;&nbsp;</span>
+            </p>
+          </div>
+          <div class="order-confirm">
+            <span class="price">总金额<br>¥&nbsp;{{content.totalPrice}}</span>
+          </div>
+        </div>
+        <div class="list">
+          <table border="0" cellspacing="0" cellpadding="0">
+            <thead>
+            <tr>
+              <th>展示</th>
+              <th>舱型</th>
+              <th>数量</th>
+              <th>金额</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(item,index) in cabContent">
+              <td>
+                <img :src="item.cabinImg" alt="">
+              </td>
+              <td>
+                <span class="cabin-name">{{item.cabinType}}</span>
+              </td>
+              <td>
+                <div class="num">
+                  <i class="icon-jian" v-if="status == false" @click="reduceNum(item)">
+                    <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#icon-tooldel"></use>
+                    </svg>
+                  </i>
+                  <span>{{item.roomNum}}</span>
+                  <i class="icon-jian" v-if="status == false" @click="addNum(item)">
+                    <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#icon-tooladd"></use>
+                    </svg>
+                  </i>
+                </div>
+              </td>
+              <td>
+                <span class="price">¥{{item.price * item.roomNum}}</span>
+              </td>
+              <td>
+                <div class="operation">
+                  <span @click="deleteJson(index,item)">删除</span>
+                  <span v-if="status" @click="status = !status">修改</span>
+                  <span class="confirm" v-if="status == false" @click="confirm()">确认</span>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="title">
+          <h3>出行人信息填写>></h3>
+        </div>
+        <div class="link-info">
+          <ul>
+            <li class="item">
+              <span>统一联系人姓名</span>
+              <input v-model="linkMan" type="text">
+            </li>
+            <li class="item">
+              <span>统一联系人手机号</span>
+              <input v-model="linkPhone" type="text">
+            </li>
+          </ul>
+        </div>
+        <div class="order-btn">
+          <button @click="goOrderSuccess()">确认下单</button>
+        </div>
+      </div>
+    </div>
+    <Mfooter></Mfooter>
+  </div>
+</template>
+
+<style lang="less" scoped="">
+  @import "../assets/css/common";
+  #placeOrder{
+    width: 100%;
+    min-width: 1200px;
+    background-color: #eff4f7;
+    .main{
+      min-height: 541px;
+      .main-inner{
+        width: 1200px;
+        margin: 40px auto 40px;
+        background-color: #fff;
+        padding: 40px;
+        .title{
+          border-bottom: 1px solid #6aadff;
+          padding-bottom: 5px;
+          width: 1113px;
+          margin-bottom: 20px;
+          h3{
+            color: @topBg;
+            font-size: 20px;
+            line-height: 21px;
+            font-weight: normal;
+            text-indent: 10px;
+          }
+        }
+        .product-box{
+          width: 100%;
+          .product-img{
+            width: 206px;
+            height: 144px;
+            border: 1px solid #ccc;
+            text-align: center;
+            .borderRadius;
+            float: left;
+            img{
+              width: 201px;
+              height: 139px;
+              .borderRadius;
+              margin-top: 2px;
+            }
+          }
+          .product-desc{
+            float: left;
+            padding-left: 24px;
+            width: 58%;
+            .name{
+              font-size: 28px;
+              color: #333;
+              margin: 20px 0 17px 0;
+            }
+            .date,.cabin-type{
+              font-size: 16px;
+              color: #999;
+              margin-bottom: 10px;
+            }
+          }
+          .order-confirm{
+            float: right;
+            text-align: center;
+            margin: 20px 48px 0 0;
+            span{
+              color: @clickBtnBg;
+              font-size: 28px;
+              display: block;
+            }
+          }
+        }
+        .list{
+          width: 100%;
+          border:1px solid @lineColor;
+          margin: 38px 0 40px 0;
+          table{
+            width: 100%;
+            thead{
+              th{
+                width: 20%;
+                height: 41px;
+                color: #333;
+                font-size: 20px;
+                font-weight: normal;
+                border-bottom: 1px solid @lineColor;
+              }
+            }
+            tbody{
+              tr:last-child{
+                td{
+                  border:0;
+                }
+              }
+              td:nth-child(1){
+                padding: 10px 0;
+              }
+              td{
+                text-align: center;
+                border-bottom: 1px solid @lineColor;
+                img{
+                  width: 120px;
+                  height: 80px;
+                }
+                .cabin-name{
+                  color: #999;
+                  font-size: 18px;
+                }
+                .num{
+                  .icon{
+                    color: @topBg;
+                    font-size: 28px;
+                    cursor: pointer;
+                    vertical-align: middle;
+                  }
+                  span{
+                    font-size: 21px;
+                    color: @subTextColor;
+                    margin: 0 10px;
+                    vertical-align: middle;
+                  }
+                }
+                .price{
+                  color: @clickBtnBg;
+                  font-size: 25px;
+                }
+                .operation{
+                  span{
+                    color: @topBg;
+                    font-size: 16px;
+                    display: block;
+                    margin-bottom: 15px;
+                    cursor: pointer;
+                  }
+                  span:last-child{
+                    margin-bottom: 0;
+                  }
+                  .confirm{
+                    color: @clickBtnBg;
+                  }
+                }
+              }
+            }
+          }
+        }
+        .link-info{
+          width: 100%;
+          height: 82px;
+          padding: 6px 0;
+          background-color: #f0f7ff;
+          .item{
+            width: 240px;
+            height: 100%;
+            margin: 4px 40px;
+            span{
+              font-size: 16px;
+            }
+            input{
+              width: 100%;
+              height: 32px;
+              line-height: 32px;
+              padding: 3px 0;
+              text-indent: 8px;
+              .borderRadius;
+              outline: none;
+              border: 1px solid @lineColor;
+              transition: all .3s;
+              &:hover{
+                border-color: @changeBtnBg;
+              }
+            }
+          }
+        }
+        .order-btn{
+          width: 224px;
+          height: 56px;
+          margin: 40px auto 0;
+          button{
+              width: 224px;
+              height: 56px;
+              border:0;
+              .borderRadius(@radius: 30px);
+              margin-top: 10px;
+              background-color: @clickBtnBg;
+              color: #fff;
+              cursor: pointer;
+              font-size: 26px;
+              outline: none;
+            }
+        }
+      }
+    }
+  }
+</style>
+
+<script>
+  import Mheader from "../components/header.vue";
+  import Mfooter from "../components/footer.vue";
+
+  let vm;
+  export default {
+    name:'placeOrder',
+    components:{
+      Mheader,
+      Mfooter
+    },
+    data(){
+      return{
+        status:true,
+        content:[],
+        cabContent:[],
+        linkMan: '',
+        linkPhone: ''
+      }
+    },
+    mounted:function(){
+      vm = this;
+      vm.getData();
+    },
+    methods:{
+      reduceNum:function(obj){
+        if (obj.roomNum > 0) {
+          obj.roomNum -= 1;
+          vm.content.total -= 1;
+          obj.stockCount++;
+          vm.content.totalPrice = vm.content.totalPrice - obj.price;
+        }
+      },
+      addNum: function (obj) {
+        if (obj.stockCount > 0) {
+          obj.roomNum += 1;
+          vm.content.total += 1;
+          obj.stockCount--;
+          vm.content.totalPrice = vm.content.totalPrice + obj.price;
+        }
+      },
+      deleteJson:function (i,obj) {
+
+          vm.cabContent.splice(i,1);
+          vm.content.totalPrice = vm.content.totalPrice - (obj.price*obj.roomNum);
+      },
+      confirm:function () {
+        vm.status = !vm.status;
+        vm.content.cabinArr = vm.cabContent;
+        sessionStorage.ptOrder = JSON.stringify(vm.content);
+      },
+      getData:function () {
+        vm.content=[];
+        vm.cabContent = [];
+        let content = JSON.parse(sessionStorage.ptOrder);
+        vm.content = content;
+        vm.cabContent = content.cabinArr;
+      },
+      goOrderSuccess:function () {
+      	console.log(vm.content)
+        if( !vm.linkMan ){
+          vm.dialog.showDialog('请填写统一联系人姓名');
+          return;
+        }
+        if( !vm.linkPhone ){
+          vm.dialog.showDialog('请填写统一联系人手机号');
+          return;
+        }
+        if(vm.cabContent.length <= 0){
+          vm.dialog.showDialog('舱型数量不能为 0');
+          return;
+        }
+        let orderJson = new Array;
+      	let cabinArr = vm.content.cabinArr;
+      	let cruiseVoyage;
+      	for(let i=0;i<cabinArr.length;i++){
+          cruiseVoyage = cabinArr[0].cruiseVoyage;
+      		let orderObj = new Object;
+          orderObj.cabin = cabinArr[i].numberCode;
+          orderObj.count = cabinArr[i].roomNum;
+          orderObj.stock = cabinArr[i].stock;
+          orderJson.push(orderObj)
+        }
+        let parame = {
+      		voyage: cruiseVoyage,
+          orderJson: JSON.stringify(orderJson),
+          linkMan: vm.linkMan,
+          linkPhone: vm.linkPhone,
+        }
+        console.log(parame)
+        vm.axios.post(this.api+this.urlApi.createCruiseOrderOper,parame).then(function (response) {
+        	console.log(response)
+          if(response.status) vm.$router.push('/orderSuccess');
+        })
+      }
+    }
+  }
+</script>

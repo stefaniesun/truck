@@ -1,0 +1,145 @@
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="apple-mobile-web-app-capable" content="no">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="css/login-2.35.0.css">
+       <link rel="stylesheet" href="css/weui.css"/>
+    <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+     <script type="text/javascript" src="js/util.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+       <script src="js/weui.min.js"></script>
+  
+</head>
+
+<body>
+<div class="container" id="login_page">
+    <!-- 头部 S -->
+    <header class="login-header">
+        <div class="top">
+            <a href="javascript:history.go(-1);" class="cross"></a>
+        
+        </div>
+        <figure class="logo">
+            <img src="image/truck/logo.png" alt="">
+        </figure>
+    </header>
+    <!-- 头部 E -->
+    <form action="">
+        <!-- 手机短信登录 S -->
+        <div class="phone-message input visible">
+            <!-- 填写手机号 S-->
+            <div class="item">
+                <input type="tel" id="phone" placeholder="请填写手机号" maxlength="11" name="tel_number" id="tel_number">
+            </div>
+            <!-- 填写手机号 E-->
+            <!-- 填写手机验证码 S-->
+         
+            <!-- 错误提示信息 -->
+            <div class="warn">
+                <p class="warn-text"></p>
+                <p class="voice hadShow">收不到短信？<em class="get-code-voice" data-voice-interface="https://sso.360che.com/index.php?c=sms&amp;m=getSmsCodeByLogin">使用语音验证码</em></p>
+            </div>
+            <!-- 填写手机验证码 S-->
+            <div>
+                <input type="button" class="submit" id="register" value="进入雷锋货车网" data-submit-interface="https://sso.360che.com/index.php?c=login&amp;m=login">
+            </div>
+            <div class="agree-tip">
+                <p><input type="checkbox" id="check" name="check" checked="checked"><label for="check" class="selected"></label> <label for="check"> 登录表示同意</label> <a href="xieyi.html">《雷锋货车网隐私条款协议》</a></p>
+                <p><label for="check"> 未注册手机号验证后自动创建账户</label></p>
+            </div>
+        </div>
+        <!-- 手机短信登录 E -->
+
+     
+    </form>
+    <!-- 图片弹窗验证 -->
+    <div class="testModel" id="test_model">
+        <div class="mask"></div>
+        <div class="testModel-content">
+            <h2>请输入图中验证码</h2>
+            <img src="" id="get_code_pic" class="get-code-pic">
+            <p>看不清？点击图片换一张</p>
+            <div class="input-wrap">
+                <input type="tel" placeholder="" maxlength="4" id="code_pic">
+                <!-- 错误提示 -->
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- 语音提示 -->
+    <!-- 语音验证弹窗 -->
+    <div class="popup">
+        <div class="mask"></div>
+        <div class="content">
+            <p class="head">语音验证码</p>
+            <div class="body">
+                <p>即将给您<em></em>来电</p>
+                <p>请注意接听</p>
+            </div>
+            <span class="footer ok">我知道了</span>
+        </div>
+    </div>
+</div>
+<!-- toast提示 -->
+<!-- toast弹窗 -->
+<div class="toast">
+    <div class="mask"></div>
+    <div class="content">
+        <div class="icon icon-load">
+            <img src="https://s.kcimg.cn/bigCarMall/image/loading.gif">
+        </div>
+        <i class="icon icon-success"></i>
+        <i class="icon icon-error"></i>
+        <i class="icon icon-warn"></i>
+        <p class="text-content">登录成功</p>
+    </div>
+</div>
+
+<div class="toast">
+</div>
+
+<script>
+  
+	
+	$(document).ready(function() {
+
+		 $("#register").click(function(){
+		    
+		    if($("#phone").val().trim()==""){
+		    	weui.alert("请输入手机号");
+		    	return;
+		    }
+		    var phone=$("#phone").val();
+		    
+		    $.ajax({
+				url : "/CustomerWS/customerRegisterOper.xyz",
+				type : "POST",
+				data : {
+					phone : phone
+				},
+				success : function(data) {
+					if (data.status == 1) {
+						var securityLogin=data.content;
+						localStorage.setItem("username", securityLogin.nameCn);
+						addCustomerLoginCookie(data.content);
+						weui.alert("注册成功");
+						setTimeout(function(){
+							window.location.replace("my.html");
+						},"2000");
+					}else{
+						weui.alert(data.msg);
+					}
+				}
+			});
+		 });
+	});
+	
+	
+</script>
+
+
+</body></html>

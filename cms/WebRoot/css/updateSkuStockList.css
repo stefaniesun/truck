@@ -1,0 +1,12 @@
+.click{
+	margin:2px;
+	padding:4px;
+	background-color:#7fffd4;
+}
+.un_click{
+	margin:2px;
+	padding:4px;
+}
+.mouseover{
+	background-color:#ffe4c4;
+}

@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>资源查询管理</title>
+<link rel="stylesheet" type="text/css" href="../css/simple-calendar.css"></link>
+<link rel="stylesheet" type="text/css" href="../css/xieyaozhong.css"></link>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/bootstrap/easyui.css"></link>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/icon.css"></link>
+<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"></link>
+
+<script type="text/javascript" src="../js/library/jquery-1.7.2.js"></script>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/bootstrap/easyui.css"></link>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/icon.css"></link>
+<script type="text/javascript" src="../js/library/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/library/cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="../js/library/common/cookie2.js"></script>
+<script type="text/javascript" src="../js/library/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../js/js_resources/tkviewCalendar.js" ></script>
+<script type="text/javascript" src="../js/library/common/common.js"></script>
+<script type="text/javascript" src="../js/library/common/customUi.js" defer="defer"></script>
+
+<script type="text/javascript" src="../js/js_menu/queryResourcesManager.js" defer="defer"></script>
+</head>
+<body style="width: 100%;text-align: left;background-color:white;">
+	<div style="width:99%;position:absolute;">
+	
+		<div class='yqqPluginBg'>
+			价格 <input type="text" id="minPrice" style="width:100px;" class="prcieInput"/>-<input type="text" id="maxPrice" style="width:100px;" class="prcieInput"/>  
+			出行日期<input  type="text" id="startDate" style="width:120px;" class="dateInput"/> - <input  type="text" id="endDate" style="width:120px;" class="dateInput"/>
+		</div>
+		<div class='yqqPluginBg'>
+			出发地<input  type="text" id="startPlace" style="width:130px;"/>
+			目的地<input  type="text" id="toPlace" style="width:130px;"/>
+			邮轮<input  type="text" id="cruise" style="width:180px;"/>
+			<span id="cruiseSpan">
+				航线<input  type="text" id="airway" style="width:180px;"/>
+			        舱型<input  type="text" id="cabin" style="width:180px;"/>
+			</span>
+		       游玩天数<select id="days" class="easyui-combobox" style="width:100px;">
+		       		<option value="0">--请选择--</option>
+			       	<option value="3">3天2晚</option>
+			       	<option value="4">4天3晚</option>
+			       	<option value="5">5天4晚</option>
+			       	<option value="6">6天5晚</option>
+			       	<option value="7">7天6晚</option>
+			       	<option value="8">8天7晚</option>
+			       	<option value="9">9天8晚</option>
+			       </select>
+		      供应商 <input  type="text" id="provider" style="width:180px;"/>
+		</div>
+		
+		<div style="z-index: 100;position: fixed;right:100px;">
+			<a href="javascript:void(0);" class="easyui-linkbutton"
+			data-options="iconCls:'icon-search'" id="queryButton">查询</a>
+		</div>
+		
+		<div>
+			<div id="dateTabs" style="width:600px;height:30px;margin-top:10px;" class="easyui-tabs"></div>
+		    <div id='container'></div>
+		    
+		    <div class="bs-example" style="width:690px;height:560px;margin-left:2px;margin-top:-28px;">
+		    	<p id="noneMsg" style="margin-top:30px;margin-left:20px;display:none;">没有相关的资源信息</p>
+		    	<div id="tableDiv" style="height:500px;overflow:auto;display:none;">
+		    		<table class="table table-bordered price-table">
+				      <thead>
+				        <tr>
+				          <th style="width:120px;">邮轮</th>
+				          <th style="width:120px;">单品</th>
+				          <th style="width:120px;">供应商</th>
+				          <th>库存</th>
+				          <th>成本价</th>
+				          <th>成本说明</th>
+				        </tr>
+				      </thead>
+				      <tbody id="stockTbody"></tbody>
+				    </table>
+		    	</div>
+		   </div> 
+		</div>
+		
+	</div>
+</body>
+</html>

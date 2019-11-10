@@ -1,0 +1,259 @@
+<template>
+  <div id="orderAll">
+    <Mheader isHeader="0" currentPage="2"></Mheader>
+    <div class="main">
+      <div class="main-top clearfloat">
+        <input type="text" placeholder="请输入订单号/订单关键字">
+        <div class="btn">
+          搜索
+        </div>
+      </div>
+      <div class="content">
+        <ul class="nav">
+          <li class="width-1">订单信息</li>
+          <li class="width-2">下单日期</li>
+          <li class="width-2">出发日期</li>
+          <li class="width-2">下单人</li>
+          <li class="width-3">金额</li>
+        </ul>
+        <ul class="list clearfloat">
+          <li class="item">
+            <div class="top">
+              <span>订单号：4565442318453132132</span>
+              <div class="btn">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-shanchu"></use>
+                </svg>
+              </div>
+            </div>
+            <div class="detail">
+              <ul class="detail-wrap">
+                <li class="width-1">
+                  <img class="pic" src="" alt="">
+                  <span class="name">星梦邮轮【世界梦号】6天5晚胡志明市+芽庄</span>
+                </li>
+                <li class="width-2 date">
+                  <span>2017/11/12<br>12:11:10</span>
+                </li>
+                <li class="width-2">
+                  <span>2017/11/12</span>
+                </li>
+                <li class="width-2">
+                  <span>王麻子</span>
+                </li>
+                <li class="width-3">
+                  <span>￥3659</span>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="page-wrap">
+      <div>
+        <Page :total="total" :page-size="3" @on-change="pageChange" className="paging-style"></Page>
+      </div>
+    </div>
+    <Mfooter></Mfooter>
+  </div>
+</template>
+
+<script>
+  import Mheader from "../components/header.vue";
+  import Mfooter from "../components/footer.vue";
+  let vm
+  export default{
+  	name: 'orderAll',
+    components:{
+      Mheader,
+      Mfooter
+    },
+    data(){
+  		return{
+        total: 0,
+        page: 1,
+
+      }
+    },
+    mounted(){
+      vm = this;
+      vm.getData();
+      vm.$nextTick(function(){
+        let prev = document.getElementsByClassName('ivu-page-prev')[0];
+        prev.innerHTML = '上一页';
+        let next = document.getElementsByClassName('ivu-page-next')[0];
+        next.innerHTML = '下一页';
+      });
+    },
+    methods: {
+    	getData(){
+    		let parame = {
+    			page: 1,
+          rows: 10
+        }
+        vm.axios.post(this.api+this.urlApi.queryCruiseOrderList,parame).then(function (respones) {
+          if(respones.status){
+            console.log(respones)
+          }
+        })
+      },
+      pageChange(){
+
+      }
+    }
+  }
+</script>
+
+<style lang="less" scoped>
+  @import "../assets/css/common.less";
+  #orderAll{
+    .main{
+      width: 1200px;
+      min-height: 700px;
+      margin: 40px auto 0;
+      padding: 18px 46px;
+      .borderRadius;
+      background-color: #fff;
+    }
+    .main-top{
+      width: 320px;
+      height: 26px;
+      line-height: 26px;
+      input{
+        width: 240px;
+        height: 26px;
+        text-indent: 8px;
+        float: left;
+        font-size: 14px;
+        border: 1px solid @lineColor;
+        outline: none;
+        transition: all .3s;
+        &:focus{
+          border-color: @changeBtnBg;
+        }
+      }
+      .btn{
+        width: 80px;
+        height: 100%;
+        background-color: @changeBtnBg;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        float: left;
+      }
+    }
+    .content{
+      margin: 20px auto 10px;
+      .nav{
+        width: 100%;
+        height: 42px;
+        line-height: 42px;
+        text-align: center;
+        border: 1px solid @lineColor;
+        background-color: #fafafb;
+        margin-bottom: 10px;
+        li{
+          color: #333;
+        }
+      }
+      .list{
+        .item{
+          width: 100%;
+          height: 150px;
+          margin-bottom: 20px;
+          border: 1px solid @lineColor;
+          .top{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            padding: 0 22px;
+            background-color: #fafafb;
+            border-bottom: 1px solid @lineColor;
+            .btn{
+              display: inline-block;
+              float: right;
+              font-size: 24px;
+              cursor: pointer;
+            }
+          }
+          .detail{
+            width: 100%;
+            height: 109px;
+            line-height: 109px;
+            text-align: center;
+            font-size: 16px;
+            position: relative;
+            .detail-wrap{
+              width: 100%;
+              height: 100%;
+              li{
+                height: 100%;
+                border-right: 1px solid @lineColor;
+                position: relative;
+                span{
+                  word-wrap: break-word;
+                }
+              }
+              li:last-child{
+                border-right: none;
+                color: @tipsColor;
+                font-size: 24px;
+              }
+              li.date{
+                line-height: 22px;
+                span{
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%,-50%);
+                }
+              }
+              .pic{
+                width: 120px;
+                height: 72px;
+                display: block;
+                .borderRadius;
+                position: absolute;
+                top: 50%;
+                left: 22px;
+                transform: translateY(-50%);
+                background-color: red;
+              }
+              .name{
+                float: right;
+                margin-right: 22px;
+              }
+            }
+          }
+        }
+      }
+    }
+    li.width-1{
+      width: 536px;
+      max-width: 536px;
+    }
+    li.width-2{
+      width: 132px;
+      max-width: 132px;
+    }
+    li.width-3{
+      width: 174px;
+      max-width: 174px;
+    }
+    .page-wrap{
+      width: 1200px;
+      height: 50px;
+      margin: 10px auto 40px;
+      background-color: #fff;
+      .borderRadius;
+      position: relative;
+      div{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+      }
+    }
+  }
+</style>

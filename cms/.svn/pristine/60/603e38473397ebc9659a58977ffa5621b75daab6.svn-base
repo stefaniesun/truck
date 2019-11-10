@@ -1,0 +1,278 @@
+<template>
+  <div id="placeOrder">
+    <Mheader></Mheader>
+    <div class="main">
+      <div class="main-inner">
+        <div class="product-box clearfloat">
+          <div class="product-img">
+            <img :src="content.cruiseImg" alt="">
+          </div>
+          <div class="product-desc">
+            <p class="name">{{content.ptviewName}}</p>
+            <p class="date">出发日期：{{content.travelDate}}</p>
+            <p class="cabin-type">舱型：海景房1间  豪华套房1间</p>
+          </div>
+          <div class="order-confirm">
+            <span class="price">总金额：¥{{content.totalPrice}}</span>
+            <button @click="goOrderSuccess()">确认下单</button>
+          </div>
+        </div>
+        <div class="list">
+          <table border="0" cellspacing="0" cellpadding="0">
+            <thead>
+            <tr>
+              <th>展示</th>
+              <th>舱型</th>
+              <th>数量</th>
+              <th>金额</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(item,index) in cabContent">
+              <td>
+                <img :src="item.cabinImg" alt="">
+              </td>
+              <td>
+                <span class="cabin-name">{{item.cabinType}}</span>
+              </td>
+              <td>
+                <div class="num">
+                  <i class="icon-jian" v-if="status == false" @click="reduceNum(item)">
+                    <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#icon-tooldel"></use>
+                    </svg>
+                  </i>
+                  <span>{{item.peopleCount}}</span>
+                  <i class="icon-jian" v-if="status == false" @click="addNum(item)">
+                    <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#icon-tooladd"></use>
+                    </svg>
+                  </i>
+                </div>
+              </td>
+              <td>
+                <span class="price">¥{{item.price * item.peopleCount}}</span>
+              </td>
+              <td>
+                <div class="operation">
+                  <span @click="deleteJson(index,item)">删除</span>
+                  <span v-if="status" @click="status = !status">修改舱型</span>
+                  <span class="confirm" v-if="status == false" @click="confirm()">确认</span>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <Mfooter></Mfooter>
+  </div>
+</template>
+
+<style lang="less" scoped="">
+  @import "../assets/css/common";
+  #placeOrder{
+    width: 100%;
+    min-width: 1200px;
+    background-color: #eff4f7;
+    .main{
+      min-height: 541px;
+      .main-inner{
+        width: 1200px;
+        margin: 40px auto 40px;
+        background-color: #fff;
+        padding: 40px;
+        .product-box{
+          width: 100%;
+          .product-img{
+            width: 206px;
+            height: 144px;
+            border: 1px solid #ccc;
+            text-align: center;
+            .borderRadius;
+            float: left;
+            img{
+              width: 201px;
+              height: 139px;
+              .borderRadius;
+              margin-top: 2px;
+            }
+          }
+          .product-desc{
+            float: left;
+            padding-left: 24px;
+            width: 58%;
+            .name{
+              font-size: 28px;
+              color: #333;
+              margin: 20px 0 17px 0;
+            }
+            .date,.cabin-type{
+              font-size: 16px;
+              color: #999;
+              margin-bottom: 10px;
+            }
+          }
+          .order-confirm{
+            float: right;
+            text-align: center;
+            margin-top: 20px;
+            span{
+              color: @clickBtnBg;
+              font-size: 28px;
+              display: block;
+            }
+            button{
+              width: 225px;
+              height: 57px;
+              border:0;
+              .borderRadius(@radius: 30px);
+              margin-top: 10px;
+              background-color: @clickBtnBg;
+              color: #fff;
+              cursor: pointer;
+              font-size: 26px;
+              outline: none;
+            }
+          }
+        }
+        .list{
+          width: 100%;
+          border:1px solid @lineColor;
+          margin-top: 38px;
+          table{
+            width: 100%;
+            thead{
+              th{
+                width: 20%;
+                height: 41px;
+                color: #333;
+                font-size: 20px;
+                font-weight: normal;
+                border-bottom: 1px solid @lineColor;
+              }
+            }
+            tbody{
+              tr:last-child{
+                td{
+                  border:0;
+                }
+              }
+              td:nth-child(1){
+                padding: 10px 0;
+              }
+              td{
+                text-align: center;
+                border-bottom: 1px solid @lineColor;
+                img{
+                  width: 120px;
+                  height: 80px;
+                }
+                .cabin-name{
+                  color: #999;
+                  font-size: 18px;
+                }
+                .num{
+                  .icon{
+                    color: @topBg;
+                    font-size: 28px;
+                    cursor: pointer;
+                    vertical-align: middle;
+                  }
+                  span{
+                    font-size: 21px;
+                    color: @subTextColor;
+                    margin: 0 10px;
+                    vertical-align: middle;
+                  }
+                }
+                .price{
+                  color: @clickBtnBg;
+                  font-size: 25px;
+                }
+                .operation{
+                  span{
+                    color: @topBg;
+                    font-size: 16px;
+                    display: block;
+                    margin-bottom: 15px;
+                    cursor: pointer;
+                  }
+                  span:last-child{
+                    margin-bottom: 0;
+                  }
+                  .confirm{
+                    color: @clickBtnBg;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+</style>
+
+<script>
+  import Mheader from "../components/header.vue";
+  import Mfooter from "../components/footer.vue";
+
+  let vm;
+  export default {
+    name:'placeOrder',
+    components:{
+      Mheader,
+      Mfooter
+    },
+    data(){
+      return{
+        status:true,
+        content:[],
+        cabContent:[],
+      }
+    },
+    mounted:function(){
+      vm = this;
+      vm.getData();
+    },
+    methods:{
+      reduceNum:function(obj){
+        if(obj.peopleCount > 0){
+            obj.peopleCount -= 1 ;
+            vm.content.total -= 1;
+            obj.stock++;
+            vm.content.totalPrice = vm.content.totalPrice - obj.price;
+        }
+      },
+      addNum:function(obj){
+          if(obj.stock > 0){
+            obj.peopleCount += 1 ;
+            vm.content.total += 1;
+            obj.stock--;
+            vm.content.totalPrice = vm.content.totalPrice + obj.price;
+          }
+      },
+      deleteJson:function (i,obj) {
+          vm.cabContent.splice(i,1);
+          vm.content.totalPrice = vm.content.totalPrice - (obj.price*obj.peopleCount);
+      },
+      confirm:function () {
+        vm.status = !vm.status;
+        vm.content.cabinArr = vm.cabContent;
+        sessionStorage.ptOrder = JSON.stringify(vm.content);
+      },
+      getData:function () {
+        vm.content=[];
+        vm.cabContent = [];
+        vm.content = JSON.parse(sessionStorage.ptOrder);
+        vm.cabContent = JSON.parse(JSON.stringify(vm.content.cabinArr));
+      },
+      goOrderSuccess:function () {
+        vm.$router.push('/orderSuccess');
+      }
+    }
+  }
+</script>

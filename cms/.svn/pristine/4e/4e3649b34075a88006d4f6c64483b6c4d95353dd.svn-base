@@ -1,0 +1,128 @@
+<template>
+  <div class="sumAmount">
+    <h2>近一月金额统计</h2>
+    <div class="container">
+
+      <div class="content-wrap">
+        <div class="left-side" >
+          <div class="line"  v-for="item in amount">
+            <span>
+              {{item.date}}
+            </span>
+          </div>
+
+        </div>
+        <div class="top-side">
+          <span v-for="item in sumTag" class="sum-tag">
+            {{parseInt(item)}}<span class="sub">{{item.replace(/[^\u4e00-\u9fa5]/gi,"")}} </span>
+          </span>
+        </div>
+        <div class="content">
+          <div class="line" v-for="item in amount">
+            <span class="progress" :style="{width: item.width }">{{item.sum}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  let vm;
+  export default {
+    name: 'sumAmount',
+    data() {
+      return {
+        sumTag: ['0','2千','5千','1万','5万','20万','50万'],
+        amount: [
+          {date: '10/27', sum: 48000, width: '55%'},
+          {date: '10/26', sum: 35000, width: '52%'},
+          {date: '10/25', sum: 48000, width: '55%'},
+          {date: '10/24', sum: 500000, width: '90%'},
+          {date: '10/23', sum: 400000, width: '80%'},
+          {date: '10/22', sum: 10000, width: '40%'},
+          {date: '10/21', sum: 5000, width: '22%'},
+          {date: '10/20', sum: 120000, width: '65%'},
+        ]
+      }
+    }
+  }
+
+</script>
+
+<style scoped lang="less">
+  @import "../assets/css/base.less";
+
+  .sumAmount{
+    width: 98%;
+    margin: 10*@basePX auto;
+    h2{
+      font-weight: normal;
+      font-size: 28*@basePX;
+      line-height: 80*@basePX;
+      color: @tipsColor;
+      text-align: center;
+    }
+    .container{
+      width: 94%;
+      margin: 0 auto;
+      padding-bottom: 50*@basePX;
+      .content-wrap{
+        width: 90%;
+        margin-left: 10%;
+        margin-top: 50*@basePX;
+        border-left: 1px solid @lineColor;
+        border-top: 1px solid @lineColor;
+        position: relative;
+        .line{
+          height: 65*@basePX;
+          position: relative;
+          span{
+            position: absolute;
+            bottom: 0;
+          }
+        }
+        .top-side{
+          position: absolute;
+          top: -50*@basePX;
+
+          color: @subTextColor;
+          .sum-tag{
+            display: inline-block;
+            width: 80*@basePX;
+            text-align: left;
+            font-size: 24*@basePX;
+            span{
+              font-size: 16*@basePX;
+              display: inline-block;
+            }
+          }
+        }
+        .left-side{
+          width: 12%;
+          position: absolute;
+          text-align: left;
+          left: -80*@basePX;
+          .line span{
+            font-size: 16*@basePX;
+            color: @subTextColor;
+          }
+        }
+
+        .content{
+          .line span{
+            background-color: #dbebfe;
+            color: @topBg;
+            text-align: right;
+            height: 30*@basePX;
+            line-height: 30*@basePX;
+            padding-right: 10*@basePX;
+            font-size: 24*@basePX;
+
+          }
+        }
+      }
+    }
+  }
+
+</style>

@@ -1,0 +1,167 @@
+<template>
+  <div id="moneyAmount">
+    <Mheader isHeader="0" currentPage="3"></Mheader>
+    <div class="main">
+      <div class="chart-wrap"></div>
+    </div>
+    <Mfooter></Mfooter>
+  </div>
+</template>
+
+<script>
+  import Mheader from "../components/header.vue";
+  import Mfooter from "../components/footer.vue";
+  let echarts = require('echarts');
+  let vm
+  export default{
+  	name: 'moneyAmount',
+    components:{
+      Mheader,
+      Mfooter
+    },
+    data(){
+  		return{
+
+      }
+    },
+    mounted(){
+      vm = this;
+       //基于准备好的dom，初始化echarts实例
+      let myChart = echarts.init(document.querySelector('.main'));
+      // 绘制图表
+      let base = +new Date(2016, 10, 4);
+      let oneDay = 24 * 3600 * 1000;
+      let valueBase = Math.random() * 300;
+      let valueBase2 = Math.random() * 50;
+      let data = [];
+      let data2 = [];
+
+      for (let i = 1; i < 30; i++) {
+        let now = new Date(base += oneDay);
+        let dayStr = [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('-');
+
+        valueBase = Math.round((Math.random() - 0.5) * 20 + valueBase);
+        valueBase <= 0 && (valueBase = Math.random() * 300);
+        data.push([dayStr, valueBase]);
+
+        valueBase2 = Math.round((Math.random() - 0.5) * 20 + valueBase2);
+        valueBase2 <= 0 && (valueBase2 = Math.random() * 50);
+        data2.push([dayStr, valueBase2]);
+      }
+
+      let option = {
+        animation: true,
+        tooltip: {
+          position: function (pt) {
+            return [pt[0], 130];
+          }
+        },
+        toolbox: {
+          left: 'center',
+          itemSize: 25,
+          top: 55,
+          feature: {
+            restore: {}
+          }
+        },
+        xAxis: {
+          type: 'time',
+          // boundaryGap: [0, 0],
+          axisPointer: {
+            value: '2016-10-6',
+            snap: true,
+            lineStyle: {
+              color: '#004E52',
+              opacity: 0.5,
+              width: 2
+            },
+            label: {
+              show: true,
+              formatter: function (params) {
+                return echarts.format.formatTime('yyyy-MM-dd', params.value);
+              },
+              backgroundColor: 'red'
+            },
+            handle: {
+              show: true,
+              color: '#004E52'
+            }
+          },
+          splitLine: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            inside: true
+          },
+          splitLine: {
+            show: false
+          },
+          axisLabel: {
+            inside: true,
+            formatter: '{value}\n'
+          },
+          z: 10
+        },
+        grid: {
+          top: 110,
+          left: 15,
+          right: 15,
+          height: 160
+        },
+        dataZoom: [{
+          type: 'inside',
+          throttle: 50
+        }],
+        series: [
+          {
+            name:'模拟数据',
+            type:'line',
+            smooth:true,
+            stack: 'a',
+            symbol: 'circle',
+            symbolSize: 5,
+            sampling: 'average',
+            itemStyle: {
+              normal: {
+                color: '#d68262'
+              }
+            },
+            areaStyle: {
+              normal: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                  offset: 0,
+                  color: '#c5dffc'
+                }, {
+                  offset: 1,
+                  color: '#8cbffe'
+                }])
+              }
+            },
+            data: data2
+          }
+
+        ]
+      };
+      myChart.setOption(option);
+    },
+    methods: {
+    }
+  }
+</script>
+
+<style lang="less" scoped>
+  @import "../assets/css/common.less";
+  #moneyAmount{
+    .main{
+      width: 1200px;
+      min-height: 541px;
+      margin: 40px auto;
+      padding: 18px 46px;
+      .borderRadius;
+      background-color: #fff;
+    }
+  }
+</style>

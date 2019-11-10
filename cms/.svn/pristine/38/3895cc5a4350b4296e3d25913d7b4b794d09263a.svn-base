@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>完整新增舱型</title>
+</head>
+<body>
+<center>
+	<form><br/>
+		<table cellspacing="4" cellpadding="4" style="width:800px;">
+			<tr>
+				<th colspan="9">
+					选择邮轮 <input id="cruiseForm" style="width:420px;" panelHeight="auto"/>
+				</th>
+			</tr>
+			<tr>
+				<th colspan="9">
+					类型 <input id="typeForm" class="easyui-combobox" value="inside" style="width:80px;"
+						data-options="panelHeight:'auto',editable:false,
+						valueField:'value',textField:'text',
+						data: [{value:'inside',text:'内舱房'},
+						{value:'seaview',text:'海景房'},
+						{value:'balcony',text:'阳台房'},
+						{value:'suite',text:'套房'}]"/> &nbsp;
+				       容量 <input type="text" id="minVolumeForm" class="easyui-numberbox" style="width:55px;" 
+				       value="1" data-options="min:1,max:20"/>
+					  - <input type="text" id="maxVolumeForm" class="easyui-numberbox" style="width:55px;" 
+					  data-options="min:1,max:20"/>	&nbsp;	
+				      数量 <input type="text" id="addCountForm" class="easyui-numberbox" style="width:55px;" value="1"/> &nbsp;
+				      <a id="addBtn"  class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加条目</a>
+				</th>
+			</tr>
+		</table>
+		
+		<table id="insideTable" cellspacing="4" cellpadding="4" style="margin-top:6px;text-align:center;">
+			<tr class="insideTr">
+				<td colspan="9"><hr style="color:#d3d3d3;"/></td>
+			</tr>
+			<tr class="insideTr">
+				<th>舱型类型</th>
+				<th>名称</th>
+				<th>容量</th>
+				<th>代码</th>
+				<th>是否开启</th>
+				<th>楼层</th>
+				<th>面积(㎡)</th>
+				<th>设施</th>
+				<th>备注</th>
+				<th>操作</th>
+			</tr>
+		   <!--  <tr id="insideTr_0">
+				<td>
+					<span id="insideSpan_0">内舱房</span>
+				</td>
+				<td>
+					 <input id="inside_nameCnForm_0" style="width:100px;"/>
+				</td>
+				<td>
+					<input id="inside_minVolumeForm_0" style="width:50px;" value="1"/>
+					-<input id="inside_maxVolumeForm_0" style="width:50 px;"/>
+				</td>
+				<td>
+					<input id="inside_markForm_0" style="width:80px;"/>
+				</td>
+				<td>
+					<input value="开" type="radio" name="inside_radio_0" checked="checked"/>开 
+					<input value="关" type="radio" name="inside_radio_0"/>关
+					<input type="hidden" id="inside_isOpenForm_0" value="开"/>
+				</td>
+				<td>
+					<input id="inside_floorsForm_0" style="width:100px;"/>
+				</td>
+				<td>
+					<input id="inside_acreageForm_0" style="width:70px;"/>
+				</td>
+				<td>
+					<input id="inside_surveyForm_0" style="width:100px;"/>
+				</td>
+				<td>
+					<input id="inside_remarkForm_0" style="width:100px;"/>
+				</td>
+				<td>
+					<img id="inside_delete_0" alt="点我删除舱型" src="../image/other/delete.png" title="点我删除舱型" style="cursor:pointer;">
+				</td>
+			</tr>  -->
+		</table>
+	
+		<table id="seaviewTable" cellspacing="4" cellpadding="4" style="margin-top:6px;text-align:center;">
+			<tr class="seaviewTr">
+				<td colspan="9"><hr style="color:#d3d3d3;"/></td>
+			</tr>
+			<tr class="seaviewTr">
+				<th>舱型类型</th>
+				<th>名称</th>
+				<th>容量</th>
+				<th>代码</th>
+				<th>是否开启</th>
+				<th>楼层</th>
+				<th>面积(㎡)</th>
+				<th>设施</th>
+				<th>备注</th>
+				<th>操作</th>
+			</tr>
+			<!-- <tr id="seaviewTr_0">
+				<td>
+					<span id="seaviewSpan_0">海景房</span>
+				</td>
+				<td>
+					<input id="seaview_nameCnForm_0" style="width:100px;"/>
+				</td>
+				<td>
+					<input id="seaview_minVolumeForm_0" style="width:50px;" value="1"/>
+					-<input id="seaview_maxVolumeForm_0" style="width:50px;"/>
+				</td>
+				<td>
+					<input id="seaview_markForm_0" style="width:80px;"/>
+				</td>
+				<td>
+					<input value="开" type="radio" name="seaview_radio_0" checked="checked"/>开 
+					<input value="关" type="radio" name="seaview_radio_0"/>关
+					<input type="hidden" id="seaview_isOpenForm_0" value="开"/>
+				</td>
+				<td>
+					<input id="seaview_floorsForm_0" style="width:100px;"/>
+				</td>
+				<td>
+					<input id="seaview_acreageForm_0" style="width:70px;"/>
+				</td>
+				<td>
+					<input id="seaview_surveyForm_0" style="width:100px;"/>
+				</td>
+				<td>
+					<input id="seaview_remarkForm_0" style="width:100px;"/>
+				</td>
+				<td>
+					<img id="seaview_delete_0" alt="点我删除舱型" src="../image/other/delete.png" title="点我删除舱型" style="cursor:pointer;">
+				</td>
+			</tr> -->
+		</table>
+		
+		<table id="balconyTable" cellspacing="4" cellpadding="4" style="margin-top:6px;text-align:center;">
+			<tr class="balconyTr">
+				<td colspan="9"><hr style="color:#d3d3d3;"/></td>
+			</tr>
+			<tr class="balconyTr">
+				<th>舱型类型</th>
+				<th>名称</th>
+				<th>容量</th>
+				<th>代码</th>
+				<th>是否开启</th>
+				<th>楼层</th>
+				<th>面积(㎡)</th>
+				<th>设施</th>
+				<th>备注</th>
+				<th>操作</th>
+			</tr>
+			<!-- <tr id="balconyTr_0">
+				<td>
+					<span id="balconySpan_0">阳台房</span>
+				</td>
+				<td>
+					<input id="balcony_nameCnForm_0" style="width:100px;"/>
+				</td>
+				<td>
+					<input id="balcony_minVolumeForm_0" style="width:50px;" value="1"/>
+					-<input id="balcony_maxVolumeForm_0" style="width:50px;"/>
+				</td>
+				<td>
+					<input id="balcony_markForm_0" style="width:80px;"/>
+				</td>
+				<td>
+					<input value="开" type="radio" name="balcony_radio_0" checked="checked"/>开 
+					<input value="关" type="radio" name="balcony_radio_0"/>关
+					<input type="hidden" id="balcony_isOpenForm_0" value="开"/>
+				</td>
+				<td>
+					<input id="balcony_floorsForm_0" style="width:100px;"/>
+				</td>
+				<td>
+					<input id="balcony_acreageForm_0" style="width:70px;"/>
+				</td>
+				<td>
+					<input id="balcony_surveyForm_0" style="width:100px;"/>
+				</td>
+				<td>
+					<input id="balcony_remarkForm_0" style="width:100px;"/>
+				</td>
+				<td>
+					<img id="balcony_delete_0" alt="点我删除舱型" src="../image/other/delete.png" title="点我删除舱型" style="cursor:pointer;">
+				</td>
+			</tr> -->
+		</table>
+		
+		<table id="suiteTable" cellspacing="4" cellpadding="4" style="margin-top:6px;text-align:center;">
+			<tr class="suiteTr">
+				<th colspan="9"><hr style="color:#d3d3d3;"/></th>
+			</tr>
+			<tr class="suiteTr">
+				<th>舱型类型</th>
+				<th>名称</th>
+				<th>容量</th>
+				<th>代码</th>
+				<th>是否开启</th>
+				<th>楼层</th>
+				<th>面积(㎡)</th>
+				<th>设施</th>
+				<th>备注</th>
+				<th>操作</th>
+			</tr>
+			<!-- <tr id="suiteTr_0">
+				<td>
+					<span id="suiteSpan_0">套房</span>
+				</td>
+				<td>
+					<input id="suite_nameCnForm_0" style="width:100px;"/>
+				</td>
+				<td>
+					<input id="suite_minVolumeForm_0" style="width:50px;" value="1"/>
+					-<input id="suite_maxVolumeForm_0" style="width:50px;"/>
+				</td>
+				<td>
+					<input id="suite_markForm_0" style="width:80px;"/>
+				</td>
+				<td>
+					<input value="开" type="radio" name="suite_radio_0" checked="checked"/>开 
+					<input value="关" type="radio" name="suite_radio_0"/>关
+					<input type="hidden" id="suite_isOpenForm_0" value="开"/>
+				</td>
+				<td>
+					<input id="suite_floorsForm_0" style="width:100px;"/>
+				</td>
+				<td>
+					<input id="suite_acreageForm_0" style="width:70px;"/>
+				</td>
+				<td>
+					<input id="suite_surveyForm_0" style="width:100px;"/>
+				</td>
+				<td>
+					<input id="suite_remarkForm_0" style="width:100px;"/>
+				</td>
+				<td>
+					<img id="suite_delete_0" alt="点我删除舱型" src="../image/other/delete.png" title="点我删除舱型" style="cursor:pointer;">
+				</td>
+			</tr> -->
+		</table>
+	</form>
+</center>
+</body>
+</html>

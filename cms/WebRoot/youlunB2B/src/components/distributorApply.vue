@@ -1,0 +1,648 @@
+<template>
+  <div id="distributorApply" @click="eliminate">
+    <header>
+      <h2>{{headerTitle}}</h2>
+    </header>
+
+    <div class="main" v-if="status == 0">
+      <div  class="apply-box">
+        <div class="item" v-for="type1 in inputContent[0].type1">
+          <span>{{type1.title}}<i>*</i><i class="remark">{{type1.remarks}}</i></span>
+          <input :type="type1.type" :placeholder="type1.placeholder" v-model="type1.message">
+        </div>
+        <div class="item" v-for="(type2,index) in inputContent[0].type2">
+          <span>{{type2.title}}<i>*</i></span>
+          <div class="select-box" ref="select-box">
+            <div @click="dropDown(type2)" ref="country-box">
+              <input type="text" @keyup="selectData(type2,index)" @focus="isFocus = true;" :placeholder="type2.placeholder" :class="type2.select ? 'input-focus':''" v-model="type2.countryName">
+              <div class="drop-icon">
+                <i class="icon"></i>
+              </div>
+            </div>
+            <div class="drop-down" v-if="type2.select">
+              <ul>
+                <li v-for="country  in type2.list" @click="assignmentCity(country,index)">{{country.name}}</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+        <div class="item">
+          <span>地址 <i>*</i> </span>
+          <input type="text" placeholder="请输入地址" v-model="address" class="address">
+        </div>
+
+        <div class="agreement">
+          <i class="iconfont" :class="icon ? 'icon-gou1':'icon-weixuanzhong1'" @click="icon = !icon"></i>
+          <span>我同意 <a href="javascript:;" @click="agreement = true;bodyNoScrolling.open()">邮轮分销平台协议内容</a></span>
+        </div>
+
+        <div class="btn-box">
+          <button @click="distributorRegister()" :class="icon?'':'noClick'">下一步</button>
+        </div>
+
+        <!-- 协议内容 -->
+        <div class="agreement-main" v-if="agreement">
+          <div class="inner-box">
+            <div class="agreement-title">邮轮分销平台协议内容</div>
+            <div class="inner-main">
+              <ul class=" clearfloat">
+                <li v-html="m" v-for="m in aegreementCon">
+                </li>
+              </ul>
+            </div>
+            <div class="btn-box">
+              <button @click="closeAgreement">同意并关闭</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+
+    <div class="main2" v-if="status == 1">
+      <div class="wait-box">
+        <img src="../assets/img/wait-img.png" alt="">
+        <p class="title">等待审核中...</p>
+        <p>审核结果、帐号信息会以邮件的形式通知</p>
+      </div>
+    </div>
+
+
+
+  </div>
+</template>
+
+<script>
+  import country from '../assets/js/country.js';
+  require('@/assets/js/xyzToPinyin.mini.js')
+  let vm;
+  let md5 = require ('js-md5');
+  export default{
+    name: 'distributorApply',
+    data(){
+      return {
+        inputContent: [
+          {
+            type1: [
+              {
+                title: "分销商名称",
+                placeholder: "请输入分销商名称",
+                type:"text",
+                message: "",
+
+              },
+              {
+                title: "法人",
+                placeholder: "请输入法人",
+                message: "",
+                type:"text",
+              },
+              {
+                title: "联系人",
+                placeholder: "请输入联系人",
+                message: "",
+                type:"text",
+              },
+              {
+                title: "联系人手机号",
+                placeholder: "请输入联系人手机号",
+                remarks:"（用于系统登陆）",
+                message: "",
+                type:"text",
+              },
+              {
+                title: "邮箱",
+                placeholder: "请输入邮箱",
+                remarks:"（用于接收审核结果通知）",
+                message: "",
+                type:"text",
+              },
+              {
+                title: "登录密码",
+                placeholder: "请输入登录密码",
+                message: "",
+                type:"password",
+              },
+              {
+                title: "确认密码",
+                placeholder: "请再次输入登录密码",
+                message: "",
+                type:"password",
+              },
+            ],
+            type2: [
+              {
+                title: "省",
+                placeholder: "请选择省",
+                select: false,
+                countryName: "",
+                list: [],    //省
+              },
+              {
+                title: "市",
+                placeholder: "请选择市",
+                select: false,
+                countryName: "",
+                list: [],    //市
+              },
+              {
+                title: "区",
+                placeholder: "请选择区",
+                select: false,
+                countryName: "",
+                list: [],    //区
+              },
+            ]
+          }
+        ],
+        countryContent: [],   //城市
+        headerTitle:"",
+        status:0,
+        address:"",
+        tipMsg:"",
+        aegreementCon: [],    //协议内容
+        agreement:false,    //协议显示状态
+        icon:false,    //协议勾选状态
+        isFocus: false
+      }
+    },
+    mounted: function () {
+      vm = this;
+      vm.headerTitle = "分销商注册申请";
+      vm.getAgreement();
+      vm.assignmentCountry();
+    },
+    methods:{
+      selectData(obj, index){
+        let nameArr = new Array;
+        switch (index) {
+          case 0:
+            for (let i = 0; i < country.length; i++) {
+              if (xyzToPinyin(country[i].name).indexOf(obj.countryName) > -1 || !obj.countryName || country[i].name.indexOf(obj.countryName) > -1) {
+                let nameObj = {
+                  name: country[i].name
+                }
+                nameArr.push(nameObj);
+              }
+            }
+            obj.list = nameArr;
+            break;
+          case 1:
+            for (let i = 0; i < country.length; i++) {
+              for (let j = 0; j < country[i].city.length; j++) {
+                if (xyzToPinyin(country[i].city[j].name).indexOf(obj.countryName) > -1 || !obj.countryName || country[i].city[j].name.indexOf(obj.countryName) > -1) {
+                  let nameObj = {
+                    name: country[i].city[j].name,
+                  }
+                  nameArr.push(nameObj);
+                }
+              }
+            }
+            obj.list = nameArr;
+            break;
+          case 2:
+            for (let i = 0; i < country.length; i++) {
+              for (let j = 0; j < country[i].city.length; j++) {
+                for (let q = 0; q < country[i].city[j].area.length; q++) {
+                  if (xyzToPinyin(country[i].city[j].area[q]).indexOf(obj.countryName) > -1 || !obj.countryName || country[i].city[j].area[q].indexOf(obj.countryName) > -1) {
+                    let nameObj = {
+                      name: country[i].city[j].area[q]
+                    }
+                    nameArr.push(nameObj);
+                  }
+                }
+              }
+            }
+            obj.list = nameArr;
+            break;
+        }
+      },
+      getAgreement(){
+      	let parame = {
+          codes: 'AGREEMENT',
+          possessor: sessionStorage.getItem('possessor')
+        }
+        vm.axios.post(this.api + this.urlApi.querySystemConfigList,parame).then(function (data) {
+          if(data.status == 1){
+            let content = data.content;
+            for(let i=0;i<content.length;i++){
+              vm.aegreementCon.push(content[i].content);
+            }
+          }
+        })
+      },
+      dropDown:function(obj){
+          if(obj.list.length > 0){
+            let select = vm.isFocus;
+            for(let i=0; i<vm.inputContent[0].type2.length; i++){
+              vm.inputContent[0].type2[i].select = false;
+            }
+            obj.select = select;
+          }
+      },    //显示城市级联选择下拉框
+
+      assignmentCountry:function () {
+        vm.inputContent[0].type2[0].list = [];
+        for(let num in country){
+          let nameObj = {
+            name: country[num].name
+          }
+          vm.inputContent[0].type2[0].list.push(nameObj);
+        }
+      },    //分配省
+
+      assignmentCity:function (obj,num) {
+        vm.inputContent[0].type2[num].select = false;
+        vm.inputContent[0].type2[num].countryName = obj.name;
+        for (let i = 0; i < vm.inputContent[0].type2.length; i++) {
+          if (i > num) {
+            vm.inputContent[0].type2[i].countryName = '';
+            vm.inputContent[0].type2[i].list = [];
+          }
+        }
+        let nameList = new Array;
+        if (num == 0) {
+          for (let i = 0; i < country.length; i++) {
+            if ( obj.name === country[i].name ) {
+              nameList = country[i].city;
+            }
+          }
+        }else if(num === 1){
+          for (let i = 0; i < country.length; i++) {
+            for (let j = 0; j < country[i].city.length; j++) {
+              if (country[i].city[j].name === obj.name) {
+                country[i].city[j].area.forEach(function (item,index) {
+                  let nameObj = {
+                    name: item
+                  }
+                  nameList.push(nameObj);
+                })
+              }
+            }
+          }
+        }
+        if(num < 2){
+          vm.inputContent[0].type2[num + 1].select = true;
+          vm.inputContent[0].type2[num + 1].list = nameList;
+          let myDiv = vm.$refs['country-box'];
+          myDiv[num+1].children[0].focus();
+        }
+      },    //分配市和区
+
+      distributorRegister:function () {
+        if(!vm.icon){
+          return;
+        }
+        let p = /^1[34578][0-9]{9}$/;   //手机号
+        let yx = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;   //邮箱
+
+        let data = vm.inputContent[0];
+        let name = data.type1[0].message;  //注册人姓名
+        let legalPerson = data.type1[1].message;   //法人
+        let linkMan = data.type1[2].message;    //联系人
+        let phone = data.type1[3].message;    //联系电话
+        let email = data.type1[4].message;
+        let password = data.type1[5].message;    //固定电话
+        let repwd = data.type1[6].message;    //传真
+        let province = data.type2[0].countryName;   //省
+        let city = data.type2[1].countryName;   //市
+        let area = data.type2[2].countryName;   //区
+        let address = vm.address;   //地址
+
+
+        if(!name){
+          vm.dialog.showDialog('分销商姓名不能为空!');
+          return;
+        }else if(!legalPerson){
+          vm.dialog.showDialog('法人不能为空!');
+          return;
+        }else if(!linkMan){
+          vm.dialog.showDialog('联系人不能为空!');
+          return;
+        }else if(!phone){
+          vm.dialog.showDialog("手机号不能为空！");
+          return;
+        }else if(!(p.test(phone))){
+          vm.dialog.showDialog('手机号格式错误!');
+          return;
+        }else if(!email){
+          vm.dialog.showDialog('邮箱不能为空！');
+          return;
+        }else if(!(yx.test(email))){
+          vm.dialog.showDialog('邮箱格式错误!');
+          return;
+        }else if(!password){
+          vm.dialog.showDialog( "请输入登录密码!");;
+          return;
+        }else if(!repwd){
+          vm.dialog.showDialog("请确认登录密码!");
+          return;
+        }else if(password != repwd){
+          vm.dialog.showDialog("两次输入的密码不一致!");
+          return;
+        }else if(!province){
+          vm.dialog.showDialog( "省不能为空！");
+          return;
+        }else if(!city){
+          vm.dialog.showDialog( "市不能为空！");
+          return;
+        }else if(!area){
+          vm.dialog.showDialog("区不能为空！");
+          return;
+        }else if(!address){
+          vm.dialog.showDialog( "地址不能为空!");
+          return;
+        }else if(vm.icon == false){
+          vm.dialog.showDialog( "阅读邮轮同业协议平台内容并同意");
+          return;
+        }
+
+
+        let params = {
+          name : name,
+          legalPerson : legalPerson,
+          linkMan : linkMan,
+          phone : phone,
+          email : email,
+          password : md5(password).substr(8,16),
+          repwd : md5(repwd).substr(8,16),
+          province : province,
+          city : city,
+          area : area,
+          address : address
+        };
+
+        vm.axios.post(this.api + this.urlApi.getRegisterDistributor,params).then(function (data) {
+          if(data.status == 1){
+            vm.status = 0;
+          }
+        })
+      },    //分销商注册
+
+      goBack:function () {
+        vm.$router.goBack();
+      },
+
+      closeAgreement:function () {
+      	vm.bodyNoScrolling.close();
+        vm.icon = true;
+        vm.agreement = false;
+      },
+
+      eliminate : function(){
+        let myDiv = vm.$refs['select-box'];
+        try{
+          let index = 0;
+          for(let i=0; i < myDiv.length; i++) {
+            if (myDiv[i].contains(window.event.srcElement)) {
+              index++;
+            }
+          }
+          if(index == 0){
+            for(let j=0; j < vm.inputContent[0].type2.length; j++){
+              vm.inputContent[0].type2[j].select = false;
+            }
+          }
+        }catch (e){}
+      },//消除下拉框
+    }
+  }
+</script>
+
+<style lang="less" scoped>
+  @import "../assets/css/base.less";
+  @lineBlue:#c2d6ee;
+  .input-focus{
+    box-shadow: 0 0 7px rgba(36, 106, 191, 0.38);
+  }
+
+  #distributorApply{
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    background-color:#fff;
+    .main{
+      width: 100%;
+      background-color:@appBg;
+      padding:112*@basePX 24*@basePX 24*@basePX 24*@basePX;
+      .apply-box{
+        background-color: #fff;
+        .item{
+          width: 100%;
+          padding: 40*@basePX 40*@basePX 0;
+          font-size: 32*@basePX;
+          span{
+            display: block;
+            vertical-align: middle;
+            i{
+              color: @clickBtnBg;
+              display: inline-block;
+              vertical-align: middle;
+            }
+            .remark{
+              color: #4d4d4d;
+              font-style: normal;
+              margin: -2*@basePX 0 0 10*@basePX;
+            }
+          }
+          input{
+            width: 100%;
+            height: 74*@basePX;
+            margin-top: 16*@basePX;
+            border:1px solid @lineBlue;
+            padding: 22*@basePX;
+            outline: none;
+            font-size: 28*@basePX;
+          }
+          input:hover{
+            box-shadow: 0 0 7px rgba(36, 106, 191, 0.38);
+          }
+          .select-box{
+            position: relative;
+            .drop-icon{
+              height: 54*@basePX;
+              border-left: 2*@basePX solid @lineBlue;
+              position: absolute;
+              right: 0;
+              top: 27*@basePX;
+              text-align: center;
+              .icon{
+                display: inline-block;
+                border-left: 13*@basePX solid transparent;
+                border-right: 13*@basePX solid transparent;
+                border-top: 24*@basePX solid @lineBlue;
+                margin:18*@basePX;
+              }
+            }
+            .drop-down{
+              width: 100%;
+              max-height: 450*@basePX;
+              overflow: auto;
+              z-index: 9;
+              box-shadow: 0 0 7px rgba(36, 106, 191, 0.38);
+              border:1px solid @lineBlue;
+              background: #ffffff;
+              position: absolute;
+              top: 88*@basePX;
+              ul{
+                li{
+                  font-size: 14px;
+                  color:#808080;
+                  line-height: 33px;
+                  border-bottom: 1px solid #e5f1ff;
+                  cursor: pointer;
+                  width: 100%;
+                  padding-left: 10px;
+                }
+              }
+            }
+          }
+
+        }
+        .agreement{
+          width: 100%;
+          margin-top: 40*@basePX;
+          padding: 0 35*@basePX;
+          position: relative;
+          .iconfont{
+            position: absolute;
+            top:50%;
+            transform: translateY(-50%);
+            left: 40*@basePX;
+            font-size: 32*@basePX;
+          }
+          .icon-gou1{
+            font-size: 53*@basePX;
+            color:@topBg;
+            left: 30*@basePX;
+          }
+          span{
+            font-size: 28*@basePX;
+            margin-top: -2px;
+            margin-left: 50*@basePX;
+            a{
+              color: @topBg;
+              text-decoration: none;
+            }
+          }
+        }
+        .btn-box{
+          width: 100%;
+          text-align: center;
+          padding: 40*@basePX 0;
+          button{
+            width: 600*@basePX;
+            height: 88*@basePX;
+            background-color: @clickBtnBg;
+            color: #fff;
+            outline: none;
+            .borderRadius(@radius: 50*@basePX);
+            border: 0;
+            font-size: 40*@basePX;
+            display: inline-block;
+            line-height: 2.2;
+          }
+          .noClick{
+            background-color: #ccc;
+            cursor:auto;
+          }
+        }
+      }
+      .agreement-main{
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.35);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9;
+        .inner-box{
+          width: 600*@basePX;
+          height: 88%;
+          max-height: 88%;
+          position: absolute;
+          left: 50%;
+          margin-left: -300*@basePX;
+          top: 110*@basePX;
+          background-color: #fff;
+          overflow: hidden;
+          .borderRadius;
+          .agreement-title{
+            height: 140*@basePX;
+            padding-top: 30*@basePX;
+            text-align: center;
+            font-size: 36*@basePX;
+            color: #fff;
+            background: @topBg url(../assets/img/dialog_head.png) 0 0 no-repeat;
+            background-size: 100% 100%;
+          }
+          .inner-main{
+            width: 100%;
+            height: 68%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            margin-top: 22*@basePX;
+            padding: 0 46*@basePX;
+            ul{
+              overflow: auto;
+              height: 709*@basePX;
+              li{
+                font-size: 26*@basePX;
+              }
+            }
+          }
+          .btn-box{
+            position: absolute;
+            left: 0;
+            bottom: 10*@basePX;
+            padding: 0;
+            margin: 40*@basePX 0 30*@basePX;
+            button{
+              width: 348*@basePX;
+              height: 78*@basePX;
+              font-size: 32*@basePX;
+            }
+          }
+          &:after{
+            content: '';
+            height: 10*@basePX;
+            width: 100%;
+            background-color: @changeBtnBg;
+            display: block;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+          }
+        }
+      }
+    }
+    .main2{
+      width: 100%;
+      height: 100%;
+      background-color:@appBg;
+      padding:112*@basePX 24*@basePX 24*@basePX 24*@basePX;
+      .wait-box{
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        background-color: #fff;
+        img{
+          width: 555*@basePX;
+          margin: 308*@basePX 0 60*@basePX;
+        }
+        .title{
+          font-size: 33*@basePX;
+          margin-bottom: 10*@basePX;
+        }
+        p{
+          text-align: center;
+          color: #b2b2b2;
+        }
+      }
+    }
+
+  }
+</style>

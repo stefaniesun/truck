@@ -1,0 +1,114 @@
+<template>
+  <div id="header">
+    <header v-if="isHeader != 1">
+      <div class="center clearfloat">
+        <div class="logo-wrapper">
+          <img src="../assets/img/logo.png" alt="邮轮供应资源售卖系统">
+        </div>
+        <div class="contact">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-dianhua1"></use>
+          </svg>
+          <span>客服电话：023-46963653</span>
+        </div>
+      </div>
+    </header>
+    <nav>
+      <div class="center clearfloat">
+        <div class="user">
+          <svg class="icon">
+            <use xlink:href="#icon-zhanghao"></use>
+          </svg>
+          <span>欢迎您：XXX</span>
+        </div>
+        <ul class="navigation">
+          <li :class="currentPage == 1 ? 'current-state' : ''"><router-link class="link" to="productQuery">首页</router-link></li>
+          <li :class="currentPage == 2 ? 'current-state' : ''"><router-link class="link" to="">全部订单</router-link></li>
+          <li :class="currentPage == 3 ? 'current-state' : ''"><router-link class="link" to="">金额统计</router-link></li>
+          <li :class="currentPage == 4 ? 'current-state' : ''"><router-link class="link" to="">游客统计</router-link></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'header',
+    props : ['currentPage','isHeader'],//currentPage控制当前显示页面状态，1为首页、2为全部订单、3为金额统计、4为游客统计。isHeader控制客服电话一行是否显示
+  }
+</script>
+
+<style lang="less" scoped>
+  @import "../assets/css/common.less";
+  .center{
+    width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  header{
+    position: relative;
+    height: 88px;
+    line-height: 88px;
+    background-color: #fff;
+    .logo-wrapper{
+      float: left;
+    }
+    .contact {
+      float: right;
+      svg{
+        width: 24px;
+        height: 20px;
+      }
+      span{
+        font-size: 18px;
+        color: #808080;
+      }
+    }
+  }
+
+  nav{
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    background-color: @topBg;
+    .user{
+      float: left;
+      color: #fff;
+      .icon{
+        font-size: 18px;
+      }
+    }
+    ul{
+      position: absolute;
+      right: 0;
+      li{
+        float: left;
+        cursor: pointer;
+        &:hover{
+          background-color: @tipsColor;
+          color: #fff;
+
+        }
+        .link{
+          padding: 0 20px;
+          border-right: 1px solid #fff;
+          text-decoration: none;
+          color: #fff;
+        }
+        &:last-child {
+          .link{
+            border-right: 0;
+          }
+        }
+      }
+      .current-state{
+        background-color: #ff9b0b;
+        .link{
+          border-right:0;
+        }
+      }
+    }
+  }
+</style>

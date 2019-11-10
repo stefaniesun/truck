@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/xieyaozhong.css"></link>
+<script type="text/javascript" src="../js/library/jquery-1.7.2.js"></script>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/bootstrap/easyui.css"></link>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/icon.css"></link>
+<script type="text/javascript" src="../js/library/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/library/cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="../js/library/common/cookie2.js"></script>
+<script type="text/javascript" src="../js/library/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../js/library/common/common.js"></script>
+<script type="text/javascript" src="../js/library/common/customUi.js" defer="defer"></script>
+
+<script type="text/javascript" src="../js/js_core/commonOrderCore.js" defer="defer"></script>
+<script type="text/javascript" src="../js/js_core/xyzInitQueryToolForOrder.js" defer="defer"></script>
+
+<script type="text/javascript" src="../js/js_core/orderContentManager.js" defer="defer"></script>
+
+
+
+<style type="text/css">
+body{
+	margin: 0;padding: 0;border: 0;font-size: 14px;
+}
+div{
+	margin: 0;padding: 0;border: 0;
+}
+</style>
+</head>
+
+<body style="width: 100%;text-align: left;">
+	<div style="width:99%;position:absolute;">
+		<!--搜索栏 -->
+		<div id="orderContentAutoId"  class='yqqPluginBg' style="float: left;">
+		</div>
+		<div class='yqqPluginBg'>
+			票单编号 <input type="text" id="clientCode" style="width:100px;"/>
+			订单状态 <input id="status" class="easyui-combobox" style="width:80px;"
+    				data-options="valueField:'value',textField:'text',multiple:true,
+    				data:[{value:'pay',text:'已付款'},
+    					  {value:'notPay',text:'未付款'},
+    					  {value:'refoundMoney',text:'有退款'},
+    					  {value:'notRefoundMoney',text:'无退款'},
+    					  {value:'refoundStock',text:'有退库存'},
+    					  {value:'notRefoundStock',text:'无退库存'},
+    					  {value:'surpass',text:'有超卖'},
+    					  {value:'notSurpass',text:'无超卖'},
+    					  {value:'send',text:'已发货'},
+    					  {value:'notSend',text:'未发货'},
+    					  {value:'over',text:'已结束'},
+    					  {value:'notOver',text:'未结束'},
+    					  {value: 'flag_0',text: '灰灯'},
+						  {value: 'flag_1',text: '红灯'},
+						  {value: 'flag_2',text: '黄灯'},
+						  {value: 'flag_3',text: '绿灯'},
+						  {value: 'flag_4',text: '蓝灯'},
+						  {value: 'flag_5',text: '紫灯'},
+						  {value: 'flag_6',text: '黑灯'}]"/>
+			 <input id="dateType" class="easyui-combobox" style="width:80px;" name="dept"   
+    				data-options="valueField:'value',textField:'text',
+    				data:[{value:'add_date',text:'下单时间'},
+    					  {value:'alter_date',text:'修改时间'},
+    					  {value:'pay_date',text:'付款时间'},
+    					  {value:'send_date',text:'发货时间'},
+    					  {value:'refound_money_date',text:'退款时间'},
+    					  {value:'shipment_travel_date',text:'出行时间'}],
+    				value:'add_date'"/>
+			<input id="startDate" type="text" class="easyui-datebox" style="width:100px;"/>
+			~<input id="endDate" type="text" class="easyui-datebox" style="width:100px;"/>
+
+		</div>
+		
+		<div style="z-index: 100;position: fixed;right:100px;">
+			<a href="javascript:void(0);" class="easyui-linkbutton"
+				data-options="iconCls:'icon-search'"
+				id="orderContentQueryButton"
+			>查询</a>
+			<a href="javascript:void(0);" class="easyui-linkbutton"
+				data-options="iconCls:'icon-search'"
+				id="relaxOrderCoreButton"
+			>释放控制区</a>
+		</div>
+		
+		<!-- 展示栏 -->
+		<div>
+			<table id="orderContentManagerTable">
+			</table>
+		</div>
+	</div>
+</body>
+</html>

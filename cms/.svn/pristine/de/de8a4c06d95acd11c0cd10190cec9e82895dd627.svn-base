@@ -1,0 +1,37 @@
+/**
+ * Created by Administrator on 2017/11/1.
+ */
+import Vue from 'vue'
+import loading from '@/components/loading.vue'
+import dialog from '@/components/dialog.vue'
+
+const LoadingConstructor = Vue.extend(loading);
+const dialogConstructor = Vue.extend(dialog);
+//加载动画
+Vue.prototype.Loading = {
+  show(el) {
+    let node = el || '#app';
+    let mountDom = document.querySelector(node);
+    let instance = new LoadingConstructor().$mount();
+    mountDom.appendChild(instance.$el);
+  },
+  hide(){
+    let loading = document.querySelector('.loading-wrapper');
+    loading && loading.remove();
+  }
+}
+//提示弹窗
+Vue.prototype.dialog = {
+  showDialog( msg) {
+    let node = '#app';
+    let dom = document.querySelector(node);
+    let dialog = new dialogConstructor({propsData: {msg: msg}}).$mount();
+    dom.appendChild(dialog.$el);
+  },
+  hideDialog() {
+    let dialog = document.querySelector('.dialog-wrapper');
+    dialog && dialog.remove();
+  }
+};
+
+export default new Vue

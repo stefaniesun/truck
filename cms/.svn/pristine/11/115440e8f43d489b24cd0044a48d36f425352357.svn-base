@@ -1,0 +1,291 @@
+package xyz.work.taobao.ctrl;
+
+
+import java.math.BigDecimal;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import xyz.work.taobao.svc.TaobaoSvc;
+
+
+@Controller
+@RequestMapping(value = "/TaobaoWS")
+public class TaobaoWS {
+
+    @Autowired
+    TaobaoSvc taobaoSvc;
+
+    @RequestMapping(value = "queryTaobaoGroupCruise")
+    @ResponseBody
+    public Map<String, Object> queryTaobaoGroupCruise() {
+        return taobaoSvc.queryTaobaoGroupCruise();
+    }
+
+    @RequestMapping(value = "queryTaobaoItem")
+    @ResponseBody
+    public Map<String, Object> queryTaobaoItem(int page , int rows , String cruise ,
+                                               String itemId , String itemTitle , String channel ,
+                                               String itemStatus , String outId , String itemType ,
+                                               String sort , String order) {
+        int pagesize = rows;
+        int offset = (page - 1) * pagesize;
+        return taobaoSvc.queryTaobaoItem(offset, pagesize, cruise, itemId, itemTitle, channel,
+            itemStatus, outId, itemType, sort, order);
+    }
+
+    @RequestMapping(value = "getTaobaoItemByIdOper")
+    @ResponseBody
+    public Map<String, Object> getTaobaoItemByIdOper(Long id , String channel , String remark) {
+        return taobaoSvc.getTaobaoItemByIdOper(id, channel, remark);
+    }
+
+    @RequestMapping(value = "addAllTaobaoIdOper")
+    @ResponseBody
+    public Map<String, Object> addAllTaobaoIdOper(String channel , String remark) {
+        return taobaoSvc.addAllTaobaoIdOper(channel, remark);
+    }
+
+    @RequestMapping(value = "deleteTaobao")
+    @ResponseBody
+    public Map<String, Object> deleteTaobao(String numberCodes) {
+        return taobaoSvc.deleteTaobao(numberCodes);
+    }
+
+    @RequestMapping(value = "getSkuDetails")
+    @ResponseBody
+    public Map<String, Object> getSkuDetails(String skuInfo) {
+        return taobaoSvc.getSkuDetails(skuInfo);
+    }
+
+    @RequestMapping(value = "addDetail")
+    @ResponseBody
+    public Map<String, Object> addDetail(String taobaoBaseInfo , String detail) {
+        return taobaoSvc.addDetail(taobaoBaseInfo, detail);
+    }
+
+    @RequestMapping(value = "addImages")
+    @ResponseBody
+    public Map<String, Object> addImages(String taobaoBaseInfo , String urls) {
+        return taobaoSvc.addImages(taobaoBaseInfo, urls);
+    }
+
+    @RequestMapping(value = "getTaobaoAllInfo")
+    @ResponseBody
+    public Map<String, Object> getTaobaoAllInfo(String baseInfo) {
+        return taobaoSvc.getTaobaoAllInfo(baseInfo);
+    }
+
+    @RequestMapping(value = "getTaobaoSkuOper")
+    @ResponseBody
+    public Map<String, Object> getTaobaoSkuOper(String baseInfo) {
+        return taobaoSvc.getTaobaoSkuOper(baseInfo);
+    }
+
+    @RequestMapping(value = "editTaobaoDetails")
+    @ResponseBody
+    public Map<String, Object> editTaobaoDetails(String numberCode , String tkview ,
+                                                 String minTkview , BigDecimal price ,
+                                                 int priceType , int isLock , int isEdit ,
+                                                 String stock , String stockNumberCode) {
+        return taobaoSvc.editTaobaoDetails(numberCode, tkview, minTkview, price, priceType,
+            isLock, isEdit, stock, stockNumberCode);
+    }
+
+    @RequestMapping(value = "overrideTaobaoSkuOper")
+    @ResponseBody
+    public Map<String, Object> overrideTaobaoSkuOper(String taobaoBaseInfo) {
+        return taobaoSvc.overrideTaobaoSkuOper(taobaoBaseInfo);
+    }
+
+    @RequestMapping(value = "editOnlineStatus")
+    @ResponseBody
+    public Map<String, Object> editOnlineStatus(String taobaoBaseInfo , Boolean isUp) {
+        return taobaoSvc.editOnlineStatus(taobaoBaseInfo, isUp);
+    }
+
+    @RequestMapping(value = "addSkuDetails")
+    @ResponseBody
+    public Map<String, Object> addSkuDetails(String baseInfo , String skuInfo , String date,
+                                             String minTkview , BigDecimal price , int priceType ,
+                                             int isLock , int isEdit , String stock ,
+                                             String stockNumberCode) {
+        return taobaoSvc.addSkuDetails(baseInfo, skuInfo, date, minTkview, price, priceType,
+            isLock, isEdit, stock, stockNumberCode);
+    }
+
+    @RequestMapping(value = "deleteSkuDetails")
+    @ResponseBody
+    public Map<String, Object> deleteSkuDetails(String skuInfos , String numberCodes) {
+        return taobaoSvc.deleteSkuDetails(skuInfos, numberCodes);
+    }
+
+    @RequestMapping(value = "addTaobaoSku")
+    @ResponseBody
+    public Map<String, Object> addTaobaoSku(String baseInfo , String skuNameCn , String tkviewType) {
+        return taobaoSvc.addTaobaoSku(baseInfo, skuNameCn, tkviewType);
+    }
+
+    @RequestMapping(value = "editTaobaoSku")
+    @ResponseBody
+    public Map<String, Object> editTaobaoSku(String baseInfo , String skuInfo , String skuNameCn ,
+                                             String tkviewType) {
+        return taobaoSvc.editTaobaoSku(baseInfo, skuInfo, skuNameCn, tkviewType);
+    }
+
+    @RequestMapping(value = "deleteTaobaoSku")
+    @ResponseBody
+    public Map<String, Object> deleteTaobaoSku(String baseInfo , String skuInfos) {
+        return taobaoSvc.deleteTaobaoSku(baseInfo, skuInfos);
+    }
+
+    @RequestMapping(value = "getTaobaoLog")
+    @ResponseBody
+    public Map<String, Object> getTaobaoLog(String numberCode) {
+        return taobaoSvc.getTaobaoLog(numberCode);
+    }
+
+    @RequestMapping(value = "copyTaobaoTravelItemOper")
+    @ResponseBody
+    public Map<String, Object> copyTaobaoTravelItemOper(String numberCode , String channel ,
+                                                        String skuJson , String stockJson) {
+
+        return taobaoSvc.copyTaobaoTravelItemOper(numberCode, channel, skuJson, stockJson);
+    }
+
+    @RequestMapping(value = "publishTaobaoItemOper")
+    @ResponseBody
+    public Map<String, Object> publishTaobaoItemOper(String baseInfo) {
+        return taobaoSvc.publishTaobaoItemOper(baseInfo);
+    }
+
+    @RequestMapping(value = "getTaobaoItemByNumberCode")
+    @ResponseBody
+    public Map<String, Object> getTaobaoItemByNumberCode(String numberCode) {
+        return taobaoSvc.getTaobaoItemByNumberCode(numberCode);
+    }
+
+    @RequestMapping(value = "saveTaobaoItem")
+    @ResponseBody
+    public Map<String, Object> saveTaobaoItem(String baseInfo , String baseJsonStr ,
+                                              String cruiseInfoJsonStr , String saleInfoJsonStr ,
+                                              String rulesJsonStr , String channel , String cruise) {
+        return taobaoSvc.saveTaobaoItem(baseInfo, baseJsonStr, cruiseInfoJsonStr, saleInfoJsonStr,
+            rulesJsonStr, channel, cruise);
+    }
+
+    @RequestMapping(value = "syncTaobaoTravelItemOper")
+    @ResponseBody
+    public Map<String, Object> syncTaobaoTravelItemOper(String syncNumberCode , String skuJson ,
+                                                        String travelItems,int type) {
+        return taobaoSvc.syncTaobaoTravelItemOper(syncNumberCode, skuJson, travelItems,type);
+    }
+
+    @RequestMapping(value = "getCruiseData")
+    @ResponseBody
+    public Map<String, Object> getCruiseData(String cruise) {
+        return taobaoSvc.getCruiseData(cruise);
+    }
+
+    @RequestMapping(value = "updateTaobaoItem")
+    @ResponseBody
+    public Map<String, Object> updateTaobaoItem(String baseInfo) {
+        return taobaoSvc.updateTaobaoItem(baseInfo);
+    }
+
+    @RequestMapping(value = "getTkviewByTaobaoCruise")
+    @ResponseBody
+    public Map<String, Object> getTkviewByTaobaoCruise(String baseInfo) {
+        return taobaoSvc.getTkviewByTaobaoCruise(baseInfo);
+    }
+
+    @RequestMapping(value = "addRelationSkuAndStock")
+    @ResponseBody
+    public Map<String, Object> addRelationSkuAndStock(String skuJsonStr , String baseInfo) {
+        return taobaoSvc.addRelationSkuAndStock(skuJsonStr, baseInfo);
+    }
+
+    @RequestMapping(value = "getExistSkuByBaseInfo")
+    @ResponseBody
+    public Map<String, Object> getExistSkuByBaseInfo(String baseInfo) {
+        return taobaoSvc.getExistSkuByBaseInfo(baseInfo);
+    }
+
+    @RequestMapping(value = "getRelationTkview")
+    @ResponseBody
+    public Map<String, Object> getRelationTkview(String taobaoSkuDetail) {
+        return taobaoSvc.getRelationTkview(taobaoSkuDetail);
+    }
+
+    @RequestMapping(value = "getStockDate")
+    @ResponseBody
+    public Map<String, Object> getStockDate(String sku , String date) {
+        return taobaoSvc.getStockDate(sku, date);
+    }
+
+    @RequestMapping(value = "editStockByNumberCodes")
+    @ResponseBody
+    public Map<String, Object> editStockByNumberCodes(String numberCodes) {
+        return taobaoSvc.editStockByNumberCodes(numberCodes);
+    }
+
+    @RequestMapping(value = "queryStockByNumberCodes")
+    @ResponseBody
+    public Map<String, Object> queryStockByNumberCodes(String sku) {
+        return taobaoSvc.queryStockByNumberCodes(sku);
+    }
+
+    @RequestMapping(value = "editIsNormalByNumberCode")
+    @ResponseBody
+    public Map<String, Object> editIsNormalByNumberCode(String numberCode , int isNormal) {
+        return taobaoSvc.editIsNormalByNumberCode(numberCode, isNormal);
+    }
+
+    @RequestMapping(value = "skuPriceModifyOper")
+    @ResponseBody
+    public Map<String, Object> skuPriceModifyOper(String sku , String stockJson) {
+        return taobaoSvc.skuPriceModifyOper(sku, stockJson);
+    }
+
+    @RequestMapping(value = "getRelationTkviewType")
+    @ResponseBody
+    public Map<String, Object> getRelationTkviewType(String taobaoSku) {
+        return taobaoSvc.getRelationTkviewType(taobaoSku);
+    }
+
+    @RequestMapping(value = "queryTkviewTypeList")
+    @ResponseBody
+    public Map<String, Object> queryTkviewTypeList(String taobaoSku) {
+        return taobaoSvc.queryTkviewTypeList(taobaoSku);
+    }
+
+    @RequestMapping(value = "getTkviewScotkList")
+    @ResponseBody
+    public Map<String, Object> getTkviewScotkList(String numberCode,String taobaoSku , String date) {
+        return taobaoSvc.getTkviewScotkList(numberCode,taobaoSku, date);
+    }
+
+    @RequestMapping(value = "submitSkuDetailsOper")
+    @ResponseBody
+    public Map<String, Object> submitSkuDetailsOper(String numberCode , String outId , BigDecimal price ,
+                                                    int priceType , String stock) {
+        return taobaoSvc.submitSkuDetailsOper(numberCode , outId , price, priceType, stock);
+    }
+    
+    @RequestMapping(value = "getSkuInfo")
+    @ResponseBody
+    public Map<String, Object> getSkuInfo(String baseInfo) {
+        return taobaoSvc.getSkuInfo(baseInfo);
+    }
+    
+    @RequestMapping(value = "queryTaobaoLogByCruiseWorkList")
+    @ResponseBody
+    public Map<String, Object> queryTaobaoLogByCruiseWorkList(String cruise) {
+        return taobaoSvc.queryTaobaoLogByCruiseWorkList(cruise);
+    }
+    
+    
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>新增航程</title>
+</head>
+<body>
+<center>
+	<form><br/>
+		<table cellspacing="4" cellpadding="4">
+			<tr>
+				<td style="text-align:right;">港口</td>
+				<td>
+					<input id="portForm" style="width:300px;"/>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">行程标题</td>
+				<td>
+					<input id="timeForm" style="width:300px;"
+					  data-options="required:true,validType:'length[1,30]'"/>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">抵达时间</td>
+				<td>
+					<input id="arrivalTimeForm" style="width:300px;" />
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">起航时间</td>
+				<td>
+					<input id="leaveTimeForm" style="width:300px;" />
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">行程规划</td>
+				<td>
+					<textarea id="detailForm" style="width:290px;height:70px;resize:none;"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">备注</td>
+				<td>
+					<textarea id="remarkForm" style="width:290px;height:50px;resize:none;" class="easyui-validatebox" data-options="validType:'length[1,150]'"></textarea>
+				</td>
+			</tr>
+		</table>
+	</form>
+</center>
+</body>
+</html>

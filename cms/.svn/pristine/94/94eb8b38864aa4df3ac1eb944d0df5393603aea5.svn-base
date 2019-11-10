@@ -1,0 +1,1038 @@
+<template>
+  <div class="product-detail">
+    <header>
+      <h2>产品详情</h2>
+      <i class="back iconfont icon-fanhui" @click="goBack()"></i>
+      <i class="user iconfont icon-gerenzhongxin" @click=" goUserCenter()"></i>
+    </header>
+
+    <div class="container">
+      <!--邮轮信息-->
+      <section class="product-module">
+        <div class="content">
+          <div class="img-wrap">
+            <span class="info-btn" @click="goCruiseDetail()">查看邮轮资料</span>
+            <div class="slider-wrapper" ref="sliderWrapper">
+              <mt-swipe :auto="4000" >
+                <mt-swipe-item class="slider-item" :key="index" v-for="(item,index) in sliders">
+                  <img v-lazy="item" alt="">
+                </mt-swipe-item>
+              </mt-swipe>
+            </div>
+          </div>
+          <div class="pro-info-wrap">
+            <div v-if="userType === 'true'" class="markUp-wrapper" @click="goPmarkUp">
+              <i class="icon iconfont icon-share"></i>
+              <div class="text">加价分享</div>
+            </div>
+
+            <h3>
+              {{ptview.name}}
+            </h3>
+            <div class="price">
+              &yen; {{userType == 'true' ? ptview.price : ptview.salePrice}}<span>起/人</span>
+            </div>
+            <div class="detail">
+
+              <div class="line-text"> <i class="iconfont icon-date"></i> 出发日期：{{travelDate}}
+                <div class="sel-date" v-if="dateListBtn" @click="slcDate.slcBoolean = true; bodyNoScrolling.open()">选择日期</div>
+              </div>
+              <div class="line-text"> <i class="iconfont icon-gangkou"></i> 出发港口：{{ptview.startCity}}</div>
+              <div class="line-text name-cn"> <i class="iconfont icon-youlunyou"></i> <span>邮轮号</span>：{{ptview.cruiseNameCn}}</div>
+              <div class="line-text"> <i class="iconfont icon-tianshu"></i> 行程天数：{{travelDays}}</div>
+              <div class="line-text"> <i class="iconfont icon-chengshi"></i> 途经城市： {{travelPlace}}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!--舱型-->
+      <section class="cabin-module">
+        <div class="content">
+          <h3>
+            <span>舱型选择</span>
+          </h3>
+          <div class="cabin-group" v-for="(cabin, index) in cabinList" v-if="cabin.list.length > 0">
+            <div class="cabin-type">
+              <i class="iconfont icon-haijing" v-if="cabin.cabinType === '海景房'"></i>
+              <i class="iconfont icon-neicang" v-if="cabin.cabinType === '内舱房'"></i>
+              <i class="iconfont icon-taofang" v-if="cabin.cabinType === '套房'"></i>
+              <i class="iconfont icon-yangtai" v-if="cabin.cabinType === '阳台房'"></i>
+              <span class="type-name">{{cabin.cabinType}}</span>
+            </div>
+            <div class="cabin-content">
+              <div class="cabin-item" v-for="(item, listIndex) in cabin.list" v-if="listIndex < cabin.condition">
+                <div class="title-wrapper clearfloat" @click="ifShowCabinDetail(index, listIndex)">
+                  <h4 class="title"  >
+                    {{item.name}}
+                  </h4>
+                  <div class="cabin-price">
+                    <div class="price" >{{'&yen;' + (userType === 'true' ? item.price:item.salePrice)}}<span>起/人</span></div>
+                    <!--<div class="rebate-price" v-if="item.rebate && userType === 'true'">{{'后返' + item.rebate + '/人'}}</div>-->
+                  </div>
+                </div>
+                <div class="cabinDetail-wrapper animated fadeIn" v-show="item.ifShowDetail">
+                  <div class="img-con">
+                    <div class="cabin-img">
+                      <img :src="item.cabinImg" alt="">
+                    </div>
+                    <!--计数器-->
+                    <div class="order-wrap" @click="joinShoppingCart(item)"><span  v-if="item.holdCount" >加入购物车</span><span v-if="!item.holdCount" >已售罄</span></div>
+                  </div>
+                  <div class="tips">
+                    <div class="center">
+                      <span>容量：{{item.volume}} 人</span>
+                      <span>室内面积：35M<sup>2</sup></span>
+                      <span v-if="!item.stockType && ((item.realCount < item.sufficientCount) || !item.sufficientCount) && item.holdCount">仅剩<b class="mark">{{item.realCount}}</b>间</span>
+                      <span v-if="!item.stockType && (item.realCount >= item.sufficientCount) && item.sufficientCount && item.holdCount"><b class="mark">库存充足</b></span>
+                      <span v-if="item.stockType && item.holdCount" class="mark">库存紧张</span>
+                      <span v-if="!item.holdCount" class="mark">已售罄</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="more-wrapper" v-if="cabin.list.length > cabin.condition"  @click="viewMore(cabin.list.length, index)">
+              <div class="view-more">查看更多</div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!--行程-->
+      <section class="voyage-module">
+        <div class="content">
+          <h3>
+            <span>行程安排</span>
+          </h3>
+          <div class="voyage-group">
+            <div class="voyage-list clearfloat" v-for="voyage in tripPlanList">
+              <div class="voyage-title">
+                <span class="date">day{{voyage.sort}}</span>
+                <span class="leaveTime" v-if="voyage.planType === 'START_PORT'">{{voyage.leaveTime}}
+                  <span >起航</span>
+                </span>
+                <span class="leaveTime"  v-if="voyage.planType === 'END_PORT'">{{voyage.arriveTime}}
+                  <span >抵港</span>
+                </span>
+              </div>
+              <div class="activity">
+                <div class="port">
+                  <b class="port-icon iconfont icon-gangkou" v-if="voyage.planType === 'START_PORT'"></b>
+                  <b class="port-icon iconfont icon-youlunyou" v-if="voyage.planType === 'CRUISE'"></b>
+                  <b class="port-icon iconfont icon-qizi" v-if="voyage.planType=== 'SCENIC'"></b>
+                  <b class="port-icon iconfont icon-gangkou" v-if="voyage.planType === 'END_PORT'"></b>
+                  <span v-if="voyage.planType === 'START_PORT'">{{voyage.nameCn}}（登船）</span>
+                  <span v-if="voyage.planType !== 'START_PORT'">{{voyage.nameCn}}</span>
+                </div>
+                <div class="repast">
+                  <div class="diet">
+                    <i class="iconfont icon-canju"></i>
+                    早餐: {{voyage.breakfast}} /
+                    午餐: {{voyage.lunch}} /
+                    晚餐: {{voyage.dinner}}
+                  </div>
+                  <div class="accom">
+                    <i class="iconfont icon-icon"></i>
+                    住宿: {{voyage.putUp}}
+                  </div>
+                </div>
+                <div class="detail" v-html="voyage.detail">
+                </div>
+                <div class="img-wrapper" v-if="voyage.images">
+                  <div class="img-item" v-for="img in voyage.images.split(',')">
+                    <img :src="img" alt="">
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="explain-wrapper">
+        <info-explain :infoList="infoList"></info-explain>
+      </div>
+    </div>
+
+    <transition  name="custom-classes-transition"
+                 enter-active-class=" animated slideInRight"
+                 leave-active-class="animated slideOutRight">
+      <div class="calendar-wrap" v-if="slcDate.slcBoolean">
+        <calendar @select="selectDate" :travelDate="travelDate" :dateList="dateList" :slcDate="slcDate"></calendar>
+      </div>
+    </transition>
+    <div @click="backTop" v-if="showBackTop" class="back-top">
+      <i class="iconfont icon-20pxhuidaodingbu"></i>
+    </div>
+    <shoppingCart :popupState="popupState" :shoppingCareObj="shoppingCareObj" @confirm="confirm" @getOrder="getOrder"></shoppingCart>
+  </div>
+</template>
+<script>
+  let vm;
+
+  import common from '@/assets/js/common'
+  import Calendar from '@/components/calendar'
+  import infoExplain from '@/components/infoExplain'
+  import shoppingCart from '@/components/shoppingCart'
+  export default {
+    name:"productDetail",
+    components: {
+      Calendar,
+      infoExplain,
+      shoppingCart,
+    },
+    data() {
+      return {
+        showBackTop: false,
+        ptview: {},
+        travelPlace: '',
+        sliders:[],
+        travelDate: new Date().Format("yyyy-MM-dd"),
+        numberCode:'',
+        travelDays:0,
+        slcDate: {
+          slcBoolean: false
+        },
+        infoList:[],
+        order: {
+          total: 0,
+          totalPrice: 0,
+          travelDate: '',
+          cruiseImg: '',
+          cabinArr:[],
+          ptViewName: '',
+        },
+//        舱型
+        cabinList: [],
+//        行程安排
+        tripPlanList:[],
+
+        dateList: [],
+        dateListBtn: false,
+        voyageList: [],
+        userType: sessionStorage.userType,
+        popupState: false,
+        shoppingCareObj :{},
+      }
+    },
+    created() {
+    },
+    mounted() {
+      vm = this;
+      let numberCode = sessionStorage.numberCode;
+      vm.numberCode = numberCode;
+      vm._getPtDetail(numberCode);
+      vm._getVoyageDateList(numberCode);
+      window.addEventListener('scroll', vm.scrolling);
+    },
+
+    destroyed() {
+      window.removeEventListener("scroll", vm.scrolling);
+    },
+    methods: {
+      scrolling(){
+        vm.scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        vm.scrollTop >= 600 ? vm.showBackTop = true : vm.showBackTop = false;
+      },
+      goCruiseDetail() {
+        vm.$router.push({ name: 'cruiseDetail', params: { cruise: vm.ptview.cruise }});
+      },
+      goUserCenter() {
+        vm.$router.push('/userCenter');
+      },
+      goBack() {
+        vm.$router.goBack();
+      },
+
+      selectDate(date) {
+        vm.travelDate = vm.translateTravelDate(date.travelDate).Format("yyyy/MM/dd");
+        let numberCode = date.numberCode;
+        sessionStorage.setItem('numberCode',numberCode);
+        vm._getPtDetail(numberCode);
+        vm._getVoyageDateList(numberCode);
+      },
+      _getPtDetail(numberCode) {
+        vm.axios.post(this.api + this.urlApi.getVoyageDetail, {numberCode: numberCode}).then((response) => {
+        	if(response.status){
+            if(!common.xyzIsNull(response)) {
+              vm.ptview = response.content.voyage;
+              vm.travelDays =  vm.ptview.airwayNameCn.split(' ')[1];
+              vm.tripPlanList = response.content.tripPlanList;
+              vm.travelDate = vm.translateTravelDate(vm.ptview.date).Format("yyyy/MM/dd");
+              vm.infoList = [
+                {name: '费用说明', content: vm.ptview.infoCost},
+                {name: '签证信息', content: vm.ptview.infoVisa},
+                {name: '预订须知', content: vm.ptview.infoNotice},
+                {name: '退改须知', content: vm.ptview.infoRefund}
+              ];
+              vm.setTravelPlace(vm.ptview.airwayNameCn);
+              vm.setOrderInfo(vm.ptview.image, vm.ptview.date, vm.ptview.name);
+              vm.setSliders(vm.ptview.image,vm.ptview.images);
+              vm.setCabin(response.content.cabiList);
+              if(sessionStorage.order) {
+                vm.getOrder(sessionStorage.order)
+              }
+              sessionStorage.setItem('documentTitle',vm.ptview.name);
+            }
+          }
+        })
+      },
+      translateTravelDate(date) {
+        date = date.split(/[- : \/]/);
+        date = new Date(date[0], date[1]-1, date[2]);
+        return date;
+      },
+      setOrderInfo(cruiseImg, travelDate, ptviewNameCn) {
+        if(!common.xyzIsNull(cruiseImg)) {
+          vm.order.cruiseImg = cruiseImg;
+        }
+        vm.order.ptViewName = ptviewNameCn;
+        vm.order.travelDate = vm.translateTravelDate(travelDate).Format("yyyy/MM/dd");
+      },
+      setSliders(sliders,images) {
+        vm.sliders.length = 0;
+        if(common.xyzIsNull(sliders) && common.xyzIsNull(images)) {
+          let img = require('../assets/img/baseImg.png');
+          vm.$set(vm.sliders, 0, img)
+        }else{
+          let sliderImg;
+          if(images){
+            sliderImg = (sliders + ',' + images).split(',');
+          }else {
+            sliderImg = sliders.split(',');
+          }
+          for (let i = 0; i < sliderImg.length; i++) {
+            vm.$set(vm.sliders, vm.sliders.length, sliderImg[i])
+          }
+        }
+      },
+      setTravelPlace(place) {
+        place = place.split(' ')[0];
+        place = place.split('-');
+        place = [...new Set(place)];
+        for(let i in place) {
+          if (place[i] == '海上巡游'){
+            place.splice(i,1);
+          }
+        }
+        vm.travelPlace = place.toString();
+      },
+      getOrder(order) {
+        order = JSON.parse(order);
+        let cabinArr = order.cabinArr;
+        let date = vm.ptview.date.split(' ')[0];
+        let dateObj = date.split('-')[1] + '/' + date.split('-')[2];
+        for (let i in vm.cabinList) {
+          for(let k in vm.cabinList[i].list) {
+            if(cabinArr.length === 0){
+              vm.$set(vm.cabinList[i].list[k], 'ifShowDetail', false);
+              vm.$set(vm.cabinList[i].list[k], 'counter', 0);
+              vm.$set(vm.cabinList[i].list[k], 'realCount', vm.cabinList[i].list[k].holdCount)
+            }
+            for (let j in cabinArr) {
+              if(cabinArr[j].cruiseNumberCode == vm.ptview.numberCode && cabinArr[j].date == dateObj){
+                for(let n in cabinArr[j].list){
+                  let json = cabinArr[j].list[n];
+                  if(json.numberCode == vm.cabinList[i].list[k].numberCode) {
+                    vm.$set(vm.cabinList[i].list[k], 'ifShowDetail', true);
+                    vm.$set(vm.cabinList[i].list[k], 'counter', json.counter);
+                    vm.$set(vm.cabinList[i].list[k], 'realCount', vm.cabinList[i].list[k].holdCount - json.counter)
+                  }
+                }
+              }
+            }
+          }
+        }
+        vm.order = order;
+      },
+      ifShowCabinDetail(cabinindex, listIndex) {
+        vm.$set(vm.cabinList[cabinindex].list[listIndex], 'ifShowDetail', !vm.cabinList[cabinindex].list[listIndex].ifShowDetail)
+      },
+
+      setCabin(cabinList) {
+        let arrList = [
+          {cabinType: '内舱房', condition: 5, list:[]},
+          {cabinType: '海景房', condition: 5, list: []},
+          {cabinType: '阳台房', condition: 5, list: []},
+          {cabinType: '套房', condition: 5, list: []}
+        ];
+
+        for(let i in cabinList) {
+          vm.$set(cabinList[i], 'counter', 0);
+          vm.$set(cabinList[i], 'cabinImg', require('../assets/img/cabinImg.png'));
+          if(cabinList[i].validCount){
+            let realCount = Math.min(cabinList[i].validCount,cabinList[i].stockCount);
+            vm.$set(cabinList[i], 'realCount', realCount);
+            vm.$set(cabinList[i], 'holdCount', realCount);
+            if(cabinList[i].maxCount > realCount){
+              vm.$set(cabinList[i], 'maxCount', realCount);
+            }
+          }else {
+            vm.$set(cabinList[i], 'realCount', cabinList[i].stockCount);
+            vm.$set(cabinList[i], 'holdCount', cabinList[i].stockCount);
+          }
+          if(cabinList[i].type.indexOf('I') === 0) {
+            arrList[0].list.push(cabinList[i]);
+          }
+          if(cabinList[i].type.indexOf('S') === 0) {
+            arrList[1].list.push(cabinList[i]);
+          }
+          if(cabinList[i].type.indexOf('B') === 0) {
+            arrList[2].list.push(cabinList[i]);
+          }
+          if(cabinList[i].type.indexOf('T') === 0) {
+            arrList[3].list.push(cabinList[i]);
+          }
+        }
+        for (let i = arrList.length-1; i >= 0; i--) {
+          if(arrList[i].list.length === 0) {
+            arrList.splice(i, 1)
+          }
+        }
+        vm.cabinList = arrList;
+      },
+      viewMore(len, index) {
+       vm.$set(vm.cabinList[index], 'condition', len)
+      },
+      //返回顶部
+      backTop(){
+        vm.showBackTop = false;
+        let timer = setInterval(function () {
+          vm.scrollTop -= 100;
+          if(vm.scrollTop <= 0){
+            vm.scrollTop = 0;
+            clearInterval(timer);
+          }
+          if(document.documentElement.scrollTop){
+            document.documentElement.scrollTop = vm.scrollTop;
+          }else if(document.body.scrollTop){
+            document.body.scrollTop = vm.scrollTop;
+          }
+        },13)
+      },
+      _getVoyageDateList(numberCode) {
+        vm.dateList.length = 0;
+        vm.axios.post(this.api + this.urlApi.getVoyageDateList, {
+          numberCode: numberCode
+        }).then((res) => {
+          if (res.status) {
+            let dateList = res.content;
+            vm.dateListBtn = dateList.length > 1 ? true : false;
+            if (dateList.length > 1) {
+              for (let i = 0; i < dateList.length; i++) {
+                if (vm.dateList.length > 0) {
+                  let onOff = true;
+                  for (let j = 0; j < vm.dateList.length; j++) {
+                    if (vm.dateList[j].month === dateList[i].date.substring(0, 7)) {
+                      onOff = false;
+                      continue;
+                    }
+                  }
+                  if (onOff) {
+                    let dateInfo = new Date(dateList[i].date).getMonth();
+                    let month = dateInfo + 1 < 10 ? '0' + (dateInfo + 1) : dateInfo + 1;
+                    vm.dateList.push({
+                      month: new Date(dateList[i].date).getFullYear() + '-' + month,
+                      dates: new Array
+                    });
+                  }
+                } else {
+                  let dateInfo = new Date(dateList[i].date).getMonth();
+                  let month = dateInfo + 1 < 10 ? '0' + (dateInfo + 1) : dateInfo + 1;
+                  vm.dateList.push({
+                    month: new Date(dateList[i].date).getFullYear() + '-' + month,
+                    dates: new Array
+                  });
+                }
+              }
+              for (let j = 0; j < vm.dateList.length; j++) {
+                for (let i = 0; i < dateList.length; i++) {
+                  if (vm.dateList[j].month === dateList[i].date.substring(0, 7)) {
+                    vm.dateList[j].dates.push({
+                      travelDate: dateList[i].date,
+                      minPrice: dateList[i].price,
+                      numberCode: dateList[i].numberCode
+                    })
+                  }
+                }
+              }
+            }
+          }
+        })
+      },
+      goPmarkUp(){
+        vm.$router.push('/ptDetailToC');
+      },
+      confirm(falg){
+        vm.popupState = falg;
+      },
+      joinShoppingCart(obj){
+        if(!obj.holdCount){
+          return;
+        }
+        vm.popupState = true;
+        let date = vm.ptview.date.split(' ')[0];
+        obj.date = date.split('-')[1]+'/'+date.split('-')[2];
+        obj.cruise = vm.ptview.cruiseNameCn;
+        obj.cruiseNmae = vm.ptview.name;
+        obj.cruiseImage = vm.ptview.image;
+        obj.cruiseDate = vm.ptview.date;
+        obj.cruiseNumberCode = vm.ptview.numberCode;
+        vm.shoppingCareObj = JSON.parse(JSON.stringify(obj));
+      }
+    }
+  }
+</script>
+<style lang="less">
+  @import "../assets/css/common.less";
+  .mint-swipe-indicators{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+     left: inherit;
+     -webkit-transform: translateX(0);
+     transform: translateX(0);
+    .mint-swipe-indicator{
+      display: inline-block;
+      float: left;
+      margin-left: 10px;
+      width: 4px;
+      height: 4px;
+      .borderRadius(50%);
+      background-color: #fff;
+      opacity: 1;
+      &.is-active{
+        background-color: @clickBtnBg;
+      }
+    }
+
+
+  }
+</style>
+
+<style lang="less" scoped>
+  @import "../assets/css/common.less";
+
+  .product-detail{
+    background-color: @appBg;
+  }
+
+  .container{
+    width: 100%;
+    margin: 72*@basePX auto 156*@basePX auto;
+    padding: 24*@basePX 0;
+  }
+
+  .container>section {
+    width: 94%;
+    margin: 24*@basePX auto auto;
+    background-color: #fff;
+    padding: 24*@basePX 0;
+    .borderRadius;
+    .content {
+      width: 94%;
+      margin: 0 auto;
+    }
+
+    h3{
+      color: @topBg;
+      font-size: 32*@basePX;
+      font-weight: normal;
+      text-align: center;
+      span{
+        display: block;
+        position: relative;
+        line-height: 37*@basePX;
+        &:before,
+        &:after{
+          position: absolute;
+          top: 50%;
+          content: '';
+          background-color: @topBg;
+          height: 2px;
+          width: 35%;
+        }
+        &:before{
+          left: 0;
+        }
+        &:after{
+          right: 0;
+        }
+      }
+    }
+  }
+
+  .price{
+    color: @tipsColor;
+    font-size: 38*@basePX;
+    span{
+      font-size: 22*@basePX;
+    }
+  }
+  .container section.product-module{
+    .img-wrap{
+      position: relative;
+      height: 391*@basePX;
+
+      overflow: hidden;
+      .borderRadius;
+      .info-btn{
+        position: absolute;
+        display: block;
+        top: 48*@basePX;
+        left: 0;
+        height: 64*@basePX;
+        line-height: 60*@basePX;
+        padding: 0 15*@basePX;
+        border: 2px solid #fff;
+        background-color: @tipsColor;
+        color: #fff;
+        font-size: 28*@basePX;
+        border-bottom-right-radius: 24px;
+        border-top-right-radius: 24px;
+        z-index: 3;
+      }
+
+      .slider-wrapper{
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        background-color: #d4deeb;
+        .slider-item{
+          float: left;
+          height: 100%;
+          overflow: hidden;
+          box-sizing: border-box;
+          .borderRadius;
+          img{
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            .borderRadius;
+          }
+        }
+      }
+    }
+
+    .pro-info-wrap{
+      margin-top: 24*@basePX;
+      position: relative;
+      .markUp-wrapper{
+        text-decoration: none;
+        position: absolute;
+        right: 0;
+        top: 0;
+        text-align: center;
+        color: @tipsColor;
+        .icon{
+          width: 29*@basePX;
+          height: 35*@basePX;
+        }
+        .text{
+          font-size: 24*@basePX;
+        }
+      }
+      h3{
+        line-height: 54*@basePX;
+        font-size: 32*@basePX;
+        font-weight: normal;
+        color: #4c4c4c;
+        text-align: left;
+        width: 80%;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+      }
+
+
+      .detail{
+        color: #8d95a3;
+        position: relative;
+        .line-text{
+          line-height: 44*@basePX;
+          font-size: 26*@basePX;
+          &.name-cn{
+            span{
+              letter-spacing: 4px;
+            }
+          }
+          i{
+            font-size: 26*@basePX;
+          }
+        }
+
+        .sel-date{
+          display: inline-block;
+          margin-left: 40*@basePX;
+          padding: 0 22*@basePX;
+          line-height: 40*@basePX;
+          background-color: @tipsColor;
+          color: #fff;
+          font-size: 24*@basePX;
+          .borderRadius(20px);
+        }
+      }
+    }
+  }
+
+  .container section.cabin-module{
+    padding-bottom: 0;
+    .more-wrapper{
+      color: @topBg;
+      font-size: 32*@basePX;
+      line-height: 80*@basePX;
+      text-align: center;
+      border-top: 1px solid @lineColor;
+      margin-top: 21*@basePX;
+    }
+    .cabin-group{
+      &:last-child{
+        padding-bottom: 24*@basePX;
+      }
+      .cabin-type{
+        line-height: 77*@basePX;
+        border-bottom: 1px solid @lineColor;
+        color: @topBg;
+        font-size: 32*@basePX;
+        margin-top: 10*@basePX;
+        .type-name{
+          margin-left: 5*@basePX;
+        }
+      }
+      .cabin-content{
+        border: 2px solid @lineColor;
+        .borderRadius;
+        margin-top: 25*@basePX;
+      }
+      .cabin-item{
+        overflow: hidden;
+        &:not(:last-child) {
+          border-bottom: 1px solid @lineColor;
+        }
+        .title-wrapper{
+          width: 100%;
+          position: relative;
+        }
+        .title{
+          line-height: 75*@basePX;
+          margin-left: 20*@basePX;
+          float: left;
+          font-weight: normal;
+          font-size: 32*@basePX;
+          width: 50%;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+        .cabin-price{
+          width: 28%;
+          float: right;
+          padding: 13*@basePX 0;
+          .sale-price,
+          .rebate-price{
+            display: block;
+          }
+          .sale-price{
+            text-decoration: line-through;
+            color: #ccc;
+            font-size: 22*@basePX;
+          }
+          /*.rebate-price{
+            width: 130*@basePX;
+            height: 28*@basePX;
+            line-height: 28*@basePX;
+            .borderRadius(14*@basePX);
+            text-align: center;
+            color: #fff;
+            background: #ff0000;
+            font-size: 22*@basePX;
+          }*/
+        }
+
+        .img-con{
+          height: 276*@basePX;
+          position: relative;
+          overflow: hidden;
+          .order-wrap{
+            float: left;
+            height: 100%;
+            width: 30%;
+            font-size: 28*@basePX;
+            background-color: @clickBtnBg;
+            color: #fff;
+            line-height:  276*@basePX;
+            text-align: center;
+          }
+          .cabin-img{
+            float: left;
+            height: 100%;
+            width: 70%;
+            background-color: #d4deeb;
+            img{
+              width: 100%;
+              height: 100%;
+              max-height: 100%;
+              max-width: 100%;
+            }
+          }
+        }
+
+        .tips{
+          height: 54*@basePX;
+          line-height: 54*@basePX;
+          color: @subTextColor;
+          font-size: 26*@basePX;
+          .center{
+            width: 90%;
+            margin: 0 auto;
+            span{
+              margin-right: 20*@basePX;
+            }
+            .mark{
+              color: @tipsColor;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .container section.voyage-module{
+    .voyage-group{
+      margin-top: 15px;
+    }
+    .voyage-list{
+
+      .voyage-title{
+        float: left;
+        width: 18%;
+        padding-right: 20px;
+        font-size: 32*@basePX;
+        text-align: right;
+        .date{
+          color: @subTextColor;
+          text-transform: uppercase;
+
+        }
+        .leaveTime{
+          color: #333;
+          span{
+            font-size: 24*@basePX;
+            display: block;
+
+          }
+        }
+      }
+      .activity{
+        float: left;
+        width: 75%;
+        border-left: 2px solid @lineColor;
+        padding-left: 30*@basePX;
+        padding-bottom:44*@basePX;
+        .img-wrapper{
+          .img-item{
+            float: left;
+            width: 32%;
+            height: 120*@basePX;
+            .borderRadius(2px);
+            border: 1px solid @lineColor;
+            overflow: hidden;
+            margin-left: 5*@basePX;
+            img{
+              max-height: 100%;
+              max-width: 100%;
+              height: 100%;
+              width: 100%;
+              .borderRadius(2px);
+            }
+          }
+        }
+        .detail{
+          padding: 10*@basePX 0 ;
+          color: @subTextColor;
+          font-size: 28*@basePX;
+        }
+        .repast{
+          margin-top: 5px;
+          font-size: 24*@basePX;
+          color: #606670;
+          i{
+            color: #add2ff;
+            font-size: 32*@basePX;
+          }
+        }
+        .port{
+          position: relative;
+          font-size: 32*@basePX;
+          color: #333;
+          line-height: 37*@basePX;
+          b.port-icon{
+            overflow: hidden;
+            position: absolute;
+            left: -50*@basePX;
+            top: 0;
+            font-weight: normal;
+            width: 38*@basePX;
+            height: 38*@basePX;
+            line-height: 38*@basePX;
+            .borderRadius(50%);
+            text-align: center;
+            font-size: 24*@basePX;
+            color: #fff;
+            vertical-align: middle;
+            &.icon-gangkou{
+              background-color: #6aadff;
+            }
+            &.icon-youlunyou{
+              background-color: #85dbe0;
+            }
+            &.icon-qizi{
+              background-color: #85e087;
+            }
+
+          }
+        }
+      }
+    }
+  }
+
+  .calendar-wrap{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    z-index: 15;
+    overflow: hidden;
+    background-color: #fff;
+  }
+
+  .explain-wrapper{
+    margin: 24*@basePX auto auto;
+
+  }
+
+  .back-top{
+    width: 92*@basePX;
+    height: 92*@basePX;
+    .borderRadius(50%);
+    background: #a6cefe;
+    position: fixed;
+    right: 24*@basePX;
+    bottom: 156*@basePX;
+    color: #fff;
+    text-align: center;
+    .icon-20pxhuidaodingbu{
+      display: block;
+      font-size: 48*@basePX;
+    }
+    .icon-20pxhuidaodingbu:after{
+      content:"TOP";
+      clear:both;
+      display:block;
+      font-size: 22*@basePX;
+      margin-top: -16*@basePX;
+    }
+  }
+
+  .animated {
+    animation-duration: .5s;
+    animation-fill-mode: both;
+  }
+  @keyframes slideInRight {
+    from {
+      transform: translate3d(100%, 0, 0);
+      visibility: visible;
+    }
+
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  .slideInRight {
+    animation-name: slideInRight;
+  }
+
+  @keyframes slideOutRight {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+
+    to {
+      visibility: hidden;
+      transform: translate3d(100%, 0, 0);
+    }
+  }
+
+  .slideOutRight {
+    animation-name: slideOutRight;
+  }
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 100%, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .fadeInUp {
+    animation-name: fadeInUp;
+  }
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translate3d(0, -100%, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .fadeInDown {
+    animation-name: fadeInDown;
+  }
+  @keyframes slideInDown {
+    from {
+      transform: translate3d(0, -50%, 0);
+      visibility: visible;
+    }
+
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  .slideInDown {
+    animation-name: slideInDown;
+  }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  .fadeIn {
+    animation-name: fadeIn;
+  }
+
+</style>

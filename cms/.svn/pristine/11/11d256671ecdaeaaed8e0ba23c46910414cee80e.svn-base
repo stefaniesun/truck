@@ -1,0 +1,20 @@
+package xyz.test;
+
+public class ttt {
+
+    /**
+     * Description  ：〈一句话功能简述〉
+     *
+     * @param args void
+     * @exception   ：〈描述可能的异常〉
+    
+     * @author      叶尼玛
+     * @date        ：2016-12-15下午5:30:55
+     */
+    public static void main(String[] args) {
+        int p = Integer.parseInt("1260");
+        System.out.println(p);
+
+    }
+
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>编辑价格区间</title>
+</head>
+<body>
+<center>
+	<form><br/>
+		<table cellpadding="6" cellspacing="6">
+			<tr>
+				<th style="text-align:right;">区间最小值</th>
+				<td>
+					<input id="minPriceForm" class="priceInup" type="text" style="width:300px;"/>
+				</td>
+			</tr>
+			<tr>
+				<th style="text-align:right;">区间最大值</th>
+				<td>
+					<input id="maxPriceForm" class="priceInup" type="text" style="width:300px;"/>
+				</td>
+			</tr>
+			<tr>
+				<th style="text-align:right;">加价值</th>
+				<td>
+					<input id="priceMarkupForm" class="priceInup" type="text" style="width:300px;"/>
+				</td>
+			</tr>
+			<tr>
+				<th style="text-align:right;">备注</th>
+				<td>
+					<input id="remarkForm" type="text" style="width:300px;"/>
+				</td>
+			</tr>
+		</table>
+	</form>
+</center>
+</body>
+</html>

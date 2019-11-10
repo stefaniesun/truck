@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>邮轮资源查询</title>
+    <link rel="stylesheet" type="text/css" href="js/library/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="css/simple-calendar.css"></link>
+    
+    <script type="text/javascript" src="js/library/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="js/library/common/common.js"></script>
+    <script type="text/javascript" src="js/library/layui/layui.js"></script>
+    <script type="text/javascript" src="js/library/layer/layer.min.js"></script>
+    <script type="text/javascript" src="js/library/md5/jquery.md5.js"></script>
+    <script type="text/javascript" src="js/library/cookie/jquery.cookie.js"></script>
+	<script type="text/javascript" src="js/library/common/cookie.js"></script>
+    <script type="text/javascript" src="js/calendar.js" ></script>
+    
+    <script type="text/javascript" src="js/query.js" defer="defer"></script>
+    <style>
+    .sc-price {font-size: 13px;}
+	.sc-item .lunar-day {float: left;}
+	.cruise-select,.cruise-select:hover{border-color:#21A1CA;}
+	.cruise-select span,.cruise-select:hover span{background-color:#21A1CA;}
+	.cruise-select i,.cruise-select:hover i{color:#21A1CA;}
+	.provider-select,.provider-select:hover{border-color:#FF9C07;}
+	.provider-select span,.provider-select:hover span{background-color:#FF9C07;}
+	.provider-select i,.provider-select:hover i{color:#FF9C07;}
+	.place-select,.place-select:hover{border-color:#FF5722;}
+	.place-select span,.place-select:hover span{background-color:#FF5722;}
+	.place-select i,.place-select:hover i{color:#FF5722;}
+    </style>
+</head>
+<body>
+   
+ 
+<fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;">
+  <legend>CMS邮轮资源查询</legend>
+  
+  
+  <div class="layui-form" action="" style="padding:30px">
+  
+  
+   <div class="layui-form-item">
+   
+   
+    <div class="layui-inline">
+      <label class="layui-form-label"><img src="image/query/price.png" style="width:22px;margin-right:5px;">价格区间</label>
+      <div class="layui-input-inline" style="width: 100px;">
+        <input type="text" id="min" name="price_min" placeholder="￥" autocomplete="off" class="layui-input">
+      </div>
+      <div class="layui-form-mid">-</div>
+      <div class="layui-input-inline" style="width: 100px;">
+        <input type="text" id="max" name="price_max" placeholder="￥" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    
+    
+     <div class="layui-inline">
+      <label class="layui-form-label"><img src="image/query/date.png" style="width:22px;margin-right:5px;">出发时间</label>
+      <div class="layui-input-inline">
+        <input type="text" id="startDate" class="layui-input" id="startDate" placeholder="yyyy-MM-dd">
+      </div>
+      <div class="layui-form-mid">-</div>
+       <div class="layui-input-inline">
+        <input type="text" id="endDate"  class="layui-input" id="endDate" placeholder="yyyy-MM-dd">
+      </div>
+      
+      <button id="queryButton" class="layui-btn layui-btn-warm" style="margin-left:10px"><i class="layui-icon">&#xe615;</i></i>搜索</button>
+    
+      <button id="clearButton" class="layui-btn layui-btn-danger" style="margin-left:10px"><i class="layui-icon">&#x1006;</i></i>清除</button>
+    
+      <button id="windowButton" class="layui-btn layui-btn-normal" style="margin-left:10px"><i class="layui-icon">&#xe638;</i></i>全屏</button>
+    
+    
+<!--    	  <button id="excelButton" class="layui-btn" style="margin-left:10px"><i class="layui-icon">&#xe62d;</i></i>下载Excel</button>
+ -->    
+    
+  </div>
+      
+    </div>
+    
+    <div class="layui-form-item">
+    <div class="layui-inline" >
+      <label class="layui-form-label"><img src="image/query/cruise.png" width="28px;">邮轮<span style="color:#f60;" id="cruiseCount"><span></label>
+       <div class="layui-input-inline layui-select" style="border:1px solid #fff">
+       <select name="modules" id="cruiseSelect" lay-verify="required" lay-search="">
+		</select>     
+      </div>
+    </div>
+    
+     <div class="layui-inline" style="margin-left:-10px;">
+      <label class="layui-form-label"><img src="image/query/cabin.png" width="25px;">舱型<span style="color:#f60;" id="cabinCount"><span></label>
+      <div class="layui-input-inline layui-select" style="border:1px solid #fff">
+       <select name="modules" id="cabinSelect" lay-verify="required" lay-search="">
+		</select>     
+      </div>
+    </div>
+    
+    <div class="layui-inline " >
+      <label class="layui-form-label"><img src="image/query/provider.png" width="30px;">供应商<span style="color:#f60;" id="providerCount"><span></label>
+      <div class="layui-input-inline layui-select" style="border:1px solid #fff">
+       <select name="modules" id="providerSelect" lay-verify="" lay-search="">
+		</select>     
+      </div>
+    </div>
+    
+    
+     <div class="layui-inline " >
+      <label class="layui-form-label"><img src="image/query/place.png" width="30px;">出发地<span style="color:#f60;" id="placeCount"><span></label>
+      <div class="layui-input-inline layui-select" style="border:1px solid #fff">
+       <select name="modules" id="placeSelect" lay-verify="" lay-search="">
+		</select>     
+      </div>
+    </div>
+    
+  </div>
+  
+  
+   <div class="layui-form-item">
+    <label class="layui-form-label">附加搜索条件</label>
+    <div class="layui-input-block" id="extraQueryInfo">
+    <span id="cruiseQuery"></span>
+    <span id="cabinQuery"></span>
+    <span id="providerQuery"></span>
+    <span id="placeQuery"></span>
+    </div>
+  </div>
+  
+  
+  </div>
+  
+  
+    <div class="layui-row" style="margin-top:-60px">
+    <div class="layui-col-xs6">
+      <div class="grid-demo grid-demo-bg1" style="padding: 0px 50px 0px 50px;">
+      
+   <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+  <ul class="layui-tab-title" style="width:700px">
+  </ul>
+  
+  
+  <div id='container'></div>
+  
+</div> 
+      
+      
+      
+      
+      </div>
+    </div>
+    <div class="layui-col-xs6" id="stockTable">
+      <div id="extraInfo" class="grid-demo" style="padding: 0px 50px 0px 50px;margin-top:-30px;display:none;">
+      
+ <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+  <legend>邮轮资源</legend>
+</fieldset>
+
+
+<blockquote class="layui-elem-quote layui-quote-nm" id="resourceInfo">
+</blockquote>
+ 
+      
+      <div class="layui-form">
+      <div style="max-height:500px;overflow:auto;">
+  <table class="layui-table">
+    <colgroup>
+      <col width="150">
+      <col width="150">
+      <col width="200">
+      <col>
+    </colgroup>
+    <thead>
+      <tr>
+        <th width="18%">邮轮</th>
+        <th width="22%" >单品</th>
+        <th width="18%">供应商</th>
+        <th width="20%">航线</th>
+        <th width="12%">结算价</th>
+        <th width="10%">库存(间)</th>
+      </tr> 
+    </thead>
+    <tbody id="resourceTable">
+    </tbody>
+  </table>
+  </div>
+</div>
+      
+      </div>
+    </div>
+  </div>
+  
+  
+  
+</fieldset>
+
+
+   
+   
+</body>
+</html>

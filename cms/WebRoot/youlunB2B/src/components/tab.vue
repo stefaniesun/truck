@@ -1,0 +1,102 @@
+<template>
+  <div class="tab clearfloat" >
+    <router-link tag="div" class="tab-item active" :class="userType ? '':'marginLeft'" :to="'orderAmount'" replace >
+      <span class="tab-link">
+        <i class="iconfont icon-dingdan-copy"></i>
+        全部订单
+      </span>
+    </router-link>
+    <router-link tag="div" class="tab-item" :to="'sumAmount'" v-if="userType" replace>
+      <span class="tab-link">
+        <i class="iconfont icon-jine"></i>
+        金额统计
+      </span>
+    </router-link>
+    <router-link tag="div" class="tab-item" :to="'touristAmount'" v-if="userType" replace >
+      <span class="tab-link">
+        <i class="iconfont icon-renshu"></i>
+        游客统计
+      </span>
+    </router-link>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'tab',
+    data(){
+        return{
+            userType: true,
+        }
+    },
+    mounted(){
+      this.userType = sessionStorage.userType === 'false'?false : true;
+    }
+  }
+
+</script>
+
+<style lang="less" scoped>
+  @import "../assets/css/base.less";
+
+  .tab {
+    .marginLeft{
+      margin-left: 33.3333%;
+    }
+    .tab-item {
+      width: 33.3333%;
+      text-align: center;
+      float: left;
+      border-bottom: 1px solid @topBg;
+      position: relative;
+      color: @subTextColor;
+
+      &.router-link-active:before,
+      &.router-link-active:after{
+        width: 0;
+        height: 0;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        padding: 0;
+        -webkit-transform: translateX(-50%);
+        -moz-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        -o-transform: translateX(-50%);
+        transform: translateX(-50%);
+        display: block;
+        content: "";
+
+      }
+      &.router-link-active:before{
+        border-bottom: 8.5px solid #fff;
+        z-index: 3;
+        bottom: -1.5px;
+        border-top: 6px solid transparent;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+      }
+      &.router-link-active:after{
+        border-bottom: 9px solid @topBg;
+        z-index: 2;
+        border-top: 7px solid transparent;
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+      }
+
+      span{
+        font-size: 28*@basePX;
+        display: block;
+        margin: 20*@basePX auto 42*@basePX;
+      }
+      i{
+        display: block;
+        color: @topBg;
+        font-size: 40*@basePX;
+      }
+    }
+
+  }
+
+
+</style>

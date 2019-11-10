@@ -1,0 +1,287 @@
+package xyz.work.taobao.svc;
+
+
+import java.math.BigDecimal;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+
+@Service
+public interface TaobaoSvc {
+
+    /**
+     * 邮轮分组查询
+     */
+    public Map<String, Object> queryTaobaoGroupCruise();
+
+    /**
+     * 根据邮轮编号查询宝贝信息
+     */
+    public Map<String, Object> queryTaobaoItem(int offset , int pagesize , String cruise ,
+                                               String itemId , String itemTitle , String channel ,
+                                               String itemStatus , String outId , String itemType ,
+                                               String sort , String order);
+
+    /**
+     * 宝贝新增、编辑
+     * 
+     * @param baseInfo
+     *            宝贝基础信息编号
+     * @param baseJsonStr
+     *            宝贝基础信息JSON
+     * @param cruiseInfoJsonStr
+     *            邮轮信息JSON
+     * @param saleInfoJsonStr
+     *            宝贝售卖信息JSON
+     * @param rulesJsonStr
+     *            宝贝(商品)规则信息JSON
+     * @param channel
+     *            渠道编号
+     * @param cruise
+     *            邮轮编号
+     */
+    public Map<String, Object> saveTaobaoItem(String baseInfo , String baseJsonStr ,
+                                              String cruiseInfoJsonStr , String saleInfoJsonStr ,
+                                              String rulesJsonStr , String channel , String cruise);
+
+    /**
+     * 宝贝图片
+     * 
+     * @param taobaoBaseInfo
+     *            宝贝基础信息编号
+     * @param urls
+     *            图片
+     */
+    public Map<String, Object> addImages(String taobaoBaseInfo , String urls);
+
+    /**
+     * 宝贝详情
+     * 
+     * @param taobaoBaseInfo
+     *            宝贝基础信息编号
+     * @param detail
+     *            详情
+     */
+    public Map<String, Object> addDetail(String taobaoBaseInfo , String detail);
+
+    /**
+     * 根据travalItem获取宝贝SKU以及SKU的库存(同步宝贝，宝贝克隆 用到)
+     * 
+     * @param numberCode
+     *            travalItem编号
+     * @author : 熊玲
+     */
+    public Map<String, Object> getTaobaoItemByNumberCode(String numberCode);
+
+    /**
+     * SKU同步
+     * 
+     * @param syncNumberCode
+     *            要同步宝贝的travelItem
+     * @param skuJson
+     *            要同的SKU数据
+     * @param travelItems
+     *            同步到的宝贝travelItems
+     * @author : 熊玲
+     */
+    public Map<String, Object> syncTaobaoTravelItemOper(String syncNumberCode , String skuJson ,
+                                                        String travelItems,int type);
+
+    /**
+     * 宝贝克隆
+     * 
+     * @param numberCode
+     *            要克隆宝贝的编号
+     * @param channel
+     *            克隆到的渠道
+     * @param skuJson
+     *            要宝贝的SKU JSON字符串
+     * @param stockJson
+     *            要宝贝的SKU库存 JSON字符串
+     * @author : 熊玲
+     */
+    public Map<String, Object> copyTaobaoTravelItemOper(String numberCode , String channel ,
+                                                        String skuJson , String stockJson);
+
+    /**
+     * 一、发布宝贝(未发布是上传;如果是批量上传,不会上传已发布的宝贝)
+     * 
+     * @param baseInfo
+     *            宝贝基本信息编号
+     */
+    public Map<String, Object> publishTaobaoItemOper(String baseInfo);
+
+    /**
+     * 二、已发布宝贝，更新到淘宝上去
+     * 
+     * @param baseInfo
+     *            宝贝基础信息编号
+     */
+    public Map<String, Object> updateTaobaoItem(String baseInfo);
+
+    /**
+     * 三、宝贝(商品)上/下架
+     * 
+     * @param taobaoBaseInfo
+     *            宝贝基础信息编号
+     * @param isUp
+     *            上架/下架
+     */
+    public Map<String, Object> editOnlineStatus(String taobaoBaseInfo , Boolean isUp);
+
+    // 通过一个Itemid获取宝贝
+    public Map<String, Object> getTaobaoItemByIdOper(Long id , String channel , String remark);
+
+    // 删除本地宝贝
+    public Map<String, Object> deleteTaobao(String numberCodes);
+
+    // 编辑时获取宝贝信息
+    public Map<String, Object> getTaobaoAllInfo(String baseInfo);
+
+    /**
+     * 1、查询SKU套餐
+     */
+    public Map<String, Object> getTaobaoSkuOper(String baseInfo);
+
+    public Map<String, Object> editTaobaoDetails(String numberCode , String tkview ,
+                                                 String minTkview , BigDecimal price ,
+                                                 int priceType , int isLock , int isEdit ,
+                                                 String stock , String stockNumberCode);
+
+    /**
+     * 四、上传SKU
+     * 
+     * @param taobaoBaseInfo
+     */
+    public Map<String, Object> overrideTaobaoSkuOper(String taobaoBaseInfo);
+
+    // 获取店铺所有的Itemid
+    public Map<String, Object> addAllTaobaoIdOper(String channel , String remark);
+
+    /**
+     * 1.获取SKU日历库存信息
+     */
+    public Map<String, Object> getSkuDetails(String skuInfo);
+
+    /**
+     * 新增SkuDetail
+     * @param baseInfo
+     * @param skuInfo
+     * @param date
+     * @param minTkview
+     * @param price
+     * @param priceType
+     * @param isLock
+     * @param isEdit
+     * @param stock
+     * @param stockNumberCode
+     * @return
+     */
+    public Map<String, Object> addSkuDetails(String baseInfo , String skuInfo , String date,
+                                             String minTkview , BigDecimal price , int priceType ,
+                                             int isLock , int isEdit , String stock ,
+                                             String stockNumberCode);
+
+    public Map<String, Object> deleteSkuDetails(String skuInfos , String numberCodes);
+
+    /**
+     * 2、新增SKU套餐
+     */
+    public Map<String, Object> addTaobaoSku(String baseInfo , String skuNameCn , String tkviewType);
+
+    /**
+     * 3、编辑SKU套餐
+     */
+    public Map<String, Object> editTaobaoSku(String baseInfo , String skuInfo , String skuNameCn ,
+                                             String tkviewType);
+
+    /**
+     * 4、删除SKU套餐
+     */
+    public Map<String, Object> deleteTaobaoSku(String baseInfo , String skuInfos);
+
+    public Map<String, Object> getTaobaoLog(String numberCode);
+
+    public Map<String, Object> getCruiseData(String cruise);
+
+    public Map<String, Object> getTkviewByTaobaoCruise(String baseInfo);
+
+    public Map<String, Object> getExistSkuByBaseInfo(String baseInfo);
+
+    public Map<String, Object> addRelationSkuAndStock(String skuJsonStr , String baseInfo);
+
+    public Map<String, Object> getRelationTkview(String taobaoSkuDetail);
+
+    public Map<String, Object> getStockDate(String sku , String date);
+
+    /**
+     * 根据SKU库存编号清空SKU库存的库存值
+     * 
+     * @param numberCodes
+     *            SKU库存编号(可以选择多个)
+     * @return Map<String,Object>
+     * @exception :〈描述可能的异常〉
+     * @author : 熊玲
+     * @date : 2017-3-6下午5:02:17
+     */
+    public Map<String, Object> editStockByNumberCodes(String numberCodes);
+
+    /**
+     * 5、更新SKU--根据SKU套餐编号查询SKU日历库存信息
+     */
+    public Map<String, Object> queryStockByNumberCodes(String sku);
+
+    /**
+     * 更新SKU
+     */
+    public Map<String, Object> skuPriceModifyOper(String sku , String stockJson);
+
+    /**
+     * 更新SKU--修改手动改价的状态
+     */
+    public Map<String, Object> editIsNormalByNumberCode(String numberCode , int isNormal);
+
+    public Map<String, Object> getRelationTkviewType(String taobaoSku);
+
+    /**
+     * 2.查询单品种类的舱型名称
+     */
+    public Map<String, Object> queryTkviewTypeList(String taobaoSku);
+
+    /**
+     * 3.获取单品库存信息
+     */
+    public Map<String, Object> getTkviewScotkList(String numberCode , String taobaoSku ,
+                                                  String date);
+
+    /**
+     * 4.编辑SKU库存信息
+     */
+    public Map<String, Object> submitSkuDetailsOper(String numberCode , String outId ,
+                                                    BigDecimal price , int priceType , String stock);
+
+    /**
+     * 淘宝基础信息编号查询SKU套餐
+     */
+    public Map<String, Object> getSkuInfo(String baseInfo);
+    
+    /**
+     * 
+     * Description  ：根据游轮查询日志
+     *
+     * @param cruise
+     * @return Map<String,Object>
+     * @exception   ：〈描述可能的异常〉
+    
+     * @author      ：yangyong
+     * @date        ：2017-11-6下午4:29:51
+     */
+    public Map<String, Object> queryTaobaoLogByCruiseWorkList(String cruise);
+    
+    /**
+     * 批量上传SKU套餐
+     */
+    public Map<String, Object> batchUploadSkuOper(String cruise);
+    
+}

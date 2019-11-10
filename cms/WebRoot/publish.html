@@ -1,0 +1,360 @@
+
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <title>WeUI</title>
+    <link rel="stylesheet" href="css/weui.css"/>
+    <link rel="stylesheet" href="css/example.css"/>
+      <script type="text/javascript" src="js/util.js"></script>
+</head>
+<body ontouchstart>
+    <div class="weui-toptips weui-toptips_warn js_tooltips">错误提示</div>
+
+    <div class="container" id="container">
+    
+    
+  <div class="page form_page js_show">
+  <div class="weui-form">
+    <div class="weui-form__control-area" style="margin: -30px 0;">
+      <div class="weui-cells__group weui-cells__group_form">
+        <div class="weui-cells__title">
+        
+        <p>平台严禁发布违法虚假信息，严重违反者冻结帐号处理！请您按照<a style="text-decoration:underline" href="publishXieyi.html">《发布信息协议》</a>发布您的信息</p>
+        
+        </div>
+        <div class="weui-cells weui-cells_form">
+          <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">车辆名称</label></div>
+            <div class="weui-cell__bd">
+                <input id="nameTitle" class="weui-input" placeholder="品牌、车型描述" >
+            </div>
+          </div>
+          <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">价格(万)</label></div>
+            <div class="weui-cell__bd">
+                <input id="price" class="weui-input" placeholder="估价">
+            </div>
+          </div>
+          <div class="weui-cell weui-cell_switch">
+                <div class="weui-cell__bd">有无户</div>
+                <div class="weui-cell__ft">
+                    <input class="weui-switch" type="checkbox" id="isGuohu">
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access" id="showDatePicker1">
+            <div class="weui-cell__bd">上牌时间</div>
+            <div class="weui-cell__ft"></div>
+          </div>
+          <div class="weui-cell weui-cell_access" id="showDatePicker2">
+            <div class="weui-cell__bd">年检时间</div>
+            <div class="weui-cell__ft"></div>
+          </div>
+              <div class="weui-cell weui-cell_access" id="showDatePicker3">
+            <div class="weui-cell__bd">交强险时间</div>
+            <div class="weui-cell__ft"></div>
+          </div>
+             <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">行驶里程</label></div>
+            <div class="weui-cell__bd">
+                <input id="mile" class="weui-input" placeholder="km">
+            </div>
+          </div>
+              <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">车龄(年)</label></div>
+            <div class="weui-cell__bd">
+                <input id="year" class="weui-input" placeholder="年">
+            </div>
+          </div>
+          <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">联系电话</label></div>
+            <div class="weui-cell__bd">
+                <input id="phone" class="weui-input" placeholder="填写绑定的电话号码" type="number" pattern="[0-9]*">
+            </div>
+          </div>
+          <div class="weui-cell weui-cell_access weui-cell_select weui-cell_select-after">
+            <div class="weui-cell__hd"><label class="weui-label">身份</label></div>
+            <div class="weui-cell__bd" id="showPicker">商家</div>
+          </div>
+            <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">看车地址</label></div>
+            <div class="weui-cell__bd">
+                <input id="address" class="weui-input" placeholder="">
+            </div>
+          </div>
+           <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">详细内容</label></div>
+            <div class="weui-cell__bd">
+                <input id="remark" class="weui-input" placeholder="其他补充信息">
+            </div>
+          </div>
+          
+          
+           <div class="weui-gallery" id="gallery">
+            <span class="weui-gallery__img" id="galleryImg"></span>
+            <div class="weui-gallery__opr">
+                <a href="javascript:" class="weui-gallery__del">
+                    <i class="weui-icon-delete weui-icon_gallery-delete"></i>
+                </a>
+            </div>
+        </div>
+          
+          <div class="weui-cell" style="background-color:#FFFFFF">
+                <div class="weui-cell__bd">
+                    <div class="weui-uploader">
+                        <div class="weui-uploader__hd">
+                            <p class="weui-uploader__title">图片上传</p>
+                            <div class="weui-uploader__info">0/0</div>
+                        </div>
+                        <div class="weui-uploader__bd">
+                            <ul class="weui-uploader__files" id="uploaderFiles">
+                           <!--      <li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>
+                                <li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>
+                                <li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>
+                                <li class="weui-uploader__file weui-uploader__file_status" style="background-image:url(./images/pic_160.png)">
+                                    <div class="weui-uploader__file-content">
+                                        <i class="weui-icon-warn"></i>
+                                    </div>
+                                </li>
+                                <li class="weui-uploader__file weui-uploader__file_status" style="background-image:url(./images/pic_160.png)">
+                                    <div class="weui-uploader__file-content">50%</div>
+                                </li> -->
+                            </ul>
+                            <div class="weui-uploader__input-box">
+                                <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" multiple="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          
+          
+        </div>
+      </div>
+    </div>
+    
+    <div class="weui-form__tips-area">
+      <p class="weui-form__tips">
+        提交发布后，后台会尽快完成审核
+      </p>
+    </div>
+    
+    
+    <div class="weui-form__opr-area">
+      <a class="weui-btn weui-btn_primary weui-btn" href="javascript:" id="publish">发布</a>
+    </div>
+    
+  </div>
+  <div id="js_toast" style="display: none;">
+      <div class="weui-mask_transparent"></div>
+      <div class="weui-toast">
+          <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+          <p class="weui-toast__content">已完成</p>
+      </div>
+  </div>
+</div>
+    
+    
+    </div>
+    
+    <script src="js/zepto.min.js"></script>
+    <script type="text/javascript" src="js/jweixin-1.0.0.js"></script>
+    <script src="js/weui.min.js"></script>
+    <script src="js/example.js"></script>
+ 
+    
+    <script>
+	
+    var images=[];
+    
+    $('#showDatePicker1').on('click', function () {
+        weui.datePicker({
+            start: 2019,
+            end: new Date().getFullYear(),
+            onChange: function (result) {
+                console.log(result);
+            },
+            onConfirm: function (result) {
+            	$('#showDatePicker1').val(result[0].value+"-"+result[1].value+"-"+result[2].value);
+            	$('#showDatePicker1 .weui-cell__bd').append("&nbsp;&nbsp;&nbsp;&nbsp;"+result[0].value+"年"+result[1].value+"月"+result[2].value+"日");
+            },
+            title: '上牌时间'
+        });
+    });
+    
+    $('#showDatePicker2').on('click', function () {
+        weui.datePicker({
+            start: 2019,
+            end: new Date().getFullYear(),
+            onChange: function (result) {
+                console.log(result);
+            },
+            onConfirm: function (result) {
+            	$('#showDatePicker2').val(result[0].value+"-"+result[1].value+"-"+result[2].value);
+            	$('#showDatePicker2 .weui-cell__bd').append("&nbsp;&nbsp;&nbsp;&nbsp;"+result[0].value+"年"+result[1].value+"月"+result[2].value+"日");
+            },
+            title: '年检时间'
+        });
+    });
+    
+    $('#showDatePicker3').on('click', function () {
+        weui.datePicker({
+            start: 2019,
+            end: new Date().getFullYear(),
+            onChange: function (result) {
+                console.log(result);
+            },
+            onConfirm: function (result) {
+            	$('#showDatePicker3').val(result[0].value+"-"+result[1].value+"-"+result[2].value);
+            	$('#showDatePicker3 .weui-cell__bd').append("&nbsp;&nbsp;&nbsp;&nbsp;"+result[0].value+"年"+result[1].value+"月"+result[2].value+"日");
+            },
+            title: '交强险时间'
+        });
+    });
+    
+    $('#showPicker').on('click', function () {
+        weui.picker([{
+            label: '个人',
+            value: 1
+        },{
+            label: '商家',
+            value: 0
+        }], {
+            onChange: function (result) {
+                console.log(result);
+            },
+            onConfirm: function (result) {
+                console.log(result);
+                $("#showPicker").html(result[0].label);
+            },
+            title: '身份'
+        });
+    });
+    
+    var tmpl = '<li class="weui-uploader__file" style="background-image:url(#url#)"></li>',
+    $gallery = $("#gallery"), $galleryImg = $("#galleryImg"),
+    $uploaderInput = $("#uploaderInput"),
+    $uploaderFiles = $("#uploaderFiles")
+    ;
+
+    var blobToBase64 = function (blob, callback) {
+        var a = new FileReader();
+        a.onload = function (e) {
+            callback(e.target.result);
+        }
+        a.readAsDataURL(blob);
+    };
+    
+
+    
+$uploaderInput.on("change", function(e){
+    var src, url = window.URL || window.webkitURL || window.mozURL, files = e.target.files;
+    
+    for (var i = 0, len = files.length; i < len; ++i) {
+        var file = files[i];
+
+        if (url) {
+            src = url.createObjectURL(file);
+        } else {
+            src = e.target.result;
+        }
+        
+        blobToBase64(file, function (data) {
+        	images.push(data)
+        });
+        
+        $uploaderFiles.append($(tmpl.replace('#url#', src)));
+        
+    }
+    var count=$(".weui-uploader__files li").length;
+    $(".weui-uploader__info").html(count+"/"+count);
+    
+});
+var index;
+$uploaderFiles.on("click", "li", function(){
+	index = $(".weui-uploader__files li").index(this);
+    $galleryImg.attr("style", this.getAttribute("style"));
+    $gallery.fadeIn(100);
+});
+$gallery.on("click", function(){
+    $gallery.fadeOut(100);
+});
+
+$(".weui-icon-delete").click(function(){
+	$(".weui-uploader__files li").eq(index).remove();
+    var count=$(".weui-uploader__files li").length;
+    $(".weui-uploader__info").html(count+"/"+count);
+});
+
+$("#publish").click(function(){
+	
+	var title=$("#nameTitle").val();
+	var price=$("#price").val();
+	var isGuohu=$("#isGuohu").prop("checked")?1:0;
+	var cardDate=$("#showDatePicker1").val();
+	var checkDate=$("#showDatePicker2").val();
+	var insuranceDate=$("#showDatePicker3").val();
+	var mile=$("#mile").val();
+	var year=$("#year").val();
+	var phone=$("#phone").val();
+	var type=$("#showPicker").html();
+	var address=$("#address").val();
+	var remark=$("#remark").val();
+	
+	if(xyzIsNull(title)){
+		weui.alert("车辆名称不能为空");
+		return;
+	}
+	if(xyzIsNull(price)){
+		weui.alert("车辆价格不能为空");
+		return;
+	}
+	if(images.length==0){
+		weui.alert("请上传车辆图片");
+		return;
+	}
+	
+	var map={};
+	map.title=title;
+	map.price=price;
+	map.isGuohu=isGuohu;
+	map.cardDate=cardDate;
+	map.checkDate=checkDate;
+	map.insuranceDate=insuranceDate;
+	map.mile=mile;
+	map.year=year;
+	map.phone=phone;
+	map.type=type;
+	map.address=address;
+	map.remark=remark;
+	map.images=images;
+	
+	console.log(map);
+	
+	$.ajax({
+		url : "/TruckWS/addTruck.cus",
+		type : "POST",
+		data : {
+			dataJson : JSON.stringify(map)
+		},
+		async : false,
+		dataType : "json",
+		success : function(data) {
+			if (data.status == 1) {
+				weui.alert("提交成功");
+				setTimeout(function(){
+					window.location.replace("my.html");
+				},"2000");
+			} else {
+				weui.alert(data.msg);
+			}
+		}
+	});
+	
+});
+
+</script>
+    
+</body>
+</html>

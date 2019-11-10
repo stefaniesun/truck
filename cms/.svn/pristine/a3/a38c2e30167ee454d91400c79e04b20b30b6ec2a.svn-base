@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/xieyaozhong.css"></link>
+<script type="text/javascript" src="../js/library/jquery-1.7.2.js"></script>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/bootstrap/easyui.css"></link>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/icon.css"></link>
+<script type="text/javascript" src="../js/library/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/library/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../js/library/easyui/extension/datagrid-detailview.js"></script>
+<script type="text/javascript" src="../js/library/common/common.js"></script>
+<script type="text/javascript" src="../js/library/common/customUi.js" defer="defer"></script>
+
+<script type="text/javascript" src="../js/library/print/jquery.PrintArea.js"></script>
+
+<script type="text/javascript" src="../js/js_core/orderContentDetailManager.js" defer="defer"></script>
+<script type="text/javascript" src="../js/js_core/xyzPersonInfoManager.js" defer="defer"></script>
+
+<style type="text/css">
+	body{
+		margin: 0;padding: 0;border: 0;font-size: 14px;
+	}
+	div{
+		margin: 0;padding: 0;border: 0;
+	}
+	.datagrid-header-row,.datagrid-row{
+			height : 35px;
+	}
+	.datagrid-header-row{
+		font-weight: bold;;
+	}
+</style>
+</head>
+
+<body style="width: 100%;text-align: left;background-color:white;">
+<input type="hidden" id="cruise"/>
+<input type="hidden" id="shipment"/>
+<input type="hidden" id="currentOrderNum"/>
+
+	<table id="listTable">
+		<tr>
+			<td>
+				<span style="font-weight:bold;">【</span><span id="shipmentMark"></span>】 
+			</td>
+			<td>
+				<span style="font-weight:bold;">【</span><span id="shipmentTravelDate"></span>】 
+			</td>
+			<td id="linkmanTd">
+				<span style="font-weight:bold;">【</span><span id="linkmanT"></span>】 
+			</td>
+			<td id="linkPhoneTd">
+				<span style="font-weight:bold;">【</span><span id="linkPhoneT"></span>】 
+			</td>
+			<td id="emailTd">
+				<span style="font-weight:bold;">【</span><span id="emailT"></span>】 
+			</td>
+			<td id="addressTd">
+				<span style="font-weight:bold;">【</span><span id="addressT"></span>】 
+			</td>
+			<td>
+				<img src="../js/library/easyui/themes/icons/pencil.png" style="cursor: pointer;" id="orderContentForLinkmanButton" />
+			</td>
+			<td>
+				<img src="../js/library/easyui/themes/icons/reload.png" style="cursor: pointer;"  id="loadOrderCoreQueryButton" />
+			</td>
+		</tr>
+		<tr>
+			<td colspan="6">
+				【<span id="countCost"></span>】
+			
+				【<span id="earnest"></span>】
+			
+				【<span id="orderPrice"></span>】
+			
+				【<span id="payAmount"></span>】
+			
+				【<span id="refoundAmount"></span>】
+			
+				【<span id="inPrice"></span>】
+			</td>
+		</tr>
+	</table>
+	<div style="width:99%;position:absolute;">
+		<!-- 展示栏 -->
+		<div>
+			<table id="noClientTable">
+			</table>
+		</div>
+		<div>
+			<table id="yesClientTable">
+			</table>
+		</div>
+		<div>
+			<table id="logWorkTable">
+			</table>
+		</div>
+	</div>
+</body>
+</html>

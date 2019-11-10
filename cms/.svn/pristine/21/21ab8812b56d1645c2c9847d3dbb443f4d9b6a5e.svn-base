@@ -1,0 +1,307 @@
+<template>
+  <div class="placeOrder">
+    <!-- 头部 start -->
+    <header>
+      <h2>订单确认</h2>
+      <i @click="goBack()" class="iconfont back icon-fanhui"></i>
+    </header>
+
+    <!-- 内容 start-->
+    <div class="main">
+      <div class="main-inner">
+
+        <!-- 邮轮信息 start -->
+        <div class="liner-info clearfloat" v-if="content.cabinArr && content.cabinArr.length == 1">
+          <img :src="content.cabinArr[0].cruiseImage" alt="">
+          <dl>
+            <dt>{{content.cabinArr[0].cruiseNmae}}</dt>
+            <dd>出行日期：{{content.cabinArr[0].cruiseDate.substring(0,10)}}</dd>
+          </dl>
+        </div>
+
+        <!-- 单条邮轮舱型数量 start-->
+        <div class="cabin-type" v-if="content.cabinArr && content.cabinArr.length == 1">
+          <ul>
+            <li v-for="num in content.cabinArr[0].list">
+              <div class="cabinTypeName pull-left">{{num.name}}</div>
+              <div class="price pull-left">&yen{{num.volume*(userType == 'true' ? num.price:num.salePrice)}}x{{num.counter}}</div>
+              <div class="totalPrice pull-right" :class="userType == 'true'? 'tourist':''">
+                &yen{{num.volume*num.counter*(userType == 'true' ? num.price:num.salePrice)}}
+                <div v-if="userType == 'true'&& level == i.level" v-for="i in num.cabinPriceList">返现{{i.rebate}}</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!--多条游轮舱型展示-->
+        <div class="cruiseNum" v-if="content.cabinArr && content.cabinArr.length > 1">
+          <div class="cruiseInfo" v-for="num in content.cabinArr">
+            <p>{{num.date}}【{{num.cruise}}】</p>
+            <ul>
+              <li v-for="cabin in num.list">
+                <div class="cabinTypeName pull-left">{{cabin.name}}</div>
+                <div class="price pull-left">&yen{{cabin.volume*(userType == 'true' ? cabin.price : cabin.salePrice)}}x{{cabin.counter}}</div>
+                <div class="totalPrice pull-right" :class="userType == 'true'? 'tourist':''">
+                  &yen{{cabin.volume*cabin.counter*(userType == 'true' ? cabin.price:cabin.salePrice)}}
+                  <div v-if="userType == 'true'&& level == i.level" v-for="i in num.cabinPriceList">返现{{i.rebate}}</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+      <div class="input-panel">
+        <ul>
+          <li>
+            <span>统一联系人姓名</span>
+            <input class="phone" type="text" v-model="linkMan" placeholder="请输入统一联系人姓名">
+          </li>
+          <li>
+            <span>统一联系人电话</span>
+            <input class="name" type="text" v-model="linkPhone" placeholder="请输入统一联系人电话">
+          </li>
+        </ul>
+      </div>
+      <!-- 下单按钮 start-->
+      <div class="btn-box">
+        <button @click="goOrderSuccess">立即下单¥{{content.totalPrice}}</button>
+        <div class="disable" v-if="operation==false"></div>
+        <!--<div @click="payment">支付</div>-->
+      </div>
+    </div>
+    <!-- 内容 end -->
+  </div>
+</template>
+
+<script>
+  let vm;
+  export default{
+    name: 'pOrderToC',
+    data(){
+      return {
+        operation:true, //操作 (true:编辑按钮显示，下单按钮禁用)
+        content:[],
+        cabbin:[],    //舱型
+        allprice:0,  //总价
+        linkMan: '',
+        linkPhone: '',
+        userType:sessionStorage.userType,
+        level : parseInt(sessionStorage.rebatelevel),
+      }
+    },
+    mounted:function(){
+      vm = this;
+      vm.addData();
+    },
+    methods:{
+      goBack:function () {
+        vm.$router.goBack();
+      },
+      goOrderSuccess:function () {
+        let tel = /^1[34578][0-9]{9}$/;
+        if( !vm.linkMan ){
+          vm.tooltip.show('请填写统一联系人姓名','.phone');
+          return;
+        }
+        if( !vm.linkPhone || !(tel.test(vm.linkPhone))  ){
+          vm.tooltip.show('请正确填写统一联系人手机号','.name');
+          return;
+        }
+        let orderJson = new Array;
+        let cabinArr = vm.content.cabinArr;
+        let cruiseVoyage;
+        console.log(cabinArr)
+        for(let i=0;i<cabinArr.length;i++){
+          cruiseVoyage = cabinArr[0].cruiseNumberCode;
+          let json = cabinArr[i];
+          for(let num=0; num<json.list.length; num++){
+            let orderObj = new Object;
+            orderObj.cabin = json.list[num].numberCode;
+            orderObj.count = json.list[num].counter;
+            orderObj.stock = json.list[num].stock;
+            orderObj.sharePrice = json.list[num].price;
+            orderJson.push(orderObj)
+          }
+        }
+        vm.upData(cruiseVoyage,orderJson);
+      },
+      upData(cruiseVoyage,orderJson){
+        let parame = {
+          voyage: cruiseVoyage,
+          orderJson: JSON.stringify(orderJson),
+          linkMan: vm.linkMan,
+          linkPhone: vm.linkPhone,
+          distributor: sessionStorage.userCode,
+          openId: sessionStorage.openid,
+          sharePrice: sessionStorage.sharePrice
+        };
+        vm.axios.post(this.api+this.urlApi.shartCreateShareOrderOper,parame).then(function (response) {
+          if(response.status) vm.$router.push('/orderSuccess');
+        })
+      },
+      addData:function () {
+        vm.content=[];
+        vm.cabbin = [];
+        if(sessionStorage.order){
+          vm.content = JSON.parse(sessionStorage.order);
+        }
+      }
+    }
+
+  }
+
+</script>
+
+<style lang="less" scoped>
+  @import "../assets/css/common.less";
+
+  @font-color:#8d95a3;
+  .placeOrder{
+    width: 100%;
+    height: 100%;
+    background-color: #dee9f8;
+    .main{
+      width: 100%;
+      height: 100%;
+      padding:88*@basePX 24*@basePX 0 24*@basePX;
+      background-color:@appBg;
+      .main-inner{
+        width: 100%;
+        background-color: #fff;
+        padding: 24*@basePX;
+        padding-bottom: 0;
+        margin-top: 24*@basePX;
+        .liner-info{
+          width: 100%;
+          padding-bottom: 24*@basePX;
+          border-bottom: 1px solid @lineColor;
+          img{
+            width:180*@basePX;
+            height:108*@basePX ;
+            float: left;
+            padding-right: 24*@basePX;
+          }
+          dl{
+            float: left;
+            width: 72%;
+            dt{
+              font-size: 32*@basePX;
+              font-weight: bold;
+            }
+            dd{
+              font-size: 26*@basePX;
+              color: @font-color;
+            }
+          }
+        }
+        .cabin-type,.cruiseNum{
+          width: 100%;
+          padding: 24*@basePX 0;
+          li{
+            height: 100*@basePX;
+            line-height: 100*@basePX;
+            font-size: 28*@basePX;
+            .cabinTypeName{
+              font-size: 32*@basePX;
+              color:#4c4c4c;
+              width: 255*@basePX;
+            }
+            .price{
+              color:@subTextColor;
+              width: 250*@basePX;
+            }
+            .totalPrice{
+              color:@clickBtnBg;
+              div{
+                height: 30*@basePX;
+                line-height: 30*@basePX;
+                font-size: 24*@basePX;
+                background-color: @clickBtnBg;
+                color:#fff;
+                padding: 0 12*@basePX;
+                border-radius: 8*@basePX;
+              }
+            }
+            .tourist{
+              margin-top: 10*@basePX;
+              line-height: 44*@basePX;
+            }
+          }
+        }
+        .cruiseNum{
+          padding-top: 0;
+          .cruiseInfo{
+            p{
+              height: 66*@basePX;
+              line-height: 66*@basePX;
+              color:@changeBtnBg;
+              border-bottom: 2*@basePX solid @changeBtnBg;
+            }
+          }
+        }
+      }
+      .input-panel {
+        width: 100%;
+        height: 352*@basePX;
+        margin-top: 18*@basePX;
+        padding: 30*@basePX 0 0 42*@basePX;
+        font-size: 32*@basePX;
+        background-color: #fff;
+        span {
+          display: block;
+        }
+        input {
+          width: 620*@basePX;
+          height: 72*@basePX;
+          line-height: 36*@basePX;
+          padding: 18*@basePX 0;
+          margin: 16*@basePX 0;
+          border: 1px solid #c2d6ee;
+          background-color: #fff;
+          .borderRadius;
+          text-indent: 16*@basePX;
+          font-size: 32*@basePX;
+        }
+        input:focus{
+          box-shadow: 0 0 7px rgba(36, 106, 191, 0.38);
+        }
+      }
+      .btn-box{
+        width: 100%;
+        background-color:@panleBg;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        text-align: center;
+        z-index: 9;
+        button{
+          width: 600*@basePX;
+          height: 88*@basePX;
+          .borderRadius(@radius:50*@basePX );
+          border:0;
+          background-color: @clickBtnBg;
+          color: #fff;
+          font-size: 40*@basePX;
+          margin: 24*@basePX 0;
+          letter-spacing: 2px;
+          cursor: pointer;
+          outline: none;
+        }
+        .disable{
+          width: 600*@basePX;
+          height: 88*@basePX;
+          .borderRadius(@radius:50*@basePX );
+          background-color: #fff;
+          position:absolute;
+          z-index: 10;
+          left: 50%;
+          margin-left:-(600*@basePX/2) ;
+          bottom:50%;
+          margin-bottom: -(88*@basePX/2);
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+</style>

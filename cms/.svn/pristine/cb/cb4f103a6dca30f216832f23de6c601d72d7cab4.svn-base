@@ -1,0 +1,37 @@
+function getLoginCookie(){
+	var cookieValue = $.cookie('cmscmscmscmscmscmscmscmscmscms');
+	if(cookieValue==null){
+		cookieValue = "";
+	}
+	return cookieValue;
+}
+
+function deleteLoginCookie(){
+	$.cookie('cmscmscmscmscmscmscmscmscmscms',null,
+		{
+			path : '/'
+		}
+	);
+}
+
+function setLoginCookie(xyzxyzxyzxyzxyzxyzxyzxyzxyzxyz){
+	$.cookie('cmscmscmscmscmscmscmscmscmscms',xyzxyzxyzxyzxyzxyzxyzxyzxyzxyz);
+}
+
+function addLoginCookie(xyzxyzxyzxyzxyzxyzxyzxyzxyzxyz,days){
+	if(days==0){
+		$.cookie('cmscmscmscmscmscmscmscmscmscms',xyzxyzxyzxyzxyzxyzxyzxyzxyzxyz, 
+			{
+				path : '/'
+			}
+		);
+	}else{
+		$.cookie('cmscmscmscmscmscmscmscmscmscms',xyzxyzxyzxyzxyzxyzxyzxyzxyzxyz, 
+			{
+				expires : days,
+				path : '/'
+			}
+		);
+	}
+}
+

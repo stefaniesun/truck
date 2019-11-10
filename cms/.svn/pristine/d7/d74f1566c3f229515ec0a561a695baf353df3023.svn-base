@@ -1,0 +1,74 @@
+/**
+ * Created by Administrator on 2017/12/4.
+ */
+import Vue from 'vue'
+import Router from 'vue-router'
+import login from '@/components/login'
+import productQuery from '@/components/productQuery'
+import placeOrder from '@/components/placeOrder'
+import productDetail from '@/components/ptDetail'
+import orderSuccess from '@/components/orderSuccess'
+import orderAll from '@/components/orderAll'
+import moneyAmount from '@/components/moneyAmount'
+Vue.use(Router)
+
+export default new Router({
+  routes: [
+    {
+      path: '/',
+      name: 'login',
+      component: login,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
+    },
+    {
+      path:'/productQuery',
+      name:'productQuery',
+      component:productQuery,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
+    },
+    {
+      path: '/placeOrder',
+      name: 'placeOrder',
+      component: placeOrder,
+      meta: {
+        keepAlive: false // 不需要被缓存
+      }
+    },
+    {
+      path: '/productDetail',
+      name: 'productDetail',
+      component: productDetail,
+      meta: {
+        keepAlive: false // 不需要被缓存
+      }
+    },
+    {
+      path: '/orderSuccess',
+      name: 'orderSuccess',
+      component: orderSuccess,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
+    },
+    {
+      path: '/orderAll',
+      name: 'orderAll',
+      component: orderAll,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
+    },
+    {
+      path: '/moneyAmount',
+      name: 'moneyAmount',
+      component: moneyAmount,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
+    }
+  ]
+})

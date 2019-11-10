@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC 
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN" 
+	"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+	
+		<mapping class="xyz.work.security.model.LogOper"></mapping>
+		<mapping class="xyz.work.security.model.SecurityApi"></mapping>
+		<mapping class="xyz.work.security.model.SecurityFunction"></mapping>
+		<mapping class="xyz.work.security.model.SecurityLogin"></mapping>
+		<mapping class="xyz.work.security.model.SecurityPosition"></mapping>
+		<mapping class="xyz.work.security.model.SecurityPositionButton"></mapping>
+		<mapping class="xyz.work.security.model.SecurityUser"></mapping>
+		<mapping class="xyz.work.security.model.TokenInfo"></mapping>
+		<mapping class="xyz.work.security.model.Possessor"></mapping>
+		<mapping class="xyz.work.security.model.Possessor_Relate"></mapping>
+		
+		<mapping class="xyz.work.security.model.UserOper"></mapping>
+				
+		<mapping class="xyz.work.security.model.SystemContent"></mapping>
+		
+		<!-- 售卖相关 -->
+		<mapping class="xyz.work.sell.model.Ptview"></mapping>
+		<mapping class="xyz.work.sell.model.PtviewSku"></mapping>
+		<mapping class="xyz.work.sell.model.PtviewSku_TkviewType"></mapping>
+		<mapping class="xyz.work.sell.model.PtviewSkuStock"></mapping>
+		
+		<mapping class="xyz.work.sell.model.OrderContent"></mapping>
+		<mapping class="xyz.work.sell.model.LogHold"></mapping>
+		<mapping class="xyz.work.sell.model.PersonInfo"></mapping>
+		
+		<mapping class="xyz.work.core.model.PlanWork"></mapping>
+		<mapping class="xyz.work.core.model.PlanWorkLog"></mapping>
+		<mapping class="xyz.work.core.model.LogWork"></mapping>
+		
+		<!-- 档案-->
+		<mapping class="xyz.work.base.model.Company"></mapping>
+		<mapping class="xyz.work.base.model.Cruise"></mapping>
+		<mapping class="xyz.work.base.model.Cabin"></mapping>
+		<mapping class="xyz.work.base.model.Area"></mapping>
+		<mapping class="xyz.work.base.model.Port"></mapping>
+		<mapping class="xyz.work.base.model.Airway"></mapping>
+		<mapping class="xyz.work.base.model.Trip"></mapping>
+		<mapping class="xyz.work.base.model.Shipment"></mapping>
+		<mapping class="xyz.work.base.model.Voyage"></mapping>
+		<mapping class="xyz.work.base.model.Backup"></mapping>
+		
+		<!-- 计划目标 -->
+		<mapping class="xyz.work.goal.model.Person"></mapping>
+		<mapping class="xyz.work.goal.model.PlanGoal"></mapping>
+		<mapping class="xyz.work.goal.model.Record"></mapping>
+		
+		<!-- 资源 -->
+		<mapping class="xyz.work.resources.model.Stock"></mapping>
+		<mapping class="xyz.work.resources.model.Tkview"></mapping>
+		<mapping class="xyz.work.resources.model.Provider"></mapping>
+		<mapping class="xyz.work.resources.model.TkviewType"></mapping>
+		
+		<mapping class="xyz.work.excel.model.PriceStrategy"></mapping>
+		<mapping class="xyz.work.excel.model.ExcelLog"></mapping>
+		
+		<mapping class="xyz.work.resources.model.Channel"></mapping>
+		<mapping class="xyz.work.resources.model.Account"></mapping>
+		<mapping class="xyz.work.resources.model.Joiner"></mapping>
+		
+		<!-- 分销管理 -->
+		<mapping class="xyz.work.resources.model.Distributor"></mapping>
+		<mapping class="xyz.work.resources.model.DistributorTag"></mapping>
+		
+		<!-- 淘宝售卖 -->
+		<mapping class="xyz.work.taobao.model.TaobaoBaseInfo"></mapping>
+		<mapping class="xyz.work.taobao.model.TaobaoBookingRule"></mapping>
+		<mapping class="xyz.work.taobao.model.TaobaoCruiseItemExt"></mapping>
+		<mapping class="xyz.work.taobao.model.TaobaoOrderTbo"></mapping>
+		<mapping class="xyz.work.taobao.model.TaobaoOrderTbt"></mapping>
+		<mapping class="xyz.work.taobao.model.TaobaoSaleInfo"></mapping>
+		<mapping class="xyz.work.taobao.model.TaobaoSkuInfo"></mapping>
+		<mapping class="xyz.work.taobao.model.TaobaoSkuInfoDetail"></mapping>
+		<mapping class="xyz.work.taobao.model.TaobaoTravelItem"></mapping>
+		<mapping class="xyz.work.taobao.model.Sku_TkviewType"></mapping>
+		<mapping class="xyz.work.taobao.model.TaobaoLogWork"></mapping>
+		
+		<!-- 预约 -->
+		<mapping class="xyz.work.reserve.model.Reserve"></mapping>
+		
+		<!-- 客户 -->
+		<mapping class="xyz.work.custom.model.Customer"></mapping>
+		<mapping class="xyz.work.custom.model.BizSecurityLogin"></mapping>
+		<mapping class="xyz.work.custom.model.UserTag"></mapping>
+		
+		<mapping class="xyz.work.truck.model.Truck"></mapping>
+		
+		<!-- 微信公众号平台 -->
+		<mapping class="xyz.work.weixin.model.WechatSubscription"></mapping>
+		
+		<!-- 美团 -->
+		<mapping class="xyz.work.meituan.model.ConfirmApproval"></mapping>
+		
+		<!-- 皇家加勒比 -->
+		<mapping class="xyz.work.r_base.model.R_Airway"></mapping>
+		<mapping class="xyz.work.r_base.model.R_Area"></mapping>
+		<mapping class="xyz.work.r_base.model.R_Port"></mapping>
+		<mapping class="xyz.work.r_base.model.R_Shipment"></mapping>
+		<mapping class="xyz.work.r_base.model.R_Stock"></mapping>
+		<mapping class="xyz.work.r_base.model.R_Task"></mapping>
+		<mapping class="xyz.work.r_base.model.R_Tkview"></mapping>
+		<mapping class="xyz.work.r_base.model.R_Trip"></mapping>
+		<mapping class="xyz.work.r_base.model.R_Voyage"></mapping>
+		<mapping class="xyz.work.r_base.model.R_Task"></mapping>
+		
+	</session-factory>
+</hibernate-configuration>

@@ -1,0 +1,1384 @@
+<template>
+  <div class="pt-detail">
+
+    <m-header></m-header>
+    <div class="ptdetil-container" ref="ptdetilContainer">
+      <div class="ptinfo-module clearfloat">
+        <div class="slider-wrapper">
+          <div class="slider-group">
+            <Carousel
+              ref="carousel"
+              loop
+              v-model="carouselIndex"
+              :autoplay="carouselSetting.autoplay"
+              :autoplay-speed="carouselSetting.autoplaySpeed"
+              :dots="carouselSetting.dots"
+              :radius-dot="carouselSetting.radiusDot"
+              :trigger="carouselSetting.trigger"
+              :arrow="carouselSetting.arrow"
+              :height="carouselSetting.height"
+            >
+              <CarouselItem class=" slider-item" v-for="(item, index) in sliders" :key="index">
+                <div  style="height: 284px;" class="demo-carousel">
+                  <img  :src="item" alt="" >
+                </div>
+              </CarouselItem>
+            </Carousel>
+
+            <span class="total-num">{{carouselIndex+1}}/{{sliders.length}}</span>
+          </div>
+          <div class="small-view clearfloat" ref="smallView">
+            <div class="small-group" ref="smallGroup">
+              <div class="view-item" v-for="(item, index) in sliders" :class="{active: index === carouselIndex}" @click="onSel('click',index)">
+                <img :src="item" alt="" >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-wrapper">
+
+          <h2>{{ptview.name}}</h2>
+          <div class="price-line clearfloat">
+            <span class="price-now"><span class="icon">&yen;</span><span class="price">{{ptview.price}}</span>起/人</span>
+
+            <div class="share-wrapper">
+              <div class="icon-container">
+                <svg class="icon">
+                  <use xlink:href="#icon-erweima"></use>
+                </svg>
+              </div>
+              <div class="text">产品分享</div>
+
+              <div class="erweima-container animated fadeIn">
+                <div class="erweima-content">
+                  <img src="../assets/img/erwm.png" alt="">
+                </div>
+                <div class="text-inline clearfloat">
+                  <svg class="icon">
+                    <use xlink:href="#icon-saomiao"></use>
+                  </svg>
+                  <div class="text">微信扫描 转发收客</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <button class="calendar-btn"  @click="slcDate.slcBoolean = true" v-if="dateListBtn">出发日期</button>
+            <div class="info-line">
+              <svg class="icon">
+                <use xlink:href="#icon-date"></use>
+              </svg>
+              <span>出发日期：{{new Date(travelDate).Format("yyyy/MM/dd")}}</span>
+            </div>
+            <div class="info-line">
+              <svg class="icon">
+                <use xlink:href="#icon-gangkou"></use>
+              </svg>
+              <span>出发港口：{{ptview.startCity}}</span>
+            </div>
+            <div class="info-line ">
+              <svg class="icon">
+                <use xlink:href="#icon-youlunyou1"></use>
+              </svg>
+              <span><span class="cruise">邮轮号：</span>{{ptview.cruiseNameCn}}</span>
+            </div>
+            <div class="info-line">
+              <svg class="icon">
+                <use xlink:href="#icon-tianshu"></use>
+              </svg>
+              <span>行程天数：{{travelDays}}</span>
+            </div>
+            <div class="info-line">
+              <svg class="icon">
+                <use xlink:href="#icon-chengshi"></use>
+              </svg>
+              <span>途经城市：{{travelPlace}}</span>
+            </div>
+          </div>
+
+          <div class="btn-wrapper clearfloat">
+            <button class="btn-order" @click="goPtOrder" :disabled="order.total===0">立即预定</button>
+            <div class="order-info">
+              <p>已选 <span>{{order.total}}</span> 间房间</p>
+              <p class="travel-date">{{travelDate}} 出发</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subNav-container" ref="subNavContainer">
+        <div class="nav-group">
+          <div class="nav-item" v-for="(item,index) in navList" :class="{active: navItem === index}" @click="jump('section',index, 'nav')">
+            <span class="top-border"></span>
+            <span >{{item.name}}</span>
+          </div>
+
+        </div>
+      </div>
+
+      <section class="cabin-module" id="cabinModule" >
+        <cabin-type :cabinList="cabinList" :height="100" :order="order"></cabin-type>
+
+      </section>
+
+      <section class="voyage-module" id="voyageModule">
+        <div class="title">
+          <h3>行程安排>></h3>
+        </div>
+
+        <div class="voyage-container">
+          <div class="map-wrapper">
+            <div class="sub-title">
+              <h3>航线图</h3>
+            </div>
+             <div class=" map-content">
+               <div class="map-img">
+                 <img src="../assets/img/voyage_map.png" alt="">
+               </div>
+               <div class="voyage-brief">
+                 <table>
+                   <tr  class="thead">
+                     <th>天数</th>
+                     <th>停靠港口</th>
+                     <th>抵达时间</th>
+                     <th>启航时间</th>
+                   </tr>
+
+                   <tr v-for="(item, index) in tripPlanList">
+                     <td>第{{item.sort}}天</td>
+                     <td>
+                       <span v-if="item.planType !== 'CRUISE'">{{item.nameCn}}</span>
+                       <span v-if="item.planType === 'CRUISE'">--</span>
+                     </td>
+                     <td>
+                       <span v-if="item.arriveTime"> {{item.arriveTime}} </span>
+                       <span v-if="!item.arriveTime"> -- </span>
+                     </td>
+                     <td>
+                       <span v-if="item.leaveTime"> {{item.leaveTime}} </span>
+                       <span v-if="!item.leaveTime"> -- </span>
+                     </td>
+                   </tr>
+                 </table>
+               </div>
+             </div>
+          </div>
+
+          <div class="voyage-detail">
+            <div class="sub-title">
+              <h3>具体行程</h3>
+            </div>
+            <div class="detail-content">
+              <div class="days-select" ref="selectDate">
+                <span class="slc-item" v-for="(item, index) in tripPlanList" :class="{active: index === slc}" @click="jump('.voyage-list',index, 'voyage')">
+                  第{{index+1}}天
+                </span>
+              </div>
+              <div class="voyage-group">
+                <div class="left-line"></div>
+                <div class="voyage-list" v-for="(item, index) in tripPlanList">
+                  <div class="voyage-title">
+                    <span class="icon-circle"></span>
+                    <span class="day">Day{{item.sort}}</span>
+                    <span class="date">{{item.date}} {{item.weekday}} ,</span>
+                    <span v-if="item.planType === 'START_PORT'"> 出发日 ,</span>
+                    <span >{{item.nameCn}}</span>
+                  </div>
+
+                  <div class="repast" >
+                    <div class="repast-content">
+                      <div class="diet">
+                        <svg class="icon">
+                          <use xlink:href="#icon-canju"></use>
+                        </svg>
+                        早餐: {{item.breakfast}} /
+                        午餐: {{item.lunch}} /
+                        晚餐: {{item.dinner}}
+                      </div>
+                      <div class="accom" >
+                        <svg class="icon">
+                          <use xlink:href="#icon-icon1"></use>
+                        </svg>
+                        住宿: {{item.putUp}}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="voyage-content">
+                    <div class="portNameCn" v-if="index===0">{{item.portNameCn}}</div>
+                    <div class="detail clearfloat">
+                      <div class="text"  v-html="item.detail">
+                      </div>
+                      <div class="img-wrapper">
+                        <div class="img-item"  v-for="img in item.images">
+                          <img :src="img" alt="">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class=" cost-module" id="costModule">
+        <div class="title">
+          <h3>费用说明>></h3>
+        </div>
+
+        <div class="description-container" v-html="ptview.infoCost"></div>
+      </section>
+
+      <section class="visa-module" id="visaModule">
+        <div class="title">
+          <h3>签证信息>></h3>
+        </div>
+
+        <div class="description-container" v-html="ptview.infoVisa"></div>
+      </section>
+      <section class="visa-module" id="reserveModule">
+        <div class="title">
+          <h3>预订须知>></h3>
+        </div>
+
+        <div class="description-container" v-html="ptview.infoNotice"></div>
+      </section>
+      <section class="visa-module" id="infoRefundModule">
+        <div class="title">
+          <h3>退改说明>></h3>
+        </div>
+
+        <div class="description-container" v-html="ptview.infoRefund"></div>
+      </section>
+
+    </div>
+
+    <div class="cover" v-if="slcDate.slcBoolean" @click="slcDate.slcBoolean = false" ></div>
+    <div class="calendar-wrap" v-if="slcDate.slcBoolean" >
+      <calendar @select="selectDate" :travelDate="travelDate" :dateList="dateList" :slcDate="slcDate"></calendar>
+    </div>
+
+    <div class="footer-wrapper">
+      <m-footer></m-footer>
+    </div>
+
+    <div v-show="showBackTop" class="back-top" ref="backTop" @click="backTop()">返回顶部</div>
+
+  </div>
+</template>
+
+
+
+<script>
+
+  let vm;
+
+  import MHeader from '@/components/header'
+  import MFooter from '@/components/footer'
+  import Calendar from '@/components/calendar'
+  import cabinType from '@/components/cabinType'
+
+  import common from '../assets/js/common'
+
+  export default {
+    name: 'ptDetail',
+    components: {
+      MHeader,
+      MFooter,
+      Calendar,
+      cabinType
+    },
+    data() {
+      return {
+        scrollTop: 0,
+        slcDate: {
+          slcBoolean: false
+        },
+        showBackTop: false,
+        travelDate: '2017-12-1',
+        navItem: 0,
+        transitionName: 'fadeInRight',
+        cabinTypeIndex: 0,
+//        跑马灯效果设置
+        carouselIndex: 0,
+        carouselSetting: {
+          autoplay: false,
+          autoplaySpeed: 2000,
+          dots: 'none',
+          radiusDot: true,
+          trigger: 'click',
+          arrow: 'hover',
+          height: 284
+        },
+        sliders: [],
+        ptview: {},
+        slc: 0,
+        travelPlace: '',
+        travelDays: 0,
+        ifOnscroll: true,
+        order: {
+          total: 0,
+          totalPrice: 0,
+          travelDate: '',
+          cruiseImg: require('../assets/img/product.jpg'),
+          cabinArr:[],
+          ptviewName: '',
+//          cruiseVoyage: ''
+        },
+//       舱型
+        cabinList: [],
+//        行程
+        tripPlanList:[],
+        navList: [
+          {anchor: '/#cabinModule', name: '舱型价格'},
+          {anchor: '/#voyageModule', name: '行程安排'},
+          {anchor: '/#costModule', name: '费用说明'},
+          {anchor: '/#visaModule', name: '签证信息'},
+          {anchor: '/#reserveModule', name: '预订须知'},
+          {anchor: '/#infoRefundModule', name: '退改说明'}
+        ],
+        dateList: [],
+        dateListBtn: false,
+        voyageList: []
+      }
+    },
+    watch: {
+      carouselIndex: {
+        handler: function (newVal, oldVal) {
+          if (newVal >= 5) {
+            vm.$refs.smallGroup.style.transform = "translateX(" + (- (newVal-5) * 70) + "px)";
+          }else{
+            vm.$refs.smallGroup.style.transform = "translateX(0px)";
+          }
+        },
+        deep: true
+      }
+    },
+
+    created() {
+    },
+    mounted() {
+      vm = this;
+
+      vm.$refs.backTop.style.left = vm.getConLeft() + vm.getConWidth() + 'px';
+      let numberCode = sessionStorage.numberCode;
+      vm._initSmViewW();
+      vm._getPtDetail(numberCode);
+      vm._getVoyageDateList(numberCode);
+      vm.getVoyages();
+      window.addEventListener("scroll", vm.listenScroll);
+      window.addEventListener("resize", vm.listenLeft);
+
+    },
+
+    destroyed() {
+      window.removeEventListener('scroll', vm.listenScroll);
+      window.removeEventListener("resize", vm.listenLeft)
+    },
+    methods: {
+      getVoyages() {
+        vm.axios.post(this.api + this.urlApi.queryVoyageList, {
+          page: 0,
+          rows: 0,
+        }).then((res) => {
+        	if(res.status){
+            vm.voyageList = res.content.rows;
+          }
+        })
+      },
+      selectDate(date) {
+        vm.travelDate = new Date(date).Format("yyyy-MM-dd");
+        for(let i in vm.voyageList) {
+          if(new Date(vm.voyageList[i].date).Format("yyyy-MM-dd") === vm.travelDate) {
+            sessionStorage.numberCode = vm.voyageList[i].numberCode;
+            vm._getPtDetail(vm.voyageList[i].numberCode);
+            vm._getVoyageDateList(vm.voyageList[i].numberCode);
+          }
+        }
+      },
+      goPtOrder() {
+        vm.$router.push('placeOrder')
+      },
+      _getPtDetail(numberCode) {
+        vm.axios.post(this.api + this.urlApi.getVoyageDetail,{
+          numberCode: numberCode
+        }).then((response) => {
+        	if(response.status){
+            vm.ptview = response.content.voyage;
+            vm.travelDays = vm.ptview.airwayNameCn.split(' ')[1];
+            vm.travelDate = new Date(vm.ptview.date).Format("yyyy-MM-dd");
+
+            vm.setTravelPlace(vm.ptview.airwayNameCn);
+            vm.setSliders(vm.ptview.image);
+            vm.setOrderInfo(vm.ptview.image, vm.ptview.date, vm.ptview.name);
+            if(response.content.tripPlanList.length > 0) {
+              vm.setVoyage(response.content.tripPlanList)
+            }
+            if(response.content.cabiList.length > 0) {
+              vm.setCabin(response.content.cabiList);
+            }
+            if(sessionStorage.ptOrder) {
+              vm.getOrder(sessionStorage.ptOrder)
+            }
+          }
+        })
+      },
+      setVoyage(voyage) {
+        let weekdays = ['周日','周一','周二','周三','周四','周五','周六'];
+        let date = vm.travelDate;
+        for(let i in voyage) {
+          date = vm.getTransDate(vm.travelDate, i);
+          voyage[i] = Object.assign(voyage[i], {
+            date: new Date(date).Format("yyyy/MM/dd"),
+            weekday: weekdays[ new Date(date).getDay()]
+          });
+          voyage[i].images = voyage[i].images.split(',');
+        }
+        vm.tripPlanList = voyage;
+      },
+      setOrderInfo(cruiseImg, travelDate, ptviewNameCn) {
+        if(!common.xyzIsNull(cruiseImg)) {
+          vm.order.cruiseImg = cruiseImg;
+        }
+        vm.order.ptviewName = ptviewNameCn;
+        vm.order.travelDate = new Date(travelDate).Format("yyyy-MM-dd");
+      },
+      setSliders(sliders) {
+        vm.sliders.length = 0;
+        if(common.xyzIsNull(sliders)) {
+          let img = require('../assets/img/baseImg.png');
+          vm.$set(vm.sliders, 0, img)
+        }else{
+          let sliderImg = sliders.split(',');
+          for (let i = 0; i < sliderImg.length; i++) {
+            vm.$set(vm.sliders, vm.sliders.length, sliderImg[i])
+          }
+        }
+      },
+      setTravelPlace(place) {
+        place = place.split(' ')[0];
+        place = [...new Set(place.split('-'))];
+        for(let i in place) {
+          if (place[i] == '海上巡游') {
+            place.splice(i,1);
+          }
+        }
+        vm.travelPlace = place.toString();
+      },
+      _initSmViewW() {
+        let child = vm.$refs.smallGroup.children;
+        if(child.length > 6) {
+          let width = (child[0].offsetWidth+10) * child.length;
+          vm.$refs.smallGroup.style.width = width + 'px';
+        }
+      },
+
+      getConLeft() {
+        return vm.$refs.ptdetilContainer.offsetLeft;
+      },
+      getConWidth() {
+        return vm.$refs.ptdetilContainer.offsetWidth;
+      },
+      getScrollTop() {
+        return document.documentElement.scrollTop || document.body.scrollTop;
+      },
+
+      listenLeft() {
+        let cSclTop = document.querySelector(".detail-content").getBoundingClientRect().top;
+        if(cSclTop <= 0) {
+          vm.$refs.selectDate.style.left = vm.getConLeft() - vm.$refs.selectDate.offsetWidth + 'px';
+        }
+        vm.$refs.backTop.style.left = vm.getConLeft() + vm.getConWidth() + 'px';
+      },
+
+      listenScroll() {
+
+        let cSclTop = document.querySelector(".detail-content").getBoundingClientRect().top;
+        let ch = document.querySelector(".detail-content").getBoundingClientRect().height - document.querySelector('.days-select').getBoundingClientRect().height;
+
+        if(cSclTop <= 0 && cSclTop >= -ch) {
+          vm.setPostion(vm.$refs.selectDate, 'fixed', 50, vm.getConLeft() - vm.$refs.selectDate.offsetWidth);
+          vm.scrollAnchor('.voyage-list','voyage');
+        }else{
+          vm.setPostion(vm.$refs.selectDate, 'absolute', 30, -112)
+        }
+
+        let mh = document.querySelector('.ptinfo-module').offsetHeight + document.querySelector('#header').offsetHeight;
+
+        if(vm.getScrollTop() >= mh) {
+          vm.setPostion(vm.$refs.subNavContainer, 'fixed', 0);
+          vm.$refs.subNavContainer.style.marginTop = 0;
+          vm.scrollAnchor('section','nav');
+        }else{
+          vm.setPostion(vm.$refs.subNavContainer, 'static', 0);
+          vm.$refs.subNavContainer.style.marginTop = 40 + 'px';
+        }
+        vm.scrollTop = vm.getScrollTop();
+        vm.scrollTop >= 600 ? vm.showBackTop = true : vm.showBackTop = false;
+      },
+
+      scrollAnchor(el,type) {
+
+        let section = document.querySelectorAll(el);
+
+        for (let i = 0; i < section.length ; i++) {
+          let bTop = section[i].getBoundingClientRect().top;
+
+          let offsetHeight = section[i].getBoundingClientRect().height;
+          if ( bTop <= 0 && Math.abs(bTop) <= offsetHeight) {
+            switch (type) {
+              case 'voyage': vm.slc = i; break;
+              case 'nav': vm.navItem = i; break;
+            }
+          }
+        }
+      },
+
+      setPostion(el, postion, top, left) {
+        el.style.position = postion;
+        el.style.top = top + 'px';
+        el.style.left = left + 'px';
+      },
+
+      jump(el,index, type) {
+        switch (type) {
+          case 'voyage': vm.slc = index; break;
+          case 'nav': vm.navItem = index; break;
+        }
+
+        let distance = vm.getScrollTop();
+        let slcItem = document.querySelectorAll(el);
+        let total = slcItem[index].getBoundingClientRect().top;
+        let top = distance + total - 40;
+
+        document.body.scrollTop = top;
+        document.documentElement.scrollTop = top;
+        window.pageYOffset = top;
+      },
+
+      onSel(event, index) {
+        vm.carouselIndex = index;
+
+        let carousel = vm.$refs.carousel;
+        carousel.dotsEvent(event,index)
+      },
+      getOrder(order) {
+        order = JSON.parse(order);
+        let cabinArr = order.cabinArr;
+        for (let i in vm.cabinList) {
+          for(let k in vm.cabinList[i].list) {
+            for (let j in cabinArr) {
+              if(cabinArr[j].numberCode === vm.cabinList[i].list[k].numberCode) {
+                vm.$set(vm.cabinList[i].list[k], 'counter', cabinArr[j].roomNum);
+                vm.$set(vm.cabinList[i].list[k], 'stockCount', vm.cabinList[i].list[k].stockCount - cabinArr[j].roomNum)
+              }
+            }
+          }
+        }
+        vm.order = order;
+      },
+
+      setCabin(cabinList) {
+        let arrList = [
+          {cabinType: '内舱房',list:[]},
+          {cabinType: '海景房', list: []},
+          {cabinType: '阳台房',list: []},
+          {cabinType: '套房', list: []}
+        ];
+
+        for(let i in cabinList) {
+          vm.$set(cabinList[i], 'counter', 0);
+          vm.$set(cabinList[i], 'cabinImg', require('../assets/img/cabinImg.png'));
+          if(cabinList[i].type.indexOf('I') === 0) {
+            arrList[0].list.push(cabinList[i]);
+          }
+          if(cabinList[i].type.indexOf('S') === 0) {
+            arrList[1].list.push(cabinList[i]);
+          }
+          if(cabinList[i].type.indexOf('B') === 0) {
+            arrList[2].list.push(cabinList[i]);
+          }
+          if(cabinList[i].type.indexOf('T') === 0) {
+            arrList[3].list.push(cabinList[i]);
+          }
+        }
+        vm.cabinList = arrList;
+      },
+      //返回顶部
+      backTop(){
+        vm.showBackTop = false;
+        let timer = setInterval(function () {
+          vm.scrollTop -= 100;
+          if(vm.scrollTop <= 0){
+            vm.scrollTop = 0;
+            clearInterval(timer);
+          }
+          document.documentElement.scrollTop = vm.scrollTop;
+          document.body.scrollTop = vm.scrollTop;
+        },13)
+      },
+
+//      指定日期的后几天
+      transDate(dateParameter, num) {
+        let translateDate = "", dateString = "", monthString = "", dayString = "";
+        translateDate = dateParameter.replace("-", "/").replace("-", "/");
+        let newDate = new Date(translateDate);
+        newDate = newDate.valueOf();
+        newDate = newDate + num * 24 * 60 * 60 * 1000;
+        newDate = new Date(newDate);
+        if ((newDate.getMonth() + 1).toString().length === 1) {
+          monthString = 0 + "" + (newDate.getMonth() + 1).toString();
+        } else {
+          monthString = (newDate.getMonth() + 1).toString();
+        }
+        if (newDate.getDate().toString().length === 1) {
+          dayString = 0 + "" + newDate.getDate().toString();
+        } else {
+          dayString = newDate.getDate().toString();
+        }
+        dateString = newDate.getFullYear() + "-" + monthString + "-" + dayString;
+        return dateString;
+      },
+
+      getTransDate(date, num) {
+        let trans_day = "";
+        let cur_date = new Date(date);
+        let cur_year = new Date(date).getFullYear();
+        let cur_month = cur_date.getMonth() + 1;
+        let real_date = cur_date.getDate();
+        cur_month = cur_month > 9 ? cur_month : ("0" + cur_month);
+        real_date = real_date > 9 ? real_date : ("0" + real_date);
+        let eT = cur_year + "-" + cur_month + "-" + real_date;
+        trans_day = vm.transDate(eT, num);
+
+        return trans_day;
+      },
+
+      _getVoyageDateList(numberCode) {
+        vm.dateList.length = 0;
+        vm.axios.post(this.api + this.urlApi.getVoyageDateList, {
+          numberCode: numberCode
+        }).then( (response) => {
+        	if(response.status){
+            let dateList = response.content;
+            vm.dateListBtn = dateList.length === 1 ? false : true;
+            for (let i = 0; i < dateList.length; i++) {
+              vm.dateList.push({
+                month: new Date(dateList[i]).getFullYear() + '-' + (new Date(dateList[i]).getMonth()+1),
+                dates: [{
+                  travelDate: dateList[i],
+                  minPrice: 3500
+                }]
+              });
+              for (let j = i+1; j < dateList.length; j++) {
+                let month = new Date(dateList[i]).getMonth();
+                let year = new Date(dateList[i]).getFullYear();
+                if (month === new Date(dateList[j]).getMonth() && year === new Date(dateList[j]).getFullYear()) {
+                  vm.dateList[i].dates.push({
+                    travelDate: dateList[j],
+                    minPrice: 3600
+                  })
+                }
+              }
+            }
+
+            for(let i = 0; i < vm.dateList.length; i++) {
+              for (let j = i+1; j < vm.dateList.length; j++) {
+                if(vm.dateList[i].month === vm.dateList[j].month) {
+                  vm.dateList.splice(j, 1)
+                }
+              }
+            }
+          }
+        })
+      }
+    }
+  }
+
+</script>
+
+<style lang="less" scoped>
+  @import "../assets/css/base.less";
+
+  .animated {
+    animation-duration: .3s;
+    animation-fill-mode: both;
+  }
+
+  @keyframes fadeInRight {
+    from {
+      opacity: 0;
+      transform: translate3d(100%, 0, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .fadeInRight {
+    animation-name: fadeInRight;
+  }
+  @keyframes fadeInLeft {
+    from {
+      opacity: 0;
+      transform: translate3d(-100%, 0, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .fadeInLeft {
+    animation-name: fadeInLeft;
+  }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  .fadeIn {
+    animation-name: fadeIn;
+  }
+
+
+
+  .pt-detail{
+    background-color: @appBg;
+  }
+  .center{
+    width: 1247px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+
+  .ptdetil-container{
+    width: 1200px;
+    margin: 40px auto auto;
+    background-color: #fff;
+    .borderRadius;
+    padding-bottom: 40px;
+  }
+
+  .btn-order{
+    float: left;
+    background-color: @clickBtnBg;
+    color: #fff;
+    width: 225px;
+    height: 57px;
+    .borderRadius(28.5px);
+    border: 0;
+    outline: none;
+    font-size: 26px;
+    letter-spacing: 5px;
+    cursor: pointer;
+    line-height: 57px;
+    &:hover{
+      background-color: darken(@clickBtnBg, 5%);
+    }
+
+  }
+  .ptinfo-module{
+    width: 1160px;
+    padding: 20px 32px 0 44px;
+  }
+  section{
+    width: 1160px;
+    padding: 20px 32px 0 44px;
+    .title{
+      border-bottom: 1px solid @topBg;
+      padding-bottom: 5px;
+      width: 1113px;
+      h3{
+        color: @topBg;
+        font-size: 20px;
+        line-height: 21px;
+        font-weight: normal;
+        text-indent: 10px;
+      }
+    }
+  }
+  .ptinfo-module{
+    .slider-wrapper{
+      width: 410px;
+      float: left;
+      overflow: hidden;
+      .slider-group{
+        position: relative;
+        width: 408px;
+        height: 284px;
+        border: 1px solid #ccc;
+        .borderRadius;
+        overflow: hidden;
+        .slider{
+          height: 284px;
+          .slider-item{
+            background-color: #d9d9d9;
+            overflow: hidden;
+            width: 408px;
+            height: 284px;
+            line-height: 284px;
+            text-align: center;
+            float: left;
+          }
+        }
+        .total-num{
+          position: absolute;
+          right: 15px;
+          bottom: 5px;
+          color: @tipsColor;
+          font-size: 16px;
+        }
+
+        img{
+          max-width: 100%;
+          width: 100%;
+          height: 282px;
+          border: 2px solid #fff;
+          .borderRadius;
+        }
+        .prev-btn,.next-btn{
+          width: 40px;
+          height: 40px;
+          text-align: center;
+          line-height: 40px;
+          background: rgba(0,0,0,.3);
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          .borderRadius(50%);
+          color: #fff;
+          font-size: 22px;
+          cursor: pointer;
+        }
+        .prev-btn{
+          left: 15px;
+        }
+        .next-btn{
+          right: 15px;
+        }
+      }
+      .small-view{
+        width: 410px;
+        height: 40px;
+        margin-top: 10px;
+        overflow: hidden;
+        .small-group{
+          height: 40px;
+
+          .view-item{
+            width: 60px;
+            height: 40px;
+            border: 2px solid #ccc;
+            float: left;
+            cursor: pointer;
+            overflow: hidden;
+            .borderRadius(2px);
+            background-color: #d9d9d9;
+            text-align: center;
+            &:not(:first-child){
+              margin-left: 9px;
+            }
+            &.active,
+            &:hover{
+              border: 2px solid @tipsColor;
+            }
+            img{
+              width: 100%;
+              max-width: 100%;
+              height: 36px;
+              .borderRadius(2px);
+              border: 2px solid #fff;
+            }
+          }
+        }
+      }
+    }
+    .detail-wrapper{
+      float: left;
+      margin-left: 42px;
+      width: 630px;
+      /*position: relative;*/
+
+      h2{
+        font-size: 28px;
+        font-weight: normal;
+      }
+      .price-line{
+        margin-top: 15px;
+        position: relative;
+        .share-wrapper{
+          position: absolute;
+          right: -30px;
+          cursor: pointer;
+          .icon-container{
+            width: 22px;
+            height: 22px;
+            color: @topBg;
+            margin: 0 auto;
+            .icon{
+              width: 100%;
+              height: 100%;
+            }
+          }
+          .text{
+            text-align: center;
+            color: @topBg;
+            font-size: 14px;
+          }
+
+          &:hover{
+            .erweima-container{
+              display: block;
+            }
+          }
+          .erweima-container{
+            display: none;
+            position: absolute;
+            left: -107px;
+            width: 270px;
+            height: 270px;
+            background-color: #fff;
+            .borderRadius;
+            -webkit-box-shadow: 0 0 9px 0 rgba(58,135,229,0.3);
+            -moz-box-shadow: 0 0 9px 0 rgba(58,135,229,0.3);
+            box-shadow: 0 0 9px 0 rgba(58,135,229,0.3);
+            .erweima-content{
+              width: 160px;
+              height: 160px;
+              margin: 39px auto auto;
+              -webkit-box-shadow: 0 0 6px 0 rgba(232,178,101,0.11);
+              -moz-box-shadow: 0 0 6px 0 rgba(232,178,101,0.11);
+              box-shadow: 0 0 6px 0 rgba(232,178,101,0.11);
+              img{
+                width: 160px;
+                height: 160px;
+              }
+            }
+            .text-inline{
+              text-align: center;
+              line-height: 26px;
+              margin-top: 8px;
+              .icon{
+                display: inline-block;
+                width: 30px;
+                height: 26px;
+              }
+              .text{
+                margin-left: 8px;
+                vertical-align: super;
+                display: inline-block;
+                color: #666;
+                font-size: 16px;
+
+              }
+            }
+          }
+        }
+        .price-now{
+          font-size: 14px;
+          color: #666;
+          float: left;
+          .icon{
+            color: @tipsColor;
+          }
+          .price{
+            padding: 0 5px;
+            color: @tipsColor;
+            font-size: 30px;
+          }
+        }
+        .price-old{
+          float: left;
+          height: 26px;
+          text-decoration: line-through;
+          line-height: 40px;
+          vertical-align: bottom;
+          color: #c1c6ce;
+          margin-left: 18px;
+          margin-top: 10px;
+        }
+        .discounts{
+          margin-left: 18px;
+          float: left;
+          width: 68px;
+          height: 26px;
+          background-color: #ff0000;
+          color: #fff;
+          .borderRadius(13px);
+          font-size: 14px;
+          text-align: center;
+          line-height: 26px;
+          margin-top: 10px;
+        }
+      }
+      .info-wrapper{
+        margin-top: 15px;
+        position: relative;
+        .calendar-btn{
+          position: absolute;
+          top: 0;
+          left: 260px;
+          width: 110px;
+          height: 34px;
+          .borderRadius(17px);
+          background-color: @changeBtnBg;
+          color: #fff;
+          text-align: center;
+          line-height: 34px;
+          font-size: 16px;
+          border: 0;
+          outline: none;
+          cursor: pointer;
+          &:hover{
+            background-color: darken(@changeBtnBg, 5%);
+          }
+        }
+        .info-line{
+          color: #999;
+          font-size: 16px;
+          line-height: 28px;
+          .icon{
+            margin-right: 9px;
+          }
+          .cruise{
+            letter-spacing: 5px;
+          }
+        }
+      }
+      .btn-wrapper{
+        margin-top: 20px;
+
+        .order-info{
+          float: left;
+          margin-left: 10px;
+          padding-top: 9px;
+          p{
+            font-size: 16px;
+            color: #8d95a3;
+            span{
+              color: @tipsColor;
+            }
+            &.travel-date{
+              color: @tipsColor;
+            }
+          }
+        }
+      }
+    }
+  }
+  .cabin-module{
+    width: auto;
+  }
+  .voyage-module{
+    .voyage-container{
+      background-color: @appBg;
+      padding-bottom: 18px;
+      margin-top: 14px;
+      width: 1120px;
+      .sub-title{
+        padding: 20px 0;
+         h3{
+           color: #333;
+           font-size: 20px;
+           font-weight: normal;
+         }
+      }
+      .map-wrapper{
+        padding: 0 10px;
+      }
+      .map-content{
+        background-color: #fff;
+        height: 270px;
+        padding: 18px 20px 17px 20px;
+        .map-img{
+          float: left;
+          width: 465px;
+        }
+        .voyage-brief{
+          float: left;
+          margin-left: 20px;
+          width: 575px;
+          height: 236px;
+          table{
+            height: 100%;
+            width: 100%;
+            border: 1px solid @lineColor;
+            border-collapse:collapse;
+
+            tr{
+              height: 38px;
+              line-height: 38px;
+              border-bottom: 1px solid @lineColor;
+              &.thead{
+                th{
+                  font-weight: normal;
+                  font-size: 14px;
+                  color: #333;
+                }
+                background-color: #f2f9ff;
+              }
+              td{
+                font-size: 14px;
+                text-align: center;
+                color: #999;
+              }
+            }
+          }
+        }
+      }
+      .voyage-detail{
+        padding: 0 10px;
+        .sub-title{
+          text-indent: 0;
+        }
+      }
+      .detail-content{
+        background-color: #fff;
+
+        padding: 24px 0 28px 27px;
+        position: relative;
+        .days-select{
+          position: absolute;
+          z-index: 2;
+          left: -112px;
+          top: 30px;
+          .slc-item{
+            display: block;
+            width: 58px;
+            height: 33px;
+            border: 1px solid @lineColor;
+            background-color: #f2f2f2;
+            text-align: center;
+            line-height: 35px;
+            font-size: 14px;
+            cursor: pointer;
+            &:hover,&.active{
+              background-color: @changeBtnBg;
+              border: 1px solid @changeBtnBg;
+              color: #fff;
+              position: relative;
+              &:after{
+                content: "";
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                right: -10px;
+                border-left: 10px solid @changeBtnBg;
+                border-top: 8px solid transparent;
+                border-bottom: 8px solid transparent;
+              }
+            }
+
+          }
+        }
+        .voyage-group{
+          padding-left: 14px;
+          position: relative;
+          .left-line{
+            position: absolute;
+            left: 0;
+            top: 20px;
+            width: 2px;
+            height: 99%;
+            background-color: #daebff;
+          }
+          .voyage-list{
+            font-size: 14px;
+            color: #333;
+
+            &:not(:last-child) {
+              padding-bottom: 35px;
+            }
+
+            .voyage-title{
+              border-bottom: 1px solid #daebff;
+              padding-left: 14px;
+              font-size: 16px;
+              width:1020px;
+              position: relative;
+              .icon-circle{
+                position: absolute;
+                top: 10px;
+                left: -23px;
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                .borderRadius(50%);
+                background-color: #daebff;
+                &:after{
+                  top: 50%;
+                  left: 50%;
+                  -webkit-transform: translate(-50%,-50%);
+                  -moz-transform: translate(-50%,-50%);
+                  -ms-transform: translate(-50%,-50%);
+                  -o-transform: translate(-50%,-50%);
+                  transform: translate(-50%,-50%);
+                  content: "";
+                  position: absolute;
+                  width: 16px;
+                  height: 16px;
+                  .borderRadius(50%);
+                  background-color: #daebff;
+                  border: 3px solid #fff;
+                }
+              }
+              .day{
+                font-size: 28px;
+                color: #aed2ff;
+              }
+            }
+            .repast{
+              padding-left: 14px;
+              padding-top: 5px;
+              .repast-content{
+                display: inline-block;
+                border-bottom: 1px solid #add2ff;
+                line-height: 28px;
+                .diet,.accom{
+                  display: inline-block;
+                  .icon{
+                    color: #add2ff;
+                    font-size: 20px;
+                    margin-right: 5px;
+                  }
+                }
+                .accom{
+                  margin-left: 34px;
+                }
+              }
+            }
+            .voyage-content{
+              padding-left: 14px;
+              margin-top: 12px;
+              .detail{
+                .text{
+                  width: 870px;
+                }
+                .img-wrapper{
+                  margin-top: 13px;
+                  .img-item{
+                    float: left;
+                    width: 276px;
+                    height: 170px;
+                    .borderRadius(2px);
+                    border: 1px solid @lineColor;
+                    overflow: hidden;
+                    margin: 0 22px 22px 0;
+                    img{
+                      max-height: 100%;
+                      max-width: 100%;
+                      height: 100%;
+                      width: 100%;
+                      border: 1px solid #fff;
+                      .borderRadius(2px);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .footer-wrapper{
+    margin-top: 40px;
+  }
+
+  .subNav-container{
+    height: 50px;
+    margin-top: 40px;
+    z-index: 10;
+    width: 1200px;
+    .nav-group{
+      height: 50px;
+      border-top: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+      background-color: #fafafa;
+      .nav-item{
+        float: left;
+        width: 156px;
+        text-align: center;
+        line-height: 49px;
+        font-size: 20px;
+        position: relative;
+        cursor: pointer;
+        .top-border{
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 4px;
+          border-top: 4px solid @topBg;
+          display: none;
+        }
+        a{
+          color: #808080;
+
+        }
+        &:hover,
+        &.active{
+          background-color: #fff;
+          color: @topBg;
+          border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;
+          &:first-child{
+            border-left: 0;
+          }
+          a{
+            color: @topBg;
+          }
+          .top-border{
+            display: inline-block;
+          }
+        }
+      }
+    }
+  }
+
+  .description-container{
+    background-color: #f0f7ff;
+    width: 1120px;
+    padding: 20px;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  .calendar-wrap{
+    position: fixed;
+
+    z-index: 11;
+  }
+  .cover{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 10;
+  }
+  .back-top{
+    position: fixed;
+    bottom: 220px;
+    width: 68px;
+    left: auto;
+    background: @topBg;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+    .borderRadius(2px);
+    cursor: pointer;
+  }
+</style>

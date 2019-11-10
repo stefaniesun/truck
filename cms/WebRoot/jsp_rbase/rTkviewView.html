@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>皇家单品视图管理</title>
+<link rel="stylesheet" type="text/css" href="../css/xieyaozhong.css"></link>
+<link rel="stylesheet" type="text/css" href="../css/simple-calendar.css">
+<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/icon.css"></link>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/bootstrap/easyui.css"></link>
+<script type="text/javascript" src="../js/library/jquery-1.7.2.js"></script>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/icon.css"></link>
+<script type="text/javascript" src="../js/library/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/library/cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="../js/library/common/cookie2.js"></script>
+<script type="text/javascript" src="../js/library/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../js/js_resources/tkviewCalendar.js"></script>
+<script type="text/javascript" src="../js/library/common/common.js"></script> 
+<script type="text/javascript" src="../js/library/common/customUi.js" defer="defer"></script>
+
+<script type="text/javascript" src="../js/js_rbase/rTkviewView.js" defer="defer"></script>
+
+<style type="text/css">
+	.sc-price {
+	    font-size: 12px;
+	}
+	body {
+		margin: 0;
+		padding: 0;
+		border: 0;
+		font-size: 14px;
+	}
+	div {
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+	.price-table td{
+		 padding: 4px;
+	}
+	.label-warning {
+		background-color: #f8ac59;
+		color: #FFF;
+		font-size: 10px;
+		font-weight: 600;
+		padding: 3px 8px;
+		text-shadow: none;
+		cursor:pointer;
+		line-height: 3;
+	}
+	.label-click{
+		background-color: #00bfff;
+		color: #FFF;
+		font-size: 10px;
+		font-weight: 600;
+		padding: 3px 8px;
+		text-shadow: none;
+		cursor:pointer;
+		line-height: 3;
+	}
+</style>
+
+</head>
+<body style="width:100%;text-align:left;background-color:white;">
+	<div style="width:100%;height:100%;position:absolute;">
+		<div>
+			<div id="cabinDivs"></div>
+			
+			<div id="dateTabs" style="width:600px;height:30px;margin-top:10px" class="easyui-tabs"></div>
+  			
+  			<div id='container'></div>
+  
+  			<div class="bs-example" style="width:650px;height:530px;margin-top:-28px;">
+  				<p><code>基本信息</code></p>
+ 			    <table style="width:90%" id="baseInfo"></table>
+  				<p style="margin-top:40px"><code>价格信息</code></p>
+    		    <p id="noMsg" style="margin-top:20px;margin-left:20px;display:none;">暂无供应商价格信息</p>
+  
+  				<div id="tableDiv" style="overflow:auto;margin-bottom:6px;">
+				   <table cellpadding="2" cellspacing="0" border="1">
+				   		<thead>
+				   			<tr style="background-color:#dcdcdc">
+				   				<th>价格代码</th>
+				   				<th>价格描述</th>
+				   				<th>价格生效日</th>
+				   				<th>价格到期日</th>
+				   				<th>单人间均价</th>
+				   				<th>双人间均价</th>
+				   				<th>三人间均价</th>
+				   				<th>四人间均价</th>
+				   			</tr>
+				   		</thead>
+				   		<tbody id="stockListInfo"></tbody>
+				   </table>
+  				</div>
+  			</div>
+		</div>
+		
+	</div>
+</body>
+</html>

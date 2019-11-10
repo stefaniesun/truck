@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>单品批量备注</title>
+</head>
+<body>
+<div style="width:720px;height:450px;margin-top:20px;">
+	<div style="margin-top:20px;">
+		<table>
+			<thead>
+				<tr>	
+					<th>
+						航期 <span id="shipSpan" style="color:red;font-size:16px;"></span>
+					</th>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td>
+						<input type="checkbox" id="shipCheckAll" checked="checked" />全选
+					    <input type="hidden" id="shipAll" value="0">
+					</td>
+				</tr>
+			</thead>
+			<tbody id="shipTbody"></tbody>
+		</table>
+	</div>
+	<div style="margin-top:10px;">
+		<table>
+			<thead>
+				<tr>
+					<th>
+						舱型 <span id="cabinSpan" style="color:red;font-size:16px;"></span>
+					</th>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td>
+						<input type="checkbox" id="cabinCheckAll" checked="checked" />全选
+						<input type="hidden" id="cabinAll" value="0">
+					</td>
+				</tr>
+			</thead>
+			<tbody id="cabinTbody"></tbody>
+			<tfoot>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td>
+						<a href="#" id="queryBtn" class="easyui-linkbutton" data-options="iconCls:'icon-search'">确定选择</a>
+						<input id="btnCheck" type="hidden" value="query">
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">单品备注</td>
+					<td colspan="4">
+						<textarea id="remarkForm" style="width:400px;height:120px;resize:none;" class="easyui-validatebox" 
+						data-options="required:true,validType:'length[1,1000]'"></textarea>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+</div>
+
+<div id="tkviewDiv" style="width:680px;height:200px;margin-top:-450px;margin-left:570px;">
+	<table cellpadding="0" cellspacing="0" style="width:500px;text-align:center;">
+		<thead>
+			<tr>
+				<th>出发日期</th>
+				<th>舱型</th>
+				<th>单品名称</th>
+				<th>
+					全选<br/>
+					<input id="checkAll" type="checkbox" checked="checked"/>
+				</th>
+			</tr>
+		</thead>
+		<tbody id="tkviewTbody"></tbody>
+	</table>
+</div>
+</body>
+</html>

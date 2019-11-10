@@ -1,0 +1,813 @@
+<template>
+  <div @click.self.stop="closeScreenPanel" ref="searchWrap" class="screen-wrap">
+
+    <transition name="drop-down"
+                enter-active-class=" animated slideDown"
+                leave-active-class="animated slideUp">
+      <div v-if="showPanel" class="panel">
+        <div class="screen-key-wrap">
+          <span v-if="!screenKeyArr.length">未选择关键词</span>
+          <ul v-if="screenKeyArr.length" class="key-word">
+            <li v-if="item" v-for="(item,index) in screenKeyArr">
+              <span>{{item}}</span>
+              <i @click="deleteKey(index,item)" class="iconfont icon-cha"></i>
+            </li>
+          </ul>
+          <div class="clearfloat"></div>
+        </div>
+        <div class="screen-content">
+          <ul class="menu">
+            <li @click="changeSearchMenu(index)" v-for="(item,index) in screenClass" :class="item.status?'menu-item-bg':''" class="menu-item">
+              <span>{{item.title}}</span>
+            </li>
+          </ul>
+          <div class="list-wrap">
+            <ul v-if="screenMenuIndex == 0 || screenMenuIndex == 1" class="list">
+              <li @click="changeScreenKey(index,false)" v-if="screenKey.length" v-for="(item,index) in screenKey" :class="item.status?'list-item-bg':''">
+                <span>{{item.value}}</span>
+              </li>
+            </ul>
+            <ul v-if="screenMenuIndex == 2" class="list">
+              <li @click="changeScreenKey(index,true)" v-if="screenKey.length" v-for="(item,index) in priceList" :class="item.status?'list-item-bg':''">
+                <span>{{item.value}}</span>
+              </li>
+            </ul>
+            <ul v-if="screenMenuIndex == 3" class="cruise-wrap">
+              <li>
+                <div class="cruise-company sub-menu">
+                  <ul>
+                    <li @click="changeCruiseList(index)" v-for="(item,index) in companyArr" :class="item.status?'cruise-item-bg':''">
+                      <span>{{item.value}}</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="cruise-list-wrap sub-menu">
+                  <ul class="cruise-list">
+                    <li v-for="(item,index) in cruiseArr" :class="item.status?'cruise-item-bg':''">
+                      <span @click.self.stop="selectCruiseKey(index)">{{item.value}}</span>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="btn">
+          <div @click="closeScreenPanel">取消</div>
+          <div @click="deleteKeyAll">清除重选</div>
+          <div @click="startScreen">确定</div>
+        </div>
+      </div>
+    </transition>
+  </div>
+</template>
+
+<script>
+  import common from '@/assets/js/common'
+  let vm
+  export default{
+  	name: 'screenPanel',
+    props: {
+      screenPanelStatus: {
+        type: Boolean,
+        default: false
+      },
+      isRequest: {
+        type: Boolean,
+        default: true
+      }
+    },
+    data(){
+      return{
+        showPanel: false,
+        screenClass: [
+          {
+            title: '航区',
+            status: true
+          },
+          {
+            title:  '日期',
+            status: false
+          },
+          {
+            title: '价格',
+            status: false
+          },
+          {
+            title: '邮轮',
+            status: false
+          }
+        ],
+        initKeyArr: [],
+        keyArr: [],
+        screenKey: [],
+        screenKeyArr: [],
+        screenMenuIndex: 0,
+        companyArr: [],
+        cruiseArr: [],
+        priceList: []
+      }
+    },
+    mounted(){
+    	vm = this;
+    },
+    methods: {
+      getSelectData(){
+        vm.screenKeyArr = new Array;
+        vm.axios.post(this.api + this.urlApi.getSelectData).then(function (data) {
+        	if(data.status){
+            let content = data.content;
+            if(content.length>0){
+              let areaArr = new Array;
+              let dateArr = new Array;
+              let priceArr = new Array;
+              let companyArr = new Array;
+              let cruiseArr = new Array;
+              for(let i=-1;i<content.length;i++){
+                let areaObj = {};
+                let dateObj = {};
+                let priceObj = {};
+                let companyObj = {};
+                let cruiseObj = {};
+                let status = false;
+                if(i==-1){
+                  status = true;
+                  let value = '不限';
+                  areaObj.value = value;
+                  dateObj.value = value;
+                  priceObj.value = value;
+                  companyObj.value = value;
+                  cruiseObj.value = value;
+                }else {
+                  let dateTempArr = content[i].dateMark.split('');
+                  let year = new Date().getFullYear().toString().substring(0,2) + dateTempArr[0] + dateTempArr[1];
+                  let month = dateTempArr[2] + dateTempArr[3];
+                  content[i].dateMark = year +'年'+ month+'月';
+                  content[i].basePrice = content[i].basePrice.substring(0,4);
+                  areaObj.value = content[i].areaNameCn;
+                  areaObj.id = content[i].area;
+                  dateObj.value = content[i].dateMark;
+                  priceObj.value = content[i].basePrice;
+                  companyObj.value = content[i].companyNameCn;
+                  cruiseObj.value = content[i].cruiseNameCn;
+                  cruiseObj.id = content[i].cruise;
+                }
+                areaObj.status = status;
+                areaArr.push(areaObj);
+                dateObj.status = status;
+                dateArr.push(dateObj);
+                priceObj.status = status;
+                priceArr.push(priceObj);
+                companyObj.status = status;
+                companyArr.push(companyObj);
+                cruiseObj.status = status;
+                cruiseArr.push(cruiseObj);
+              }
+              vm.$set(vm.keyArr,0,vm.removeDuplicate(areaArr));
+              vm.$set(vm.keyArr,1,vm.dateSort(vm.removeDuplicate(dateArr)));
+              vm.$set(vm.keyArr,2,vm.removeDuplicate(priceArr));
+              vm.$set(vm.keyArr,3,vm.removeDuplicate(companyArr));
+              vm.$set(vm.keyArr,4,vm.removeDuplicate(cruiseArr));
+              vm.initKeyArr = content;
+              vm.screenKey = vm.removeDuplicate(areaArr);
+            }else {
+              vm.dialog.showDialog('暂无数据');
+            }
+          }
+        })
+      },
+      /**
+       * 切换筛选类别
+       * @param index：关键词类别索引
+       */
+      changeSearchMenu(index){
+        vm.screenKey = new Array;
+        vm.screenMenuIndex = index;
+        for(let i=0;i<vm.screenClass.length;i++){
+          i == index ? vm.screenClass[i].status = true : vm.screenClass[i].status = false;
+        }
+        let onOff = false;
+        for(let j=0;j<vm.screenKeyArr.length;j++){
+          if(vm.screenKeyArr[j]){
+            onOff = true;
+            break;
+          }
+        }
+        if(onOff){
+          let screenKeyArrTemp = vm.getScreenKey();
+          let keyArr = [{
+            value: '不限',
+            status: true
+          }];
+          let companyArr = [];
+          for(let n=0;n<vm.initKeyArr.length;n++){
+            let A = vm.initKeyArr[n];
+            for(let m=0;m<screenKeyArrTemp.length;m++){
+              let B = screenKeyArrTemp[m];
+              if(A[B.key] == B.value){
+              	if(index < 3){
+                  let obj = {};
+                  switch (index)
+                  {
+                    case 0:
+                      obj.value = A.areaNameCn;
+                      obj.id = A.area;
+                      break;
+                    case 1:
+                      obj.value = A.dateMark;
+                      break;
+                    case 2:
+                      obj.value = A.basePrice;
+                      break;
+                  }
+                  keyArr.push(obj);
+                }else {
+                  let companyObj = {};
+                  companyObj.value = A.companyNameCn;
+                  companyArr.push(companyObj);
+                }
+              }
+            }
+          }
+          if(index<3){
+          	if(index == 1){
+              vm.screenKey = vm.setStatus(vm.dateSort(vm.removeDuplicate(keyArr)));
+            }else {
+              vm.screenKey = vm.setStatus(vm.removeDuplicate(keyArr));
+            }
+            if(index == 2){
+              vm.getPriceList(vm.screenKey);
+            }
+          }else {
+            vm.companyArr = vm.setStatus(vm.removeDuplicate(companyArr));
+            vm.mark = 0;
+            for(let i=0;i< vm.companyArr.length;i++){
+              vm.setCruiseArr(i);
+            }
+            for(let j=0;j< vm.companyArr.length;j++){
+              j==vm.mark ? vm.$set(vm.companyArr[j],'status',true) : vm.$set(vm.companyArr[j],'status',false);
+            }
+            vm.cruiseArr =  vm.removeDuplicate(vm.setCruiseArr(vm.mark));
+          }
+        }else {
+          for(let c=0;c<vm.keyArr.length;c++){
+          	let arr = vm.keyArr[c];
+            for(let r=0;r<arr.length;r++){
+            	let status = false;
+            	if(r==0) status = true;
+            	vm.$set(arr[r],'status',status);
+            }
+          }
+          if (index < 3) {
+            vm.screenKey = vm.keyArr[index];
+            if(index == 2){
+              vm.getPriceList(vm.screenKey);
+            }
+          } else {
+            vm.companyArr = new Array;
+            for(let i=0;i<vm.keyArr[index].length;i++){
+              if(i>0){
+                vm.companyArr.push(vm.keyArr[index][i])
+              }
+            }
+            vm.cruiseArr = vm.removeDuplicate(vm.setCruiseArr(0));
+            vm.companyArr[0].status = true;
+          }
+        }
+      },
+      /**
+       *切换邮轮公司
+       * @param index 邮轮列表索引
+       */
+      changeCruiseList(index){
+      	if(vm.companyArr[index].status)return;
+        for(let i=0;i<vm.companyArr.length;i++){
+          i==index ? vm.$set(vm.companyArr[i],'status',true) : vm.$set(vm.companyArr[i],'status',false);
+        }
+        vm.cruiseArr = vm.removeDuplicate(vm.setCruiseArr(index));
+      },
+      /**
+       /**
+       * 选择筛选关键词
+       * @param index：关键词索引
+       */
+      changeScreenKey(index,flag){
+        let Index = vm.screenMenuIndex;
+        if(!flag){
+          index == 0 ? vm.screenKeyArr.splice(Index,1) : vm.screenKeyArr[Index] = vm.screenKey[index].value;
+          vm.changeStatus(index);
+        }else {
+          index == 0 ? vm.screenKeyArr.splice(Index,1) : vm.screenKeyArr[Index] = vm.priceList[index].value;
+          for(let i=0;i<vm.priceList.length;i++){
+            i==index ? vm.$set(vm.priceList[i],'status',true) : vm.$set(vm.priceList[i],'status',false);
+          }
+        }
+
+      },
+      /**
+       * 选择邮轮关键词
+       * @param index 邮轮公司索引
+       * @param subIndex 邮轮索引
+       */
+      selectCruiseKey(subIndex){
+        let Index = vm.screenMenuIndex;
+        vm.screenKeyArr[Index] = vm.cruiseArr[subIndex].value;
+        for(let i=0;i<vm.cruiseArr.length;i++){
+          i==subIndex ? vm.$set(vm.cruiseArr[i],'status',true) : vm.$set(vm.cruiseArr[i],'status',false);
+        }
+      },
+      /**
+       * 删除关键词
+       * @param index   关键词索引
+       * @param key  关键词
+       */
+      deleteKey(index,key){
+        let keyArr;
+        keyArr = vm.keyArr[index];
+        vm.screenKeyArr.splice(index,1);
+        if(index !== 3) {
+          for(let q=0;q<keyArr.length;q++){
+            let obj = keyArr[q];
+            if(obj.value == key && obj.status){
+              obj.status = false;
+              keyArr[0].status = true;
+            }
+          }
+        }else {
+          for(let q=0;q<vm.cruiseArr.length;q++){
+            let obj = vm.cruiseArr[q];
+            if(obj.value == key && obj.status){
+              obj.status = false;
+            }
+          }
+        }
+      },
+      //
+      deleteKeyAll(){
+        vm.screenKeyArr = new Array;
+        let Index = vm.screenMenuIndex;
+        if( Index !== 3 ){
+          for(let q=0;q<vm.keyArr.length;q++){
+            let obj = vm.keyArr[q];
+            for (let i = 0; i < obj.length; i++) {
+              i == 0 ? obj[i].status = true : obj[i].status = false;
+            }
+          }
+        }else {
+          for(let q=0;q<vm.companyArr.length;q++){
+            q == 0 ? vm.companyArr[q].status = true : vm.companyArr[q].status = false;
+          }
+          for(let q=0;q<vm.cruiseArr.length;q++){
+            vm.cruiseArr[q].status = false;
+          }
+        }
+      },
+      getPriceList(){
+        vm.priceList = new Array;
+        for(let i=0;i<vm.screenKey.length;i++){
+          let priceObj = vm.screenKey[i];
+          let obj = {};
+          let status = false;
+          if(i==0){
+            obj.value = '不限';
+            status = true;
+          }else {
+            if( priceObj.value < 3000 ){
+              obj.value = '3000以下';
+            }else if(priceObj.value <= 5000 && priceObj.value >= 3000) {
+              obj.value = '3000-5000';
+            }else if(priceObj.value > 5000) {
+              obj.value = '5000以上';
+            }
+          }
+          obj.status = status;
+          vm.priceList.push(obj);
+        }
+        vm.priceList = vm.setStatus(vm.removeDuplicate(vm.priceList)) ;
+      },
+      setCruiseArr(index){
+      	let cruiseArr = new Array;
+        for(let c=0;c<vm.initKeyArr.length;c++){
+          let arr = vm.initKeyArr[c];
+          for(let r in arr){
+            let obj ={}
+            if(vm.companyArr[index].value ==arr[r] ){
+              obj.value = arr.cruiseNameCn;
+              obj.id = arr.cruise;
+              let content = vm.getScreenKey();
+              if( content ){
+                for(let m=0;m<content.length;m++){
+                	if( content[m].value == obj.value ){
+                    vm.mark = index;
+                    vm.$set(obj,'status',true);
+                  }else {
+                    vm.$set(obj,'status',false);
+                  }
+                }
+              }
+              cruiseArr.push(obj)
+            }
+          }
+        }
+        return cruiseArr;
+      },
+      dateSort(array){
+        let arrayTemp = new Array;
+        for(let i=0;i<array.length;i++){
+          if( i>0 ){
+            let dateStr = array[i].value.split('年');
+            let year = dateStr[0].toString();
+            let month = dateStr[1].substring(0,2).toString();
+            let day = '01';
+            let newDate = new Date(year+'/'+month+'/'+day);
+            arrayTemp.push(newDate.getTime());
+          }
+        }
+        arrayTemp.sort();
+        for(let j=0;j<arrayTemp.length;j++){
+          let unixTimestamp = new Date( arrayTemp[j] ) ;
+          let commonTime = unixTimestamp.toLocaleString();
+          commonTime = commonTime.split(' ')[0].split('/');
+          let year = commonTime[0].substring(2,4);
+          let month = commonTime[1] < 10 ? "0" + commonTime[1] : commonTime[1];
+          let dateStr = new Date().getFullYear().toString().substring(0,2) + year+'年'+month+'月';
+          array[j+1].value = dateStr;
+        }
+        return array;
+      },
+      //筛选关键词去重, 参数 array 需要去重的关键词数组
+      removeDuplicate(array) {
+        let re = [array[0]];
+        let This = new Array;
+        for (let i = 1; i < array.length; i++) {
+          This.push(array[i]);
+        }
+        This.sort();
+        for (let i = 0; i < This.length; i++) {
+          let onOff = true;
+          for(let j=0;j<re.length;j++){
+            if (This[i].value == re[j].value) {
+              onOff = false;
+            }
+          }
+          if(onOff) re.push(This[i]);
+        }
+        return re;
+      },
+      setStatus(arr){
+        let index = 0;
+        for (let c = 0; c < arr.length; c++) {
+          for (let q = 0; q < vm.screenKeyArr.length; q++) {
+          	if(vm.screenKeyArr[q]){
+              if (vm.screenKeyArr[q] == arr[c].value) {
+                index = c;
+              }
+            }
+          }
+        }
+        for (let c = 0; c < arr.length; c++) {
+        	c == index ? vm.$set(arr[c], 'status', true) : vm.$set(arr[c], 'status', false);
+        }
+        return arr;
+      },
+      changeStatus(index){
+        for(let i=0;i<vm.screenKey.length;i++){
+          i==index ? vm.$set(vm.screenKey[i],'status',true) : vm.$set(vm.screenKey[i],'status',false);
+        }
+      },
+      //获取被选中的关键词
+      getScreenKey(){
+        let selectedKeyArr = new Array;
+        let priceArr = new Array;
+        for (let i = 0; i < vm.screenKeyArr.length; i++) {
+          let key = vm.screenKeyArr[i];
+          if (!common.xyzIsNull(key)) {
+            let obj = {};
+            for(let m=0;m<vm.initKeyArr.length;m++){
+            	let arrTemp = vm.initKeyArr[m];
+              for(let n in arrTemp){
+                if(arrTemp[n] == key){
+                	switch (n)
+                  {
+                    case 'areaNameCn':
+                      obj.id = arrTemp.area;
+                    	break;
+                    case 'cruiseNameCn':
+                      obj.id = arrTemp.cruise;
+                    	break;
+                    default:
+                    	break;
+                  }
+                  obj.key = n;
+                  obj.value = key;
+                }else {
+                  if( n=='basePrice'){
+                    let priceStr
+                    if( key.indexOf('-')>-1 ){
+                    	let priceObj = {};
+                      priceObj.key = n;
+                      priceStr = key.split('-');
+                      if( arrTemp[n] >= priceStr[0] && arrTemp[n] <= priceStr[1]  ){
+                        priceObj.value = arrTemp[n];
+                        priceArr.push(priceObj)
+                      }
+                    }else if( key.indexOf('以下')>-1 ) {
+                      let priceObj = {};
+                      priceObj.key = n;
+                      priceStr =  key.split('以');
+                      if(arrTemp[n] < priceStr[0]){
+                        priceObj.value = arrTemp[n];
+                        priceArr.push(priceObj)
+                      }
+                    }else if( key.indexOf('以上')>-1 ){
+                      let priceObj = {};
+                      priceObj.key = n;
+                      priceStr =  key.split('以');
+                      if(arrTemp[n] > priceStr[0]){
+                        priceObj.value = arrTemp[n];
+                        priceArr.push(priceObj)
+                      }
+                    }
+                    break;
+                  }
+                }
+
+              }
+            }
+            if(obj.value)selectedKeyArr.push(obj);
+          }
+        }
+        if(priceArr.length && selectedKeyArr.length){
+          selectedKeyArr = selectedKeyArr.concat(priceArr)
+        }else if(priceArr.length && !selectedKeyArr.length){
+          selectedKeyArr = priceArr;
+        }
+        return selectedKeyArr;
+      },
+      //关闭筛选面板
+      closeScreenPanel(){
+        vm.showPanel = false;
+        vm.screenMenuIndex = 0;
+        for(let i=0;i<vm.screenClass.length;i++){
+          i == 0 ? vm.$set(vm.screenClass[i],'status',true) : vm.$set(vm.screenClass[i],'status',false);
+        }
+      },
+      //点击确认进行筛选
+      startScreen(){
+      	let screenData = vm.getScreenKey();
+        for(let j=0;j<screenData.length;j++){
+        	let obj = screenData[j];
+        	if(obj.key == 'dateMark'){
+            let date = obj.value.substring(2).replace(/-/,'');
+            obj.value = date;
+          }
+        }
+        vm.showPanel = false;
+        vm.screenMenuIndex = 0;
+        for(let i=0;i<vm.screenClass.length;i++){
+          i == 0 ? vm.$set(vm.screenClass[i],'status',true) : vm.$set(vm.screenClass[i],'status',false);
+        }
+        vm.$emit('startScreen',screenData);
+        console.log(screenData)
+        console.log(vm.screenKeyArr)
+        vm.$emit('screenKeyArr',vm.screenKeyArr);
+      },
+    },
+    watch: {
+      screenPanelStatus(newVal){
+        vm.showPanel = newVal;
+      },
+      showPanel(newVal){
+        let obj = vm.$refs['searchWrap'];
+        if(newVal){
+        	vm.getSelectData();
+          obj.style.display = 'block';
+          vm.bodyNoScrolling.open();
+        }else {
+          let timer = setTimeout(function () {
+            obj.style.display = 'none';
+            vm.$emit('closePanel',false);
+            vm.bodyNoScrolling.close();
+            clearTimeout(timer);
+          },450)
+        }
+      },
+      screenKeyArr(newVal){
+      	let index = vm.screenMenuIndex;
+        vm.changeSearchMenu(index);
+      }
+    }
+  }
+</script>
+
+<style lang="less" scoped>
+  @import "../assets/css/base.less";
+  .screen-wrap{
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.4);
+    position: fixed;
+    top: 88*@basePX;
+    left: 0;
+    z-index: 9;
+    .panel{
+      width: 100%;
+      min-height: 682*@basePX;
+      background: #fff;
+      font-size: 30*@basePX;
+      .screen-key-wrap{
+        width: 100%;
+        min-height: 54*@basePX;
+        padding: 3*@basePX 22*@basePX 6*@basePX;
+        border-top: 1px solid @lineColor;
+        border-bottom: 1px solid @lineColor;
+        transition: all 1s;
+        >span{
+          color: @subTextColor;
+          font-size: 12px;
+        }
+        .key-word{
+          height: auto;
+          li{
+            width: auto;
+            height: 36*@basePX;
+            line-height: 36*@basePX;
+            background: #dee9f8;
+            margin: 6*@basePX 10*@basePX 3*@basePX 0;
+            float: left;
+            color: #333;
+            .borderRadius;
+            font-size: 12px;
+            padding: 0 6*@basePX;
+            .icon-cha{
+              font-size: 12px;
+            }
+          }
+        }
+      }
+      .screen-content{
+        width: 100%;
+        height: 550*@basePX;
+        .menu,.list-wrap{
+          float: left;
+        }
+        .menu{
+          width: 140*@basePX;
+          height: 100%;
+          text-align: center;
+          .menu-item{
+            height: 137.5*@basePX;
+            line-height: 137.5*@basePX;
+            background: #c7d2e0;
+            color: #fff;
+          }
+          .menu-item-bg{
+            background: #fff;
+            color: #6aadff;
+          }
+        }
+        .list-wrap{
+          width: 590*@basePX;
+          height: 548*@basePX;
+          max-height: 548*@basePX;
+          padding-top: 20*@basePX;
+          overflow-y: auto;
+          .list,.cruise-wrap{
+            >li{
+              width: 100%;
+              line-height: 70*@basePX;
+              text-align: left;
+              margin-left: 25*@basePX;
+              color: @subTextColor;
+            }
+          }
+          .list{
+            width: 590*@basePX;
+            overflow-x: hidden;
+            >li{
+              height: 70*@basePX;
+              border-bottom: 1px solid @lineColor;
+            }
+            .list-item-bg{
+              color: #6aadff;
+            }
+            >li:last-child{
+              border: none;
+            }
+          }
+          .cruise-wrap{
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            text-align: left;
+            >li{
+              height: 100%;
+            }
+            .sub-menu{
+              height: 100%;
+              overflow-y: auto;
+              float: left;
+              ul{
+                margin-top: -20*@basePX;
+                li{
+                  min-height: 80*@basePX;
+                  word-wrap: break-word;
+                  border-bottom: 1px solid @lineColor;
+                  position: relative;
+                  font-size: 30*@basePX;
+                  span{
+                    display: block;
+                    line-height: 36*@basePX;
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    transform: translate(0,-50%);
+                  }
+                }
+                li:last-child{
+                  border-bottom: none;
+                }
+              }
+            }
+            .cruise-company{
+              width: 284*@basePX;
+              max-width: 284*@basePX;
+              li{
+                border-right: 1px solid @lineColor;
+              }
+              li:first-child{
+                height: 126*@basePX;
+              }
+            }
+            .cruise-list-wrap{
+              width: 286*@basePX;
+              max-width: 304*@basePX;
+              li{
+                width: 90%;
+                margin: 0 auto;
+              }
+              li:first-child{
+                margin-top: 22*@basePX;
+              }
+            }
+            .cruise-item-bg{
+              color: #6aadff;
+              border-right: none !important;
+            }
+          }
+        }
+      }
+      .btn{
+        width: 100%;
+        height: 80*@basePX;
+        background: @changeBtnBg;
+        text-align: center;
+        div{
+          width: 33.3%;
+          height: 54*@basePX;
+          line-height: 54*@basePX;
+          margin-top: 13*@basePX;
+          float: left;
+          color: #fff;
+          cursor: pointer;
+          border-right: 1px solid #fff;
+        }
+        div:last-child{
+          border-right: none;
+        }
+      }
+    }
+    .animated {
+      animation-duration: .5s;
+      animation-fill-mode: both;
+    }
+    @keyframes slideDown {
+      from {
+        transform: translate3d(0, -120%, 0);
+        visibility: visible;
+      }
+      to {
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    .slideDown {
+      animation-name: slideDown;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translate3d(0, 0, 0);
+      }
+      to {
+        visibility: hidden;
+        transform: translate3d(0, -100%, 0);
+      }
+    }
+
+    .slideUp {
+      animation-name: slideUp;
+    }
+  }
+</style>

@@ -1,0 +1,296 @@
+package xyz.work.resources.model;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.GenericGenerator;
+
+@Entity
+@Table(name="tkview")
+public class Tkview implements Comparable<Tkview>{
+
+	@Id
+	@Column(name="iidd",unique=true,nullable=false)
+	@GeneratedValue(generator = "paymentableGenerator")       
+    @GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
+	private String iidd;//主键
+	
+	@Column(name="number_code",unique=true,nullable=false)
+    private String numberCode;  //编号
+    
+    @Column(name="name_cn")
+    private String nameCn; //名称
+    
+    @Column(name="mark")
+    private String mark; //单品代码
+    
+    @Column(name="cruise")
+    private String cruise;//邮轮
+    
+    @Column(name="shipment")
+    private String shipment; //航期编号
+    
+    @Column(name="shipment_mark")
+    private String shipmentMark; //航期代码(冗余)
+    
+    @Column(name="shipment_travel_date")
+    private Date shipmentTravelDate; //出发日期(冗余)
+    
+    @Column(name="cabin")
+    private String cabin;        //资源
+
+    @Column(name="remark",length = 10000)
+    private String remark;       //备注
+    
+    @Column(name="volume")
+    private BigDecimal volume;   //容积 
+    
+    @Column(name="add_date")
+    private Date addDate;        //添加时间
+ 
+    @Column(name="alter_date")
+    private Date alterDate;     //修改时间
+    
+    @Column(name="user_name")
+    private String userName;     //操作人
+    
+    @Column(name="release_date")
+    private Date releaseDate;    //释放时间
+    
+    @Transient
+    private String cabinNameCn; //资源名称
+    
+    @Transient
+    private String cruiseNameCn;//邮轮名称
+    
+    @Transient
+    private BigDecimal stock;  //库存数
+    
+    @Transient
+    private String possessorNameCn; //所属机构名称
+    
+    @Transient
+    private List<Stock> stocks = new ArrayList<Stock>();  //库存对象集合
+    
+    @Transient
+    private BigDecimal cost;  //成本价
+    
+    @Transient
+    private Stock stockObj;  //库存对象
+    
+    @Transient
+    private int stockCount;  //库存总记录数
+    
+    public String getCabin() {
+        return cabin;
+    }
+
+    public void setCabin(String cabin) {
+        this.cabin = cabin;
+    }
+
+    public String getIidd() {
+        return iidd;
+    }
+
+    public void setIidd(String iidd) {
+        this.iidd = iidd;
+    }
+
+    public String getNumberCode() {
+        return numberCode;
+    }
+
+    public void setNumberCode(String numberCode) {
+        this.numberCode = numberCode;
+    }
+
+    public String getNameCn() {
+        return nameCn;
+    }
+
+    public void setNameCn(String nameCn) {
+        this.nameCn = nameCn;
+    }
+
+    public String getMark() {
+        return mark;
+    }
+
+    public void setMark(String mark) {
+        this.mark = mark;
+    }
+
+    public Date getShipmentTravelDate() {
+        return shipmentTravelDate;
+    }
+
+    public void setShipmentTravelDate(Date shipmentTravelDate) {
+        this.shipmentTravelDate = shipmentTravelDate;
+    }
+
+    public String getCruise() {
+        return cruise;
+    }
+
+    public void setCruise(String cruise) {
+        this.cruise = cruise;
+    }
+
+    public String getCruiseNameCn() {
+        return cruiseNameCn;
+    }
+
+    public void setCruiseNameCn(String cruiseNameCn) {
+        this.cruiseNameCn = cruiseNameCn;
+    }
+
+    public String getShipment() {
+        return shipment;
+    }
+
+    public void setShipment(String shipment) {
+        this.shipment = shipment;
+    }
+
+    public String getShipmentMark() {
+        return shipmentMark;
+    }
+
+    public void setShipmentMark(String shipmentMark) {
+        this.shipmentMark = shipmentMark;
+    }
+
+    public String getCabinNameCn() {
+        return cabinNameCn;
+    }
+
+    public void setCabinNameCn(String cabinNameCn) {
+        this.cabinNameCn = cabinNameCn;
+    }
+
+    public BigDecimal getVolume() {
+        return volume;
+    }
+
+    public void setVolume(BigDecimal volume) {
+        this.volume = volume;
+    }
+    
+    public BigDecimal getStock() {
+        return stock;
+    }
+
+    public void setStock(BigDecimal stock) {
+        this.stock = stock;
+    }
+
+    public String getPossessorNameCn() {
+        return possessorNameCn;
+    }
+
+    public void setPossessorNameCn(String possessorNameCn) {
+        this.possessorNameCn = possessorNameCn;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public Stock getStockObj() {
+		return stockObj;
+	}
+
+	public void setStockObj(Stock stockObj) {
+		this.stockObj = stockObj;
+	}
+
+	public List<Stock> getStocks() {
+		return stocks;
+	}
+
+	public void setStocks(List<Stock> stocks) {
+		this.stocks = stocks;
+	}
+
+	public BigDecimal getCost() {
+		return cost;
+	}
+
+	public void setCost(BigDecimal cost) {
+		this.cost = cost;
+	}
+
+	public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Date getAddDate() {
+        return addDate;
+    }
+
+    public void setAddDate(Date addDate) {
+        this.addDate = addDate;
+    }
+
+    public Date getAlterDate() {
+        return alterDate;
+    }
+
+    public void setAlterDate(Date alterDate) {
+        this.alterDate = alterDate;
+    }
+    
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Date getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public BigDecimal getPriority(){
+    	BigDecimal priority=new BigDecimal(1);
+		
+		if(stock!=null&&stock.intValue()==0){
+			priority=new BigDecimal(0);
+		}
+		return priority;
+    }
+
+	@Override
+	public int compareTo(Tkview tkview) {
+		int result=tkview.getPriority().compareTo(getPriority());
+		if(result==0){
+			return cost.compareTo(tkview.getCost());
+		}else{
+			return result;
+		}
+	}
+
+    public int getStockCount() {
+        return stockCount;
+    }
+
+    public void setStockCount(int stockCount) {
+        this.stockCount = stockCount;
+    }
+	
+}

@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>新增单品</title>
+<style type="text/css">
+	body{
+		margin: 0;
+		padding: 0;
+		line-height: 1px;
+		font-size: 14px;
+	}
+	input,textarea{
+		display:none;
+	}
+</style>
+</head>
+<body>
+	<center>
+		<form><br/>
+			<table cellspacing="6" cellpadding="6">
+				<caption>
+					邮轮 <input type="text" id="cruiseForm" style="width:280px;"/>&nbsp;
+					航期 <input type="text" id="shipmentForm" style="width:280px;"/><br/>
+				</caption>
+				<tr>
+					<td colspan="8"><hr/></td>
+				</tr>
+				<tr>
+					<th>舱型</th>
+					<th>单品名称</th>
+					<th>单品代码</th>
+					<th>成本价</th>
+					<th>供应商</th>
+					<th>库存</th>
+					<th>可超卖数</th>
+					<th><img id="addTkviewHtml" alt="点我添加单品" src="../image/other/addPage.gif" title="点我添加单品" style="cursor: pointer;"></th>
+				</tr>
+				
+				<tr class="tkviewTrClass" id="tkviewTrId_0">
+					<td>
+						<input id="cabinForm_0" class="cabinClass" style="width:150px"/>
+					</td>
+					<td>
+						<input id="tkviewNameCnForm_0" style="width:170px"/>
+					</td>
+					<td>
+						<input id="tkviewMarkForm_0" style="width:80px"/>
+					</td>
+					<td>
+						<input id="costForm_0" style="width:80px"/>
+					</td>
+					<td>
+						<input id="providerForm_0" class="providerClass" style="width:100px"/>
+					</td>
+					<td>
+						<input id="stockForm_0" style="width:80px"/>
+					</td>
+					<td>
+						<input id="surpassForm_0" style="width:80px;"/>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</center>
+</body>
+</html>

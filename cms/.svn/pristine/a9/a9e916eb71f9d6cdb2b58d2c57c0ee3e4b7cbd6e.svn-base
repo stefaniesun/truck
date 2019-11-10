@@ -1,0 +1,313 @@
+<template>
+  <div class="cabin-wrapper">
+    <div class="title">
+      <h3>舱型及价格>></h3>
+    </div>
+    <div class="cabin-container">
+
+      <div class="cabinType-container" ref="cabinTypeContainer">
+        <div class="cabinType-list">
+          <div class="cabinType-item" v-if="item.list.length > 0" v-for="(item, index) in cabinList" :class="{active: index === cabinTypeIndex }" @mouseover="cabinTypeIndex = index">
+            <span class="item">{{item.cabinType}}</span>
+          </div>
+        </div>
+        <div class="cut-line"></div>
+        <div class="statistics-wrapper">
+          <button class="btn-order" @click="goPtOrder" :disabled="order.total===0">立即预定</button>
+          <div class="statistics">
+            <div class="stat">
+              房间数： <span class="num">{{order.total}}</span>
+            </div>
+            <div class="stat">
+              总金额： <span class="num">{{order.totalPrice}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="group-wrapper clearfloat">
+        <div class="cabin-group" :key="index" v-for="(typeItem, index) in cabinList" v-if="cabinTypeIndex === index">
+          <div class="cabin-list  animated" :class="transitionName"  v-for="cabin in typeItem.list">
+            <div class="img-wrapper">
+              <img :src="cabin.cabinImg" alt="">
+            </div>
+            <div class="introduce">
+              <div class="cabin-name">
+                {{cabin.name}}
+              </div>
+              <div class="base-info clearfloat">
+                <div class="item">
+                  可住人数：1-4人
+                </div>
+                <div class="item">
+                  室内面积：35M<sup>2</sup>
+                </div>
+                <div class="item">
+                  剩<span>{{cabin.stock}}</span>间
+                </div>
+              </div>
+            </div>
+            <div class="counter-container">
+              <label>数量</label>
+              <div class="counter-wrapper">
+                <counter :product="cabin" :order="order"></counter>
+              </div>
+            </div>
+            <div class="cabin-price">
+              &yen; {{cabin.price}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import Counter from '@/components/counter'
+  let vm;
+  export default {
+    name: 'cabinType',
+    props: ['cabinList','height','order'],
+    components: {
+      Counter
+    },
+    data() {
+      return {
+        transitionName: 'fadeInRight',
+        cabinTypeIndex: 0
+      }
+    },
+    watch: {
+      cabinTypeIndex: {
+        handler: function (newVal, oldVal) {
+          this.transitionName = newVal > oldVal ? "fadeInRight" : "fadeInLeft";
+        },
+        deep: true
+      }
+    },
+    mounted() {
+      vm = this;
+
+      vm.$refs.cabinTypeContainer.style.height = vm.height + 'px';
+    },
+    methods: {
+      goPtOrder() {
+        vm.$router.push('placeOrder')
+      },
+    }
+  }
+</script>
+
+<style lang="less" scoped>
+  @import "../assets/css/common.less";
+  .animated {
+    animation-duration: .3s;
+    animation-fill-mode: both;
+  }
+
+  @keyframes fadeInRight {
+    from {
+      opacity: 0;
+      transform: translate3d(100%, 0, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .fadeInRight {
+    animation-name: fadeInRight;
+  }
+  @keyframes fadeInLeft {
+    from {
+      opacity: 0;
+      transform: translate3d(-100%, 0, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .fadeInLeft {
+    animation-name: fadeInLeft;
+  }
+
+  .cabin-wrapper{
+    width: 100%;
+    .title{
+      border-bottom: 1px solid @topBg;
+      padding-bottom: 5px;
+      width: 1113px;
+      h3{
+        color: @topBg;
+        font-size: 20px;
+        line-height: 21px;
+        font-weight: normal;
+        text-indent: 10px;
+      }
+    }
+    .btn-order{
+      float: left;
+      background-color: @clickBtnBg;
+      color: #fff;
+      width: 225px;
+      height: 57px;
+      .borderRadius(28.5px);
+      border: 0;
+      outline: none;
+      font-size: 26px;
+      letter-spacing: 5px;
+      cursor: pointer;
+      line-height: 57px;
+      &:hover{
+        background-color: darken(@clickBtnBg, 5%);
+      }
+
+    }
+    .cabin-container{
+      background: @appBg;
+      padding: 0 0 10px 10px;
+      margin-top: 14px;
+      width: 1120px;
+      .cabinType-container{
+        background-color: @appBg;
+        .cut-line{
+          float: left;
+          height: 80px;
+          width: 2px;
+          background-color: #d9eafc;
+          margin-top: 10px;
+        }
+        .cabinType-list{
+          float: left;
+          margin-left: 1px;
+          .cabinType-item{
+            width: 160px;
+            height: 100px;
+            border-top: 4px solid @appBg;
+            line-height: 100px;
+            float: left;
+            text-align: center;
+            color: #4c4c4c;
+            cursor: pointer;
+            &.active,&:hover{
+              background-color: #fff;
+              color: @changeBtnBg;
+              border-top: 4px solid @topBg;
+            }
+            span{
+              font-size: 20px;
+            }
+          }
+        }
+        .statistics-wrapper{
+          float: right;
+          margin-top: 20px;
+          .btn-order{
+            float: right;
+            margin-right: 10px;
+            margin-top: 2px;
+          }
+          .statistics{
+            min-width: 180px;
+            color: #333;
+            font-size: 22px;
+            float: left;
+            .stat{
+              display: block;
+              line-height: 30px;
+              color: #333;
+            }
+            span{
+              color: @tipsColor;
+              font-size: 25px;
+            }
+          }
+        }
+      }
+      .group-wrapper {
+        overflow: hidden;
+      }
+
+      .cabin-group{
+        float: left;
+      }
+
+      .cabin-list{
+        background-color: #fff;
+        width: 1100px;
+        height: 100px;
+        padding: 10px 11px;
+        border: 1px solid @appBg;
+        .img-wrapper{
+          float: left;
+          width: 120px;
+          height: 80px;
+          border: 1px solid #cccccc;
+          .borderRadius(2px);
+          overflow: hidden;
+          text-align: center;
+          img{
+            height: 100%;
+            width: 100%;
+            max-height: 100%;
+            max-width: 100%;
+            .borderRadius(2px);
+          }
+        }
+        .introduce{
+          float: left;
+          margin-left: 20px;
+          padding-top: 12px;
+          .cabin-name{
+            color: #333333;
+            font-size: 20px;
+          }
+          .base-info{
+            font-size: 18px;
+            color: #999;
+            .item{
+              float: left;
+              span{
+                color: @tipsColor;
+              }
+              &:not(:first-child){
+                margin-left: 25px;
+              }
+            }
+          }
+        }
+        .counter-container{
+          float: left;
+          /*height: 100px;*/
+          width: 135px;
+          line-height: 80px;
+          margin-left: 116px;
+          label{
+            font-size: 20px;
+            color: #333;
+            float: left;
+          }
+          .counter-wrapper{
+            float: left;
+            margin-left: 10px;
+            width: 85px;
+          }
+        }
+        .cabin-price{
+          float: left;
+          margin-left:156px;
+          color: @tipsColor;
+          font-size: 25px;
+          line-height: 80px;
+        }
+      }
+
+    }
+  }
+
+</style>

@@ -1,0 +1,136 @@
+<template>
+  <div class="counter">
+
+      <span class="sub" @click="subtraction()">
+        <svg class="icon">
+          <use xlink:href="#icon-tooldel"></use>
+        </svg>
+      </span>
+      <span class="num">{{product.counter}}</span>
+      <span class="add " @click="addition()">
+         <svg class="icon">
+          <use xlink:href="#icon-tooladd"></use>
+        </svg>
+      </span>
+
+  </div>
+</template>
+
+<script>
+
+  let vm;
+  export default {
+    name: 'counter',
+    props:{
+      product: {
+        type: Object,
+      },
+      order: {
+        type: Object
+      }
+    },
+    data() {
+      return {
+        isOrder:false,
+      }
+    },
+    mounted() {
+      vm = this;
+    },
+    methods: {
+      subtraction(){
+        if(this.product.counter > 0){
+          this.product.counter--;
+          this.product.stockCount++;
+          this.order.total--;
+          this.order.totalPrice -= this.product.realPrice * this.product.volume;
+          this.createOrder('reduce', this.product)
+        }
+      },
+      addition() {
+        if(this.product.stockCount > 0){
+          this.product.counter++;
+          this.product.stockCount--;
+          this.order.total++;
+          this.order.totalPrice += this.product.realPrice * this.product.volume;
+          this.createOrder('add', this.product)
+        }
+      },
+      createOrder(compute,ptObj) {
+        let cabinArr = vm.order.cabinArr;
+        switch (compute){
+          case 'reduce': {
+            for(let i = 0; i < cabinArr.length; i++) {
+              if(cabinArr[i].numberCode === ptObj.numberCode) {
+                vm.order.cabinArr[i].roomNum--;
+                if(vm.order.cabinArr[i].roomNum === 0)  {
+                  vm.order.cabinArr.splice(i,1)
+                }else{
+                  vm.$set(vm.order.cabinArr[i], 'stockCount', ptObj.stockCount);
+                }
+              }
+            }
+          }; break;
+          case 'add': {
+            if(cabinArr.length === 0 || JSON.stringify(cabinArr).indexOf(JSON.stringify(ptObj.numberCode)) === -1) {
+              let cabinObj = {
+                cabinType: ptObj.name,
+                roomNum: 1,
+                price: ptObj.realPrice*ptObj.volume,
+                stockCount: ptObj.stockCount,
+                cabinImg: ptObj.cabinImg,
+                numberCode: ptObj.numberCode,
+                stock: ptObj.stock,
+                cruiseVoyage: ptObj.cruiseVoyage,
+              };
+              vm.$set(vm.order.cabinArr, vm.order.cabinArr.length,cabinObj);
+            }else{
+              for(let i = 0; i < cabinArr.length; i++) {
+                if(cabinArr[i].numberCode === ptObj.numberCode){
+                  vm.order.cabinArr[i].roomNum++;
+                  vm.$set(vm.order.cabinArr[i], 'stockCount', ptObj.stockCount);
+                }
+              }
+            }
+
+          }; break;
+        }
+        sessionStorage.ptOrder = JSON.stringify(vm.order);
+      }
+    }
+  }
+</script>
+
+<style lang="less" scoped>
+  @import "../assets/css/common.less";
+
+  .counter{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    .sub,.add,.num{
+      position: absolute;
+      color: @changeBtnBg;
+      font-size: 32px;
+      cursor: pointer;
+    }
+    .num{
+      left: 50%;
+      -webkit-transform: translateX(-50%);
+      -moz-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+      -o-transform: translateX(-50%);
+      transform: translateX(-50%);
+      color: @subTextColor;
+      font-size: 21px;
+      cursor: inherit;
+    }
+    .sub{
+      left: 0;
+    }
+    .add{
+      right: 0;
+    }
+  }
+
+</style>

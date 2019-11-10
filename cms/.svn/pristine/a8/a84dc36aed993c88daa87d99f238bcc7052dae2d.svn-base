@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>编辑机构</title>
+</head>
+<body>
+<center>
+	<form><br/>
+		<table cellpadding="4" cellspacing="6">
+			<tr>
+				<td style="text-align:right;">
+					机构名称
+				</td>
+				<td>
+					<input type="text" id="nameCnForm" style="width:300px;" 
+					 data-options="required:true,validType:'length[2,100]'"/>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">
+					备注
+				</td>
+				<td>
+					<!--<input type="text" id="remarkForm" style="width:480px;" class="easyui-validatebox" data-options="validType:'length[2,300]'"/>-->
+					<textarea id="remarkForm" style="width:296px;height:200px;resize:none"></textarea>
+				</td>
+			</tr>
+		</table>
+		</form>
+	</div>
+</center>
+</body>
+</html>

@@ -1,0 +1,169 @@
+/**
+ * Created by Administrator on 2017/10/20.
+ * 统一管理请求接口。
+ */
+import Vue from 'vue'
+let urlApi = {
+  queryVoyageList: {    //首页热门产品列表
+    url:'SaleVoyageWS/queryVoyageList.cms',
+    freeUrl: 'CustomerWS/queryVoyageList.open',  //游客身份时使用的url
+    isApiKey: true,   // true 表示需要 apikey
+    isLoading: true   // true 表示需要 加载动画
+  },
+  getSelectData: {      //筛选关键词
+    url: 'SaleVoyageWS/getSelectData.cms',
+    freeUrl: 'CustomerWS/getSelectData.open',
+    isApiKey: true,
+    isLoading: true
+  },
+  getQueryData: {       //获取筛选数据
+    url: 'SaleVoyageWS/getQueryData.cms',
+    freeUrl: 'CustomerWS/getQueryData.open',
+    isApiKey: true,
+    isLoading: true
+  },
+  getVoyageDetail: {     //产品详情
+    url: 'SaleVoyageWS/getVoyageDetail.cms',
+    freeUrl: 'CustomerWS/getVoyageDetail.open',
+    isApiKey: true,
+    isLoading: true
+  },
+  queryVoyageListByKeyword: {   //关键词搜索
+    url: 'SaleVoyageWS/queryVoyageListByKeyword.cms',
+    freeUrl: 'CustomerWS/queryVoyageListByKeyword.open',
+    isApiKey: true,
+    isLoading: true
+  },
+  getVoyageDateList: {     //日期选择
+    url: 'SaleVoyageWS/getVoyageDateList.cms',
+    freeUrl: 'CustomerWS/getVoyageDateList.open',
+    isApiKey: true,
+    isLoading: true
+  },
+  createCruiseOrderOper:{      //下单
+    url: 'SaleVoyageWS/createCruiseOrderOper.cms',
+    freeUrl: 'CustomerWS/createCruiseOrderOper.open',
+    isApiKey: true,
+    isLoading: true
+  },
+  shartCreateShareOrderOper:{      //分享下单
+    url: 'ShareWS/createShareOrderOper.open',
+    isApiKey: false,
+    isLoading: true
+  },
+  getCruiseDetail: {  // 游轮详情
+    url: 'SaleVoyageWS/getCruiseDetail.cms',
+    freeUrl: 'CustomerWS/getCruiseDetail.open',
+    isApiKey: true,
+    isLoading: true
+  },
+  validateWechatBindingOper: {  // 登陆判断
+    url: 'SaleVoyageWS/validateWechatBindingOper.open',
+    isApiKey: false,
+    isLoading: true
+  },
+  bindingWechatOper:{      //账号绑定
+    url: 'SaleVoyageWS/bindingWechatOper.open',
+    isApiKey: false,
+    isLoading: true
+  },
+  queryCruiseOrderList:{      //订单查询
+    url: 'SaleVoyageWS/queryCruiseOrderList.cms',
+    freeUrl: 'CustomerWS/queryCruiseOrderList.open',
+    isApiKey: true,
+    isLoading: true
+  },
+  wechatLoginOper:{      //微信登陆
+    url: 'SaleVoyageWS/wechatLoginOper.open',
+    isApiKey: false,
+    isLoading: true
+  },
+  getRegisterDistributor:{    //注册
+    url:'DistributorAccountWS/registerDistributorOper.open',
+    isApiKey:false,
+    isLoading:true
+  },
+  getBasePrice:{               //获取加价舱型
+    url:'ShareWS/getBasePrice.cms',
+    isApiKey :true,
+    isLoading:true
+  },
+  addSharePrice:{               //获取分享价的numberCode
+    url:'ShareWS/addSharePrice.cms',
+    isApiKey :true,
+    isLoading:true
+  },
+  editSharePrice:{               //加价
+    url:'ShareWS/editSharePrice.cms',
+    isApiKey :true,
+    isLoading:true
+  },
+  querySystemConfigList:{     //获取协议
+    url:"SaleVoyageWS/querySystemConfigList.open",
+    isApiKey:false,
+    isLoading:false
+  },
+  getVoyageDetailShare:{     //分享展示的详情页面
+    url:"ShareWS/getVoyageDetail.open",
+    isApiKey:false,
+    isLoading:true
+  },
+  getDistributorAccountListByNumberCode: {     //金额
+    url:"PlatformWS/getDistributorAccountListByNumberCode.cms",
+    isApiKey:true,
+    isLoading:true
+  },
+  getDistributorAccountListByaddDate:{   //金额日期查询
+    url:"PlatformWS/getDistributorAccountListByaddDate.cms",
+    freeUrl: 'CustomerWS/getDistributorAccountListByaddDate.open',
+    isApiKey:true,
+    isLoading:true
+  },
+  getWebAuth: {     //获取授权链接
+    url:"WX_WeixinWS/webAuth.wx",
+    isApiKey:false,
+    isLoading:true
+  },
+  getUserInfo: {     //获取微信用户信息
+    url:"WX_WeixinWS/getUserInfo.wx",
+    isApiKey:false,
+    isLoading:true
+  },
+  updatePersonInfoOper:{   //设置出行人
+    url:"SaleVoyageWS/updatePersonInfoOper.cms",
+    isApiKey:true,
+    isLoading:true
+  },
+  getPersonInfo:{   //获取出行人
+    url:"SaleVoyageWS/getPersonInfo.cms",
+    isApiKey:true,
+    isLoading:true
+  },
+  orderPayOper:{   //二次付款
+    url:"SaleVoyageWS/orderPayOper.cms",
+    isApiKey:true,
+    isLoading:true
+  },
+  sharePriceViewOper:{   //分享浏览记录
+    url:"ShareWS/sharePriceViewOper.open",
+    isApiKey:false,
+    isLoading:false
+  },
+  editOrderLinkInfo:{   //更改联系人
+    url:"SaleVoyageWS/editOrderLinkInfo.cms",
+    freeUrl: 'CustomerWS/editOrderLinkInfo.open',
+    isApiKey:false,
+    isLoading:false
+  },
+  queryVoyageAndStockList:{   //查询游轮舱型信息
+    url:"CustomerWS/queryVoyageAndStockList.open",
+    isApiKey:true,
+    isLoading:true
+  }
+};
+for(let i in urlApi){
+  urlApi[i] = JSON.stringify(urlApi[i]);
+}
+Vue.prototype.urlApi = urlApi;
+
+export default urlApi;

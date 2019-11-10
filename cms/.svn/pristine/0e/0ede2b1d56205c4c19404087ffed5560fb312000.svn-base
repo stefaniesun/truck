@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<!-- 应用 --> 
+	 <function isApi="0" groupCn="售卖管理" numberCode="orderContentManager" nameCn="订单处理" url="/jsp_core/orderContentManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_s20161208110901" nameCn="查询订单列表" url="/OrderContentWS/queryOrderContentList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_s20161209095401" nameCn="查询订单详情" url="/OrderContentWS/getOrderContentDetail.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_s20161209095401" nameCn="hold订单" url="/OrderContentWS/holdOrderCoreOper.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_s20161209095401" nameCn="释放控制区" url="/OrderContentWS/relaxOrderCoreOper.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_s20161209095402" nameCn="获取订单备注" url="/OrderContentWS/getOrderContentRemark.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_s20161209095403" nameCn="新增订单备注" url="/OrderContentWS/addOrderContentRemark.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_s20161209095402" nameCn="删除订单" url="/OrderContentWS/deleteOrderContent.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_s20161209095402" nameCn="获取产品价格" url="/OrderContentWS/countPrice.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_s20161209095402" nameCn="通过产品获取库存" url="/OrderContentWS/getStockByPtview.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_s20161215100501" nameCn="发货" url="/OrderContentWS/updateOrderContentSend.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_s20161215100502" nameCn="退款" url="/OrderContentWS/updateOrderContentRefound.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_s20161215100503" nameCn="修改成本价" url="/OrderContentWS/updateOrderContentCost.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_s20161215100504" nameCn="修改单品和数量" url="/OrderContentWS/updateOrderContentTkviewAndCount.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_s20161215100505" nameCn="修改订单联系人" url="/OrderContentWS/updateOrderContentForLinkman.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161215100506" nameCn="内部下单" url="/OrderContentWS/addInsideOrderContent.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20170104100507" nameCn="获取出行人" url="/OrderContentWS/getPersonInfoList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20170104100508" nameCn="编辑出行人" url="/OrderContentWS/updateOrderContentForPerson.do"/>
+		
+		<api flagServer="1" isWork="0" buttonCode="buttonCode_y20170104100509" nameCn="查询出行人信息" url="/PersonInfoWS/queryPersonInfoList.do"/>
+		<api flagServer="1" isWork="0" buttonCode="buttonCode_y20170104100510" nameCn="下拉框--获取出行人信息" url="/PersonInfoWS/getPersonInfoList.do"/>
+		<api flagServer="1" isWork="1" buttonCode="buttonCode_y20170104100511" nameCn="添加出行人" url="/PersonInfoWS/addPersonInfo.do"/>
+		<api flagServer="1" isWork="1" buttonCode="buttonCode_y20170104100512" nameCn="修改出行人" url="/PersonInfoWS/editPersonInfo.do"/>
+		
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161211130904" nameCn="查询订单备注" url="/OrderContentWS/getOrderRemark.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161211133102" nameCn="新增收款" url="/OrderContentWS/editOrderContentByPay.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161211150301" nameCn="修改旗子的状态" url="/OrderContentWS/editFlagColor.do"/>
+	</function> 
+	
+	<function isApi="0" groupCn="售卖管理" numberCode="ptviewManager" nameCn="产品管理" url="/jsp_ptview/ptviewManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170525170701" nameCn="产品邮轮选项卡" url="/PtviewWS/queryCruiseList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170525170702" nameCn="根据邮轮查询产品信息" url="/PtviewWS/queryPtviewListByCruise.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170525170703" nameCn="新增产品信息" url="/PtviewWS/addPtview.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170525170704" nameCn="编辑产品信息" url="/PtviewWS/editPtview.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170525170705" nameCn="删除产品信息" url="/PtviewWS/deletePtview.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170525170706" nameCn="根据产品编号获取SKU套餐及库存" url="/PtviewWS/getPtviewSkuByNumberCode.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170525170707" nameCn="克隆产品" url="/PtviewWS/clonePtviewOper.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170525170708" nameCn="同步产品" url="/PtviewWS/syncPtviewOper.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170525170709" nameCn="获取邮轮信息" url="/PtviewWS/getSortNumCruise.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170525170709" nameCn="首页排序" url="/PtviewWS/editSortNumCruise.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171103174001" nameCn="编辑是否开启" url="/PtviewWS/editIsOpen.do"/> 
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171103174002" nameCn="编辑主图片" url="/PtviewWS/editImage.do"/> 
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171103174003" nameCn="修改详情图片" url="/PtviewWS/editDetailImages.do"/> 
+		
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170602103801" nameCn="查询SKU套餐信息" url="/PtviewSkuWS/queryPtviewSkuList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170602103802" nameCn="新增SKU套餐信息" url="/PtviewSkuWS/addPtviewSku.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170602103803" nameCn="根据SKU编号获取关联的单品种类" url="/PtviewSkuWS/getRelationTkviewType.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170602103803" nameCn="编辑SKU套餐信息" url="/PtviewSkuWS/editPtviewSku.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170602103804" nameCn="删除SKU套餐信息" url="/PtviewSkuWS/deletePtviewSku.do"/>
+		
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170602153001" nameCn="根据SKU套餐编号获取库存日期" url="/PtviewSkuStockWS/getPtviewSkuStockDateList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170602153002" nameCn="获取关联的单品种类 (用于展示名称)" url="/PtviewSkuStockWS/getTkviewTypeList.do"/>
+	    <api flagServer="0" isWork="1" buttonCode="buttonCode_x20170602153003" nameCn="新增SKU日历库存" url="/PtviewSkuStockWS/addPtviewSkuStock.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170602153004" nameCn="编辑SKU日历库存" url="/PtviewSkuStockWS/editPtviewSkuStock.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170602153005" nameCn="删除SKU日历库存" url="/PtviewSkuStockWS/deletePtviewSkuStock.do"/> 
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170602153006" nameCn="单元点击--获取库存信息" url="/PtviewSkuStockWS/getPtviewSkuStockListByNumberCode.do"/> 
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170602153007" nameCn="根据单品编号获取单品及库存信息" url="/PtviewSkuStockWS/getStockByTkview.do"/> 
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170602153008" nameCn="根据航期编号获取航期" url="/PtviewSkuStockWS/getShipmentTravelDate.do"/> 
+	</function>
+	
+	<function isApi="0" groupCn="售卖管理" numberCode="order_taobao" nameCn="淘宝池" url="/jsp_taobao/taobaoPoolManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161124164001" nameCn="查询淘宝池" url="/TaobaoPoolWS/queryTaobaoPool.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161125164002" nameCn="查询淘宝子订单" url="/TaobaoPoolWS/queryTaobaoOrderDetail.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161128164003" nameCn="通过淘宝池添加订单" url="/TaobaoPoolWS/addOrderContentByTaobao.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211114004" nameCn="通过单品获取所有库存" url="/TaobaoPoolWS/getStockByTkview.do"/>
+	</function>
+	
+	<function  isApi="0" groupCn="售卖管理" numberCode="taobaoManager" nameCn="淘宝售卖" url="/jsp_taobao/taobaoManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161027103002" nameCn="根据邮轮分组查询宝贝信息" url="/TaobaoWS/queryTaobaoGroupCruise.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161027103002" nameCn="查询淘宝宝贝" url="/TaobaoWS/queryTaobaoItem.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161027103001" nameCn="通过ID获取淘宝宝贝" url="/TaobaoWS/getTaobaoItemByIdOper.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161027163003" nameCn="添加图片" url="/TaobaoWS/addImages.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161027163004" nameCn="添加详情" url="/TaobaoWS/addDetail.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161027173005" nameCn="获取宝贝详细信息" url="/TaobaoWS/getTaobaoAllInfo.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161102153006" nameCn="通过宝贝查询SKU" url="/TaobaoWS/getTaobaoSkuOper.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161102170707" nameCn="修改SKU日历库存" url="/TaobaoWS/editTaobaoDetails.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161104150708" nameCn="删除淘宝宝贝" url="/TaobaoWS/deleteTaobao.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161107150708" nameCn="全量覆盖SKU" url="/TaobaoWS/overrideTaobaoSkuOper.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161107150709" nameCn="淘宝上下架" url="/TaobaoWS/editOnlineStatus.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161107151010" nameCn="添加店铺所有商品ID" url="/TaobaoWS/addAllTaobaoIdOper.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161108110310" nameCn="通过SKU获取SKU详情" url="/TaobaoWS/getSkuDetails.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161108110311" nameCn="添加SKU详情" url="/TaobaoWS/addSkuDetails.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161108110312" nameCn="删除SKU详情" url="/TaobaoWS/deleteSkuDetails.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161108110313" nameCn="添加SKU" url="/TaobaoWS/addTaobaoSku.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161108110314" nameCn="编辑SKU" url="/TaobaoWS/editTaobaoSku.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161108110315" nameCn="删除SKU" url="/TaobaoWS/deleteTaobaoSku.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_sy20161202170221" nameCn="新增关联库存" url="/TaobaoWS/addTaobaoSkuRelationStock.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161109110316" nameCn="获取操作日志" url="/TaobaoWS/getTaobaoLog.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_s20161110164101" nameCn="复制宝贝" url="/TaobaoWS/copyTaobaoTravelItemOper.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161111102502" nameCn="根据淘宝宝贝编号获取所有SKU信息" url="/TaobaoWS/getTaobaoItemByNumberCode.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161110174117" nameCn="发布宝贝" url="/TaobaoWS/publishTaobaoItemOper.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161114170201" nameCn="同步宝贝" url="/TaobaoWS/syncTaobaoTravelItemOper.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161114170218" nameCn="保存宝贝" url="/TaobaoWS/saveTaobaoItem.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161114170219" nameCn="通过邮轮下拉框获取数据" url="/TaobaoWS/getCruiseData.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161116170220" nameCn="上传SKU" url="/TaobaoWS/updateTaobaoItem.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_sy20161202170221" nameCn="批量添加关联SKU以及库存" url="/TaobaoWS/addRelationSkuAndStock.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20170106093022" nameCn="通过宝贝邮轮获取单品" url="/TaobaoWS/getTkviewByTaobaoCruise.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20170106093022" nameCn="通过宝贝获取存在的SKU库存" url="/TaobaoWS/getExistSkuByBaseInfo.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161108110314" nameCn="通过SKU库存获取关联航线信息" url="/TaobaoWS/getRelationTkview.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170227150001" nameCn="查询指定的套餐的库存是否存在" url="/TaobaoWS/getStockDate.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161102170707" nameCn="根据编号清空SKU日历库存" url="/TaobaoWS/editStockByNumberCodes.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161116170220" nameCn="查询需要更新的SKU日历库存信息" url="/TaobaoWS/queryStockByNumberCodes.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170320172601" nameCn="根据SKU日历库存编号编辑是否按正常逻辑加价" url="/TaobaoWS/editIsNormalByNumberCode.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170320172602" nameCn="同步SKU价格库存到淘宝" url="/TaobaoWS/skuPriceModifyOper.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170330114401" nameCn="根据SKU套餐获取关联单品种类编号" url="/TaobaoWS/getRelationTkviewType.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170330114402" nameCn="根据SKU套餐查询关联单品种类" url="/TaobaoWS/queryTkviewTypeList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170330114403" nameCn="根据SKU套餐获取单品库存信息" url="/TaobaoWS/getTkviewScotkList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171106155101" nameCn="根据游轮查询淘宝日志" url="/TaobaoWS/queryTaobaoLogByCruiseWorkList.do"/>
+		
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170908153801" nameCn="根据baseInfo获取SKU日历库存 " url="/TaoBaoSkuWS/getSkuStockListByBaseInfo.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170908153801" nameCn="批量更新SKU" url="/TaoBaoSkuWS/updateSkuStockList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171202155601" nameCn="编辑价格是否锁定" url="/TaoBaoSkuWS/editDetailByNumberCode.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170912165101" nameCn="批量新增SKU库存 " url="/TaoBaoSkuDetailWS/addSkuDatilList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170912165102" nameCn="编辑库存是否锁定" url="/TaoBaoSkuDetailWS/editIsLock.do"/>
+	
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170330114404" nameCn="保存SKU日历库存" url="/TaobaoWS/submitSkuDetailsOper.do"/>
+		
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170609163001" nameCn="推送美团渠道下面的淘宝数据给美团" url="/QueryTaobaoWS/addProduct.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170609163002" nameCn="根据宝贝基础信息编号获取SKU套餐" url="/TaobaoWS/getSkuInfo.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170609163002" nameCn="推送美团渠道下面的SKU套餐数据给美团" url="/QueryTaobaoWS/pushProductOper.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171120105501" nameCn="批量上传SKU套餐" url="/TaobaoWS/batchUploadSkuOper.do"/>
+	</function>
+	
+	<!-- <function isApi="0" groupCn="客户管理" numberCode="customerManager" nameCn="客户" url="/jsp_custom/customerManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170122111801" nameCn="查询客户信息" url="/CustomerWS/queryCustomerList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170122111802" nameCn="编辑客户信息" url="/CustomerWS/editCustomer.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="客户管理" numberCode="userTagManager" nameCn="客户标签" url="/jsp_custom/userTagManager.html">
+	    <api flagServer="0" isWork="0" buttonCode="buttonCode_z20170122155401" nameCn="查询客户标签信息" url="/UserTagWS/queryUserTagList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_z20170122155402" nameCn="新增客户标签信息" url="/UserTagWS/addUserTag.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_z20170122155403" nameCn="编辑客户标签信息" url="/UserTagWS/editUserTag.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="预约管理" numberCode="reserveManager" nameCn="预约" url="/jsp_reserve/reserveManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20161228113501" nameCn="查询预约信息" url="/SubscribeWS/queryReserveList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161128113503" nameCn="根据预约编号获取出行人信息" url="/SubscribeWS/getPersonListByReserve.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161128113503" nameCn="审核信息" url="/SubscribeWS/editReserveFlagByNumberCode.do"/>
+	</function> 
+	
+	<function isApi="0" groupCn="微信公众号平台" numberCode="wechatSubscriptionManager" nameCn="公众号管理" url="/jsp_weixin/wechatSubscriptionManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170213153001" nameCn="查询公众号信息" url="/WechatSubscriptionWS/queryWechatSubscriptionList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170213153002" nameCn="新增公众号信息" url="/WechatSubscriptionWS/addWechatSubscription.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170213153003" nameCn="编辑公众号信息" url="/WechatSubscriptionWS/editWechatSubscription.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170213153004" nameCn="删除公众号信息" url="/WechatSubscriptionWS/deleteWechatSubscription.do"/>
+	</function> -->
+	
+	<function isApi="0" groupCn="客服查询" numberCode="menuManager" nameCn="资源查询" url="/query.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170629095001" nameCn="资源查询" url="/QueryResourcesWS/queryTkviewStockList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170629095002" nameCn="根据出行日期查询资源" url="/QueryResourcesWS/clickDateOper.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_h20170925093000" nameCn="客服CMS资源查询" url="/QueryResourcesWS/getTkviewStockList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_h20170925093001" nameCn="客服CMS资源时效性验证" url="/QueryResourcesWS/getValidateData.do"/>
+	</function> 
+	
+	<function isApi="0" groupCn="客服查询" numberCode="shipmentQuery" nameCn="航期查询" url="/query/shipmenyQuery.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20171027145001" nameCn="查询航期" url="/QueryShipmentWS/queryShipmentList.do"/>
+	</function> 
+	
+	<function isApi="0" groupCn="资源管理" numberCode="providerManager" nameCn="供应商管理" url="/jsp_resources/providerManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161208093600" nameCn="查询供应商" url="/ProviderWS/queryProviderList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161208093601" nameCn="添加供应商" url="/ProviderWS/addProvider.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161208093602" nameCn="修改供应商" url="/ProviderWS/editProvider.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161208093603" nameCn="删除供应商" url="/ProviderWS/deleteProviders.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170321170101" nameCn="根据供应商查询代码查询数据" url="/ProviderWS/getProviderMarkList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170321170102" nameCn="编辑供应商账户" url="/ProviderWS/editAccountList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170321170103" nameCn="编辑供应商对接人" url="/ProviderWS/editJoinerList.do"/>
+		
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170830165301" nameCn="导入供应商Excel" url="/ProviderWS/importExcelOper.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170830165302" nameCn="导出Excel模版" url="/ProviderWS/exportExcelOper.do"/>
+	</function> 
+	
+	<function isApi="0" groupCn="资源管理" numberCode="AccountManager" nameCn="供应商账户管理" url="/jsp_resources/accountManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20171031163600" nameCn="查询供应商账户" url="/AccountWS/queryAccountList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171031163601" nameCn="添加供应商账户" url="/AccountWS/addAccount.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171031163602" nameCn="编辑供应商账户" url="/AccountWS/editAccount.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171031163603" nameCn="编辑是否启用" url="/AccountWS/editIsEnable.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171031163604" nameCn="删除供应商账户" url="/AccountWS/deleteAccount.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20171031163605" nameCn="根据供应商查询供应商账户" url="/AccountWS/queryAccountListByprovider.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="资源管理" numberCode="JoinerManager" nameCn="对接人信息管理" url="/jsp_resources/joinerManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20171102100100" nameCn="查询对接人信息" url="/JoinerWS/queryJoinerList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171102100101" nameCn="添加对接人信息" url="/JoinerWS/addJoiner.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171102100102" nameCn="编辑对接人信息" url="/JoinerWS/editJoiner.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171102100103" nameCn="删除对接人信息" url="/JoinerWS/deleteJoiner.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20171102100104" nameCn="根据供应商查询对接人信息" url="/JoinerWS/queryJoinerListByprovider.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="资源管理" numberCode="PriceStrategyManager" nameCn="加价区间管理" url="/jsp_resources/priceStrategyManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170309120001" nameCn="查询加价区间" url="/PriceStrategyWS/queryPriceStrategyList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170309120002" nameCn="添加加价区间" url="/PriceStrategyWS/addPriceStrategy.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170309120003" nameCn="修改加价区间" url="/PriceStrategyWS/editPriceStrategy.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170309120004" nameCn="删除加价区间" url="/PriceStrategyWS/deletePriceStrategy.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="资源管理" numberCode="TkviewTypeManager" nameCn="单品种类管理" url="/jsp_resources/tkviewTypeManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170329182101" nameCn="查询单品种类信息" url="/TkviewTypeWS/queryTkviewTypeList.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="资源管理" numberCode="resourcesManager" nameCn="单品管理" url="/jsp_resources/tkviewGroupCruise.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161207151900" nameCn="查询单品" url="/TkviewWS/queryTkviewList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161207153901" nameCn="添加单品" url="/TkviewWS/addTkview.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161207153902" nameCn="修改单品" url="/TkviewWS/editTkview.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161207153903" nameCn="删除单品" url="/TkviewWS/deleteTkviews.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161208105010" nameCn="完整添加单品" url="/TkviewWS/addQuickTkview.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20160718095813" nameCn="获取单品日志" url="/TkviewWS/getTkviewLog.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_z20170213095800" nameCn="快捷添加单品" url="/TkviewWS/addFastlyTkview.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_z20170213095801" nameCn="通过航期和邮轮获取舱型" url="/TkviewWS/getCabinByCruiseList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161202170215" nameCn="根据航期获取单品列表" url="/TkviewWS/getTkviewListByShipment.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_h20170331113400" nameCn="根据单品种类获取单品数据" url="/TkviewWS/getTkviewListByTkviewType.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_h20170331113401" nameCn="获取单品视图数据" url="/TkviewWS/getTkviewViewData.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_h20170331113402" nameCn="获取单品名称组" url="/TkviewWS/getTkviewTabList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_h20170331113403" nameCn="根据单品名称组获取组数据" url="/TkviewWS/getTkviewListByTkviewGroup.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170822181001" nameCn="根据舱型删除所有关联的单品及库存" url="/TkviewWS/deleteTkviewByCabin.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170822181002" nameCn="批量编辑备注" url="/TkviewWS/editTkviewRemark.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170822181003" nameCn="根据航期舱型获取单品" url="/TkviewWS/getTkviewListByShipmentAndCabin.do"/>
+		
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161207173904" nameCn="通过单品查询库存" url="/StockWS/queryStockListByTkview.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161208105005" nameCn="新增库存信息" url="/StockWS/addStock.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161208105007" nameCn="编辑库存信息" url="/StockWS/editStockDetails.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161208105008" nameCn="删除库存" url="/StockWS/deleteStock.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170511103901" nameCn="交换优先级" url="/StockWS/setPriority.do"/>
+		
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170407153301" nameCn="根据单品编号查询库存信息" url="/TkviewWS/getTkviewViewStockList.do"/>
+		
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170410105101" nameCn="根据邮轮分组查询单品信息" url="/TkviewWS/queryTkviewGroupCruise.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170410105102" nameCn="邮轮查询并根据航期分组查询单品信息" url="/TkviewWS/queryTkviewGroupShipmentByCruise.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170410105103" nameCn="修改操作人和释放时间" url="/TkviewWS/editOperationData.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170410105104" nameCn="手动释放单品" url="/TkviewWS/editTkviewRelease.do"/>
+		
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170410105105" nameCn="更新单品库存信息到SKU日历库存" url="/TkviewWS/editStockToSku.do"/>
+		
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170531111301" nameCn="根据邮轮查询舱型信息" url="/StockWS/getCabinByCruise.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170531111302" nameCn="批量新增库存" url="/StockWS/addStockList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170531111303" nameCn="根据邮轮查询航期信息" url="/StockWS/getShipmentByCruise.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170531111304" nameCn="根据舱型或航期获取库存信息" url="/StockWS/getStockListByCruise.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171025110101" nameCn="根据单品查询舱型" url="/StockWS/getCabinByTkiew.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171025110102" nameCn="根据单品查询航期" url="/StockWS/getShipmentByTkiew.do"/>  
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171025143001" nameCn="根据单品查询库存" url="/StockWS/getStockByTkview.do"/> 
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171025155801" nameCn="根据航期舱型供应商修改库存" url="/StockWS/editStockByCabinAndShipmentAndProvider.do"/>
+	</function> 
+	
+	<function isApi="0" groupCn="资源管理" numberCode="resourcesViewManager" nameCn="单品视图" url="/jsp_resources/tkviewViewManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_h20170330205700" nameCn="查询单品" url="/TkviewWS/queryTkviewList.do"/>
+	</function> 
+	
+	<function  isApi="0" groupCn="资源管理" numberCode="channelManager" nameCn="渠道管理" url="/jsp_resources/channelManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161209094200" nameCn="查询渠道" url="/ChannelWS/queryChannelList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161209094201" nameCn="添加渠道" url="/ChannelWS/addChannel.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161209094202" nameCn="修改渠道" url="/ChannelWS/editChannel.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161209094203" nameCn="删除渠道" url="/ChannelWS/deleteChannel.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161209094205" nameCn="渠道授权" url="/ChannelWS/setAuthorizeOper.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171104115601" nameCn="查询渠道信息根据编号" url="/ChannelWS/queryChannlListByNumberCode.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171104115600" nameCn="根据编号修改价格规则" url="/ChannelWS/editPriceStrategyByNumberCode.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171106115301" nameCn="更新到系统内存" url="/ChannelWS/editSystemMemory.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="资源管理" numberCode="excelManager" nameCn="Excel数据同步管理" url="/jsp_resources/excelManager.html">
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_h20170316112000" nameCn="查询Excel日志记录" url="/ExcelWS/queryExcelLogList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170308112301" nameCn="导入Excel" url="/ExcelWS/importExcelDataOper.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170308112302" nameCn="导出EXcel" url="/ExcelWS/exportExcelDataOper.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171024104101" nameCn="下载模板" url="/ExcelWS/downTemplate.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_h20171026152100" nameCn="下载比价数据" url="/ExcelWS/downCompareData.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_h20171104154700" nameCn="上传Excel更新SKU" url="/ExcelWS/importSkuExcelOper.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="档案管理" numberCode="CompanyManager" nameCn="邮轮公司" url="/jsp_base/companyManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20161207100201" nameCn="查询邮轮公司信息" url="/CompanyWS/queryCompanyList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207100202" nameCn="新增邮轮公司信息" url="/CompanyWS/addCompany.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207100203" nameCn="编辑邮轮公司信息" url="/CompanyWS/editCompany.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207100204" nameCn="删除邮轮公司信息" url="/CompanyWS/deleteCompany.do"/>
+	</function> 
+	<function isApi="0" groupCn="档案管理" numberCode="CruiseManager" nameCn="邮轮档案" url="/jsp_base/cruiseManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20161207110501" nameCn="查询邮轮信息" url="/CruiseWS/queryCruiseList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207110502" nameCn="新增邮轮信息" url="/CruiseWS/addCruise.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207110503" nameCn="编辑邮轮信息" url="/CruiseWS/editCruise.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207110504" nameCn="删除邮轮信息" url="/CruiseWS/deleteCruise.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207110505" nameCn="上传邮轮图片" url="/CruiseWS/addImages.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207110506" nameCn="邮轮详情信息" url="/CruiseWS/addDetail.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207110505" nameCn="上传微信图片" url="/CruiseWS/addWeixinImages.do"/>
+	</function>
+	<function isApi="0" groupCn="档案管理" numberCode="CabinManager" nameCn="舱型档案" url="/jsp_base/cabinManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20161207195601" nameCn="查询舱型信息" url="/CabinWS/queryCabinList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207195602" nameCn="新增舱型信息" url="/CabinWS/addCabin.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207195603" nameCn="编辑舱型信息" url="/CabinWS/editCabin.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207195604" nameCn="删除舱型信息" url="/CabinWS/deleteCabin.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207195605" nameCn="上传舱型图片" url="/CabinWS/addImages.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20161215110606" nameCn="完整新增舱型" url="/CabinWS/addQuickCabin.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161215110607" nameCn="舱型详情信息" url="/CabinWS/addDetail.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161215110608" nameCn="编辑是否开启状态" url="/CabinWS/editIsOpen.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171019100401" nameCn="船舱游轮分组" url="/CabinWS/queryCabinGroupCruise.do"/>
+	</function>
+	<function isApi="0" groupCn="档案管理" numberCode="AreaManager" nameCn="航区档案" url="/jsp_base/areaManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20161207200101" nameCn="查询航区信息" url="/AreaWS/queryAreaList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207200102" nameCn="新增航区信息" url="/AreaWS/addArea.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207200103" nameCn="编辑航区信息" url="/AreaWS/editArea.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207200104" nameCn="删除航区信息" url="/AreaWS/deleteArea.do"/>
+	</function>
+	<function isApi="0" groupCn="档案管理" numberCode="portManager" nameCn="港口档案" url="/jsp_base/portManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20161207200501" nameCn="查询港口信息" url="/PortWS/queryPortList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207200502" nameCn="新增港口信息" url="/PortWS/addPort.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207200503" nameCn="编辑港口信息" url="/PortWS/editPort.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207200504" nameCn="删除港口信息" url="/PortWS/deletePort.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207200505" nameCn="设置港口坐标" url="/PortWS/editPortCoordinate.do"/>
+	</function>
+	<function isApi="0" groupCn="档案管理" numberCode="AirwayManager" nameCn="航线档案" url="/jsp_base/airwayManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20161207200201" nameCn="查询航线信息" url="/AirwayWS/queryAirwayList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207200202" nameCn="新增航线信息" url="/AirwayWS/addAirway.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207200203" nameCn="编辑航线信息" url="/AirwayWS/editAirway.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207200204" nameCn="删除航线信息" url="/AirwayWS/deleteAirway.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20171107190801" nameCn="根据航线编号获取行程模版信息" url="/AirwayWS/getTripByAirway.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="档案管理" numberCode="ShipmentManager" nameCn="航期管理" url="/jsp_base/shipmentManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20161207200401" nameCn="查询航期信息" url="/ShipmentWS/queryShipmentList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207200402" nameCn="新增航期信息" url="/ShipmentWS/addShipment.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_z20170206095200" nameCn="批量新增航期信息" url="/ShipmentWS/addMoreShipment.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207200403" nameCn="编辑航期信息" url="/ShipmentWS/editShipment.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207200404" nameCn="删除航期信息" url="/ShipmentWS/deleteShipment.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207200405" nameCn="航期详情" url="/ShipmentWS/addDetail.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207200406" nameCn="克隆航期" url="/ShipmentWS/cloneShipmentByNumberCodeOper.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_h20170205085400" nameCn="快速建立航期单品" url="/ShipmentWS/quickCreateTkviewOper.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161207200404" nameCn="根据航期查询单品以及单品库存" url="/ShipmentWS/getTkiewAndStocCount.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20161207200401" nameCn="航期邮轮分组" url="/ShipmentWS/queryShipmentGroupCruise.do"/>
+		
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20161213113303" nameCn="查询航程信息" url="/ShipmentWS/queryVoyageListByShipment.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161213113304" nameCn="编辑航程信息" url="/ShipmentWS/editShipmentVoyage.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161213113305" nameCn="设置航期航线" url="/ShipmentWS/setShipmentAirway.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161213113306" nameCn="根据航期编号获取航程信息" url="/ShipmentWS/getVoyageByShipment.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20161213113306" nameCn="完整编辑航程信息" url="/ShipmentWS/editQuickVoyage.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="分销管理" numberCode="DistributorListManager" nameCn="分销商管理" url="/jsp_distributor/distributorManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20160809113701" nameCn="查询分销商" url="/DistributorWS/queryDistributorList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20160809113702" nameCn="添加分销商" url="/DistributorWS/addDistributor.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20160809113703" nameCn="修改分销商" url="/DistributorWS/editDistributor.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20160809113704" nameCn="删除分销商" url="/DistributorWS/deleteDistributor.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171109102901" nameCn="根据编号修改启用状态" url="/DistributorWS/editIsEnable.do"/>
+	</function>
+	
+ 	<function isApi="0" groupCn="分销管理" numberCode="DistributorTagListManager" nameCn="分销等级" url="/jsp_distributor/distributorTagManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20171108152101" nameCn="查询分销等级" url="/DistributorTagWS/queryDistributorTagList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171108152102" nameCn="添加分销等级" url="/DistributorTagWS/addDistributorTag.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171108152103" nameCn="修改分销等级" url="/DistributorTagWS/editDistributorTag.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171108152104" nameCn="删除分销等级" url="/DistributorTagWS/deleteDistributorTag.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171108152105" nameCn="根据编号修改减免价格" url="/DistributorTagWS/editStrategyJsonByNumberCode.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20171108152106" nameCn="根据编号查询分销等级" url="/DistributorTagWS/queryDistributorTagListByNumberCode.do"/>
+	</function> 
+	
+	<function isApi="0" groupCn="计划目标管理" numberCode="RecordManager" nameCn="会议记录管理" url="/jsp_planGoal/recordManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20171013161001" nameCn="查询会议记录" url="/RecordWS/queryRersonList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171013161002" nameCn="新增会议记录" url="/RecordWS/addRerson.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171013161003" nameCn="编辑会议记录" url="/RecordWS/editRerson.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171013161004" nameCn="删除会议记录" url="/RecordWS/deleteRerson.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171013161005" nameCn="会议记录详情" url="/RecordWS/addDetails.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="计划目标管理" numberCode="PersonManager" nameCn="员工 信息管理" url="/jsp_planGoal/personManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20171013141001" nameCn="查询员工信息" url="/PersonWS/queryPersonList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171013141002" nameCn="新增员工信息" url="/PersonWS/addPerson.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171013141003" nameCn="编辑员工信息" url="/PersonWS/editPerson.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171013141004" nameCn="删除员工信息" url="/PersonWS/deletePerson.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="计划目标管理" numberCode="PlanGoalManager" nameCn="计划目标管理" url="/jsp_planGoal/planGoalManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20171012181001" nameCn="查询计划目标" url="/PlanGoalWS/queryPlanGoalList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171012181002" nameCn="新增计划目标" url="/PlanGoalWS/addPlanGoal.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171012181003" nameCn="编辑计划目标" url="/PlanGoalWS/editPlanGoal.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171012181004" nameCn="编辑类型" url="/PlanGoalWS/editPlanGoalByType.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171012181005" nameCn="编辑状态" url="/PlanGoalWS/editState.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171012181006" nameCn="编辑是否延迟" url="/PlanGoalWS/editDelay.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20171012181007" nameCn="删除计划目标" url="/PlanGoalWS/deletePlanGoal.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="皇家加勒比" numberCode="RTaskManager" nameCn="数据下行管理" url="/jsp_rbase/rTaskManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170801105201" nameCn="查询" url="/R_TaskWS/queryTaskList.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="皇家加勒比" numberCode="RAreaManager" nameCn="皇家航区管理" url="/jsp_rbase/rAreaManager.html">
+	    <api flagServer="0" isWork="0" buttonCode="buttonCode_x20170727093001" nameCn="查询皇家航区数据" url="/R_AreaWS/queryRAreaList.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="皇家加勒比" numberCode="RAirwayManager" nameCn="皇家航线管理" url="/jsp_rbase/rAirwayManager.html">
+	    <api flagServer="0" isWork="0" buttonCode="buttonCode_x20170725094001" nameCn="查询皇家航线数据" url="/R_AirwayWS/queryRAirwayList.do"/>
+		
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170725094002" nameCn="查询皇家行程模版数据" url="/R_TripWS/queryRTripList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170725094503" nameCn="上传ITINERARY.txt文件" url="/R_TripWS/importTxtOper.do"/>
+	</function>
+
+	<function isApi="0" groupCn="皇家加勒比" numberCode="RPortManager" nameCn="皇家港口管理" url="/jsp_rbase/rPortManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170724141701" nameCn="查询皇家港口数据" url="/R_PortWS/queryRPortList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_x20170724141702" nameCn="上传港口信息" url="/R_PortWS/importExcelPortOper.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="皇家加勒比" numberCode="RShipmentManager" nameCn="皇家航期管理" url="/jsp_rbase/rShipmentManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170727093501" nameCn="查询皇家航期数据" url="/R_ShipmentWS/queryRShipmentList.do"/>
+	
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170727093502" nameCn="查询皇家航程数据" url="/R_VoyageWS/queryRVoyageList.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="皇家加勒比" numberCode="RTkviewManager" nameCn="皇家单品管理" url="/jsp_rbase/rTkviewManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170724093201" nameCn="读取皇家txt文件" url="/R_TkviewWS/readTxtOper.do"/>
+	    <api flagServer="0" isWork="0" buttonCode="buttonCode_x20170724093202" nameCn="查询皇家单品数据" url="/R_TkviewWS/queryRTkviewList.do"/>
+	
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170724093202" nameCn="查询皇家单品库存数据" url="/R_StockWS/queryRStockList.do"/>
+	</function>
+	<function isApi="0" groupCn="皇家加勒比" numberCode="RTkviewViewManager" nameCn="皇家单品视图" url="/jsp_rbase/rTkviewCruiseGroup.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170802175201" nameCn="查询皇家所有邮轮信息" url="/RTkview_ViewWS/queryRoyalCruiseList.do"/>
+	    <api flagServer="0" isWork="0" buttonCode="buttonCode_x20170802175202" nameCn="根据邮轮编号获取所有舱型信息" url="/RTkview_ViewWS/getRoyalCabinList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170802175203" nameCn="获取月份和日期价格信息" url="/RTkview_ViewWS/getRoyalTkviewDateList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_x20170802175204" nameCn="获取单品及价格信息" url="/RTkview_ViewWS/getRoyalTkviewPriceList.do"/>
+	</function>
+	
+	<list>
+		<api flagServer="0" isWork="1" nameCn="安全退出" url="/LoginWS/safeQuit.do"/>
+		<api flagServer="0" isWork="1" nameCn="登录验证" url="/LoginWS/decideLogin.do"/>
+		<api flagServer="0" isWork="1" nameCn="新增用户自定义使用习惯" url="/UserOperWS/addUserOper.do"/>
+	</list>
+	
+	<list>
+		<api flagServer="0" isWork="0" nameCn="获取用户昵称" url="/AdminUserWS/getNickNameByUsername.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-获取所有机构信息" url="/ListWS/getPossessorList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-获取所有邮轮公司信息" url="/ListWS/getCompanyList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-获取所有邮轮信息" url="/ListWS/getCruiseList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-获取所有港口信息" url="/ListWS/getPortList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-获取所有航区信息" url="/ListWS/getAreaList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-获取所有航线信息" url="/ListWS/getAirwayList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-根据航线编号获取行程路线信息" url="/ListWS/getRouteList.do"/>
+		
+		<api flagServer="0" isWork="0" nameCn="下拉框-获取所有供应商信息" url="/ListWS/getProviderList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-获取所有分销商信息" url="/ListWS/getDistributorNameAndPhoneList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-获取航期" url="/ListWS/getShipmentList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-通过邮轮获取舱型" url="/ListWS/getCabinListByCruise.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-通过航期获取舱型" url="/ListWS/getCabinListByShipment.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-获取舱型" url="/ListWS/getCabinList.do"/>
+		
+		<api flagServer="0" isWork="0" nameCn="下拉框-获取所有渠道信息" url="/ListWS/getChannelList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-获取所有单品信息" url="/ListWS/getTkviewList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-通过单品编号获取不在此编号中的单品中信息" url="/ListWS/getTkviewListNotInNumber.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-获取所有产品信息" url="/ListWS/getPtviewList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-获取产品的航期信息" url="/ListWS/getPtviewShipmentList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-获取所有淘宝宝贝信息" url="/ListWS/getTaobaoProductList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-通过渠道获取宝贝" url="/ListWS/getTravelItemByChannel.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-通过宝贝SKU获取航期" url="/ListWS/getShipmentByTaobaoSku.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-通过宝贝SKU获取单品" url="/ListWS/getTkviewByShipmentAndCruise.do"/>
+		
+		<api flagServer="0" isWork="0" nameCn="下拉框-查询全部舱型信息" url="/ListWS/getCabinByCruiseList.do"/>
+		
+		<api flagServer="0" isWork="0" nameCn="下拉框-通过渠道获取类目" url="/ListWS/getCidByChannel.do"/>
+		
+		<api flagServer="0" isWork="0" nameCn="下拉框-获取航期的航线" url="/ListWS/getShipmentAirwayList.do"/>
+	
+		<api flagServer="0" isWork="0" nameCn="下拉框-获取航期邮轮信息" url="/ListWS/getShipmentCruiseList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框-获取所有单品种类信息" url="/ListWS/getTkviewTypeList.do"/>
+	
+		<api flagServer="0" isWork="0" nameCn="下拉框--根据邮轮编号获取航期的月份" url="/ListWS/getShipmentMouthList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框--根据邮轮编号获取航期的出发日期" url="/ListWS/getTkviewShipmentList.do"/>
+	
+		<api flagServer="0" isWork="0" nameCn="下拉框--根据产品SKU编号获取航期" url="/ListWS/getShipmentByPtviewSku.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框--根据产品SKU编号获取航期" url="/ListWS/getTkviewByShipment.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框--获取全部产品" url="/ListWS/getPtviewAllList.do"/>
+		
+		<api flagServer="0" isWork="0" nameCn="下拉框--资源查询--根据邮轮编号获取航线" url="/ListWS/getAirwayListByCruise.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框--资源查询--获取所有航期的出发地" url="/ListWS/getStartPlace.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框--资源查询--查询出海上巡游的所有港口" url="/ListWS/getToPlace.do"/>
+	
+		<api flagServer="0" isWork="0" nameCn="下拉框--获取皇家所有的邮轮信息" url="/ListWS/getRoyalCruiseList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框--获取皇家单品月份" url="/ListWS/getRoyalShipmentMouthList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框--获取皇家单品出行日期" url="/ListWS/getRoyalShipmentList.do"/>
+		
+		<api flagServer="0" isWork="0" nameCn="下拉框--根据航期获取供应商" url="/ListWS/getProviderByShipmentList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框--根据邮轮获取供应商" url="/ListWS/getProviderByCruiseList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框--根据邮轮和状态查询舱型" url="/ListWS/getCabinIsOpenByCruiseList.do"/>
+		
+		<api flagServer="0" isWork="0" nameCn="下拉框--获取全部员工信息" url="/ListWS/getPersonList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框--获取单品下的舱型" url="/ListWS/getCabinByTkviewList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框--获取单品下的航期" url="/ListWS/getShipmentByTkviewList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框--根据单品获取库存供应商" url="/ListWS/getProviderByTkviewList.do"/>
+		<api flagServer="0" isWork="0" nameCn="下拉框--获取所有分销等级" url="/ListWS/getDistributorTagList.do"/>
+	</list>
+	
+	 <function isApi="0" groupCn="管理员" numberCode="a_userManager" nameCn="用户管理" url="/xyzsecurity/a_userManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20141231101614" nameCn="查询用户列表" url="/AdminUserWS/queryUserList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20141225153101" nameCn="新增用户" url="/AdminUserWS/addUser.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20141225153102" nameCn="编辑用户" url="/AdminUserWS/editUser.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20141225153103" nameCn="删除用户" url="/AdminUserWS/deleteUser.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_s20150625102901" nameCn="重设密码" url="/AdminUserWS/editUserPassword.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20141225153104" nameCn="开关用户" url="/AdminUserWS/editUserEnabled.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20141225153105" nameCn="设置用户岗位" url="/AdminUserWS/setUserPosition.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20141225153105" nameCn="获取岗位" url="/AdminUserWS/getAllPosition.do"/>
+		
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_s20150819095001" nameCn="给用户设置机构" url="/AdminUserWS/setUserPossessor.do"/>
+		
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_s20160219104101" nameCn="获取用户信息" url="/AdminUserWS/getUser.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="管理员" numberCode="userLog" nameCn="日志查看" url="/xyzsecurity/a_userLog.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20160115101501" nameCn="查询日志列表" url="/LogWS/getLogOperList.do"/>
+	</function>
+	
+	<function isApi="0" groupCn="管理员" numberCode="positionManager" nameCn="岗位管理" url="/xyzsecurity/a_positionManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20141231101619" nameCn="查询岗位列表" url="/AdminPositionWS/queryPositionList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20141231101619" nameCn="新增岗位" url="/AdminPositionWS/addPosition.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20141231101619" nameCn="编辑岗位" url="/AdminPositionWS/editPosition.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20141231101619" nameCn="删除岗位" url="/AdminPositionWS/deletePosition.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20141231101619" nameCn="查询岗位内操作列表" url="/AdminPositionWS/queryPositionButtonTrueList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20141231101619" nameCn="查询岗位外操作列表" url="/AdminPositionWS/queryPositionButtonFalseList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20141231101619" nameCn="查询岗位内操作树" url="/AdminPositionWS/queryPositionButtonTrueTree.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20141231101619" nameCn="查询岗位外操作树" url="/AdminPositionWS/queryPositionButtonFalseTree.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20141231101619" nameCn="添加操作进岗位" url="/AdminPositionWS/addPositionButton.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_y20141231101619" nameCn="删除岗位内操作" url="/AdminPositionWS/deletePositionButton.do"/>
+	</function>   
+	
+	<function isApi="0" groupCn="管理员" numberCode="possessorManager" nameCn="机构" url="/xyzsecurity/possessorManager.html">
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_s20150708143401" nameCn="查询机构列表" url="/PossessorWS/queryPossessorList.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_s20150708143402" nameCn="添加机构" url="/PossessorWS/addPossessor.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_s20150708143403" nameCn="修改机构" url="/PossessorWS/editPossessor.do"/>
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_s20150708143404" nameCn="删除机构" url="/PossessorWS/deletePossessor.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211143405" nameCn="添加单品给机构" url="/PossessorWS/addPossessorTkview.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211143405" nameCn="通过机构删除单品" url="/PossessorWS/deletePossessorTkview.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211143406" nameCn="添加产品给机构" url="/PossessorWS/addPossessorPtview.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211143407" nameCn="通过机构删除产品" url="/PossessorWS/deletePossessorPtview.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211143408" nameCn="添加供应商给机构" url="/PossessorWS/addPossessorProvider.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211143409" nameCn="通过机构删除供应商" url="/PossessorWS/deletePossessorProvider.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211143410" nameCn="添加渠道给机构" url="/PossessorWS/addPossessorChannel.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211143411" nameCn="通过机构删渠道" url="/PossessorWS/deletePossessorChannel.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211143412" nameCn="添加分销商给机构" url="/PossessorWS/addPossessorDistributor.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211143413" nameCn="通过机构删除分销商" url="/PossessorWS/deletePossessorDistributor.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211143414" nameCn="添加岗位给机构" url="/PossessorWS/addPossessorPosition.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211143415" nameCn="通过机构删除岗位" url="/PossessorWS/deletePossessorPosition.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211160000" nameCn="获取机构内所有岗位" url="/AdminPositionWS/queryPossessorPositionTrueList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211160000" nameCn="获取机构外所有岗位" url="/AdminPositionWS/queryPossessorPositionFalseList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211160000" nameCn="获取机构内所有分销商" url="/DistributorWS/queryPossessorDistributorTrueList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211160000" nameCn="获取机构外所有分销商" url="/DistributorWS/queryPossessorDistributorFalseList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211160000" nameCn="获取机构内所有渠道" url="/ChannelWS/queryPossessorChannelTrueList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211160000" nameCn="获取机构外所有渠道" url="/ChannelWS/queryPossessorChannelFalseList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211160000" nameCn="获取机构内所有供应商" url="/ProviderWS/queryPossessorProviderTrueList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211160000" nameCn="获取机构外所有供应商" url="/ProviderWS/queryPossessorProviderFalseList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211160000" nameCn="获取机构内所有产品" url="/PtviewWS/queryPossessorPtviewTrueList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211160000" nameCn="获取机构外所有产品" url="/PtviewWS/queryPossessorPtviewFalseList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211160000" nameCn="获取机构内所有单品" url="/TkviewWS/queryPossessorTkviewTrueList.do"/>
+		<api flagServer="0" isWork="0" buttonCode="buttonCode_y20161211160000" nameCn="获取机构外所有单品" url="/TkviewWS/queryPossessorTkviewFalseList.do"/>
+	</function> 
+	
+	<!-- <function isApi="0" groupCn="美团订单" numberCode="meituanOrderManager" nameCn="确认审批" url="/jsp_meituan/confirmApprovalManager.html">
+	    <api flagServer="0" isWork="0" buttonCode="buttonCode_hy20170620182201" nameCn="查询确认审批列表" url="/MeituanWS/queryConfirmApprovalList.do"/>
+	    <api flagServer="0" isWork="1" buttonCode="buttonCode_hy20170620182202" nameCn="确认审批" url="/MeituanWS/affirmApprol.do"/>
+	</function> -->
+
+</root>

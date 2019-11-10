@@ -1,0 +1,40 @@
+/**
+ * Created by Administrator on 2017/10/20.
+ * 统一管理请求接口。
+ */
+import Vue from 'vue'
+let urlApi = {
+  queryVoyageList: {    //首页热门产品列表
+    url:'SaleVoyageWS/queryVoyageList.cms',
+    isApiKey: true   // true 表示需要 apikey
+  },
+  getSelectData: {      //筛选关键词
+    url: 'SaleVoyageWS/getSelectData.cms',
+    isApiKey: true
+  },
+  getQueryData: {       //获取筛选数据
+    url: 'SaleVoyageWS/getQueryData.cms',
+    isApiKey: true
+  },
+  getVoyageDetail: {     //产品详情
+    url: 'SaleVoyageWS/getVoyageDetail.cms',
+    isApiKey: true
+  },
+  queryVoyageListByKeyword: {   //关键词搜索
+    url: 'SaleVoyageWS/queryVoyageListByKeyword.cms',
+    isApiKey: true
+  },
+  getLoginData:{        //登录
+    url: 'SaleVoyageWS/loginByPhoneOper.open',
+    isApiKey:false
+  },
+  getWechatLoginCode:{      //登录二维码
+    url: 'SaleVoyageWS/getWechatLoginCodeOper.cms',
+    isApiKey:false
+  },
+};
+for(let i in urlApi){
+  urlApi[i] = JSON.stringify(urlApi[i])
+}
+Vue.prototype.urlApi = urlApi;
+

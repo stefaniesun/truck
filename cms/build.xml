@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="zip" name="cms" basedir=".">
+	<description>cms</description>
+
+	<property name="web.dir" location="WebRoot" />
+	<!-- 编译输出位置 -->
+	<property name="build.dir" location="build" />
+	<!-- 打包发布后的位置 -->
+	<property name="dist.dir" location="c:/bak/" />
+	<property name="copy.dir" location="${dist.dir}/copy/${ant.project.name}" />
+
+	<!-- ================================= 
+          target: all              
+         ================================= -->
+	<target name="all" depends="zip,war" description="执行所有任务" />
+
+	<!-- ================================= 
+          target: all.clean              
+         ================================= -->
+	<target name="all.clean" description="清理发布文件">
+		<delete file="${dist.dir}/${ant.project.name}.zip" />
+		<delete file="${dist.dir}/${ant.project.name}.war" />
+		<delete file="${copy.dir}" />
+	</target>
+
+	<!-- ================================= 
+          target: zip.dist              
+         ================================= -->
+	<target name="zip.dist" description="发布所有文件">
+		<!-- 复制文件 -->
+		<copy todir="${copy.dir}">
+			<fileset dir="${web.dir}">
+				<exclude name="*.svn" />
+				<exclude name="**/*.jar" />
+				<exclude name="**/config/jdbc.properties"/>
+				<exclude name="**/config/sys.properties"/>
+				<exclude name="**/test/*.*" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- ================================= 
+	          target: war.dist              
+	         ================================= -->
+	<target name="war.dist" description="发布所有文件">
+		<!-- 复制文件 -->
+		<copy todir="${copy.dir}">
+			<fileset dir="${web.dir}">
+				<exclude name="*.svn" />
+				<exclude name="**/test/*.*" />
+			</fileset>
+		</copy>
+	</target>
+
+
+	<!-- ================================= 
+          target: zip             
+         ================================= -->
+	<target name="zip" depends="zip.dist" description="打包成zip发布">
+		<zip destfile="${dist.dir}/${ant.project.name}.zip" basedir="${copy.dir}" />
+		<delete dir="${copy.dir}" />
+		<echo>zip打包完成！</echo>
+	</target>
+
+	<!-- ================================= 
+	          target: war             
+	         ================================= -->
+	<target name="war" depends="war.dist" description="打包war文件">
+		<war destfile="${dist.dir}/${ant.project.name}.war">
+			<fileset dir="${copy.dir}" includes="**/*.*" />
+		</war>
+		<delete dir="${copy.dir}" />
+		<echo>war打包完成！</echo>
+	</target>
+
+</project>

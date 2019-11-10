@@ -1,0 +1,45 @@
+// The Vue build version to load with the `import` command
+// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import Vue from 'vue'
+import App from './App'
+import router from './router'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+import iView from 'iview';
+import 'iview/dist/styles/iview.css';
+
+Vue.use(VueAxios, axios)
+Vue.use(iView);
+
+router.beforeEach((to, from, next) => {
+  iView.LoadingBar.start();
+  to.path == '/' ? document.title = 'Login - 登录' : document.title = '邮轮资源分销系统';
+  if(to.matched.length === 0) {
+    next({
+      path: '/',
+    })
+  }else{
+    next();
+  }
+  iView.LoadingBar.finish();
+});
+
+router.afterEach(() => {
+  iView.LoadingBar.finish();
+});
+
+require('@/assets/utils/component');
+require('@/assets/utils/axios');
+require('@/assets/utils/urlApi');
+
+Vue.config.productionTip = false
+
+process.env.NODE_ENV == 'development'?Vue.prototype.api = 'api/':Vue.prototype.api = '';
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  router,
+  template: '<App/>',
+  components: { App }
+})

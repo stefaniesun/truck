@@ -1,0 +1,267 @@
+import Vue from 'vue'
+import Router from 'vue-router'
+let urlApi = require('@/assets/utils/urlApi').default;
+
+Router.prototype.goBack = function () {  //route添加一个goBack方法，用于记录路由的前进后退状态,需要后退时调用：vm.$router.goBack();
+  this.isBack = true;
+  this.go(-1);
+};
+
+Vue.use(Router);
+
+const router = new Router({
+  routes: [
+    {
+      path:'/',
+      name:'beforLogin',
+      component: resolve => { require(['@/components/beforLogin'],resolve);},
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
+      path: '/productQuery',
+      name: 'productQuery',
+      component: resolve => { require(['@/components/productQuery'], resolve); },
+      meta: {
+        keepAlive: false // 需要被缓存
+      }
+    },
+    {
+      path: '/productDetail',
+      name: 'productDetail',
+      component: resolve => { require(['@/components/productDetail'], resolve); },
+      meta: {
+        keepAlive: false // 不需要被缓存
+      }
+    },
+    {
+      path: '/placeOrder',
+      name: 'placeOrder',
+      component: resolve => { require(['@/components/placeOrder'], resolve); },
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
+      path: '/cruiseDetail/:cruise',
+      name: 'cruiseDetail',
+      component: resolve => { require(['@/components/cruiseDetail'], resolve); },
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
+      path: '/orderSuccess',
+      name: 'orderSuccess',
+      component: resolve => { require(['@/components/orderSuccess'], resolve); },
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
+      path: '/customerInfoFill',
+      name: 'customerInfoFill',
+      component: resolve => { require(['@/components/customerInfoFill'], resolve); },
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
+      path: '/userCenter/',
+      name: 'userCenter',
+      component: resolve => {require (['@/components/userCenter'], resolve); },
+      meta: {
+        keepAlive: false
+      },
+      redirect: '/userCenter/orderAmount',
+      children: [
+        {
+          path: 'orderAmount',
+          name: 'orderAll',
+          component: resolve => {require (['@/components/orderAll'], resolve); },
+          meta: {
+            keepAlive: false
+          }
+        },
+        {
+          path: 'sumAmount',
+          name: 'sumAmount ',
+          component: resolve => {require (['@/components/sumAmount'], resolve); },
+          meta: {
+            keepAlive: false
+          }
+        },
+        {
+          path: 'touristAmount',
+          name: 'touristAmount ',
+          component: resolve => {require (['@/components/touristAmount'], resolve); },
+          meta: {
+            keepAlive: false
+          }
+        },
+
+      ]
+    },
+    {
+      path:'/binding',
+      name:'binding',
+      component: resolve => { require(['@/components/binding'],resolve);},
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
+      path:'/quotation',
+      name:'quotation',
+      component: resolve => { require(['@/components/quotation'],resolve);},
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
+      path:'/distributorApply',
+      name:'distributorApply',
+      component: resolve => { require(['@/components/distributorApply'],resolve);},
+      meta:{
+        keepAlive:false
+      }
+    },
+    {
+      path:'/ptDetailToC',
+      name:'ptDetailToC',
+      component: resolve => { require(['@/components/ptDetailToC'],resolve);},
+      meta:{
+        keepAlive:false
+      }
+    },
+    {
+      path:'/pOrderToC',
+      name:'pOrderToC',
+      component: resolve => { require(['@/components/pOrderToC'],resolve);},
+      meta:{
+        keepAlive:false
+      }
+    },
+    {
+      path:'/paymentPage',
+      name:'paymentPage',
+      component: resolve => { require(['@/components/paymentPage'],resolve);},
+      meta:{
+        keepAlive:false
+      }
+    },
+    {
+      path:'/noPage',
+      name:'noPage',
+      component: resolve => { require(['@/components/noPage'],resolve);},
+      meta:{
+        keepAlive:false
+      }
+    },
+    {
+      path:'/modifyContacts',
+      name:'modifyContacts',
+      component: resolve => { require(['@/components/modifyContacts'],resolve);},
+      meta:{
+        keepAlive:false
+      }
+    },
+    {
+      path:'/shoppingCart',
+      name:'shoppingCart',
+      component: resolve => { require(['@/components/shoppingCart'],resolve);},
+      meta:{
+        keepAlive:false
+      }
+    }
+  ]
+});
+
+import common from '@/assets/js/common'
+
+router.beforeEach((to, form, next) => {
+  let apikey = sessionStorage.apikey;
+  let parame = common.getUrlParameters();
+  if(process.env.NODE_ENV !== 'development'){
+    //禁止在微端以为的设备打开
+    let ua = navigator.userAgent.toLowerCase();
+    let isWeixin = ua.indexOf('micromessenger') != -1;
+    if (!isWeixin) {
+      document.head.innerHTML = '<title>抱歉，出错了</title><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0"><link rel="stylesheet" type="text/css" href="https://res.wx.qq.com/open/libs/weui/0.4.1/weui.css">';
+      document.body.innerHTML = '<div class="weui_msg"><div class="weui_icon_area"><i class="weui_icon_info weui_icon_msg"></i></div><div class="weui_text_area"><h4 class="weui_msg_title">请在微信客户端打开链接</h4></div></div>';
+      return;
+    }
+  }
+  if(to.name === 'ptDetailToC') {
+    document.title = sessionStorage.documentTitle ? sessionStorage.documentTitle : '邮轮资源分销系统';
+  }else {
+    document.title = '邮轮资源分销系统';
+  }
+  if(to.name === 'distributorApply' || to.name === 'quotation'){
+    next();
+  }else {
+    setPath(to.path);
+    if(apikey === undefined) {
+      sessionStorage.setItem('apikey', '');
+      sessionStorage.setItem('outkey',parame.outkey);
+      if ((parame.voyage && parame.distributor && parame.isQRcode)) {
+        setPath('/ptDetailToC');
+        let urlJson = {
+          distributor: parame.distributor,
+          voyage: parame.voyage,
+          isQRcode: parame.isQRcode
+        }
+        sessionStorage.setItem('urlJson', JSON.stringify(urlJson));
+        if(parame.sharePrice) {
+          sessionStorage.setItem('sharePrice', parame.sharePrice);
+          // next({
+          //   path: '/'
+          // });
+        }
+      } else {
+        parame.code && sessionStorage.setItem('code', parame.code);
+      }
+
+      if(process.env.NODE_ENV !== 'development'){
+        let redirectUrl = location.origin + location.pathname + '#/';
+        let dataJson = {
+          outkey: parame.outkey,
+          redirectUrl: redirectUrl
+        }
+        Vue.axios.post(urlApi.getWebAuth, dataJson).then(function (rep) {
+          if (rep.status) {
+            location.replace(rep.content);
+          }
+        })
+        next(false);
+        return;
+      }else {
+        if(to.path !== '/'){
+          next({
+            path: '/',
+            query: {
+              outkey: parame.outkey
+            }
+          });
+        }else {
+          next();
+        }
+
+      }
+    }else {
+      next();
+    }
+  }
+});
+router.afterEach(() => {
+  window.scrollTo(0, 0);
+});
+
+function setPath(path){
+  if(!(path == '/' || path == '/binding' )){
+    sessionStorage.setItem('originalPath',path);
+  }
+}
+
+export default router;

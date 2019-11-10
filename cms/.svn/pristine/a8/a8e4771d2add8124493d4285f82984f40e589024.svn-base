@@ -1,0 +1,503 @@
+<template>
+  <div class="placeOrder">
+    <!-- 头部 start -->
+    <header>
+      <h2>订单确认</h2>
+      <i @click="goBack()" class="iconfont back icon-fanhui"></i>
+      <i @click=" goUserCenter()" class="iconfont user icon-gerenzhongxin"></i>
+    </header>
+
+    <!-- 内容 start-->
+    <div class="main">
+      <div class="main-inner">
+
+        <!-- 邮轮信息 start -->
+        <div class="liner-info clearfloat">
+          <img :src="content.cruiseImg" alt="">
+          <dl>
+            <dt>{{content.ptViewName}}</dt>
+            <dd>出行日期：{{content.travelDate}}</dd>
+          </dl>
+        </div>
+
+        <!-- 邮轮舱型数量 start-->
+        <div class="cabin-type">
+          <ul>
+            <li class="clearfloat" v-for="cabin in cabbin">
+              <div class="check" @click="cabin.notCheck=!cabin.notCheck;">
+                <i class="iconfont" :class="cabin.notCheck ? 'icon-weixuanzhong1' : 'icon-weixuanzhong'" v-if="!operation"></i>
+                <span>{{cabin.cabinType}}</span>
+              </div>
+              <div class="num" :class="operation ? 'hide-bianji' : ''">
+                <b>数量：</b>
+                <div class="count" v-if="operation == false">
+                  <i class="iconfont icon-tooldel" @click="reduceNum(cabin)"></i>
+                    <span>{{cabin.roomNum}}</span>
+                   <i class="iconfont icon-tooladd" @click="addNum(cabin)"></i>
+                  <div class="tips" v-if="!cabin.stockType && ((cabin.realCount < cabin.sufficientCount) || !cabin.sufficientCount)">(仅剩{{cabin.realCount}}间)</div>
+                  <div class="tips" v-if="!cabin.stockType && (cabin.realCount >= cabin.sufficientCount) && cabin.sufficientCount">库存充足</div>
+                  <div class="tips" v-if="cabin.stockType">库存紧张</div>
+                </div>
+                <span class="show-num" v-if="operation">{{cabin.roomNum}}</span>
+              </div>
+              <div class="cabin-price">
+                <span class="sale-price">&yen;{{cabin.price * cabin.roomNum}}</span>
+                <span class="rebate" v-if="cabin.rebatePrice">后返{{cabin.rebatePrice * cabin.roomNum}}</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 操作按钮 start-->
+        <div class="operation clearfloat">
+          <div v-if="operation == false">
+            <a href="javascript:;" @click="deleteJson()">
+              <i class="iconfont icon-shanchu"></i>删除
+            </a>
+            <span class="line"></span>
+            <a href="javascript:;" @click="edit">
+              <i class="iconfont icon-wancheng"></i>完成
+            </a>
+          </div>
+          <!-- 编辑按钮 start -->
+          <a href="javascript:;" class="bianji" @click="edit" v-if="operation">
+            <i class="iconfont icon-bianji"></i>编辑
+          </a>
+          <!-- 编辑按钮 end -->
+        </div>
+        <!-- 操作按钮 end -->
+      </div>
+      <div class="input-panel">
+        <ul>
+          <li>
+            <span>统一联系人姓名</span>
+            <input class="phone" type="text" v-model="linkMan" placeholder="请输入统一联系人姓名">
+          </li>
+          <li>
+            <span>统一联系人电话</span>
+            <input class="name" type="text" v-model="linkPhone" placeholder="请输入统一联系人电话">
+          </li>
+        </ul>
+      </div>
+
+
+      <!-- 下单按钮 start-->
+      <div class="btn-box">
+        <button @click="goOrderSuccess">立即下单¥{{content.totalPrice}}</button>
+        <div class="disable" v-if="operation==false"></div>
+      </div>
+    </div>
+    <!-- 内容 end -->
+  </div>
+</template>
+
+<script>
+  let vm;
+  export default{
+    name: 'placeOrder',
+    data(){
+      return {
+        operation:true, //操作 (true:编辑按钮显示，下单按钮禁用)
+        content:[],
+        cabbin:[],    //舱型
+        allprice:0,  //总价
+        linkMan: '',
+        linkPhone: ''
+      }
+    },
+    mounted:function(){
+      vm = this;
+      vm.addData();
+    },
+    methods:{
+       /* 编辑 */
+      edit:function () {
+        vm.operation = !(vm.operation);
+        if(vm.operation){
+          vm.content.cabinArr = vm.cabbin;
+          sessionStorage.ptOrder = JSON.stringify(vm.content);
+        }
+      },
+      /* 数量减 */
+      reduceNum:function (obj) {
+        if(obj.roomNum > 1 ){
+          obj.roomNum -= 1;
+          vm.content.total -= 1;
+          obj.realCount++;
+          vm.content.totalPrice -= obj.price;
+        }else {
+          vm.dialog.showDialog('每个舱型最少保留数量为1！');
+        }
+      },
+      /* 数量加 */
+      addNum:function (obj) {
+        if(!obj.maxCount){
+          if(obj.realCount > 0){
+            obj.roomNum += 1;
+            vm.content.total += 1;
+            obj.realCount--;
+            vm.content.totalPrice += obj.price;
+          }
+        }else {
+          if(obj.roomNum < obj.maxCount){
+            if(obj.realCount > 0){
+              obj.roomNum += 1;
+              vm.content.total += 1;
+              obj.realCount--;
+              vm.content.totalPrice += obj.price;
+            }
+          }else {
+            vm.dialog.showDialog('单次购买最多只能买'+obj.maxCount+'间');
+          }
+        }
+      },
+      /* 删除订单 */
+      deleteJson: function () {
+      	if(vm.cabbin.length>1){
+          vm.dialog.showDialog({
+            close: true,
+            btnText: '确定',
+            msg: '确定要删除该舱型吗？'
+          },function (flag) {
+            if( flag ){
+              let num,price;
+              for (let del = vm.cabbin.length - 1; del >= 0; del--) {
+                let json = vm.cabbin[del];
+                if (json.notCheck == false) {
+                  num = vm.cabbin[del].roomNum;
+                  price = vm.cabbin[del].price * num;
+                  vm.cabbin.splice(del, 1);
+                }
+              }
+              vm.content.cabinArr = vm.cabbin;
+              vm.content.total -= num;
+              vm.content.totalPrice -= price;
+              sessionStorage.ptOrder = JSON.stringify(vm.content);
+            }
+          })
+        } else {
+          vm.dialog.showDialog('最少保留一个舱型！');
+        }
+      },
+      goBack:function () {
+        vm.$router.goBack();
+      },
+      goUserCenter:function () {
+        vm.$router.push('/userCenter');
+      },
+      goOrderSuccess:function () {
+        let tel = /^1[34578][0-9]{9}$/;
+        if( !vm.linkMan ){
+          vm.tooltip.show('请填写统一联系人姓名','.phone');
+          return;
+        }
+        if( !vm.linkPhone || !(tel.test(vm.linkPhone))  ){
+          vm.tooltip.show('请正确填写统一联系人手机号','.name');
+          return;
+        }
+        let orderJson = new Array;
+        let cabinArr = vm.content.cabinArr;
+        let cruiseVoyage;
+        let cabinType = new Array;
+        for(let i=0;i<cabinArr.length;i++){
+          cruiseVoyage = cabinArr[0].cruiseVoyage;
+          let orderObj = new Object;
+          orderObj.cabin = cabinArr[i].numberCode;
+          orderObj.count = cabinArr[i].roomNum;
+          orderObj.stock = cabinArr[i].stock;
+          orderJson.push(orderObj)
+          if( cabinArr[i].stockType ){
+            cabinType.push(cabinArr[i].cabinType)
+          }
+        }
+        if(cabinType.length){
+          let msg = cabinType.length > 1 ? cabinType.join('、') : cabinType[0];
+          vm.dialog.showDialog({
+            close: true,
+            btnText: '确定',
+            msg: '【' + msg + '】的资源紧张，本次下单不进行支付，需后台资源确认后在订单管理中进行二次付款操作，给您带来的不便敬请谅解。'
+          }, function (flag) {
+            if (flag) {
+              vm.upData(cruiseVoyage,orderJson);
+            }
+          })
+        }else {
+          vm.upData(cruiseVoyage,orderJson);
+        }
+      },
+      upData(cruiseVoyage,orderJson){
+        let parame = {
+          voyage: cruiseVoyage,
+          orderJson: JSON.stringify(orderJson),
+          linkMan: vm.linkMan,
+          linkPhone: vm.linkPhone,
+        };
+        vm.axios.post(this.api+this.urlApi.createCruiseOrderOper,parame).then(function (response) {
+          if(response.status) vm.$router.push('/orderSuccess');
+        })
+      },
+      addData:function () {
+        vm.content=[];
+        vm.cabbin = [];
+        if(sessionStorage.ptOrder){
+          vm.content = JSON.parse(sessionStorage.ptOrder);
+          let order = JSON.parse(JSON.stringify(vm.content.cabinArr));
+          for(let i in order){
+            let json = order[i];
+            json.notCheck = true;
+            vm.cabbin.push(json);
+          }
+        }else{
+          vm.$router.replace('/productQuery');
+        }
+      }
+    }
+
+  }
+
+</script>
+
+<style lang="less" scoped>
+  @import "../assets/css/base.less";
+
+  @font-color:#8d95a3;
+  .placeOrder{
+    width: 100%;
+    height: 100%;
+    background-color: #dee9f8;
+    .main{
+      width: 100%;
+      height: 100%;
+      padding:88*@basePX 24*@basePX 0 24*@basePX;
+      background-color:@appBg;
+      .main-inner{
+        width: 100%;
+        background-color: #fff;
+        padding: 24*@basePX;
+        padding-bottom: 0;
+        margin-top: 24*@basePX;
+        .liner-info{
+          width: 100%;
+          padding-bottom: 24*@basePX;
+          border-bottom: 1px solid @lineColor;
+          img{
+            width:180*@basePX;
+            height:108*@basePX ;
+            float: left;
+            padding-right: 24*@basePX;
+          }
+          dl{
+            float: left;
+            width: 72%;
+            dt{
+              font-size: 32*@basePX;
+              font-weight: bold;
+            }
+            dd{
+              font-size: 26*@basePX;
+              color: @font-color;
+            }
+          }
+        }
+        .cabin-type{
+          width: 100%;
+          padding: 40*@basePX 0;
+          border-bottom: 1px solid @lineColor;
+          li{
+            width: 100%;
+            margin-bottom: 32*@basePX;
+            position: relative;
+            .check,.num{
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+            }
+            .check{
+              left: 0;
+              font-size: 32*@basePX;
+              height: 46*@basePX;
+              line-height: 46*@basePX;
+              i{
+                display: inline-block;
+                margin-right: 20*@basePX;
+                transform: translateY(3%);
+              }
+              .iconfont{
+                font-size: 35*@basePX;
+              }
+              .icon-weixuanzhong1{
+                color: #8d95a3;
+              }
+              .icon-weixuanzhong{
+                color: @changeBtnBg;
+              }
+            }
+            .num{
+              left: 40%;
+              font-size: 33*@basePX;
+              min-width: 208*@basePX;
+              height: 48*@basePX;
+              line-height: 48*@basePX;
+              .iconfont{
+                color: @changeBtnBg;
+                font-size: 42*@basePX;
+              }
+              .count{
+                position: absolute;
+                top: 50%;
+                right: 0;
+                transform: translateY(-50%);
+                float: left;
+                span{
+                  display: inline-block;
+                  font-size: 33*@basePX;
+                  transform: translateY(-10%);
+                  min-width: 40*@basePX;
+                  text-align: center;
+                }
+                .tips{
+                  font-size: 26*@basePX;
+                  color: @tipsColor;
+                  text-align: center;
+                }
+              }
+              .show-num{
+                color: @font-color;
+                font-size: 26*@basePX;
+              }
+              b{
+                font-weight: normal;
+                font-size: 26*@basePX;
+                color: @font-color;
+                margin: 4*@basePX 5*@basePX 0 0;
+                display: inline-block;
+              }
+              &.hide-bianji{
+                left: 30%;
+              }
+            }
+            .cabin-price{
+              float: right;
+              width: 20%;
+              text-align: center;
+            }
+            .sale-price,
+            .rebate{
+              display: block;
+              width: 100%;
+              text-align: center;
+            }
+            .rebate {
+              width: 130*@basePX;
+              height: 28*@basePX;
+              line-height: 28*@basePX;
+              .borderRadius(14*@basePX);
+              text-align: center;
+              color: #fff;
+              background: #ff0000;
+              font-size: 22*@basePX;
+            }
+            .sale-price{
+              color: @clickBtnBg;
+              font-size: 38*@basePX;
+            }
+          }
+          li:last-child{
+            margin-bottom: 0;
+          }
+        }
+        .operation{
+          width: 100%;
+          padding: 25*@basePX 0;
+          a{
+            float: left;
+            width: 49%;
+            text-align: center;
+            color: @clickBtnBg;
+            text-decoration: none;
+            font-size: 32*@basePX;
+            .iconfont{
+              color: @clickBtnBg;
+              font-size:35*@basePX ;
+              margin-right: 5*@basePX;
+            }
+            .icon-wancheng{
+              font-size: 32*@basePX;
+            }
+          }
+          .bianji{
+            width: 100%;
+          }
+          .line{
+            float: left;
+            width: 2*@basePX;
+            height: 42*@basePX;
+            display: inline-block;
+            background-color: @lineColor;
+          }
+        }
+      }
+      .input-panel {
+        width: 100%;
+        height: 352*@basePX;
+        margin-top: 18*@basePX;
+        padding: 30*@basePX 0 0 42*@basePX;
+        font-size: 32*@basePX;
+        background-color: #fff;
+        span {
+          display: block;
+        }
+        input {
+          width: 620*@basePX;
+          height: 72*@basePX;
+          line-height: 36*@basePX;
+          padding: 18*@basePX 0;
+          margin: 16*@basePX 0;
+          border: 1px solid #c2d6ee;
+          background-color: #fff;
+          .borderRadius;
+          text-indent: 16*@basePX;
+          font-size: 32*@basePX;
+        }
+        input:focus{
+          box-shadow: 0 0 7px rgba(36, 106, 191, 0.38);
+        }
+      }
+      .btn-box{
+        width: 100%;
+        background-color:@panleBg;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        text-align: center;
+        z-index: 9;
+        button{
+          width: 600*@basePX;
+          height: 88*@basePX;
+          .borderRadius(@radius:50*@basePX );
+          border:0;
+          background-color: @clickBtnBg;
+          color: #fff;
+          font-size: 40*@basePX;
+          margin: 24*@basePX 0;
+          letter-spacing: 2px;
+          cursor: pointer;
+          outline: none;
+        }
+        .disable{
+          width: 600*@basePX;
+          height: 88*@basePX;
+          .borderRadius(@radius:50*@basePX );
+          background-color: #fff;
+          position:absolute;
+          z-index: 10;
+          left: 50%;
+          margin-left:-(600*@basePX/2) ;
+          bottom:50%;
+          margin-bottom: -(88*@basePX/2);
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+</style>

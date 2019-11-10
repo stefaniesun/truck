@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>锁定日志</title>
+</head>
+<body>
+<div style="margin-left:100px;">
+	<form>
+		<div style="float:left;width:490px;">
+			<table style="width:480px;text-align:center;" cellpadding="4" cellspacing="0" border="1" bordercolor="#C0C0C0">
+				<caption>
+					<span style="margin:auto;">SKU套餐锁定库存</span>
+				</caption>
+				<thead>
+					<tr>
+						<th>邮轮</th>
+						<th>店铺</th>
+						<th>SKU套餐</th>
+						<th>日期</th>
+						<th>价格</th>
+						<th>库存</th>
+						<th>锁定</th>
+					</tr>
+				</thead>
+				<tbody id="skuAllTable"></tbody>
+			</table>
+		</div>
+		<div style="float:left;margin-left:20px;height:500px;overflow:auto;">
+			<table cellpadding="4" style="width:560px;" cellspacing="0" border="1" bordercolor="#C0C0C0">
+				<caption>
+					<span style="margin:auto;">锁定操作日志</span>
+				</caption>
+				<thead>
+					<tr>
+						<th style="text-align:center;">操作人</th>
+						<th style="text-align:center;">操作时间</th>
+						<th style="text-align:center;">日志</th>
+					</tr>
+				</thead>
+				<tbody id="logWorkAllTable"></tbody>
+			</table>
+		</div>
+	</form>
+</div>
+</body>
+</html>

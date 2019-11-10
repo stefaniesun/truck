@@ -1,0 +1,111 @@
+<template>
+  <div class="loading-wrapper mask-base">
+    <div>
+      <div class="wave-svg-shape" ref="loding">
+        <svg class="wave-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 215.43">
+          <title>loding</title>
+          <path
+            d="M639,986.07c-17-1-27.33-.33-40.5,2.67s-24.58,11.84-40.46,15c-13.56,2.69-31.27,2.9-46.2,1.35-17.7-1.83-35-9.06-35-9.06S456,987.07,439,986.07s-27.33-.33-40.5,2.67-24.58,11.84-40.46,15c-13.56,2.69-31.27,2.9-46.2,1.35-17.7-1.83-35-9.06-35-9.06S256,987.07,239,986.07s-27.33-.33-40.5,2.67-24.58,11.84-40.46,15c-13.56,2.69-31.27,2.9-46.2,1.35-17.7-1.83-35-9.06-35-9.06v205.06h600V996S656,987.07,639,986.07Z" transform="translate(-76 -985)">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <span>加载中...</span>
+  </div>
+</template>
+
+<script>
+  let vm
+  export default{
+  	name: 'loding',
+  }
+</script>
+
+<style lang="less" scoped>
+  .loading-wrapper {
+    > div {
+      width: 100px;
+      height: 100px;
+      overflow: hidden;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -100%);
+      z-index: 22;
+      -webkit-mask: url("../assets/img/loding.png") no-repeat;
+      -moz-mask: url("../assets/img/loding.png") no-repeat;
+      -o-mask: url("../assets/img/loding.png") no-repeat;
+      -webkit-mask-size: 100% 100%;
+      -moz-mask-size: 100% 100%;
+      -o-mask-size: 100% 100%;
+      background: #fff;
+      .wave-svg-shape {
+        width: 300px;
+        height: 110px;
+        /*animation: fillUpSvg 4s linear infinite;*/
+        transform: scaleY(1) translateY(40%);
+        border-radius: 50%;
+        .wave-svg {
+          width: 100%;
+          height: auto;
+          fill: #6aadff;
+          animation: waveSvgAnim 1.5s linear infinite;
+        }
+      }
+    }
+    span {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translateX(-45%);
+      margin-top: 10px;
+      z-index: 20;
+      color: #fff;
+      font-size: 18px;
+    }
+    @keyframes fillUpSvg {
+      0% {
+        transform: translateY(calc(100px / 2)) scaleY(0);
+      }
+      100% {
+        transform: translateY(calc(-5px)) scaleY(1);
+      }
+      /*100% {*/
+      /*transform: translateY(calc(100px/2)) scaleY(0);*/
+      /*}*/
+    }
+    @keyframes waveSvgAnim {
+      0% {
+        transform: translateX(-100px * 2);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+  }
+  .lading-wrapper-fixed{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    vertical-align: top;
+    text-align: center;
+    background: rgba(0, 0, 0, .3);
+  }
+  .lading-wrapper-absolute{
+    width: 1200px;
+    height: calc(~"100% - 80px");
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 20;
+    vertical-align: top;
+    text-align: center;
+    border-radius: 8px;
+    transform: translate(-50%,-50%);
+    background: rgba(0, 0, 0, .3);
+  }
+</style>

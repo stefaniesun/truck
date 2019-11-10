@@ -1,0 +1,79 @@
+/**
+ * Created by Administrator on 2017/10/20.
+ */
+import bus from './component'
+import axios from 'axios'
+let qs = require('querystring');
+axios.defaults.timeout = 5000;
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+
+// 请求拦截（配置发送请求的信息）
+axios.interceptors.request.use((config) => {
+  // 处理请求之前的配置
+  bus.Loading.show(config.url);
+  if(config.method  === 'post'){
+    config.data = qs.stringify(config.data);
+  }
+  return config;
+},(error) =>{
+  // 请求失败的处理
+  bus.Loading.hide(error.url);
+  bus.dialog.showDialog('请求失败');
+  return Promise.reject(error);
+});
+
+// 响应拦截（配置请求回来的信息）
+axios.interceptors.response.use((response) => {
+  // 处理响应数据
+  bus.Loading.hide(response.config.url);
+  let data = response.data;
+  if(data.status === 1){
+    return response.data;
+  }else if(data.status === 0) {
+    bus.dialog.showDialog(data.msg);
+  }else {
+    bus.dialog.showDialog('数据错误,请联系系统管理员');
+  }
+}, function (error){
+  // 处理响应失败
+  bus.Loading.hide(error.response.config.url);
+  switch (error.response.status) {
+    case 400:
+      error.message = '请求错误';
+      break;
+    case 401:
+      error.message = '未授权，请登录';
+      break;
+    case 403:
+      error.message = '拒绝访问,请联系系统管理员';
+      break;
+    case 404:
+      error.message = `请求地址出错: ${error.response.config.url}`;
+      break;
+    case 408:
+      error.message = '请求超时'
+      break;
+    case 500:
+      error.message = '服务器内部错误'
+      break;
+    case 501:
+      error.message = '服务未实现'
+      break;
+    case 502:
+      error.message = '网关错误'
+      break;
+    case 503:
+      error.message = '服务不可用'
+      break;
+    case 504:
+      error.message = '网关超时'
+      break;
+    case 505:
+      error.message = 'HTTP版本不受支持'
+      break;
+    default:
+      break;
+  }
+  bus.dialog.showDialog(error.message);
+  return Promise.reject(error);
+});

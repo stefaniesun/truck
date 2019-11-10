@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>新增/编辑宝贝</title>
+<style type="text/css">
+	*{
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+	body{
+		line-height: 1px;
+		font-size: 24px;
+	}
+</style>
+</head>
+<body>
+<center>
+	<form><br/>
+		<input type="hidden" id="baseInfo_number_code">
+		<table cellspacing="4" cellpadding="4" style="font-size:16px;">
+			<caption>
+				<span style="font-size:18px;font-weight:bold;text-align:center;">淘宝宝贝详情</span>
+			</caption>
+			<tr id="add">
+				<th colspan="4" style="color:gray;">
+					<hr>
+					<input type="hidden" id="channelHidden"/>
+				</th>
+			</tr>
+			<tr>
+				<td style="text-align:right;">宝贝标题:</td>
+				<td colspan="3" id='taobao_title'></td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">宝贝省份: </td>
+				<td>
+					<span id='taobao_prov'></span>
+				</td>
+				<td style="text-align: right;">宝贝城市: </td>
+				<td>
+					<span id='taobao_city'></span>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">出发地:</td>
+				<td>
+					<span id='taobao_from_locations'></span>
+				</td>
+				<td style="text-align:right;">目的地:</td>
+				<td>
+					<span id='taobao_to_locations'></span>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">行程天数:</td>
+				<td colspan="3">
+					<span id='taobao_trip_max_days'></span> 天 
+					<span id='taobao_accom_nights'></span> 晚
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">商品亮点:</td>
+				<td colspan="3" id='taobao_sub_titles_td_0'>
+					<textarea rows='3' class='taobao_sub_titles' cols="74" style="width:538px;"></textarea> 
+				</td>
+			</tr>
+			<tr class="subTitlesHideTr">
+				<td></td>
+				<td colspan="3" id='taobao_sub_titles_td_1'>
+					<textarea rows='3' class='taobao_sub_titles' cols="74" style="width:538px;"></textarea> 
+				</td>
+			</tr>
+			<tr class="subTitlesHideTr">
+				<td></td>
+				<td colspan="3" id='taobao_sub_titles_td_2'>
+					<textarea rows='3' class='taobao_sub_titles' cols="74" style="width:538px;"></textarea> 
+				</td>
+			</tr>
+			<tr class="subTitlesHideTr">
+				<td></td>
+				<td colspan="3" id='taobao_sub_titles_td_3'>
+					<textarea rows='3' class='taobao_sub_titles' cols="74" style="width:538px;"></textarea> 
+				</td>
+			</tr>
+			<tr id="taobao_book_rule">
+				<td colspan="4">
+					<br/>	
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">
+					费用包含:
+				</td>
+				<td colspan="3">
+					<textarea rows="8" id="taobao_rule_desc_fee_Included" cols="74" style="width:538px;"
+					class="easyui-validatebox" data-options="required:true"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">
+					费用不包含:
+				</td>
+				<td colspan="3">
+					<textarea rows="8" id="taobao_rule_desc_fee_Excluded" cols="74" style="width:538px;"
+					class="easyui-validatebox" data-options="required:true"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">
+					预定须知:
+				</td>
+				<td colspan="3">
+					<textarea rows="8" id="taobao_rule_desc_order_Info" cols="74" style="width:538px;"
+					class="easyui-validatebox" data-options="required:true,validType:'length[0,1500]'"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="4"> <br/>	</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">邮轮公司: </td>
+				<td id='taobao_cruise_company'></td>
+				<td style="text-align: right;">邮轮船名: </td>
+				<td>
+					<span id='taobao_ship_name'></span>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">上船地点: </td>
+				<td>
+					<span id='taobao_ship_up'></span>
+				</td>
+				<td style="text-align: right;">下船地点: </td>
+				<td>	
+					<span id='taobao_ship_down'></span>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">邮轮线路: </td>
+				<td id='taobao_cruise_line' colspan="3"></td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">邮轮费用包含: </td>
+				<td colspan="3" id='taobao_ship_fee_include_td'></td>
+			</tr>
+			
+			<tr>
+				<td><br/>	</td>
+			</tr>
+			
+			<tr>
+				<td style="text-align: right;">售卖类型:</td>
+				<td id='taobao_sale_type_td'>
+					 <select id='taobao_sale_type_combobox' class="easyui-combobox" name="taobao_sale_type_combobox" style="width:200px;" > 
+						<option value="0">普通</option>   
+					    <option value="1">预约</option>   
+					</select> 
+				</td>
+				<td style="text-align: right;">减库存方式:</td>
+				<td>
+					<select id='taobao_sub_stock_combobox' class="easyui-combobox" name="taobao_sub_stock_combobox" style="width:200px;" > 
+						<option value="0">拍下</option>   
+					    <option value="1">付款</option>   
+					</select> 
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">开始时间: </td>
+				<td id='taobao_start_combo_date_td'>
+					 <input id='taobao_start_combo_date_datebox' class='easyui-datetimebox' style="width:200px;"/>
+				</td>
+				<td style="text-align: right;">结束时间: </td>
+				<td>
+					<span id='taobao_end_combo_date_span'>
+						<input class='easyui-datetimebox' id='taobao_end_combo_date_datebox' style="width:200px;"/> 
+				    </span> 
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">电子凭证码商: </td>
+				<td>
+					<span id='taobao_merchant_td'>
+						<input id='taobao_merchant' style="width:200px;"/>
+					</span>
+				</td>
+				<td style="text-align: right;">电子凭证网点ID: </td>
+				<td>
+					<span id='taobao_network_id_span'>
+						<input id='taobao_network_id' style="width:200px;"/>
+					</span>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">提前天数:</td>
+				<td id='taobao_duration' colspan="3">
+					<span id='taobao_duration_span'>
+						<input id='taobao_duration_from' class="easyui-numberbox" value="0" data-options="min:0,max:300" style="width:200px;"/>
+					</span>天
+				</td>
+			</tr>
+			<tr class='taobao_seller_cids_tr'>
+				<td style="text-align: right;">店铺类目编号:</td>
+				<td id="taobao_seller_cides_one_td" colspan="3"></td>
+			</tr>
+			<tr id='taobao_has_tr'>
+				<td style="text-align:right;">
+					<span id='taobao_has_discount_span'></span>
+				</td>
+				<td>是否会员打折</td>
+				<td style="text-align:right;">
+					<span id='taobao_has_showcase_span'></span>
+				</td>
+				<td>是否橱窗推荐</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">
+					<span id='taobao_has_invoice_span'></span>
+				</td>
+				<td>是否有发票</td>
+				<td style="text-align:right;">
+					<span id='taobao_support_onsale_auto_refund_span'></span>
+				</td>
+				<td>是否支持电子凭证自动退款</td>
+			</tr>
+		</table>
+		<br/>
+		<br/>
+	</form>
+</center>
+</body>
+</html>

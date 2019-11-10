@@ -1,0 +1,576 @@
+<template>
+  <div class="productQuery">
+    <div class="search-herder" ref="header">
+      <div class="search-input">
+        <input @change="startSearch" v-model="keyWord" type="text" placeholder="搜索航线/目的地等关键词"/>
+        <div><i class="iconfont icon-sousuo1"></i></div>
+      </div>
+      <i class="iconfont icon-gerenzhongxin" @click="goUserCenter()"></i>
+    </div>
+    <!--条件搜索-->
+    <div class="condition-search" ref="searchBtn">
+      <p class="title">
+        <span @click="openScreenPanel">
+          <i class="iconfont icon-screen_icon"></i>
+          {{isReset ? '重新筛选':'点击筛选'}}
+        </span>
+      </p>
+      <ScreenPanel
+        :screen-panel-status="screenPanelStatus"
+        :is-request="isRequest"
+        @closePanel="closePanel"
+        @startScreen="getScreenData"
+        @screenKeyArr="getScreenKeyArr">
+      </ScreenPanel>
+      <transition name="slideRight" enter-active-class="animated slideInRight">
+        <div v-show="isReset" class="screen-key-wrap" ref="screenKeyWrap">
+          <ul class="key-word">
+            <li v-if="item" v-for="(item,index) in screenKeyArr">
+              <span>{{item}}</span>
+              <i @click="deleteKey(index,item)" class="iconfont icon-cha"></i>
+            </li>
+          </ul>
+          <div class="clearfloat"></div>
+        </div>
+      </transition>
+    </div>
+    <!--内容展示-->
+    <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
+      <div v-if="!noData" class="content-display" ref="productList">
+        <div @click="goProductDetail(item.numberCode)" class="single-content" v-for="item in productList">
+          <p>{{item.name}}</p>
+          <img v-if="item.image" :src="item.image">
+          <img v-if="!item.image" src="../assets/img/baseImg.png" alt="">
+          <div class="basic-info">
+            <div class="money-display">￥{{item.price}}<span>起/人</span><span class="unline">￥3959</span></div>
+            <!--<div class="tips">立减300</div>-->
+            <div class="clearfloat"></div>
+            <div class="time-display"><i class="iconfont icon-date"></i><span>出发日期：{{item.date.substring(0,10)}}</span></div>
+            <div class="time-display"><i class="iconfont icon-chengshi"></i><span>出发城市：{{item.startCity}}</span></div>
+            <div class="time-display cruise-display"><i class="iconfont icon-youlunyou"></i><span>邮轮号：{{item.cruiseNameCn}}</span></div>
+            <div class="clear"></div>
+          </div>
+        </div>
+      </div>
+    </mt-loadmore>
+
+    <div v-if="noData" class="blank-page">
+      <img src="../assets/img/blank-search.jpg" alt="">
+      <span>暂时没有相关内容</span>
+    </div>
+    <div @click="backTop" v-if="showBackTop" class="back-top">
+      <i class="iconfont icon-20pxhuidaodingbu"></i>
+    </div>
+  </div>
+</template>
+
+<script>
+  let vm;
+  import common from '../assets/js/common'
+  import ScreenPanel from '@/components/screenPanel'
+  export default{
+    name: 'productQuery',
+    components: {
+      ScreenPanel
+    },
+    data(){
+      return{
+        keyWord: '',
+        noData: false,
+        screenPanelStatus: false,
+        productList: [],
+        showBackTop: false,
+        screenKeyArr: [],
+        allLoaded: true,
+        total: 0,
+        upData: {
+          rows: 10,
+          area: '',
+          date: '',
+          price: '',
+          cruise: ''
+        },
+        page: 1,
+        isRequest: true,
+        isReset: false
+      }
+    },
+    created(){
+      addEventListener('scroll',this.scrolling,false);
+    },
+    beforeDestroy () {
+      window.removeEventListener('scroll',this.scrolling,false)
+    },
+    mounted(){
+      vm = this;
+      vm.getHotLProList();
+    },
+    methods: {
+      //头部搜索框
+      startSearch(){
+      	vm.page = 1;
+      	if(vm.screenKeyArr){
+          for(let i=0;i<vm.screenKeyArr.length;i++){
+            vm.$set(vm.screenKeyArr,i,'');
+          }
+        }
+      	let parame = {
+      		page: vm.page,
+          rows: 10,
+          keyword: vm.keyWord
+        }
+        vm.axios.post(this.api + this.urlApi.queryVoyageListByKeyword,parame).then(function (data) {
+          let content = data.content;
+          vm.total = content.total;
+          vm.productList = content.rows;
+        })
+      },
+      getHotLProList(){
+        vm.page = 1;
+        let parame = {
+          page: vm.page,
+          rows: 10
+        }
+        vm.axios.post(this.api+this.urlApi.queryVoyageList,parame).then(function (data) {
+          let content = data.content;
+          vm.total = content.total;
+          vm.productList = content.rows;
+        })
+      },
+      //监听滚动时执行的方法
+      scrolling(){
+        vm.scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+        vm.scrollTop >= 300 ? vm.showBackTop = true : vm.showBackTop = false;
+      },
+      openScreenPanel(){
+        vm.screenPanelStatus = true;
+      },
+      //筛选面板关闭回调
+      closePanel(flag){
+        vm.screenPanelStatus = flag;
+        vm.isRequest = false;
+      },
+      getScreenKeyArr(data){
+        vm.screenKeyArr = data;
+      },
+      //筛选面板点击搜索回调
+      getScreenData(screenData){
+      	vm.screenData = screenData;
+        vm.keyWord = '';
+        vm.sandScreen();
+        vm.isRequest = false;
+      },
+      sandScreen(key){
+        vm.page = 1;
+        vm.upData.page = vm.page;
+        for(let i=0;i<vm.screenData.length;i++){
+          let obj = vm.screenData[i];
+          if( key == obj.value ){
+            if( obj.key == 'areaNameCn' ){
+              vm.upData.area = '';
+            }else if(obj.key == 'cruiseNameCn'){
+              vm.upData.cruise = '';
+            }else if(obj.key == 'dateMark') {
+              vm.upData.date = '';
+            }else if(obj.key == 'basePrice') {
+              vm.upData.price = '';
+            }
+          }else if(key && key.indexOf('-')>-1){
+            let strArr = key.split('-');
+            strArr[1].length==2 ? vm.upData.date = '' : vm.upData.price = '';
+          }else if(!key) {
+            switch (obj.key)
+            {
+              case 'areaNameCn':
+                vm.upData.area = obj.id;
+                break;
+              case 'dateMark':
+                vm.upData.date = obj.value;
+                break;
+              case 'basePrice':
+                let price = obj.value >= 0 && obj.value < 3000 ? '0,2999' : obj.value >= 3000 && obj.value <= 5000 ? '3000,5000' : '5001,50000'
+                vm.upData.price = price;
+                break;
+              case 'cruiseNameCn':
+                vm.upData.cruise = obj.id;
+                break;
+              default:
+                break;
+            }
+          }
+        }
+        vm.axios.post(this.api + this.urlApi.getQueryData,vm.upData).then(function (data) {
+          let content = data.content;
+          vm.total = content.total;
+          vm.productList = content.rows;
+        })
+      },
+      //删除关键词
+      deleteKey(index,key){
+        vm.$set(vm.screenKeyArr,index,'');
+        let onOff = false;
+        for(let i=0;i<vm.screenKeyArr.length;i++){
+          if(vm.screenKeyArr[i]){
+            onOff = true;
+            break;
+          }
+        }
+        if(onOff){
+          vm.sandScreen(key);
+        }else {
+          vm.getHotLProList();
+        }
+      },
+      //返回顶部
+      backTop(){
+        vm.showBackTop = false;
+      	let timer = setInterval(function () {
+          vm.scrollTop -= 100;
+          if(vm.scrollTop <= 0){
+            vm.scrollTop = 0;
+            clearInterval(timer);
+          }
+          if(document.documentElement.scrollTop){
+            document.documentElement.scrollTop = vm.scrollTop;
+          }else if(document.body.scrollTop){
+            document.body.scrollTop = vm.scrollTop;
+          }
+        },13)
+      },
+      loadBottom() {
+        if( vm.screenKeyArr.length ){
+          if( vm.page * 10 < vm.total ){
+            vm.page++;
+            vm.upData.page = vm.page;
+            vm.axios.post(this.api + this.urlApi.getQueryData,vm.upData).then(function (data) {
+              let content = data.content;
+              vm.productList = vm.productList.concat(content.rows);
+            })
+          }else {
+            vm.allLoaded = true;
+          }
+        }else if(vm.keyWord){
+          if( vm.page * 10 < vm.total ){
+            vm.page++;
+            let parame = {
+              page: vm.page,
+              rows: 10,
+              keyword: vm.keyWord
+            }
+            vm.axios.post(this.api + this.urlApi.queryVoyageListByKeyword,parame).then(function (data) {
+              let content = data.content;
+              vm.total = content.total;
+              vm.productList = vm.productList.concat(content.rows);
+            })
+          }else {
+            vm.allLoaded = true;
+          }
+        }else {
+          //页面默认产品列表
+          if( vm.page * 10 < vm.total ){
+            vm.page++;
+            let parame = {
+              page: vm.page,
+              rows: 10
+            }
+            vm.axios.post(this.api+this.urlApi.queryVoyageList,parame).then(function (data) {
+              let content = data.content;
+              vm.total = content.total;
+              vm.productList = vm.productList.concat(content.rows);
+            })
+          }else {
+            vm.allLoaded = true;
+          }
+        }
+        this.$refs.loadmore.onBottomLoaded();
+      },
+      //跳转邮轮详情
+      goProductDetail(numberCode){
+        vm.$router.push({ name: 'productDetail', params: { numberCode: numberCode }});
+      },
+      //跳转个人中心
+      goUserCenter() {
+        vm.$router.push('/userCenter');
+      },
+    },
+    watch: {
+      screenKeyArr(newVal){
+      	let onOff = false;
+        for(let i=0;i<newVal.length;i++){
+          if(newVal[i]){
+            onOff = true;
+            break;
+          }
+        }
+        vm.isReset = onOff;
+        let fs = document.getElementsByTagName('html')[0].style.fontSize.split('px')[0];
+        let headerHeight = vm.$refs['header'].offsetHeight;
+        let searchBtnHeight = vm.$refs['searchBtn'].offsetHeight;
+        let productList = vm.$refs['productList'];
+        if(vm.isReset){
+          vm.$nextTick(function () {
+            let screenKeyWrapHeight = vm.$refs['screenKeyWrap'].offsetHeight;
+            let paddingTop = (headerHeight + searchBtnHeight + screenKeyWrapHeight) / fs;
+            productList.style.paddingTop = paddingTop + 'rem';
+          })
+        }else {
+          vm.$nextTick(function () {
+            let paddingTop = (headerHeight + searchBtnHeight) / fs;
+            productList.style.paddingTop = paddingTop + 'rem';
+          })
+        }
+      },
+      productList(newVal){
+      	newVal.length == 0 ? vm.noData = true : vm.noData = false;
+        if( newVal.length >= 10 ){
+          vm.allLoaded = false;
+        }
+      }
+    }
+  }
+</script>
+
+<style lang="less" scoped>
+  @import "../assets/css/base.less";
+  .productQuery{
+    width: 100%;
+    height: 100%;
+    .search-herder{
+      width: 100%;
+      height: 88*@basePX;
+      background-color: #6aadff;
+      padding: 12*@basePX 22*@basePX 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 20;
+      .search-input{
+        width: 592*@basePX;
+        height: 64*@basePX;
+        background-color: #fff;
+        border-radius: 32*@basePX;
+        padding-left: 25*@basePX;
+        display: inline-block;
+        input{
+          width: 460*@basePX;
+          height: 64*@basePX;
+          border:0;
+          outline: none;
+          font-size: 32*@basePX;
+          padding-left: 18*@basePX;
+        }
+        input:-ms-input-placeholder{
+          color:#b2b2b2;
+        }
+        input::-webkit-input-placeholder{
+          color:#b2b2b2;
+        }
+        div{
+          width: 90*@basePX;
+          height: 64*@basePX;
+          border-radius: 0 32*@basePX 32*@basePX 0;
+          float: right;
+          padding: 6*@basePX 0 0 22*@basePX;
+          .icon-sousuo1{
+            color: #b3b3b3;
+            font-size: 38*@basePX;
+          }
+        }
+      }
+      >.icon-gerenzhongxin{
+        width: 34*@basePX;
+        height: 40*@basePX;
+        float: right;
+        margin-top: 4*@basePX;
+        color: #fff;
+        font-size:40*@basePX;
+      }
+    }
+    .condition-search{
+      width: 100%;
+      height: 72*@basePX;
+      text-align: center;
+      background-color: #dee9f8;
+      position: fixed;
+      left: 0;
+      top: 88*@basePX;
+      z-index: 10;
+      .title{
+        line-height: 72*@basePX;
+        color: #333;
+        font-size: 32*@basePX;
+        .icon-screen_icon{
+          margin-right: 10*@basePX;
+          font-size: 32*@basePX;
+        }
+      }
+      .screen-key-wrap{
+        width: 100%;
+        padding: 3*@basePX 22*@basePX 6*@basePX;
+        margin-top: -1px;
+        border-top: 1px solid @lineColor;
+        border-bottom: 1px solid @lineColor;
+        background: #fff;
+        .key-word{
+          height: auto;
+          li{
+            width: auto;
+            height: 36*@basePX;
+            line-height: 36*@basePX;
+            background: #dee9f8;
+            margin: 6*@basePX 10*@basePX 3*@basePX 0;
+            float: left;
+            color: #333;
+            .borderRadius;
+            font-size: 12px;
+            padding: 0 6*@basePX;
+            .icon-cha{
+              font-size: 12px;
+            }
+          }
+        }
+      }
+      .animated {
+        animation-duration: .5s;
+        animation-fill-mode: both;
+      }
+      @keyframes slideInRight {
+        from {
+          transform: translate3d(100%, 0, 0);
+        }
+        to {
+          visibility: visible;
+          transform: translate3d(0, 0, 0);
+        }
+      }
+      .slideInRight {
+        animation-name: slideInRight;
+      }
+    }
+    .content-display{
+      width: 100%;
+      height: auto;
+      padding: 160*@basePX 22*@basePX 25*@basePX;
+      overflow-x: auto;
+      background-color: @appBg;
+      transition: all .5s;
+      .single-content{
+        margin-top: 25*@basePX;
+        background-color: #fff;
+        border-radius: 8*@basePX;
+        padding: 20*@basePX 24*@basePX 30*@basePX 0;
+        p{
+          font-size: 32*@basePX;
+          color:#4c4c4c;
+          padding-left: 8*@basePX;
+        }
+        >img{
+          width: 298*@basePX;
+          height: 206*@basePX;
+          display: inline-block;
+          margin: 20*@basePX 25*@basePX 0 24*@basePX;
+          .borderRadius;
+        }
+        .basic-info{
+          width: 330*@basePX;
+          float: right;
+          .money-display{
+            font-size: 38*@basePX;
+            color:#ff9b0b;
+            margin-left: -8*@basePX;
+            margin-top: 20*@basePX;
+            span{
+              font-size: 22*@basePX;
+            }
+            span.unline{
+              color: @subTextColor;
+              padding-left: 10*@basePX;
+              text-decoration: line-through;
+            }
+          }
+          .tips{
+            width: auto;
+            height: 28*@basePX;
+            line-height: 32*@basePX;
+            padding: 0 8*@basePX;
+            margin-top: -8*@basePX;
+            background: #f00;
+            float: left;
+            .borderRadius(28*@basePX);
+            font-size: 12px;
+            color: #fff;
+          }
+          .time-display{
+            height: 28*@basePX;
+            font-size: 26*@basePX;
+            color:#8d95a3;
+            margin-top: 16*@basePX;
+            span,i{
+              display: inline-block;
+              vertical-align: middle;
+            }
+            .icon-date{
+              font-size: 28*@basePX;
+              margin-right: 12*@basePX;
+            }
+            .icon-chengshi{
+              width: 32*@basePX;
+              height: 34*@basePX;
+              font-size: 28*@basePX;
+              margin: -10*@basePX 8*@basePX 0 -2*@basePX;
+            }
+          }
+          .cruise-display{
+            margin-top: 10*@basePX;
+            .icon-youlunyou{
+              font-size: 38*@basePX;
+              margin-right: 7*@basePX;
+              margin-left: -5*@basePX;
+            }
+          }
+        }
+      }
+    }
+    .blank-page{
+      width: 100%;
+      padding: 72*@basePX 22*@basePX 25*@basePX;
+      overflow-x: hidden;
+      text-align: center;
+      img{
+        width: 508*@basePX;
+        height: 404*@basePX;
+        display: block;
+        margin: 28*@basePX auto 0;
+        transform: translateX(20*@basePX);
+      }
+      span{
+        display: block;
+        padding-top: 50*@basePX;
+        color: @subTextColor;
+        font-size: 32*@basePX;
+      }
+    }
+    .back-top{
+      width: 92*@basePX;
+      height: 92*@basePX;
+      .borderRadius(50%);
+      background: #a6cefe;
+      position: fixed;
+      right: 55*@basePX;
+      bottom: 58*@basePX;
+      color: #fff;
+      text-align: center;
+      .icon-20pxhuidaodingbu{
+        display: block;
+        font-size: 48*@basePX;
+      }
+      .icon-20pxhuidaodingbu:after{
+        content:"TOP";
+        clear:both;
+        display:block;
+        font-size: 22*@basePX;
+        margin-top: -16*@basePX;
+      }
+    }
+  }
+</style>

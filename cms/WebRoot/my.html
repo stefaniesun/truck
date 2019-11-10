@@ -1,0 +1,117 @@
+
+	<!DOCTYPE html>
+	<html lang="en" style="font-size: 53.333333333333336px !important">
+	<head>
+		<meta charset="UTF-8">
+		<title>雷锋货车网</title>
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<!-- <link rel="stylesheet" type="text/css" href="http://192.168.250.212:8080/css/style-base.css"> -->
+		<link rel="stylesheet" type="text/css" href="css/style-base.css?v=2019-2-19">
+		<script type="text/javascript" src="js/library/jquery-1.7.2.js"></script>
+		    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+			<script type="text/javascript" src="js/util.js"></script>
+		<link rel="stylesheet" href="https://at.alicdn.com/t/font_496733_w0e5vjuelgsw0zfr.css">
+		<meta name = "format-detection" content = "telephone=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta content="yes" name="apple-touch-fullscreen">
+		<!-- UC全屏 -->
+		<meta name="full-screen" content="yes">
+		<!-- QQ全屏 -->
+		<meta name="x5-fullscreen" content="true">
+		<meta name="applicable-device" content="mobile">
+		<style>
+		.c-index-search-con .city .text{
+			line-height: 1.2 !important;
+		}
+		</style>
+		<!-- Google Tag Manager -->
+		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+				new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+				j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+				'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+			})(window,document,'script','dataLayer','GTM-M4RRVZ');</script>
+	<body style="padding-bottom: 57px;">
+	<div class="c-user-background c-user-center-head">
+	<div class="c-user-photo">
+		<img src="https://i.kcimg.cn/data/avatar/noavatar_big.gif-80x80.jpg" alt="头像">
+	</div>
+	<div class="info">
+<div class="c-flex-center" style="align-items: flex-start; flex-direction: column;">
+			<div class="text" style="margin-bottom: .1rem;" id="username"></div>
+					</div>
+        	</div>
+			<a class="edit-info" href="register.html">注册</a>
+	</div>
+<div class="c-list-cells c-user-center-nav">
+    	<a class="c-list-cell c-flex-center" href="/personal/history">
+		<div class="iconfont browse"></div>
+		<div class="c-box-flex">浏览记录</div>
+		<div class="more-icon-right"></div>
+	</a>
+	<a class="c-list-cell c-flex-center" href="/personal/favorites">
+		<div class="iconfont collection"></div>
+		<div class="c-box-flex">我的收藏</div>
+		<div class="c-list-ft">
+					</div>
+		<div class="more-icon-right"></div>
+	</a>
+	
+	<a class="c-list-cell c-flex-center" href="myPublish.html">
+		<div class="iconfont seller"></div>
+		<div class="c-box-flex">我的发布</div>
+	<!-- 	<div class="c-list-ft">
+			<span class="gray">去申请</span>
+		</div>  -->
+		<div class="more-icon-right"></div>
+	</a>
+	
+	
+	</div>
+<div class="c-list-cells c-user-center-nav" id="loginOuts" style="display: none;">
+	<div class="c-list-cell c-flex-center">
+		<div class="orange">退出登录</div>
+	</div>
+</div>
+<div class="c-footer-con br-t">
+        <a href="index.html" class="icon-home">首页</a>
+    <a href="/list/" class="icon-price">
+        <!-- <span></span> -->买车</a>
+        <a href="publish.html" rel="nofollow" class="icon-truck-btn truck">
+        <i class="car">
+            <img src="image/truck/truck.png" alt="icon" />
+        </i>卖车
+    </a>
+        <a href="/personal/message/" rel="nofollow" class="icon-msg login-check">
+        消息</a>
+    <a href="my.html" rel="nofollow" class="icon-bottom-user active login-check">我的</a>
+</div>
+
+
+<script>
+
+$(document).ready(function() {
+	
+	var apikey=getCustomerLoginCookie();
+	
+
+	if(xyzIsNull(apikey)){
+		//$("#username").html("222");
+		
+	}else{
+		var username=localStorage.getItem("username");
+		$("#username").html(username);
+		$(".edit-info").hide();
+	}
+	
+	
+});
+
+</script>
+
+
+	</body>
+</html>
+   
+

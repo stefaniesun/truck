@@ -1,0 +1,390 @@
+<template>
+  <div class="placeOrder">
+    <!-- 头部 start -->
+    <header>
+      <h2>订单确认</h2>
+      <a class="back" @click="goBack()">
+          <i class="iconfont icon-fanhui"></i>
+      </a>
+      <a class="user" @click=" goUserCenter()">
+        <i class="iconfont icon-gerenzhongxin"></i>
+      </a>
+    </header>
+
+    <!-- 内容 start-->
+    <div class="main">
+      <div class="main-inner">
+
+        <!-- 邮轮信息 start -->
+        <div class="liner-info clearfloat">
+          <img :src="content.cruiseImg" alt="">
+          <dl>
+            <dt>{{content.ptViewName}}</dt>
+            <dd>出行日期：{{content.travelDate}}</dd>
+          </dl>
+        </div>
+
+        <!-- 邮轮舱型数量 start-->
+        <div class="cabin-type">
+          <ul>
+            <li class="clearfloat" v-for="cabin in cabbin">
+              <span class="check">
+                <label @click="cabin.notCheck=!cabin.notCheck;">
+                  <i class="iconfont" :class="cabin.notCheck ? 'icon-weixuanzhong1' : 'icon-weixuanzhong'" v-if="!operation"></i>
+                  <small>{{cabin.cabinType}}</small>
+                </label>
+              </span>
+              <span class="num" :class="operation ? 'hide-bianji' : ''">
+                <b>数量：</b>
+                <label v-if="operation == false">
+                  <i class="iconfont icon-tooldel" @click="reduceNum(cabin)"></i>
+                    <small>{{cabin.roomNum}}</small>
+                   <i class="iconfont icon-tooladd" @click="addNum(cabin)"></i>
+                </label>
+                <label class="show-num" v-if="operation">{{cabin.roomNum}}人</label>
+              </span>
+              <span class="price">¥{{cabin.price * cabin.roomNum}}</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 操作按钮 start-->
+        <div class="operation clearfloat">
+          <div v-if="operation == false">
+            <a href="javascript:;" @click="deleteJson()">
+              <i class="iconfont icon-shanchu"></i>删除
+            </a>
+            <span class="line"></span>
+            <a href="javascript:;" @click="edit">
+              <i class="iconfont icon-wancheng"></i>完成
+            </a>
+          </div>
+          <!-- 编辑按钮 start -->
+          <a href="javascript:;" class="bianji" @click="edit" v-if="operation">
+            <i class="iconfont icon-bianji"></i>编辑
+          </a>
+          <!-- 编辑按钮 end -->
+        </div>
+        <!-- 操作按钮 end -->
+
+      </div>
+
+      <!-- 下单按钮 start-->
+      <div class="btn-box">
+        <button @click="goOrderSuccess">立即下单¥{{allprice}}</button>
+        <div class="disable" v-if="operation==false"></div>
+      </div>
+    </div>
+    <!-- 内容 end -->
+  </div>
+</template>
+
+<script>
+  let vm;
+  export default{
+    name: 'placeOrder',
+    data(){
+      return {
+        operation:true, //操作 (true:编辑按钮显示，下单按钮禁用)
+        content:[],
+        cabbin:[],    //舱型
+        allprice:0,  //总价
+      }
+    },
+    mounted:function(){
+      vm = this;
+      vm.addData();
+    },
+    methods:{
+       /* 编辑 */
+      edit:function () {
+        vm.operation = !(vm.operation);
+        vm.content.cabinArr = vm.cabbin;
+        sessionStorage.ptOrder = JSON.stringify(vm.content);
+        vm.allMoney();
+      },
+      /* 数量减 */
+      reduceNum:function (obj) {
+        if(obj.roomNum > 0 ){
+          obj.roomNum -= 1;
+          vm.content.total -= 1;
+          obj.stockCount++;
+        }
+      },
+      /* 数量加 */
+      addNum:function (obj) {
+        if(obj.stockCount > 0) {
+          obj.roomNum += 1;
+          vm.content.total += 1;
+          obj.stockCount--;
+        }
+      },
+      /* 删除订单 */
+      deleteJson:function () {
+        for(let del = vm.cabbin.length-1; del >= 0 ; del--){
+            let json = vm.cabbin[del];
+            if(json.notCheck == false){
+                vm.cabbin.splice(del,1);
+            }
+        }
+      },
+      /* 总价 */
+      allMoney:function () {
+        vm.allprice = 0;
+        let data = vm.cabbin;
+        let money;
+        for(let i = 0; i < data.length; i++){
+          money = (data[i].roomNum*data[i].price);
+          vm.allprice += money;
+        }
+      },
+      goBack:function () {
+        vm.$router.goBack();
+      },
+      goUserCenter:function () {
+        vm.$router.push('/userCenter');
+      },
+      goOrderSuccess:function () {
+        vm.$router.push('/orderSuccess');
+      },
+      addData:function () {
+        vm.content=[];
+        vm.cabbin = [];
+        vm.content = JSON.parse(sessionStorage.ptOrder);
+        let order = JSON.parse(JSON.stringify(vm.content.cabinArr));
+        for(let i in order){
+          let json = order[i];
+          json.notCheck = true;
+          vm.cabbin.push(json);
+        }
+        vm.allMoney();
+      }
+    }
+
+  }
+
+</script>
+
+<style lang="less" scoped>
+  @import "../assets/css/base.less";
+
+  @font-color:#8d95a3;
+  .placeOrder{
+    width: 100%;
+    height: 100%;
+    background-color: #dee9f8;
+    header{
+      background-color: @topBg;
+      width: 100%;
+      height: 88*@basePX;
+      color: #fff;
+      position: fixed;
+      top:0;
+      left: 0;
+      z-index: 9;
+      h2{
+        width: 100%;
+        font-weight: normal;
+        font-size: 40*@basePX;
+        line-height:2.3;
+        text-align: center;
+      }
+      a{
+        height: 88*@basePX;
+        display: inline-block;
+        position: absolute;
+        top:0;
+        padding:0 24*@basePX;
+        text-decoration: none;
+        color: #fff;
+        .iconfont{
+          font-size:40*@basePX;
+          line-height: 2.3;
+        }
+      }
+      .back{
+        left: 0;
+      }
+      .user{
+        right: 0;
+      }
+    }
+    .main{
+      width: 100%;
+      height: 100%;
+      padding:88*@basePX 24*@basePX 0 24*@basePX;
+      background-color:@appBg;
+      .main-inner{
+        width: 100%;
+        background-color: #fff;
+        padding: 24*@basePX;
+        padding-bottom: 0;
+        margin-top: 24*@basePX;
+        .liner-info{
+          width: 100%;
+          padding-bottom: 24*@basePX;
+          border-bottom: 1px solid @lineColor;
+          img{
+            width:180*@basePX;
+            height:108*@basePX ;
+            float: left;
+            padding-right: 24*@basePX;
+          }
+          dl{
+            float: left;
+            width: 72%;
+            dt{
+              font-size: 32*@basePX;
+              font-weight: bold;
+            }
+            dd{
+              font-size: 26*@basePX;
+              color: @font-color;
+            }
+          }
+        }
+        .cabin-type{
+          width: 100%;
+          padding: 40*@basePX 0;
+          border-bottom: 1px solid @lineColor;
+          li{
+            width: 100%;
+            margin-bottom: 64*@basePX;
+            span{
+              display: inline-block;
+              float: left;
+            }
+            .check{
+              label{
+                display: inline-block;
+                font-size: 32*@basePX;
+                i{
+                  display: inline-block;
+                  vertical-align: middle;
+                  margin-right: 28*@basePX;
+                }
+                small{
+                  font-size: 32*@basePX;
+                  display: inline-block;
+                  vertical-align: middle;
+                  margin-top: 2px;
+                }
+              }
+              .iconfont{
+                font-size: 35*@basePX;
+              }
+              .icon-weixuanzhong1{
+                color: #8d95a3;
+              }
+              .icon-weixuanzhong{
+                color: @changeBtnBg;
+              }
+            }
+            .num{
+              margin-left: 28*@basePX;
+              label{
+                vertical-align: middle;
+                display: inline-block;
+                .iconfont{
+                  color: @changeBtnBg;
+                  font-size: 42*@basePX;
+                }
+                small{
+                  font-size: 33*@basePX;
+                  margin: 0 9*@basePX;
+                }
+              }
+              .show-num{
+                color: @font-color;
+                font-size: 26*@basePX;
+              }
+              b{
+                font-weight: normal;
+                font-size: 26*@basePX;
+                color: @font-color;
+                margin-right: 5*@basePX;
+                display: inline-block
+              }
+            }
+            .hide-bianji{
+              margin-top: 3*@basePX;
+            }
+            .price{
+              float: right;
+              color: @clickBtnBg;
+              font-size: 38*@basePX;
+            }
+          }
+          li:last-child{
+            margin-bottom: 0;
+          }
+        }
+        .operation{
+          width: 100%;
+          padding: 25*@basePX 0;
+          a{
+            float: left;
+            width: 49%;
+            text-align: center;
+            color: @clickBtnBg;
+            text-decoration: none;
+            font-size: 32*@basePX;
+            .iconfont{
+              color: @clickBtnBg;
+              font-size:35*@basePX ;
+              margin-right: 5*@basePX;
+            }
+            .icon-wancheng{
+              font-size: 32*@basePX;
+            }
+          }
+          .bianji{
+            width: 100%;
+          }
+          .line{
+            float: left;
+            width: 2*@basePX;
+            height: 42*@basePX;
+            display: inline-block;
+            background-color: @lineColor;
+          }
+        }
+      }
+      .btn-box{
+        width: 100%;
+        background-color:@panleBg;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        text-align: center;
+        z-index: 9;
+        button{
+          width: 600*@basePX;
+          height: 88*@basePX;
+          .borderRadius(@radius:50*@basePX );
+          border:0;
+          background-color: @clickBtnBg;
+          color: #fff;
+          font-size: 40*@basePX;
+          margin: 24*@basePX 0;
+          letter-spacing: 2px;
+          cursor: pointer;
+          outline: none;
+        }
+        .disable{
+          width: 600*@basePX;
+          height: 88*@basePX;
+          .borderRadius(@radius:50*@basePX );
+          background-color: #fff;
+          position:absolute;
+          z-index: 10;
+          left: 50%;
+          margin-left:-(600*@basePX/2) ;
+          bottom:50%;
+          margin-bottom: -(88*@basePX/2);
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+</style>

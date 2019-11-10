@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>货车管理</title>
+<link rel="stylesheet" type="text/css" href="../css/xieyaozhong.css"></link>
+<script type="text/javascript" src="../js/library/jquery-1.7.2.js"></script>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/bootstrap/easyui.css"></link>
+<link rel="stylesheet" type="text/css" href="../js/library/easyui/themes/icon.css"></link>
+<script type="text/javascript" src="../js/library/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/library/cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="../js/library/common/cookie2.js"></script>
+<script type="text/javascript" src="../js/library/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../js/library/common/common.js"></script>
+<script type="text/javascript" src="../js/library/common/customUi.js" defer="defer"></script>
+	
+<script type="text/javascript" src="../js/js_truck/truckManager.js" defer="defer"></script>
+<style type="text/css">
+	body{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		font-size: 14px;
+	}
+	div{
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+	.datagrid-header-row,.datagrid-row{
+			height : 35px;
+	}
+	.datagrid-header-row{
+		font-weight: bold;;
+	}
+</style>
+</head>
+<body style="width: 100%;text-align: left;background-color:white;">
+	<div style="width:99%;position:absolute;">
+	
+		<!--搜索栏 -->
+		<div class='yqqPluginBg'>
+			昵称【模】<input id="nickName" type="text" style="width:200px;"/>  
+		</div>
+		
+		<div style="z-index: 100;position: fixed;right:100px;">
+			<a href="javascript:void(0);" class="easyui-linkbutton"
+				data-options="iconCls:'icon-search'"
+				id="truckQueryButton"
+			>查询</a>
+		</div>
+		
+		<!-- 展示栏 -->
+		<div>
+			<table id="truckManagerTable">
+			</table>
+		</div>
+		
+	</div>
+</body>
+</html>

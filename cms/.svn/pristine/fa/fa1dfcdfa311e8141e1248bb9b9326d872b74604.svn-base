@@ -1,0 +1,97 @@
+<template>
+  <div id="app">
+    <transition :name="transitionName">
+      <div>
+        <keep-alive>
+          <router-view v-if="$route.meta.keepAlive" class="child-view"></router-view>
+        </keep-alive>
+        <router-view v-if="!$route.meta.keepAlive" class="child-view"></router-view>
+      </div>
+    </transition>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'app',
+    data(){
+      return{
+        transitionName: 'slide-left',
+        isBrowserBack: false
+      }
+    },
+    created: function () {
+      let maxWidth = 768;
+      let readyWidth = 320;
+      let scale = 20;
+      let wResize = function(){
+        let width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth;
+        if(width > maxWidth) {
+          width = maxWidth;
+        }
+        let fontSize = (width / readyWidth * scale);
+        document.getElementsByTagName('html')[0].style.fontSize=fontSize+'px';
+      }
+      wResize();
+      //监听浏览器滑动返回事件
+      window.addEventListener("popstate", this.browserBack, false);
+    },
+    methods: {
+      browserBack(e){
+        let isBack = this.$router.isBack;
+        isBack ? this.transitionName = 'slide-right' : this.transitionName = 'slide-mid';
+        this.isBrowserBack = true;
+        e.preventDefault();
+      }
+    },
+    watch: {
+      '$route': function (to, from) {
+        if(!sessionStorage.urlJson && sessionStorage.userType != 'true'){
+          if(!(to.name == 'productDetail' || to.name == 'placeOrder' || to.name == 'pOrderToC')){
+            sessionStorage.removeItem("order");
+          }
+        }
+      	if(!this.isBrowserBack) this.transitionName = 'slide-left';
+        this.$router.isBack = false;
+        this.isBrowserBack = false;
+      }
+    }
+  }
+</script>
+
+<style lang="less">
+  @import "./assets/css/common.less";
+
+  #app {
+    width: 100%;
+    height: 100%;
+    min-height:100%;
+    font-family: Microsoft YaHei;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #4d4d4d;
+    user-select: none;
+    font-size: 14px;
+    line-height: 1.42857143;
+  }
+
+  .child-view {
+    transition: all .3s cubic-bezier(.55,0,.1,1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin: 0 auto;
+    z-index: 1;
+  }
+
+  .slide-left-enter, .slide-right-leave-active {
+    opacity: 0;
+    transform: translate(30px, 0);
+  }
+
+  .slide-left-leave-active, .slide-right-enter {
+    opacity: 0;
+    transform: translate(-30px, 0);
+  }
+</style>

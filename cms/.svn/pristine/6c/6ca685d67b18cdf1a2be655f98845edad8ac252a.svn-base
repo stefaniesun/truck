@@ -1,0 +1,14 @@
+/**
+ * Created by Administrator on 2017/10/20.
+ * 统一管理请求接口。
+ */
+import Vue from 'vue'
+let urlApi = {
+  queryVoyageList: 'SaleVoyageWS/queryVoyageList.cms',           //首页热门产品列表
+  getSelectData: 'SaleVoyageWS/getSelectData.cms',               //筛选关键词
+  getQueryData: 'SaleVoyageWS/getQueryData.cms',                 //获取筛选数据
+  getVoyageDetail: 'SaleVoyageWS/getVoyageDetail.cms',           //产品详情
+  queryVoyageListByKeyword: 'SaleVoyageWS/queryVoyageListByKeyword.cms',   //关键词搜索
+}
+Vue.prototype.urlApi = urlApi;
+

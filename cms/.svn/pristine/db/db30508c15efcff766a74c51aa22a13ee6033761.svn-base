@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>编辑航程</title>
+</head>
+<body>
+<center>
+	<form>
+		<table cellspacing="4" cellpadding="4">
+			<tr>
+				<td style="text-align:right;">港口</td>
+				<td>
+					<span id="portForm"></span>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">时间</td>
+				<td>
+					<input id="timeForm" type="text" style="width:300px;"
+					 data-options="required:true"/>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">时间类型</td>
+				<td>
+					<input id="timeTypeForm" class="easyui-combobox" style="width:300px;"
+						value="" data-options="required:true,panelHeight:'auto',
+						valueField:'value',textField:'text',
+						data: [{value: '0',text: '登船日'},
+						{value: '1',text: '岸上观光日'},
+						{value: '2',text: '航海日'},
+						{value: '3',text: '离船日'}]" /> 
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">抵达时间</td>
+				<td>
+					<input id="arrivalTimeForm" style="width:300px;" />
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">起航时间</td>
+				<td>
+					<input id="leaveTimeForm" style="width:300px;" />
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">行程规划</td>
+				<td>
+					<textarea id="detailForm" style="width:300px;height:100px;resize:none;"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">备注</td>
+				<td>
+					<textarea id="remarkForm" style="width:300px;height:50px;resize:none;" class="easyui-validatebox" data-options="validType:'length[1,150]'"></textarea>
+				</td>
+			</tr>
+		</table>
+	</form>
+</center>
+</body>
+</html>

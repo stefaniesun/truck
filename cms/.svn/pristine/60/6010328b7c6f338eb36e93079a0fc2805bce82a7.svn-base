@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>编辑SKU详情</title>
+</head>
+<body>
+<center>
+	<form>
+		<table cellspacing="6" cellpadding="6">
+			<tr> 
+				<td style="text-align:right;">日期</td>
+				<td>
+					<input id="dateForm" style="width:430px;" class="easyui-combobox"/>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">单品</td>
+				<td><input id="tkviewForm" style="width:430px;" class="easyui-combobox"/></td>
+			</tr>
+			<tr id="theahTr">
+				<td colspan="2">
+					<table cellpadding="4" cellspacing="4" style="margin-left:10px;text-align:center;">
+						<thead>
+							<tr>
+								<th>单品名称</th>
+								<th>供应商</th>
+								<th>库存</th>
+								<th>成本价</th>
+								<th>成本说明</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody id="tkviewTbody">
+							
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			<tr> 
+				<td style="text-align:right;">价格类型</td>
+				<td>
+					<select id="priceTypeForm" class="easyui-combobox" name="priceTypeForm" 
+					style="width:430px;" data-options="required:true,panelHeight:'auto'">   
+					    <option value="1">成人</option>   
+					    <option value="2">儿童</option>   
+					    <option value="3">单房差</option>   
+					</select>  
+				</td>
+			</tr>
+			<tr> 
+				<td style="text-align: right;">价格</td>
+				<td>
+					<input id="priceForm" type="text" 
+					data-options="validType:'length[1,50]',min:0,precision:2"/>&nbsp; 
+					
+					<span style="float:right;" id="priceFlagSpan"></span>
+				</td>
+			</tr>
+			<tr> 
+				<td style="text-align: right;">库存</td>
+				<td>
+					<input id="stockForm" type="text" class="easyui-numberbox" style="width:430px;"
+					 data-options="validType:'length[1,5]',min:0,required:true"/>
+				</td>
+			</tr>
+		</table>
+	</form>
+</center>
+</body>
+</html>

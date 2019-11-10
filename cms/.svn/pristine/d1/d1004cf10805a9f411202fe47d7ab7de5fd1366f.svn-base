@@ -1,0 +1,1028 @@
+var calendarData=[];
+
+var myCalendar;
+
+var checkedSkuStock = '';
+var checkedMoth = '';
+var minTkview = '';
+var checkedDate = '';
+var checkPrice = -1;
+$(document).ready(function() {
+	var options = {
+	      width: '600px',
+	      height: '470px',
+	      language: 'CH', //语言
+	      showLunarCalendar: false, //阴历
+	      showHoliday: false, //休假
+	      showFestival: false, //节日
+	      showLunarFestival: false, //农历节日
+	      showSolarTerm: false, //节气
+	      showMark: true, //标记
+	      timeRange: {
+	        startYear: 2017,
+	        endYear: 2018
+	      },
+	      theme: {
+	        changeAble: false,
+	        weeks: {
+	          backgroundColor: '#FBEC9C',
+	          fontColor: '#4A4A4A',
+	          fontSize: '20px',
+	        },
+	        days: {
+	          backgroundColor: '#ffffff',
+	          fontColor: '#565555',
+	          fontSize: '24px'
+	        },
+	        todaycolor: 'orange',
+	        activeSelectColor: 'orange',
+	      }
+	 };
+	  
+	myCalendar= new SimpleCalendar('#container',options);
+	
+	var params = getUrlParameters();
+	baseInfo = params.baseInfo;
+	skuInfos = params.skuInfos;
+	cruise = params.cruise;
+	
+	queryTkviewType();
+	
+	var buttonHtml = '';
+	if (xyzControlButton("buttonCode_y20161108110311")) {
+		buttonHtml += '<a id="addBtn" href="#" class="easyui-linkbutton">新增</a>&nbsp;';
+	}
+	if (xyzControlButton("buttonCode_x20170912165101")) {
+		buttonHtml += '<a id="addListBtn" href="javascript:void(0);" class="easyui-linkbutton">批量新增</a>&nbsp;';
+	}
+	if (xyzControlButton("buttonCode_y20161108110312")) {
+		buttonHtml += '<a id="deleteBtn" href="javascript:void(0);" class="easyui-linkbutton">删除</a>&nbsp;';
+	}
+	$("#skuStockButton").html(buttonHtml);
+	
+	if (xyzControlButton("buttonCode_y20161108110311")) {
+		$("#addBtn").linkbutton({
+			iconCls : 'icon-add',
+			onClick : function(){
+				addSkuStockButton();
+			}
+		});
+	}
+	if (xyzControlButton("buttonCode_x20170912165101")) {
+		$("#addListBtn").linkbutton({
+			iconCls : 'icon-add',
+			onClick : function(){
+				addSkuStockListButton();
+			}
+		});
+	}
+	if (xyzControlButton("buttonCode_y20161108110312")) {
+		$("#deleteBtn").linkbutton({
+			iconCls : 'icon-remove',
+			onClick : function(){
+				deleteSkuStockButton();
+			}
+		});
+	}
+	
+	//天数格添加点击事件。
+	$(".sc-item").click(function() { 
+		var numberCode = $(this).attr("numberCode");
+		if(!xyzIsNull(numberCode)){ 
+			checkedDate = $(this).attr("data");
+			checkPrice = $(this).find(".sc-price").text().substring(1);
+			checkedSkuStock = numberCode;
+			getTkviewScotkData(checkedDate, numberCode);
+		}else{
+			var moth = $(".tabs-selected").text()+""; 
+			moth = moth.substring(0, moth.length-1);
+			var mothArry = moth.split("年");
+			
+			var checkedMoth = '';
+			var day = $(this).text()+""; 
+			if($(this).is('.sc-othermenth')){
+	            var mothTemp = mothArry[1];
+	            if(day > 23){
+	            	mothTemp--;
+	            }else if(day < 8){
+	            	mothTemp++;
+	            }
+	            checkedMoth = mothArry[0]+"-"+mothTemp;
+	        }else{
+	        	checkedMoth = moth.replace("年", "-");
+	        }
+			checkedDate = checkedMoth+"-"+day;
+			checkedSkuStock = '';
+			
+			$("#plusPriceMsg").html("");
+			$("#priceForm").val("");
+			$("#stockForm").val("");
+			$("#tkviewStockCode").html("");
+			
+			$("#stockTbody").empty();
+			$("#tableDiv").hide();
+			$(".form-inline").css("display","none");
+			$("#plusPriceMsg").css("display","none");
+		}
+    });
+	
+	$.ajax({
+		url:"../TaobaoWS/getSkuDetails.do",
+		type:"POST",
+		data:{
+			skuInfo : skuInfos
+		},
+		async:false,
+		dataType:"json",
+		success:function(data) {
+			if(data.status==1){
+				//生成月份tab
+				var dateList = data.content.dateList;
+				var rows = data.content.rows;
+				
+				if(dateList.length == 0){
+					top.$.messager.alert("警告","当前SKU无日历价格库存信息!","warning");
+					return;
+				}
+				
+				for(var i=0;i<rows.length;i++){
+					calendarData[new Date(rows[i].date).Format("yyyy-M-d")] = JSON.stringify(rows[i]);
+				}
+				myCalendar._options.skuData = calendarData;
+				myCalendar.update();
+				
+				for(var i = 0; i < dateList.length; i++){
+					var dateArry = dateList[i];
+					var arr = dateArry[0].split('-');
+					$("#dateTabs").tabs('add',{
+					    title : arr[0]+'年'+arr[1]+'月',    
+					    closable : false
+					});
+					
+					if(dateArry[1] == '1'){
+						$(".tabs li:last-child a span").eq(0).attr("style","background-color:#f7dbdd;");
+					}
+				}
+				
+				var dateObj = dateList[0];
+				var arr = dateObj[0].split('-');
+				myCalendar.update(arr[1], arr[0]);
+				if(dateObj[1] == '1'){
+					$(".tabs li:last-child a span").eq(0).attr("style","background-color:#f7dbdd;");
+				}
+				
+				$("#dateTabs").tabs({
+					onSelect : function(title,index){
+						var dateArry = dateList[index];
+						var arr = dateArry[0].split('-');
+						myCalendar.update(arr[1], arr[0]);
+				    }
+				});
+				
+			}else{
+				top.$.messager.alert("警告",data.msg,"warning");
+			}
+			
+		},
+		error:function(XMLHttpRequest, textStatus, errorThrown) {
+			top.window.AjaxError(XMLHttpRequest, textStatus, errorThrown);
+		}
+	});
+	
+	$("#tableDiv").css("display","none");
+	
+});
+
+function queryTkviewType(){
+	
+	$.ajax({
+		url : "../TaobaoWS/queryTkviewTypeList.do",
+		type : "POST",
+		data : {
+			taobaoSku : skuInfos
+		},
+		async:false,
+		dataType:"json",
+		success:function(data) {
+			if(data.status==1){
+				var tkviewTypeList = data.content;
+				var html = '';
+				for(var t = 0; t < tkviewTypeList.length; t++){
+					var tkviewTypeObj = tkviewTypeList[t];
+					var id = tkviewTypeObj.numberCode;
+					html += '<code id="'+ id +'">'+tkviewTypeObj.cabinNameCn +'</code>&nbsp;';
+				}
+				if(tkviewTypeList.length==0){
+					$("#tkviewTypeDiv").html("未绑定单品");
+				}else{
+					$("#tkviewTypeDiv").html("绑定单品:"+html);
+				}
+				
+			}else{
+				top.$.messager.alert("警告",data.msg,"warning");
+			}
+		},
+		error:function(XMLHttpRequest, textStatus, errorThrown) {
+			top.window.AjaxError(XMLHttpRequest, textStatus, errorThrown);
+		}
+	});
+	
+}
+
+var priceList = [];
+function getTkviewScotkData(date, skuDetailNumberCode){
+	
+	var nameCn = $('.tabs-selected', parent.document).text();
+	$("#tkviewStockCode").html(nameCn+" &nbsp; "+date);
+	
+	$(".form-inline").css("display","block");
+	
+	$.ajax({
+		url:"../TaobaoWS/getTkviewScotkList.do",
+		type:"POST",
+		data:{
+			numberCode : skuDetailNumberCode,
+			taobaoSku : skuInfos,
+			date : date
+		},
+		async:false,
+		dataType:"json",
+		success:function(data) {
+			if(data.status==1){
+				var stockList = data.content.stockList;
+				var detail = data.content.detail;
+				priceList = data.content.priceList;
+				
+				if(detail.priceType==1){
+			         $("#priceTypeForm option[value=1]").attr("selected", "selected");
+				}else if(detail.priceType==2){
+					 $("#priceTypeForm option[value=2]").attr("selected", "selected");
+				}else{
+					 $("#priceTypeForm option[value=3]").attr("selected", "selected");
+				}
+				$("#priceForm").val(parseInt(detail.price)/100);
+				$("#stockForm").val(detail.stock);
+				
+				var stockHtml = '';
+				if(stockList.length < 1){
+					$("#noneMsg").css("display","block");
+					$(".price-table").css("display","none");
+					$("#tableDiv").css("display","none");
+					$("#plusPriceMsg").css("display","none");
+				}else{
+					$("#noneMsg").css("display","none");
+					$(".price-table").css("display","block");
+					$("#tableDiv").css("display","block");
+					var minPrice = 0;
+					var minStock = 0;
+					var plusPrice = 0;
+					var minCost = 0;
+					var tkviewNumber = '';
+					for(var s = 0; s < stockList.length; s++){
+						var stockObj = stockList[s];
+						var numberCode = stockObj.numberCode;
+						stockHtml += '<tr>';
+						stockHtml += ' <td>';
+						if(s == 0 || tkviewNumber != stockObj.tkview){
+							tkviewNumber = stockObj.tkview;
+							if(s == 0){
+								minTkview = stockObj.tkview;
+								stockHtml += '  <code>'+ stockObj.tkviewNameCn.substring(12) +'</code>';
+							}else{
+								stockHtml += stockObj.tkviewNameCn.substring(12) ;
+							}
+							stockHtml += '  <input type="hidden" id="tkview_'+ numberCode +'" value="'+ tkviewNumber +'"/>';
+						}
+						stockHtml += ' </td>';
+						stockHtml += ' <td>';
+						if(s==0){
+							stockHtml += '  <code>【'+ stockObj.providerMark + "】"+stockObj.providerNameCn +'</code>';
+						}else{
+							stockHtml += ' 【'+ stockObj.providerMark + "】"+stockObj.providerNameCn;
+						}
+						stockHtml += ' </td>';
+						stockHtml += ' <td>';
+						var cost = xyzGetPrice(stockObj.cost);//成本价
+						if(s == 0){
+							minPrice = parseFloat(cost);
+							for(var p = 0; p < priceList.length; p++){
+								var priceObj = priceList[p];
+								if(priceObj.minPrice <= cost && priceObj.maxPrice >= cost){
+									plusPrice= parseFloat(priceObj.priceMarkup);
+									minCost= parseFloat(cost);
+									minPrice = parseFloat(cost) + parseFloat(priceObj.priceMarkup);
+									break;
+								}
+							}
+							minStock = stockObj.stock;
+						}
+						if(s==0){
+							stockHtml += '  <code>'+ cost +'</code>';
+						}else{
+							stockHtml += cost;
+						}
+						stockHtml += ' </td>';
+						stockHtml += ' <td>';
+						stockHtml += '  <code>'+ stockObj.stock +'</code>';
+						stockHtml += ' </td>';
+						stockHtml += '  <td>';
+						if(s==0){
+							stockHtml += '  <code>'+ stockObj.costRemark +'</code>';
+						}else{
+							stockHtml += stockObj.costRemark;
+						}
+						stockHtml += ' </td>';
+						stockHtml += '</tr>';
+					}
+					$("#stockTbody").html(stockHtml);
+
+					minPrice = parseInt(minPrice/100)*100+99;
+					var priceHtml = '加价策略：结算价（'+minCost+'）+加价（'+plusPrice+'）= '+minPrice+'(结尾取99) &nbsp; ';
+					if(parseInt(detail.isLock) == 0){ //不锁定
+		        		priceHtml += "<img width='18px' src='../image/other/unlock.png' title='点我锁定价格(锁定价格,更新库存时不会更改)' ";
+		        		priceHtml += "id='isLockEdiImg_"+ detail.numberCode +"' /> ";
+			        	priceHtml += "<input id='isLockEdi_"+ detail.numberCode +"' type='hidden' value='0'/> ";
+		        	}else{
+		        		priceHtml += "<img width='18px' src='../image/other/lock.png' title='点我不锁定价格(不锁定价格,更新库存时会更改)' ";
+		        		priceHtml += "id='isLockEdiImg_"+ detail.numberCode +"' /> ";
+			        	priceHtml += "<input id='isLockEdi_"+ detail.numberCode +"' type='hidden' value='1'/> ";
+		        	}
+					$("#plusPriceMsg").html(priceHtml);
+					
+					$("#plusPriceMsg").css("display","block");
+					
+					if(checkPrice != -1){
+						$("#priceForm").val(checkPrice);
+					}else{
+						$("#priceForm").val(minPrice);
+					}
+					$("#stockForm").val(minStock);
+					
+					/* 库存锁定点击事件 */
+					$("#isLockEdiImg_"+detail.numberCode).click(function(){
+						var id = $(this).prop('id').split('_')[1];
+						var isLock = $("#isLockEdi_"+id).val();
+						if(xyzIsNull(isLock)||isLock == '0'){
+							isLock = '1';
+							$(this).attr("src","../image/other/lock.png");
+							$(this).attr("title","点我不锁定价格(不锁定价格,更新库存时会更改)");
+							
+							$(".sc-selected").find("img").attr("src","../image/other/lock.png");
+							$(".sc-selected").find("img").attr("title","点我不锁定价格(不锁定价格,更新库存时会更改)");
+						}else{
+							isLock = '0';  //不锁定
+							$(this).attr("src","../image/other/unlock.png");
+							$(this).attr("title","点我锁定价格(锁定价格,更新库存时不会更改)");
+							
+							$(".sc-selected").find("img").attr("src","../image/other/unlock.png");
+							$(".sc-selected").find("img").attr("title","点我锁定价格(锁定价格,更新库存时不会更改)");
+						}
+						$("#isLockEdi_"+id).val(isLock);
+						
+						editIsLock(id);
+					});
+					
+					/*编辑保存*/
+					$("#submitBtn").click(function(){
+						if(xyzIsNull(checkedDate) && xyzIsNull(checkedSkuStock)){
+							return false;
+						}
+						var priceType = $("#priceTypeForm option:selected").val();
+						var price = $("#priceForm").val();
+						var stock = $("#stockForm").val();
+						
+						var tempPrice = parseFloat(price);
+						if(tempPrice <= 1000){
+							$.messager.confirm('确认','确定价格小于等于1000吗？',function(r){    
+								if(r){
+									submitBtnData(checkedSkuStock, minTkview, priceType, price, stock);
+								}else{
+									$("#priceForm").val("");
+								}
+							});
+						}else{
+							submitBtnData(checkedSkuStock, minTkview, priceType, price, stock);
+						}
+						
+					});
+				}
+				
+			}else{
+				top.$.messager.alert("警告",data.msg,"warning");
+			}
+		},
+		error:function(XMLHttpRequest, textStatus, errorThrown) {
+			top.window.AjaxError(XMLHttpRequest, textStatus, errorThrown);
+		}
+	});
+}
+
+function submitBtnData(checkedSkuStock, minTkview, priceType, price, stock){
+	
+	var priceTemp = parseFloat(price);
+	
+	$.ajax({
+		url : "../TaobaoWS/submitSkuDetailsOper.do",
+		type : "POST",
+		data : {
+			numberCode : checkedSkuStock,
+			outId : minTkview,
+			priceType : priceType,
+			price : xyzSetPrice(priceTemp),
+			stock : stock
+		},
+		async : false,
+		dataType : "json",
+		success : function(data) {
+			if(data.status==1){
+				
+				$(".sc-selected .sc-stock").html("余:"+stock);
+				$(".sc-selected .sc-price").html("<dfn>¥</dfn>"+price);
+				top.$.messager.alert("提示","操作成功!","info");
+			}else{
+				top.$.messager.alert("警告",data.msg,"warning");
+			}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			top.window.AjaxError(XMLHttpRequest, textStatus, errorThrown);
+		}
+	});
+	
+}
+
+var minStock = 0;
+var minPrice = 0;
+var priceList = [];   //加价规则
+function getStockByTkview(value){
+	
+	$.ajax({
+		url:"../TaobaoPoolWS/getStockByTkview.do",
+		type:"POST",
+		data:{
+			tkview : value
+		},
+		async:false,
+		dataType:"json",
+		success:function(data) {
+			if(data.status==1){
+				var content = data.content;
+				var stockList = content.stockList;
+				priceList = content.priceList;
+				
+				$("#theahTr").show();
+				$("#tkviewTbody").empty();
+				var html = '';
+				if(stockList.length > 0){
+					var tkviewNumber = '';
+					for(var t = 0; t < stockList.length; t++){
+						var stockObj = stockList[t];
+						html += '<tr id="stcokTr_'+ stockObj.numberCode +'" class="stcokTr_'+stockObj.tkview+'">';
+						html += ' <td><p>';
+						var boolean = false;
+						if(xyzIsNull(tkviewNumber) || tkviewNumber != stockObj.tkview){
+							tkviewNumber = stockObj.tkview;
+							boolean = true;
+							html += xyzGetDiv(stockObj.tkviewNameCn.substring(12),0,8);
+						}
+						html += '</p>';
+						html += '<input id="tkviewHidden_'+ stockObj.numberCode +'" type="hidden" value="'+ tkviewNumber +'"/>';
+						html += '</td>';
+						html += ' <td><p>【'+ stockObj.providerMark +'】'+ xyzGetDiv(stockObj.providerNameCn,0,6) +'</p></td>';
+						var type = stockObj.type==1?stockObj.stock:"现询";
+						html += ' <td><p>'+ type +'</p></td>';
+						html += ' <td><p>'+ xyzGetPrice(stockObj.cost) +'</p></td>';
+						html += ' <td><p>'+ stockObj.costRemark +'</p></td>';
+						html += ' <td>';
+						if(boolean){
+							html += '  <img id="delete_'+ stockObj.numberCode +'" alt="点我删除单品库存信息"';
+							html += '  src="../image/other/delete.png" ';
+							html += '  onClick="deleteStock(\''+ stockObj.numberCode +'\',\''+ stockObj.tkview +'\')" title="点我删除单品库存信息" style="cursor:pointer;">';
+						}
+						html += ' </td>';
+						html += '</tr>';
+					}
+					$("#tkviewTbody").append(html);
+					
+					$("#stcokTr_"+stockList[0].numberCode).attr("style","color:red;");
+					
+					minStock = stockList[0].stock;
+					minTkview = stockList[0].tkview;
+					var cost = xyzGetPrice(stockList[0].cost);//成本价
+					minPrice = parseFloat(cost);
+					for(var p = 0; p < priceList.length; p++){
+						var priceObj = priceList[p];
+						if(priceObj.minPrice <= cost && priceObj.maxPrice >= cost){
+							minPrice = parseFloat(cost) + parseFloat(priceObj.priceMarkup);
+							break;
+						}
+					}
+					minPrice = parseInt(minPrice/100)*100+99;
+					$("#priceAddForm").numberbox('setValue', minPrice);
+					$("#stockAddForm").numberbox('setValue', minStock);
+				}
+				
+			}else{
+				top.$.messager.alert("警告",data.msg,"warning");
+			}
+		},
+		error:function(XMLHttpRequest, textStatus, errorThrown) {
+			top.window.AjaxError(XMLHttpRequest, textStatus, errorThrown);
+		}
+	});
+	
+}
+
+function addSkuStockButton(){
+	/*if(!xyzIsNull(checkedDate) && !xyzIsNull(checkedSkuStock)){
+		top.$.messager.alert("提示","【"+checkedDate+"】库存已存在!","info");
+		return false;
+	}
+	*/
+	var html = '<center>';
+	html += '<form>';
+	html += '<table style="margin-top:16px;text-align:center;" id="stockTable">';
+	html += ' <tr>';
+	html += '  <th style="text-align:right;height:30px;"><p>日期&nbsp;</p></th>';
+	html += '  <td>';
+	if((!xyzIsNull(checkedDate) && !xyzIsNull(checkedSkuStock)) || (xyzIsNull(checkedDate) && xyzIsNull(checkedSkuStock))){
+		html += '   <input id="dateForm" style="width:430px;"/>';
+	}else if(!xyzIsNull(checkedDate) && xyzIsNull(checkedSkuStock)){
+		html += checkedDate;
+	}
+	html += '  </td>';
+	html += ' </tr>';
+	
+	if((!xyzIsNull(checkedDate) && !xyzIsNull(checkedSkuStock)) || (xyzIsNull(checkedDate) && xyzIsNull(checkedSkuStock))){
+		html += ' <tr>';
+		html += '  <th style="text-align:right;height:30px;"><p>单品&nbsp;</P></th>';
+		html += '  <td>';
+		html += '   <input id="tkviewForm" style="width:430px;"/>';
+		html += '  </td>';
+		html += ' </tr>';
+		html += ' <tr id="theahTr">';
+		html += '  <td colspan="2">';
+		html += '   <table style="margin-left:40px;">';
+		html += '    <thead>';
+		html += '     <tr>';
+		html += '	   <th><p>&nbsp;单品名称&nbsp;</p></th> ';
+		html += '      <th><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;供应商&nbsp;</p></th> ';
+		html += '      <th><p>&nbsp;库存&nbsp;</p></th> ';
+		html += '      <th><p>&nbsp;成本价&nbsp;</p></th> ';
+		html += '      <th><p>&nbsp;成本说明&nbsp;</p></th> ';
+		html += '      <th><p>&nbsp;操作&nbsp;</p></th> ';
+		html += '     </tr>';
+		html += '    </thead>';
+		html += '    <tbody id="tkviewTbody"></tbody>';
+		html += '   </table>';
+		html += '  </td>';
+		html += ' </tr>';
+	}
+	
+	html += ' <tr>';
+	html += '  <th style="text-align:right;height:30px;"><p>价格类型&nbsp;</p></th>';
+	html += '  <td>';
+	html += '   <p><select id="priceTypeAddForm" name="priceTypeForm" style="width:430px;">';   
+	html += '    <option value="1">成人</option>';   
+	html += '    <option value="2">儿童</option>';
+	html += '    <option value="3">单房差</option>'; 
+	html += '   </select><p>';
+	html += '  </td>';
+	html += ' </tr>';
+	html += ' <tr>';
+	html += '  <th style="text-align:right;height:30px;"><p>价格&nbsp;</p></th>';
+	html += '  <td>';
+	html += '   <input id="priceAddForm" type="text" style="width:395px;" />&nbsp; ';
+	html += '   <span style="float:right;height:30px;">';
+	html += '    <img src="../image/other/unlock.png" title="点我锁定价格(锁定价格后,克隆/更新宝贝库存不会更改)" id="isLockForm" onclick="lockImg()"/> ';
+	html += '    <input type="hidden" id="isLockInputForm" value="0"/>';
+	html += '   </span>';
+	html += '  </td>';
+	html += ' </tr>';
+	html += ' <tr> ';
+	html += '  <th style="text-align:right;height:30px;"><p>库存&nbsp;</p></th>';
+	html += '  <td>';
+	html += '   <input id="stockAddForm" type="text" style="width:414px;" />人';
+	html += '  </td>';
+	html += ' </tr>';
+	html += ' </table>';
+	html += '</form>';
+	html += '</center>';
+
+	xyzdialog({
+		dialog : 'dialogFormDiv_addSkuStockButton',
+		title : '新增SKU',
+		//href : '../jsp_taobao/addTaobaoDetails.html',
+		content : html,
+		fit : false,
+		width : 600,
+		height : 750,
+		buttons : [ {
+			text : '确定',
+			handler : function() {
+				addSkuStockSubmit(skuInfos, checkedDate);
+			}
+		}, {
+			text : '取消',
+			handler : function() {
+				$("#dialogFormDiv_addSkuStockButton").dialog("destroy");
+			}
+		} ],
+		onOpen : function() {
+			$("#theahTr").hide();
+			
+			$("#priceTypeAddForm").attr("class","easyui-combobox");
+			$("#priceTypeAddForm").combobox({
+				required : true,
+				panelHeight : 'auto'
+			});
+			
+			$("#priceAddForm").numberbox({
+				required:true,
+				min : 0,
+				precision : 2,
+				validType : 'length[1,50]',
+				icons: [{
+					iconCls:'icon-clear',
+					handler: function(e){
+						$(e.data.target).numberbox('clear');
+					}
+				}]
+			});
+			$("#stockAddForm").numberbox({
+				required : true,
+				min : 0,
+				validType :'length[1,5]',
+				icons: [{
+					iconCls:'icon-clear',
+					handler: function(e){
+						$(e.data.target).numberbox('clear');
+					}
+				}]
+			});
+			
+			if((!xyzIsNull(checkedDate) && !xyzIsNull(checkedSkuStock)) || (xyzIsNull(checkedDate) && xyzIsNull(checkedSkuStock))){
+				xyzCombobox({
+					required: true,  
+					combobox : 'dateForm',
+					url : '../ListWS/getShipmentByTaobaoSku.do',
+					mode : 'remote',
+					lazy : false,
+					onBeforeLoad: function(param){
+						param.baseInfo = baseInfo;
+						param.sku = skuInfos;
+					},
+					onChange: function(newValue,oldValue){
+						$("#tkviewForm").combobox('clear');
+						$("#tkviewForm").combobox('reload');
+						
+						$("#tkviewTbody").empty();
+						$("#theahTr").hide();
+						$("#priceAddForm").numberbox('setValue','');
+						$("#stockAddForm").numberbox('setValue','');
+					}
+				});
+				
+				xyzCombobox({
+					required: true,  
+					combobox : 'tkviewForm',
+					url : '../ListWS/getTkviewByShipmentAndCruise.do',
+					mode: 'remote',
+					lazy : false,
+					onBeforeLoad: function(param){
+						var date = $("#dateForm").combobox('getValue');
+						if (xyzIsNull(date)) {
+							return false;
+						}
+						param.baseInfo = baseInfo;
+						param.shipment = date;
+						param.skuInfo = skuInfos;
+					},
+					onChange: function(newValue,oldValue){
+						if(xyzIsNull(newValue)){
+							return false;
+						}
+						getStockByTkview(newValue);
+					}
+				});
+			}
+			
+		}
+	});
+	
+}
+
+function lockImg(){
+	var isLock = $("#isLockInputForm").val();
+	if(isLock == '0'){
+		isLock = '1';
+		$("#isLockForm").attr("src","../image/other/lock.png");
+		$("#isLockForm").attr("title","点我不锁定价格(不锁定价格后,克隆/更新宝贝库存会更改)");
+	}else{
+		isLock = '0';  //不锁定
+		$("#isLockForm").attr("src","../image/other/unlock.png");
+		$("#isLockForm").attr("title","点我锁定价格(锁定价格后,克隆/更新宝贝库存不会更改)");
+	}
+	$("#isLockInputForm").val(isLock);
+}
+
+function getStockDate(sku, date){
+	var count = 0;
+	$.ajax({
+		url : '../TaobaoWS/getStockDate.do',
+		type : "POST",
+		data : {
+			sku : sku,
+			date : date,
+		},
+		async : false,
+		dataType : "json",
+		success : function(data) {
+			if (data.status == 1) {
+				count = data.content;
+			} else {
+				top.$.messager.alert("警告", data.msg, "warning");
+			}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			top.window.AjaxError(XMLHttpRequest, textStatus, errorThrown);
+		}
+	});
+	
+	return count;
+}
+
+function addSkuStockSubmit(skuInfos, date){
+	if(!$("form").form('validate')){
+		return false;
+	}
+	
+	var stockNumberCode = "";
+	var date = checkedDate;
+	if(xyzIsNull(checkedDate)){
+		date = $("#dateForm").combobox("getText");
+		if($(this).is('#tkviewTbody')){
+			if(xyzIsNull($("#tkviewTbody tr").eq(0).prop('id'))){
+				stockNumberCode = $("#tkviewTbody tr").eq(0).prop('id').split('_')[1];
+			}
+		}
+	}
+	var count = getStockDate(skuInfos, date);
+	if(count > 0){
+		top.$.messager.alert("提示","该库存信息已存在!","info");
+		return false;
+	}
+	
+	var priceType = $("#priceTypeAddForm").combobox('getValue');
+	var price = $("#priceAddForm").numberbox('getValue');
+	var isLock = $("#isLockInputForm").val();
+	var isEdit = isLock;
+	var stock = $("#stockAddForm").numberbox('getValue');
+	
+	if(price <= 1000){
+		$.messager.confirm('确认','确定价格小于等于1000吗？',function(r){    
+			if(r){
+				$.ajax({
+					url : "../TaobaoWS/addSkuDetails.do",
+					type : "POST",
+					data : {
+						baseInfo : baseInfo,
+						skuInfo : skuInfos,
+						date : date,
+						minTkview : minTkview,
+						price : xyzSetPrice(price),
+						priceType : priceType,
+						isLock : isLock,
+						isEdit : isEdit,
+						stock : stock,
+						stockNumberCode : stockNumberCode
+					},
+					async : false,
+					dataType : "json",
+					success : function(data) {
+						if(data.status==1){
+							$("#dialogFormDiv_addSkuStockButton").dialog("destroy");
+							top.$.messager.alert("提示","操作成功!","info");
+							window.location.reload(); 
+						}else{
+							top.$.messager.alert("警告",data.msg,"warning");
+						}
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						top.window.AjaxError(XMLHttpRequest, textStatus, errorThrown);
+					}
+				});
+			}else{
+				$("#priceAddForm").numberbox('setValue', 0);
+			}
+		});
+	}else{
+		$.ajax({
+			url : "../TaobaoWS/addSkuDetails.do",
+			type : "POST",
+			data : {
+				baseInfo : baseInfo,
+				skuInfo : skuInfos,
+				date : date,
+				minTkview : minTkview,
+				price : xyzSetPrice(price),
+				priceType : priceType,
+				isLock : isLock,
+				isEdit : isEdit,
+				stock : stock,
+				stockNumberCode : stockNumberCode
+			},
+			async : false,
+			dataType : "json",
+			success : function(data) {
+				if(data.status==1){
+					$("#dialogFormDiv_addSkuStockButton").dialog("destroy");
+					top.$.messager.alert("提示","操作成功!","info");
+					window.location.reload(); 
+				}else{
+					top.$.messager.alert("警告",data.msg,"warning");
+				}
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				top.window.AjaxError(XMLHttpRequest, textStatus, errorThrown);
+			}
+		});
+	}
+	
+}
+
+function deleteSkuStockButton(){
+	
+	if(xyzIsNull(checkedSkuStock)){
+		top.$.messager.alert("提示","请先勾选需要删除的对象!","info");
+		return;
+	}
+	
+	$.messager.confirm('确认','您确认想要删除库存吗？',function(r){    
+		if(r){
+			$.ajax({
+				url : '../TaobaoWS/deleteSkuDetails.do',
+				type : "POST",
+				data : {
+					skuInfos : skuInfos,
+					numberCodes : checkedSkuStock,
+				},
+				async : false,
+				dataType : "json",
+				success : function(data) {
+					if (data.status == 1) {
+						top.$.messager.alert("提示", "操作成功!", "info");
+						window.location.reload(); 
+					} else {
+						top.$.messager.alert("警告", data.msg, "warning");
+					}
+				},
+				error : function(XMLHttpRequest, textStatus, errorThrown) {
+					top.window.AjaxError(XMLHttpRequest, textStatus, errorThrown);
+				}
+			});
+		}
+	});
+	
+}
+
+function editIsLock(id){
+	
+	var isLock = $("#isLockEdi_"+id).val();
+	
+	$.ajax({
+		url : '../TaoBaoSkuDetailWS/editIsLock.do',
+		type : "POST",
+		data : {
+			numberCode : id,
+			isLock : isLock,
+			cruise : cruise
+		},
+		async : false,
+		dataType : "json",
+		success : function(data) {
+			if (data.status == 1) {
+				//top.$.messager.alert("提示", "操作成功!", "info");
+			} else {
+				top.$.messager.alert("警告", data.msg, "warning");
+			}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			top.window.AjaxError(XMLHttpRequest, textStatus, errorThrown);
+		}
+	});
+	
+}
+
+function addSkuStockListButton(){
+	xyzdialog({
+		dialog : 'dialogFormDiv_addSkuStockListButton',
+		title : '批量新增SKU库存',
+		href : '../jsp_taobao/addSkuStockList.html',
+		fit : false,
+		width : 600,
+		height : 450,
+		buttons : [ {
+			text : '确定',
+			handler : function() {
+				addSkuStockListSubmit();
+			}
+		}, {
+			text : '取消',
+			handler : function() {
+				$("#dialogFormDiv_addSkuStockListButton").dialog("destroy");
+			}
+		} ],
+		onLoad : function() {
+			
+		}
+	
+	});
+	
+}
+
+function addSkuStockListSubmit(){
+	if(!$("form").form('validate')){
+		return false;
+	}
+	
+	var count = getStockDate(skuInfos, date);
+	if(count > 0){
+		top.$.messager.alert("提示","该库存信息已存在!","info");
+		return false;
+	}
+	
+	var priceType = $("#priceType_Form").combobox('getValue');
+	var price = $("#price_Form").numberbox('getValue');
+	var isLock = $("#isLock_Form").val();
+	var isEdit = isLock;
+	var stock = $("#stock_Form").numberbox('getValue');
+	
+	if(price <= 1000){
+		$.messager.confirm('确认','确定价格小于等于1000吗？',function(r){    
+			if(r){
+				$.ajax({
+					url : "../TaoBaoSkuDetailWS/addSkuDatilList.do",
+					type : "POST",
+					data : {
+						baseInfo : baseInfo,
+						skuInfo : skuInfos,
+						date : date,
+						minTkview : minTkview,
+						price : xyzSetPrice(price),
+						priceType : priceType,
+						isLock : isLock,
+						isEdit : isEdit,
+						stock : stock,
+						stockNumberCode : stockNumberCode
+					},
+					async : false,
+					dataType : "json",
+					success : function(data) {
+						if(data.status==1){
+							$("#dialogFormDiv_addSkuStockListButton").dialog("destroy");
+							top.$.messager.alert("提示","操作成功!","info");
+							window.location.reload(); 
+						}else{
+							top.$.messager.alert("警告",data.msg,"warning");
+						}
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						top.window.AjaxError(XMLHttpRequest, textStatus, errorThrown);
+					}
+				});
+			}else{
+				$("#priceAddForm").numberbox('setValue', 0);
+			}
+		});
+	}else{
+		$.ajax({
+			url : "../TaoBaoSkuDetailWS/addSkuDatilList.do",
+			type : "POST",
+			data : {
+				baseInfo : baseInfo,
+				skuInfo : skuInfos,
+				date : date,
+				minTkview : minTkview,
+				price : xyzSetPrice(price),
+				priceType : priceType,
+				isLock : isLock,
+				isEdit : isEdit,
+				stock : stock
+			},
+			async : false,
+			dataType : "json",
+			success : function(data) {
+				if(data.status==1){
+					$("#dialogFormDiv_addSkuStockListButton").dialog("destroy");
+					top.$.messager.alert("提示","操作成功!","info");
+					window.location.reload(); 
+				}else{
+					top.$.messager.alert("警告",data.msg,"warning");
+				}
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				top.window.AjaxError(XMLHttpRequest, textStatus, errorThrown);
+			}
+		});
+	}
+}
