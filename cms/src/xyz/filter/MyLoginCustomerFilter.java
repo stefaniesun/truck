@@ -68,14 +68,19 @@ public class MyLoginCustomerFilter implements Filter{
 		}else{
 			Date date = new Date();
 			long temp = bizSecurityLogin.getExpireDate().getTime()-date.getTime();
-			if(temp<0){
-				throw new MyExceptionForLogin("超过时限，请重新登录！");
-			}else if(temp<Constant.sessionTimes){
-				Date expireDate = new Date();
-				expireDate.setTime(date.getTime()+Constant.sessionTimes);
-				bizSecurityLogin.setExpireDate(expireDate);
-				keySvc.updateBizSecurityLogin(bizSecurityLogin);
-			}
+			
+			Date expireDate = new Date();
+			expireDate.setTime(date.getTime()+Constant.sessionTimes);
+			bizSecurityLogin.setExpireDate(expireDate);
+			keySvc.updateBizSecurityLogin(bizSecurityLogin);
+			
+			/*
+			 * if(temp<0){ throw new MyExceptionForLogin("超过时限，请重新登录！"); }else
+			 * if(temp<Constant.sessionTimes){ Date expireDate = new Date();
+			 * expireDate.setTime(date.getTime()+Constant.sessionTimes);
+			 * bizSecurityLogin.setExpireDate(expireDate);
+			 * keySvc.updateBizSecurityLogin(bizSecurityLogin); }
+			 */
 		}
 		request.setAttribute("bizSecurityLogin", bizSecurityLogin);
 		chain.doFilter(httpServletRequest, httpServletResponse);

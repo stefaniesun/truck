@@ -23,4 +23,10 @@ public class WebWS {
         return webSvc.getIndexData();
     }
 	
+	@RequestMapping(value = "truckDetail")
+    @ResponseBody
+    public Map<String, Object> truckDetail(String numberCode){
+        return webSvc.truckDetail(numberCode);
+    }
+	
 }

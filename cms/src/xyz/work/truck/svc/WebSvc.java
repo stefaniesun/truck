@@ -9,4 +9,6 @@ public interface WebSvc {
 
 	public Map<String, Object> getIndexData();
 
+	public Map<String, Object> truckDetail(String numberCode);
+
 }

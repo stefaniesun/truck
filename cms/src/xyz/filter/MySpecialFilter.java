@@ -25,6 +25,8 @@ public class MySpecialFilter implements Filter{
 		"/LoginWS/login.xyz",
 		"/LoginWS/alterPassword.xyz",
 		"/TrackWS/queryTrackInfo.xyz",
+		"/WebWS/getIndexData.xyz",
+		"/WebWS/truckDetail.xyz",
 		
 		"/PtviewWechatWS/queryPtviewList.wx",
 		"/PtviewWechatWS/getSelectData.wx",

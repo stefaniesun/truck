@@ -38,8 +38,9 @@
 	
 	<section class="recomMod">
 	
-	 <ul>
-	 <li class=" box tz-list">
+	 <ul id="content">
+                    
+                    <!--  <li class=" box tz-list">
                           <dl class="tz-author">
                               <dt><a rel="nofollow" href="//go.cqmmgo.com/wap/user/profile/index?uid=49122571"><img src="https://avatar2.citysbs.com/m/12/561/1571714657_5baa7417.gif" alt=""></a></dt>
                               <dd><a rel="nofollow" href="//go.cqmmgo.com/wap/user/profile/index?uid=49122571">漫悠幽YOYO</a><p>2019-11-09 20:46</p></dd>
@@ -67,38 +68,7 @@
                         <div class="tz-replay">
                             <span class="yd" ><i>&nbsp;</i>14141</span>
                         </div>
-                    </li>
-                    
-                    
-                     <li class=" box tz-list">
-                          <dl class="tz-author">
-                              <dt><a rel="nofollow" href="//go.cqmmgo.com/wap/user/profile/index?uid=49122571"><img src="https://avatar2.citysbs.com/m/12/561/1571714657_5baa7417.gif" alt=""></a></dt>
-                              <dd><a rel="nofollow" href="//go.cqmmgo.com/wap/user/profile/index?uid=49122571">漫悠幽YOYO</a><p>2019-11-09 20:46</p></dd>
-                          </dl>
-                        <div class="tz-text">
-                            <a href="//go.cqmmgo.com/forum-11-thread-48581572416557287-1-1.html" rel="nofollow">
-                                   <p>去歌乐山过周末，植物园可以烧烤、做陶艺、看多肉，还不要门票</p>
-                            </a>
-                        </div>
-                            <div class="tz-img">
-                                <div class="img-list">
-                                                <a href="//go.cqmmgo.com/forum-11-thread-48581572416557287-1-1.html" rel="nofollow">
-                                                    <img style="width:113px;height:113px" src="https://att3.citysbs.com/220x220/chongqing/2019/11/08/13/226x226-130506_v2_16131573189506548_aad733c98e8e8d1b9210e5929f64097d.jpg" data-original="" class="img J_lazyImgs" style="display: block;">
-                                                </a>
-                                                <a href="//go.cqmmgo.com/forum-11-thread-48581572416557287-1-1.html" rel="nofollow">
-                                                    <img style="width:113px;height:113px" src="https://att3.citysbs.com/220x220/chongqing/2019/11/08/13/226x226-130506_v2_16131573189506548_aad733c98e8e8d1b9210e5929f64097d.jpg" data-original="" class="img J_lazyImgs" style="display: block;">
-                                                </a>
-                                                <a href="//go.cqmmgo.com/forum-11-thread-48581572416557287-1-1.html" rel="nofollow">
-                                                    <img style="width:113px;height:113px" src="https://att3.citysbs.com/220x220/chongqing/2019/11/08/13/226x226-130506_v2_16131573189506548_aad733c98e8e8d1b9210e5929f64097d.jpg" data-original="" class="img J_lazyImgs" style="display: block;">
-                                                </a>
-
-                                </div>
-
-                            </div>
-                        <div class="tz-replay">
-                            <span class="yd" ><i>&nbsp;</i>14141</span>
-                        </div>
-                    </li>
+                    </li> -->
 	 
 	 </ul>
 	
@@ -128,6 +98,52 @@
 <script>
 
 $(document).ready(function() {
+	
+	
+	$.ajax({
+		url : "/WebWS/getIndexData.xyz",
+		type : "POST",
+		async : false,
+		dataType : "json",
+		success : function(data) {
+			if (data.status == 1) {
+				console.log(data);
+			
+				var html='';
+				 for(var i=0;i<data.content.length;i++){
+					var dataObj=data.content[i];
+					html+='<li class=" box tz-list">';
+					html+='<dl class="tz-author">';
+					html+='<dt><a><img src="'+dataObj.customerImg+'" alt=""></a></dt>';
+					html+='<dd><a>'+dataObj.customerName+'</a><p>'+dataObj.passDate+'</p></dd>';
+					html+='</dl>';
+					html+='<div class="tz-text">';
+					html+='<a href="//go.cqmmgo.com/forum-11-thread-48581572416557287-1-1.html" rel="nofollow">';
+					html+='<p>'+dataObj.title+'</p>';
+					html+='</a>';
+					html+='</div>';
+					html+='<div class="tz-img">';
+					html+='<div class="img-list">';
+					var images=JSON.parse(dataObj.images)
+					for(var j=0;j<images.length;j++){
+						html+='<a href="'+images[j]+'" rel="nofollow">';
+						html+='<img style="width:113px;height:113px" src="'+images[j]+'" data-original="" class="img J_lazyImgs" style="display: block;">';
+                        html+='</a>';
+					}
+					html+='</div>';
+					html+='</div>';
+					html+='<div class="tz-replay">';
+					html+='<span class="yd" ><i>&nbsp;</i>'+dataObj.readCount+'</span>';
+					html+='</div>';
+					html+='</li>';
+				} 
+				$("#content").html(html+html+html);
+				
+			} else {
+				weui.alert(data.msg);
+			}
+		}
+	});
 	
 	
 	

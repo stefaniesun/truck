@@ -149,12 +149,12 @@
 </script>
      <div class="mlTopBox">
         <div class="mlTop">
-                <div class="mltSearch" id="mltSearch"><span>我要找车</span></div>
+                <!-- <div class="mltSearch" id="mltSearch"><span>我要找车</span></div> -->
             <a href="javascript:history.back();" class="mltBack" title="华夏二手车网" style="top:-5"></a>
             <div class="mltRight">
             	<!--<span class="transmit"></span>-->
             	<span class="attention"></span>
-                <a class="mltrNav gui_btn" id="gui_btn" style="display: block;"></a>
+               <!--  <a class="mltrNav gui_btn" id="gui_btn" style="display: block;"></a> -->
             </div>
         </div>
        
@@ -327,8 +327,8 @@
             </ul>
         </div>
 
-        <div class="info">
-            <!--<p class="iTitle border_after">车辆配置</p>-->
+       <!--  <div class="info">
+            <p class="iTitle border_after">车辆配置</p>
             <ul class="iList">
                 <li><span>排放标准</span>：<span class="dvalue">国四</span></li>
                 <li><span>排量</span>：<span class="dvalue">1.4T</span></li>
@@ -344,7 +344,7 @@
             <div class="showOption border_before" data-track="WAP详情页-查看配置" data-flag="查看配置">
                 查看详细车辆配置 &gt;&gt;
             </div>
-        </div>
+        </div> -->
         <div class="card_box" style="display:none ;">
             <div class="card_bg"></div>
             <div class="anicss card">
@@ -630,7 +630,7 @@
 
 
     <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/heart-r.png" class="fly_heart">
-    <div class="ftnav">
+    <div class="ftnav" style="padding-bottom:0px;">
         <div class="cCollect_box">
 
                 <div class="cCollect" id="cCollect" data-track="收藏wap" data-show="WAP详情配置-关注">
@@ -643,14 +643,17 @@
             <div class="ttdiv" id="cargiveprice" data-track="我要砍价wap" data-show="WAP详情配置-砍价" "="">
                 <p class="text">我要砍价</p>
             </div>
-        <div class="ringup ttdiv" data-track="拨打电话wap" id="ringup" data-show="WAP详情配置-电话" "="">
+            <div class="ttdiv" id="222" data-track="我要砍价wap" data-show="WAP详情配置-砍价" "="" style="background:#f60">
+                <p class="text">联系电话</p>
+            </div>
+       <!--  <div class="ringup ttdiv" data-track="拨打电话wap" id="ringup" data-show="WAP详情配置-电话" "="">
             <div class="linkman">
                 已有7人联系了车主
                 <i class="linkman_arrow"></i>
             </div>
             <p class="text text1">拨打电话</p>
             <p class="text text2">加密通话,保护隐私</p>
-        </div>
+        </div> -->
     </div>
 
     <div class="vFail" style="display:none;">
@@ -979,15 +982,36 @@
 </div>
 
 <script>
-    var _hmt = _hmt || [];
+    /* var _hmt = _hmt || [];
     (function () {
         var hm = document.createElement("script");
         hm.src = "//hm.baidu.com/hm.js?5b941f460f2ec63730c9f325ba44961f";
         var s = document.getElementsByTagName("script")[0];
         s.parentNode.insertBefore(hm, s);
-    })();
+    })(); */
 </script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&amp;ak=044045f8467dd77bace4b173ef75f868"></script><script type="text/javascript" src="http://api.map.baidu.com/getscript?v=2.0&amp;ak=044045f8467dd77bace4b173ef75f868&amp;services=&amp;t=20190622163250"></script>
-<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+<script>
+
+$.ajax({
+	url : "/WedWS/truckDetail.xyz",
+	type : "POST",
+	data : {
+		numberCode : numberCode
+	},
+	async : false,
+	dataType : "json",
+	success : function(data) {
+		if (data.status == 1) {
+			
+			var truck=data.content;
+			
+		} else {
+			weui.alert(data.msg);
+		}
+	}
+});
+
+</script>
 
 <div id="picShadow" style="width:100%;height:100%;position:fixed;top:0;left:0;background-color:#000;opacity:1;display:none;z-index:998;"></div><div id="bigPicbox" style="display:none;position:fixed;top:0;left:0;z-index:999;width:100%;height:150%;"><div class="swiper-container1" style="height:100%;"><div class="swiper-wrapper"></div></div></div></body></html>
