@@ -16,7 +16,8 @@
 
 <div class="page preview js_show">
     <div class="page__hd" style="padding:20px;">
-        <h1 class="page__title">我的发布</h1>
+        <h1 class="page__title">         <img onclick="javascript:window.location.replace('my.html');" style="width:20px;height:20px;" src="image/truck/back.png"></img>
+        我的发布</h1>
     </div>
     <div class="page__bd">
       <!--   <div class="weui-form-preview">
@@ -82,7 +83,6 @@ $(document).ready(function() {
 		dataType : "json",
 		success : function(data) {
 			if (data.status == 1) {
-				console.log(data);
 			
 				var html='';
 				 for(var i=0;i<data.content.length;i++){
@@ -114,6 +114,8 @@ $(document).ready(function() {
 					var status="";
 					if(dataObj.status==0){
 						status="审核中";
+					}else if(dataObj.status==1){
+						status="审核通过";
 					}
 					html+='<a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">'+status+'</a>';
 					html+='</div>';

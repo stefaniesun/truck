@@ -45,7 +45,7 @@
             </div>
             <!-- 填写手机验证码 S-->
             <div>
-                <input type="button" class="submit" id="register" value="进入雷锋货车网" data-submit-interface="https://sso.360che.com/index.php?c=login&amp;m=login">
+                <input type="button" class="submit" id="register" value="注册雷锋货车网" data-submit-interface="https://sso.360che.com/index.php?c=login&amp;m=login">
             </div>
             <div class="agree-tip">
                 <p><input type="checkbox" id="check" name="check" checked="checked"><label for="check" class="selected"></label> <label for="check"> 登录表示同意</label> <a href="xieyi.html">《雷锋货车网隐私条款协议》</a></p>
@@ -124,8 +124,8 @@
 				success : function(data) {
 					if (data.status == 1) {
 						var securityLogin=data.content;
-						localStorage.setItem("username", securityLogin.nameCn);
-						addCustomerLoginCookie(data.content);
+						localStorage.setItem("customer", JSON.stringify(data.content));
+						addCustomerLoginCookie(securityLogin);
 						weui.alert("注册成功");
 						setTimeout(function(){
 							window.location.replace("my.html");

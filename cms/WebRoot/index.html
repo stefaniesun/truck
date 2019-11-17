@@ -9,8 +9,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<link rel="stylesheet" type="text/css" href="css/style-base.css?v=2019-2-19">
 		<link rel="stylesheet" type="text/css" href="css/indexTruck.css">
+		   <link rel="stylesheet" href="css/weui.css"/>
 		<script type="text/javascript" src="js/library/jquery-1.7.2.js"></script>
+		<script type="text/javascript" src="js/jquery.cookie.js"></script>
 			<script type="text/javascript" src="js/util.js"></script>
+			  <script src="js/weui.min.js"></script>
 		<link rel="stylesheet" href="https://at.alicdn.com/t/font_496733_w0e5vjuelgsw0zfr.css">
 		<meta name = "format-detection" content = "telephone=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -78,27 +81,35 @@
 	
 
 <div class="c-footer-con br-t">
-        <a href="/" class="icon-home active">首页</a>
-    <a href="/list/" class="icon-price">
-        <!-- <span></span> -->买车</a>
-        <a href="publish.html" rel="nofollow" class="icon-truck-btn truck">
+        <a href="index.html" class="icon-home active">首页</a>
+    <a id="buy" class="icon-price">
+        买车</a>
+        <a href="publish.html" rel="nofollow" class="icon-truck-btn truck" id="sale">
         <i class="car">
             <img src="image/truck/truck.png" alt="icon" />
         </i>卖车
     </a>
-        <a href="/personal/message/" rel="nofollow" class="icon-msg login-check">
+        <a id="message" rel="nofollow" class="icon-msg login-check">
         消息</a>
     <a href="my.html" rel="nofollow" class="icon-bottom-user  login-check">我的</a>
 </div>
-
-
-
 
 
 <script>
 
 $(document).ready(function() {
 	
+	$("#buy").click(function(){
+		weui.alert("模块开发中");
+	});
+	$("#message").click(function(){
+		weui.alert("模块开发中");
+	});
+	
+	var customerObj=getCustomerLoginCookie();
+	if(xyzIsNull(customerObj)){
+		$("#sale").attr("href","register.html");
+	}
 	
 	$.ajax({
 		url : "/WebWS/getIndexData.xyz",
@@ -118,13 +129,13 @@ $(document).ready(function() {
 					html+='<dd><a>'+dataObj.customerName+'</a><p>'+dataObj.passDate+'</p></dd>';
 					html+='</dl>';
 					html+='<div class="tz-text">';
-					html+='<a href="//go.cqmmgo.com/forum-11-thread-48581572416557287-1-1.html" rel="nofollow">';
+					html+='<a href="detail.html?numberCode='+dataObj.numberCode+'" rel="nofollow">';
 					html+='<p>'+dataObj.title+'</p>';
 					html+='</a>';
 					html+='</div>';
 					html+='<div class="tz-img">';
 					html+='<div class="img-list">';
-					var images=JSON.parse(dataObj.images)
+					var images=JSON.parse(dataObj.images);
 					for(var j=0;j<images.length;j++){
 						html+='<a href="'+images[j]+'" rel="nofollow">';
 						html+='<img style="width:113px;height:113px" src="'+images[j]+'" data-original="" class="img J_lazyImgs" style="display: block;">';
@@ -137,7 +148,7 @@ $(document).ready(function() {
 					html+='</div>';
 					html+='</li>';
 				} 
-				$("#content").html(html+html+html);
+				$("#content").html(html);
 				
 			} else {
 				weui.alert(data.msg);

@@ -7,13 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.dialect.Ingres10Dialect;
 
 @Entity
 @Table(name = "truck")
-public class Truck {
+public class Truck implements Comparable<Truck>{
 
 		public static int STATUS_SUBMIT=0;//已提交
 		public static int STATUS_CHECK=1;//已审核
@@ -87,7 +88,10 @@ public class Truck {
 	    
 	    @Column(name="pass_date")
 	    private Date passDate;
-
+	    
+	    @Transient
+	    private String viewDate;
+	    
 		public String getIidd() {
 			return iidd;
 		}
@@ -262,6 +266,19 @@ public class Truck {
 
 		public void setReadCount(int readCount) {
 			this.readCount = readCount;
+		}
+
+		public String getViewDate() {
+			return viewDate;
+		}
+
+		public void setViewDate(String viewDate) {
+			this.viewDate = viewDate;
+		}
+
+		@Override
+		public int compareTo(Truck o) {
+			return o.getViewDate().compareTo(viewDate);
 		}
 	    
 }

@@ -27,17 +27,7 @@ public class MySpecialFilter implements Filter{
 		"/TrackWS/queryTrackInfo.xyz",
 		"/WebWS/getIndexData.xyz",
 		"/WebWS/truckDetail.xyz",
-		
-		"/PtviewWechatWS/queryPtviewList.wx",
-		"/PtviewWechatWS/getSelectData.wx",
-		"/PtviewWechatWS/getQueryData.wx",
-		"/PtviewWechatWS/getPtviewDetail.wx",
-		
-		"/QueryResourcesWS/updateShipmentDataOper.xyz",
-		"/QueryResourcesWS/queryShipmentData.xyz",
-		"/QueryResourcesWS/getQueryParamData.xyz",
-		
-		"/ExcelWS/transferDataOper.xyz",
+		"/WebWS/truckViewOper.xyz",
 		
 		"/CustomerWS/customerRegisterOper.xyz",
 		"/FileWS/uploadFileOper.xyz",

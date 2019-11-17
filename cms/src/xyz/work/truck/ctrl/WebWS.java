@@ -29,4 +29,10 @@ public class WebWS {
         return webSvc.truckDetail(numberCode);
     }
 	
+	@RequestMapping(value = "truckViewOper")
+    @ResponseBody
+    public Map<String, Object> truckViewOper(String truck, String customer) {
+        return webSvc.truckViewOper(truck,customer);
+    }
+	
 }

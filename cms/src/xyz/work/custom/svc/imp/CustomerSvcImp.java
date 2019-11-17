@@ -86,8 +86,11 @@ public class CustomerSvcImp implements CustomerSvc {
 	   customerObj.setPhone(phone);
 	   customerObj.setEnabled(1);
 	   customerObj.setOpenid(openid);
-	   customerObj.setImg(img);
-	   customerObj.setNameCn(nameCn);
+		/*
+		 * customerObj.setImg(img); customerObj.setNameCn(nameCn);
+		 */
+	   customerObj.setImg("https://img2.woyaogexing.com/2019/11/16/fb312fc5738e414fa19ca6e435212ef0!400x400.jpeg");
+	   customerObj.setNameCn("注册用户");
 	   
 	   commonDao.save(customerObj);
 	   
@@ -99,9 +102,9 @@ public class CustomerSvcImp implements CustomerSvc {
        securityLogin.setAddDate(currentDate);
        securityLogin.setExpireDate(expireDate);
        securityLogin.setNumberCode(customerObj.getNumberCode());
-      // securityLogin.setUserCode(orderList.get(0).getOrderNum()); 
        securityLogin.setApikey(apikey);
-       securityLogin.setNameCn(nameCn);
+       //securityLogin.setNameCn(nameCn);
+       securityLogin.setNameCn(phone);
        commonDao.save(securityLogin);
 		
 	   return ReturnUtil.returnMap(1, securityLogin);

@@ -28,6 +28,18 @@ public class TruckWS {
         return truckSvc.queryMyTruckList();
     }
 	
+	@RequestMapping(value = "queryMyViewList")
+    @ResponseBody
+    public Map<String, Object> queryMyViewList(){
+        return truckSvc.queryMyViewList();
+    }
+	
+	@RequestMapping(value = "queryMyCollectionList")
+    @ResponseBody
+    public Map<String, Object> queryMyCollectionList(){
+        return truckSvc.queryMyCollectionList();
+    }
+	
 	@RequestMapping(value = "queryTruckList")
     @ResponseBody
     public Map<String, Object> queryTruckList(int page , int rows){
@@ -42,6 +54,18 @@ public class TruckWS {
         return truckSvc.checkOper(numberCode);
     }
 	
+	
+	@RequestMapping(value = "collectionOper")
+    @ResponseBody
+    public Map<String, Object> collectionOper(String customer,String truck,String type){
+        return truckSvc.collectionOper(customer,truck,type);
+    }
+	
+	@RequestMapping(value = "getCollectionData")
+    @ResponseBody
+    public Map<String, Object> getCollectionData(String customer,String truck){
+        return truckSvc.getCollectionData(customer,truck);
+    }
 	
 	
 }

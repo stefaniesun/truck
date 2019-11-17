@@ -298,7 +298,7 @@ $("#publish").click(function(){
 	var mile=$("#mile").val();
 	var year=$("#year").val();
 	var phone=$("#phone").val();
-	var type=$("#showPicker").html();
+	var type=$("#showPicker").html()=="个人"?0:1;
 	var address=$("#address").val();
 	var remark=$("#remark").val();
 	
@@ -308,6 +308,30 @@ $("#publish").click(function(){
 	}
 	if(xyzIsNull(price)){
 		weui.alert("车辆价格不能为空");
+		return;
+	}
+	if(xyzIsNull(insuranceDate)){
+		weui.alert("交强险时间不能为空");
+		return;
+	}
+	if(xyzIsNull(checkDate)){
+		weui.alert("车检时间不能为空");
+		return;
+	}
+	if(xyzIsNull(cardDate)){
+		weui.alert("上牌时间不能为空");
+		return;
+	}
+	if(xyzIsNull(mile)){
+		weui.alert("里程不能为空");
+		return;
+	}
+	if(xyzIsNull(year)){
+		weui.alert("车龄不能为空");
+		return;
+	}
+	if(xyzIsNull(phone)){
+		weui.alert("联系电话不能为空");
 		return;
 	}
 	if(images.length==0){
@@ -342,7 +366,7 @@ $("#publish").click(function(){
 		dataType : "json",
 		success : function(data) {
 			if (data.status == 1) {
-				weui.alert("提交成功");
+				weui.alert("提交成功,等待后台审核中");
 				setTimeout(function(){
 					window.location.replace("my.html");
 				},"2000");

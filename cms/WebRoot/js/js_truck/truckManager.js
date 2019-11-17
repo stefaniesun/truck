@@ -35,9 +35,34 @@ function initTable(){
 				return xyzGetDiv(value,0,150);
         	  }
 			},
-			{field:'price',title:'估价(万)',width:150,
+			{field:'price',title:'估价(万)',width:80,
 	        	  formatter:function(value ,row ,index){
 					return xyzGetDiv(value,0,150);
+	        	  }
+			},
+			{field:'mile',title:'里程(万公里)',width:80,
+	        	  formatter:function(value ,row ,index){
+					return xyzGetDiv(value,0,150);
+	        	  }
+			},
+			{field:'year',title:'车龄',width:80,
+	        	  formatter:function(value ,row ,index){
+					return xyzGetDiv(value,0,150);
+	        	  }
+			},
+			{field:'cardDate',title:'上牌时间',width:100,
+	        	  formatter:function(value ,row ,index){
+					return xyzGetDiv(value.substring(0,10),0,150);
+	        	  }
+			},
+			{field:'checkDate',title:'年检时间',width:100,
+	        	  formatter:function(value ,row ,index){
+					return xyzGetDiv(value.substring(0,10),0,150);
+	        	  }
+			},
+			{field:'insuranceDate',title:'交强险时间',width:100,
+	        	  formatter:function(value ,row ,index){
+					return xyzGetDiv(value.substring(0,10),0,150);
 	        	  }
 			},
 			{field:'phone',title:'联系电话',width:150,
@@ -45,7 +70,15 @@ function initTable(){
 					return xyzGetDiv(value,0,150);
 	        	  }
 			},
-			{field:'status',title:'状态',width:150,
+			{field:'images',title:'图片',align:'center',width:80,
+				formatter:function(value, row, index){
+					 var html = "";
+					 var images=JSON.parse(value);
+					 html = xyzGetA("图片["+images.length+"]","checkImages",[row.numberCode],"点我查看图片!","blue");
+	        		  return html;
+				}
+			},
+			{field:'status',title:'状态',width:50,
 	        	  formatter:function(value ,row ,index){
 	        		  if(value==0){
 	        			  return "未审核";
@@ -79,12 +112,12 @@ function initTable(){
 					}
 				}
 			},
-		    {field:'addDate',title:'申请时间',width:150,
+		    {field:'addDate',title:'申请时间',width:120,
 				formatter:function(value ,row ,index){
 					return xyzGetDivDate(value);
 				}
 			},
-			{field:'passDate',title:'审核时间',width:150,
+			{field:'passDate',title:'审核时间',width:120,
 				formatter:function(value ,row ,index){
 					return xyzGetDivDate(value);
 				}
@@ -185,6 +218,48 @@ function check(numberCode){
 			top.window.AjaxError(XMLHttpRequest, textStatus, errorThrown);
 		}
 	});
+}
+
+function checkImages(numberCode){
+	
+	var customers = $("#truckManagerTable").datagrid("getRows");
+	var row;
+	for(var i=0;i<customers.length;i++){
+		if(numberCode==customers[i].numberCode){
+			row=customers[i];
+		}
+	}
+	var images=JSON.parse(row.images);
+	
+	var htmlContent = "<div id='xyzUploadifyGridDiv'>";
+	
+	for(var j=0;j<images.length;j++){
+		htmlContent+="<img src='"+images[j]+"' style='with:360px;height:300px;float:left;margin-top:10px;margin-left:10px;overflow: hidden;' >";
+	}
+	
+	htmlContent+="</div><br/>";
+	htmlContent+="<div id='xyzUploadifyButton' style='margin-left:100px;width:200px;height:20px;'>";
+	htmlContent+="</div>";
+	
+	
+	xyzdialog({
+		dialog : 'dialogFormDiv_checkImages',
+		title : '查看图片',
+		content : htmlContent,
+		fit : false,  
+		height : 900,
+		width: 1200,
+		buttons:[{
+			text:'关闭',
+			handler:function(){
+				$("#dialogFormDiv_checkImages").dialog("destroy");
+			}
+		}],
+		onOpen : function(){
+			
+		}
+	});
+	
 }
 
 function editCustomerSubmit(numberCode){

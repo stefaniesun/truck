@@ -15,4 +15,13 @@ public interface TruckSvc {
 
 	public Map<String, Object> checkOper(String numberCode);
 
+	public Map<String, Object> collectionOper(String customer, String truck,String type);
+
+	public Map<String, Object> queryMyViewList();
+
+	public Map<String, Object> queryMyCollectionList();
+
+	public Map<String, Object> getCollectionData(String customer, String truck);
+
+
 }

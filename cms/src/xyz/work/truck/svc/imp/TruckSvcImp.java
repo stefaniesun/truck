@@ -1,11 +1,13 @@
 package xyz.work.truck.svc.imp;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Set;
 
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import xyz.util.DateUtil;
 import xyz.util.StringTool;
 import xyz.util.UUIDUtil;
 import xyz.work.custom.model.Customer;
+import xyz.work.truck.model.Collect;
 import xyz.work.truck.model.Truck;
 import xyz.work.truck.svc.TruckSvc;
 
@@ -159,6 +162,96 @@ public class TruckSvcImp implements TruckSvc {
 		commonDao.update(truck);
 		
 		  return ReturnUtil.returnMap(1, null);
+	}
+
+	@Override
+	public Map<String, Object> collectionOper(String customer, String truck,String type) {
+		
+		if(!StringTool.isNotNull(customer)) {
+			 return ReturnUtil.returnMap(0, "登录信息异常");
+		}
+		if(!StringTool.isNotNull(truck)) {
+			 return ReturnUtil.returnMap(0, "参数异常");
+		}
+		
+		if(type.equals("add")) {
+			Collect collect=new Collect();
+			
+			collect.setNumberCode(UUIDUtil.getUUIDStringFor32());
+			collect.setAddDate(new Date());
+			collect.setCustomer(customer);
+			collect.setTruck(truck);
+			
+			commonDao.save(collect);
+		}else {
+			String sql="delete from collect where truck='"+truck+"' and customer='"+customer+"'";
+			commonDao.getSqlQuery(sql).executeUpdate();
+		}
+		
+		 return ReturnUtil.returnMap(1, null);
+	}
+
+	@Override
+	public Map<String, Object> queryMyViewList() {
+		
+		String customer=MyRequestUtil.getBizSecurityLogin().getNumberCode();
+		
+		if(!StringTool.isNotNull(customer)) {
+			 return ReturnUtil.returnMap(0, "登录信息异常");
+		}
+		
+		String sql="select truck,date_info from view where customer='"+customer+"' group by truck";
+		List<Object[]> resultList=commonDao.getSqlQuery(sql).list();
+		
+		List<String> truckStrList=new ArrayList<String>();
+		for(Object[] array:resultList) {
+			truckStrList.add(array[0].toString());
+		}
+		
+	    List<Truck> truckList=commonDao.queryByHql("from Truck where numberCode in("+StringTool.listToSqlString(truckStrList)+")");
+		for(Truck truck:truckList) {
+			for(Object[] array:resultList) {
+				if(array[0].toString().equals(truck.getNumberCode())) {
+					truck.setViewDate(array[1].toString());
+					break;
+				}
+			}
+		}
+		Collections.sort(truckList);
+	    
+	    return ReturnUtil.returnMap(1, truckList);
+		
+	}
+
+	@Override
+	public Map<String, Object> queryMyCollectionList() {
+		
+		String customer=MyRequestUtil.getBizSecurityLogin().getNumberCode();
+		
+		if(!StringTool.isNotNull(customer)) {
+			 return ReturnUtil.returnMap(0, "登录信息异常");
+		}
+		
+		String sql="select truck from collect where customer='"+customer+"' order by add_date";
+		List<String> resultList=commonDao.getSqlQuery(sql).list();
+		
+		List<String> truckStrList=new ArrayList<String>();
+		for(String obj:resultList) {
+			truckStrList.add(obj);
+		}
+		
+	    List<Truck> truckList=commonDao.queryByHql("from Truck where numberCode in("+StringTool.listToSqlString(truckStrList)+")");
+	    
+	    return ReturnUtil.returnMap(1, truckList);
+	}
+
+	@Override
+	public Map<String, Object> getCollectionData(String customer, String truck) {
+		
+		@SuppressWarnings("unchecked")
+		List<Collect> collects=commonDao.queryByHql("from Collect where customer='"+customer+"' and truck='"+truck+"'");
+		
+		return ReturnUtil.returnMap(1, collects);
 	}
 
 }

@@ -11,4 +11,6 @@ public interface WebSvc {
 
 	public Map<String, Object> truckDetail(String numberCode);
 
+	public Map<String, Object> truckViewOper(String truck, String customer);
+
 }

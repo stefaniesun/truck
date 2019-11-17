@@ -91,6 +91,8 @@
 		<mapping class="xyz.work.custom.model.UserTag"></mapping>
 		
 		<mapping class="xyz.work.truck.model.Truck"></mapping>
+		<mapping class="xyz.work.truck.model.View"></mapping>
+		<mapping class="xyz.work.truck.model.Collect"></mapping>
 		
 		<!-- 微信公众号平台 -->
 		<mapping class="xyz.work.weixin.model.WechatSubscription"></mapping>

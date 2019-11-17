@@ -1,0 +1,119 @@
+
+	<!DOCTYPE html>
+	<html lang="en" style="font-size: 53.333333333333336px !important">
+	<head>
+		<meta charset="UTF-8">
+		<title>雷锋货车网</title>
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<link rel="stylesheet" type="text/css" href="css/style-base.css?v=2019-2-19">
+		<link rel="stylesheet" type="text/css" href="css/indexTruck.css">
+		   <link rel="stylesheet" href="css/weui.css"/>
+		<script type="text/javascript" src="js/library/jquery-1.7.2.js"></script>
+		<script type="text/javascript" src="js/jquery.cookie.js"></script>
+			<script type="text/javascript" src="js/util.js"></script>
+			  <script src="js/weui.min.js"></script>
+		<link rel="stylesheet" href="https://at.alicdn.com/t/font_496733_w0e5vjuelgsw0zfr.css">
+		<meta name = "format-detection" content = "telephone=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta content="yes" name="apple-touch-fullscreen">
+		<!-- UC全屏 -->
+		<meta name="full-screen" content="yes">
+		<!-- QQ全屏 -->
+		<meta name="x5-fullscreen" content="true">
+		<meta name="applicable-device" content="mobile">
+		<style>
+		.c-index-search-con .city .text{
+			line-height: 1.2 !important;
+		}
+		</style>
+	<body style="padding-bottom: 57px;">
+	
+	
+	<header class="home_nav flex row item">
+    <div class="logo">
+            <h1>
+                <img onclick="javascript:window.location.replace('my.html');" style="width:20px;height:20px;" src="image/truck/back.png"></img>
+                <p class="city" ttname="wap_nav_city" href="javascript:void(0);">我的收藏</p>
+            </h1>
+    </div>
+    </header>
+	
+	<section class="recomMod">
+	
+	 <ul id="content">
+                    
+	 
+	 </ul>
+	
+	</section>
+	
+	
+
+<script>
+
+$(document).ready(function() {
+	
+	var customerObj=getCustomerLoginCookie();
+	
+	$.ajax({
+		url : "/TruckWS/queryMyCollectionList.cus",
+		type : "POST",
+		async : false,
+		dataType : "json",
+		success : function(data) {
+			if (data.status == 1) {
+				console.log(data);
+			
+				if(data.content.length==0){
+					weui.alert("暂无收藏数据");
+				}
+				
+				var html='';
+				 for(var i=0;i<data.content.length;i++){
+					var dataObj=data.content[i];
+					html+='<li class=" box tz-list">';
+					html+='<dl class="tz-author">';
+					html+='<dt><a><img src="'+dataObj.customerImg+'" alt=""></a></dt>';
+					html+='<dd><a>'+dataObj.customerName+'</a><p>'+dataObj.passDate+'</p></dd>';
+					html+='</dl>';
+					html+='<div class="tz-text">';
+					html+='<a href="detail.html?numberCode='+dataObj.numberCode+'" rel="nofollow">';
+					html+='<p>'+dataObj.title+'</p>';
+					html+='</a>';
+					html+='</div>';
+					html+='<div class="tz-img">';
+					html+='<div class="img-list">';
+					var images=JSON.parse(dataObj.images);
+					for(var j=0;j<images.length;j++){
+						html+='<a href="'+images[j]+'" rel="nofollow">';
+						html+='<img style="width:113px;height:113px" src="'+images[j]+'" data-original="" class="img J_lazyImgs" style="display: block;">';
+                        html+='</a>';
+					}
+					html+='</div>';
+					html+='</div>';
+					html+='<div class="tz-replay">';
+					html+='</div>';
+					html+='</li>';
+				} 
+				$("#content").html(html);
+				
+			} else {
+				weui.alert(data.msg);
+			}
+		}
+	});
+	
+	
+	
+	
+});
+
+</script>
+
+
+	</body>
+</html>
+   
+
