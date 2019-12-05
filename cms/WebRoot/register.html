@@ -48,7 +48,7 @@
                 <input type="button" class="submit" id="register" value="注册雷锋货车网" data-submit-interface="https://sso.360che.com/index.php?c=login&amp;m=login">
             </div>
             <div class="agree-tip">
-                <p><input type="checkbox" id="check" name="check" checked="checked"><label for="check" class="selected"></label> <label for="check"> 登录表示同意</label> <a href="xieyi.html">《雷锋货车网隐私条款协议》</a></p>
+                <p><input type="checkbox" id="check" name="check" ><label for="check" class="selected" ></label> <label for="check"> 登录表示同意</label> <a href="xieyi.html">《雷锋货车网隐私条款协议》</a></p>
                 <p><label for="check"> 未注册手机号验证后自动创建账户</label></p>
             </div>
         </div>
@@ -107,10 +107,18 @@
 	
 	$(document).ready(function() {
 
+		
+		var customerObj=getLoginCustomer();
+		
+		
 		 $("#register").click(function(){
 		    
 		    if($("#phone").val().trim()==""){
 		    	weui.alert("请输入手机号");
+		    	return;
+		    }
+		    if($("#check").attr("checked")!="checked"){
+		    	weui.alert("请勾选同意注册协议");
 		    	return;
 		    }
 		    var phone=$("#phone").val();
@@ -119,13 +127,14 @@
 				url : "/CustomerWS/customerRegisterOper.xyz",
 				type : "POST",
 				data : {
+					customer : customerObj.numberCode,
 					phone : phone
 				},
 				success : function(data) {
 					if (data.status == 1) {
 						var securityLogin=data.content;
 						localStorage.setItem("customer", JSON.stringify(data.content));
-						addCustomerLoginCookie(securityLogin);
+						
 						weui.alert("注册成功");
 						setTimeout(function(){
 							window.location.replace("my.html");

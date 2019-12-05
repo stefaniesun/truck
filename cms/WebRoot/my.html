@@ -37,7 +37,7 @@
 	<body style="padding-bottom: 57px;">
 	<div class="c-user-background c-user-center-head">
 	<div class="c-user-photo">
-		<img src="https://i.kcimg.cn/data/avatar/noavatar_big.gif-80x80.jpg" alt="头像">
+		<img id="headImg" src="https://i.kcimg.cn/data/avatar/noavatar_big.gif-80x80.jpg" alt="头像">
 	</div>
 	<div class="info">
 <div class="c-flex-center" style="align-items: flex-start; flex-direction: column;">
@@ -76,12 +76,12 @@
 		<div class="orange">退出登录</div>
 	</div>
 </div>
-<div class="c-footer-con br-t">
+<div class="c-footer-con br-t" style="padding:0px;">
         <a href="index.html" class="icon-home">首页</a>
     <a id="buy" class="icon-price">
         买车</a>
         <a href="publish.html" rel="nofollow" class="icon-truck-btn truck" id="sale">
-        <i class="car">
+        <i class="car" style="top:32%;">
             <img src="image/truck/truck.png" alt="icon" />
         </i>卖车
     </a>
@@ -103,40 +103,35 @@ $(document).ready(function() {
 	});
 	
 	var customerObj=getLoginCustomer();
+	console.log(customerObj);
+	
+	$("#username").html(customerObj.nameCn);
+	$("#headImg").attr("src",customerObj.img);
+	
+	
 	var customer="";
 	if(!xyzIsNull(customerObj)){
 		customer=customerObj.numberCode;
 	}
 	
-	if(xyzIsNull(customerObj)){
+	if(customerObj.flagRegister==0){
 		$("#sale").attr("href","register.html");
 	}
 	
-	if(!xyzIsNull(customerObj)){
-		$("#username").html(customerObj.nameCn);
+	if(customerObj.flagRegister==1){
 		$(".edit-info").hide();
-	}else{
-		
 	}
 
 	$("#viewHistory").click(function(){
-		if(xyzIsNull(customerObj)){
-			window.location.replace("register.html");
-		}else{
-			window.location.replace("myView.html");
-		}
+		window.location.replace("myView.html");
 	});
 	
 	$("#collection").click(function(){
-		if(xyzIsNull(customerObj)){
-			window.location.replace("register.html");
-		}else{
-			window.location.replace("myCollection.html");
-		}
+		window.location.replace("myCollection.html");
 	});
 	
 	$("#publish").click(function(){
-		if(xyzIsNull(customerObj)){
+		if(customerObj.flagRegister==0){
 			window.location.replace("register.html");
 		}else{
 			window.location.replace("myPublish.html");

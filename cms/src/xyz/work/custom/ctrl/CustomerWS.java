@@ -18,8 +18,8 @@ public class CustomerWS {
     
     @RequestMapping(value="customerRegisterOper")
     @ResponseBody
-    public Map<String, Object> customerRegisterOper(String phone,String nameCn,String img,String openid) {
-        return customerSvc.customerRegisterOper(phone,nameCn,img,openid);
+    public Map<String, Object> customerRegisterOper(String phone,String customer,String img,String openid) {
+        return customerSvc.customerRegisterOper(phone,customer,img,openid);
     }
     
     @RequestMapping(value="queryCustomerList")

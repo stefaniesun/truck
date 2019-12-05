@@ -3,7 +3,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="wap-font-scale" content="no">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0,   viewport-fit=cover">
-    <title>二手车</title>
+    <title>雷锋货车网</title>
     <link rel="stylesheet" type="text/css" href="css/sprite.css">
     <link rel="stylesheet" href="css/swiper.min.css?v=ae0552c54e">
     <link href="css/iconfont.css?v=d875809ed5" rel="stylesheet" type="text/css">
@@ -185,7 +185,7 @@
             <p class="updateTime" id="addDate"></p>
 
             <ul class="iList">
-                <li><span>有误户</span>：<span class="dvalue" id="isGuohu"></span></li>
+                <li><span>有无户</span>：<span class="dvalue" id="isGuohu"></span></li>
                 <li><span>上牌时间</span>：<span class="dvalue" id="cardDate"></span></li>
                 <li><span>里程</span>：<span class="dvalue" id="mile"></span></li>
                   <li><span>年检时间</span>：<span class="dvalue" id="checkDate"></span></li>
@@ -509,7 +509,9 @@ $(document).ready(function() {
 				var images=JSON.parse(truck.images);
 				var html="";
 				for(var j=0;j<images.length;j++){
-					html+='<li><img  src="'+images[j]+'" style="width:100%;height:100%;"></li>';
+	        		url='?imageMogr2/blur/1x0/quality/75|watermark/2/text/6Zu36ZSL6LSn6L2m572R/font/5b6u6L2v6ZuF6buR/fontsize/2000/fill/I0ZBRkFGQQ==/dissolve/30/gravity/Center/dx/10/dy/10|imageslim';
+
+					html+='<li><img  src="'+images[j]+url+'" style="width:100%;height:100%;"></li>';
 				}
 				$(".bxslider").html(html);
 				
@@ -627,4 +629,3 @@ $(document).ready(function() {
 </script>
 
 
-<!-- <div id="picShadow" style="width:100%;height:100%;position:fixed;top:0;left:0;background-color:#000;opacity:1;display:none;z-index:998;"></div><div id="bigPicbox" style="display:none;position:fixed;top:0;left:0;z-index:999;width:100%;height:150%;"><div class="swiper-container1" style="height:100%;"><div class="swiper-wrapper"></div></div></div></body></html> -->

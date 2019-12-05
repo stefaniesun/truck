@@ -35,4 +35,16 @@ public class WebWS {
         return webSvc.truckViewOper(truck,customer);
     }
 	
+	@RequestMapping(value = "wechatOper")
+    @ResponseBody
+    public Map<String, Object> wechatOper(String code) {
+        return webSvc.wechatOper(code);
+    }
+	
+	@RequestMapping(value = "getToken")
+    @ResponseBody
+    public Map<String, Object> getToken() {
+        return webSvc.getToken();
+    }
+	
 }

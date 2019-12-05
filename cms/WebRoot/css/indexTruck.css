@@ -60,7 +60,7 @@ a.cq_openApp{
 .logo{position:relative;font-size: 0;line-height: 0;vertical-align: middle}
     .logo a{display:inline-block;margin-right:0.07rem;padding:0.2rem 0.57rem;background:url(images/logo.png) no-repeat;background-size: contain;font-size: 0;line-height: 0;vertical-align: middle;}
     .logo p{position:relative;display: inline-block;font-size: 0.28rem;color:#303133;line-height: 0.9rem;vertical-align: middle;}
-    .logo p:after{content:"";position: absolute;top:0.4rem;right:-0.2rem;width:0.16rem;height:0.08rem;background:url(images/up.png) no-repeat;background-size: 0.16rem 0.08rem;}
+    .logo p:after{content:"";position: absolute;top:0.4rem;right:-0.2rem;width:0.16rem;height:0.08rem;background-size: 0.16rem 0.08rem;}
     .logo p.active:after{background-image: url("images/down.png");}
     .home_nav .menu{margin-right:-0.24rem;}
     .home_nav .menu_img{margin-top:0.26rem;width: 0.36rem;height: 0.36rem;display: block;background:url(images/shape.png) no-repeat;background-size: 0.36rem 0.36rem;}

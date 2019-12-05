@@ -1,80 +1,55 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
-<title></title>
-<link rel="stylesheet" href="css/weui.css"/>
-<link rel="stylesheet" href="css/example.css"/>
-<script src="js/zepto.min.js"></script>
-<script type="text/javascript" src="js/jweixin-1.0.0.js"></script>
-<script src="js/weui.min.js"></script>
-<script src="js/example.js"></script>
-</head>
-<body>
 
-
-<div class="page preview js_show">
-    <div class="page__hd" style="padding:20px;">
-        <h1 class="page__title">         <img onclick="javascript:window.location.replace('my.html');" style="width:20px;height:20px;" src="image/truck/back.png"></img>
-        我的发布</h1>
+	<!DOCTYPE html>
+	<html lang="en" style="font-size: 53.333333333333336px !important">
+	<head>
+		<meta charset="UTF-8">
+		<title>我的发布</title>
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<link rel="stylesheet" type="text/css" href="css/style-base.css?v=2019-2-19">
+		<link rel="stylesheet" type="text/css" href="css/indexTruck.css">
+		   <link rel="stylesheet" href="css/weui.css"/>
+		<script type="text/javascript" src="js/library/jquery-1.7.2.js"></script>
+		<script type="text/javascript" src="js/jquery.cookie.js"></script>
+			<script type="text/javascript" src="js/util.js"></script>
+			  <script src="js/weui.min.js"></script>
+		<link rel="stylesheet" href="https://at.alicdn.com/t/font_496733_w0e5vjuelgsw0zfr.css">
+		<meta name = "format-detection" content = "telephone=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta content="yes" name="apple-touch-fullscreen">
+		<!-- UC全屏 -->
+		<meta name="full-screen" content="yes">
+		<!-- QQ全屏 -->
+		<meta name="x5-fullscreen" content="true">
+		<meta name="applicable-device" content="mobile">
+		<style>
+		.c-index-search-con .city .text{
+			line-height: 1.2 !important;
+		}
+		</style>
+	<body style="padding-bottom: 57px;">
+	
+	
+	<header class="home_nav flex row item">
+    <div class="logo">
+            <h1>
+                <img onclick="javascript:window.location.replace('my.html');" style="width:20px;height:20px;" src="image/truck/back.png"></img>
+                <p class="city" ttname="wap_nav_city" href="javascript:void(0);">我的发布</p>
+            </h1>
     </div>
-    <div class="page__bd">
-      <!--   <div class="weui-form-preview">
-            <div class="weui-form-preview__hd">
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">估价</label>
-                    <em class="weui-form-preview__value">15W</em>
-                </div>
-            </div>
-            <div class="weui-form-preview__bd">
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">车辆名称</label>
-                    <span class="weui-form-preview__value">很长很长的名字很长很长的名字很长很长的名字很长很长的名字很长很长的名字</span>
-                </div>
-                <div class="weui-form-preview__item" >
-                    
-                    <img src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=559838245,949907253&fm=179&app=42&f=JPEG?w=75&h=75"></img>
-                    <img  src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=559838245,949907253&fm=179&app=42&f=JPEG?w=75&h=75"></img>
-                    
-                </div>
-            </div>
-            <div class="weui-form-preview__ft">
-                <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">审核中</a>
-            </div>
-        </div>
-        <br> -->
-      <!--   <div class="weui-form-preview">
-            <div class="weui-form-preview__hd">
-                <label class="weui-form-preview__label">付款金额</label>
-                <em class="weui-form-preview__value">¥2400.00</em>
-            </div>
-            <div class="weui-form-preview__bd">
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">商品</label>
-                    <span class="weui-form-preview__value">电动打蛋机</span>
-                </div>
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">标题标题</label>
-                    <span class="weui-form-preview__value">名字名字名字</span>
-                </div>
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">标题标题</label>
-                    <span class="weui-form-preview__value">很长很长的名字很长很长的名字很长很长的名字很长很长的名字很长很长的名字</span>
-                </div>
-            </div>
-            <div class="weui-form-preview__ft">
-                <a class="weui-form-preview__btn weui-form-preview__btn_default" href="javascript:">辅助操作</a>
-                <button type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">操作</button>
-            </div>
-        </div> -->
-    </div>
-</div>
-
+    </header>
+	
+	
+	<div id="content">
+	</div>
+	
 
 <script>
 
 $(document).ready(function() {
+	
+	var customerObj=getCustomerLoginCookie();
 	
 	$.ajax({
 		url : "/TruckWS/queryMyTruckList.cus",
@@ -83,46 +58,70 @@ $(document).ready(function() {
 		dataType : "json",
 		success : function(data) {
 			if (data.status == 1) {
+				console.log(data);
 			
+				if(data.content.length==0){
+					weui.alert("暂无发布数据");
+				}
+				
 				var html='';
 				 for(var i=0;i<data.content.length;i++){
 					var dataObj=data.content[i];
-					html+='<div class="weui-form-preview">';
-					html+='<div class="weui-form-preview__hd">';
-					html+='<div class="weui-form-preview__item">';
-					html+='<label class="weui-form-preview__label">估价</label>';
-					html+='<em class="weui-form-preview__value">'+dataObj.price+'W</em>';
-					html+='</div>';
-					html+='</div>';
-					html+='<div class="weui-form-preview__bd">';
-					html+='<div class="weui-form-preview__item">';
-					html+='<label class="weui-form-preview__label">车辆名称</label>';
-					html+='<span class="weui-form-preview__value">'+dataObj.title+'</span>';
-					html+='</div>';
-					html+='<div class="weui-form-preview__item">';
-					html+='<label class="weui-form-preview__label">提交时间</label>';
-					html+='<span class="weui-form-preview__value">'+dataObj.addDate.substring(0,19)+'</span>';
-					html+='</div>';
-					html+=' <div class="weui-form-preview__item">';
 					var images=JSON.parse(data.content[i].images)
-					for(var j=0;j<images.length;j++){
-						html+=' <img width=75 height=75 src="'+images[j]+'">';
-					}
+					
+					html+='<div class="weui-cells">';
+					html+='<div class="weui-cell">';
+					html+='<div class="weui-cell__hd" style="position: relative;margin-right: 10px;">';
+					html+='<img src="'+images[0]+'" style="width: 50px;display: block">';
+					html+='<span class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">'+images.length+'</span>';
+					html+='</div>';
+					html+=' <div class="weui-cell__bd">';
+					html+='<p>'+dataObj.title+'</p>';
+					//html+='<p style="font-size: 13px;color: #888888;">摘要信息</p>';
 					html+='</div>';
 					html+='</div>';
-					html+='<div class="weui-form-preview__ft">';
-					var status="";
+					
+					html+=' <div class="weui-cell weui-cell_access">';
+					html+='<div class="weui-cell__bd">';
+					html+='<span style="vertical-align: middle">估价(万)</span>';
+					//html+='<span class="weui-badge" style="margin-left: 5px;">8</span>';
+					html+='</div>';
+					html+='<div>'+dataObj.price+'</div>';
+					html+='</div>';
+					
+					html+=' <div class="weui-cell weui-cell_access">';
+					html+='<div class="weui-cell__bd">';
+					html+='<span style="vertical-align: middle">发布时间</span>';
+					//html+='<span class="weui-badge" style="margin-left: 5px;">8</span>';
+					html+='</div>';
+					html+='<div>'+dataObj.addDate.substring(0,19)+'</div>';
+					html+='</div>';
+					
+					html+=' <div class="weui-cell weui-cell_access">';
+					html+='<div class="weui-cell__bd">';
+					html+='<span style="vertical-align: middle">状态</span>';
+					html+='</div>';
+					var status='';
 					if(dataObj.status==0){
-						status="审核中";
+						status="<span>审核中</span>";
 					}else if(dataObj.status==1){
-						status="审核通过";
+						status="<span style='color:green;'>审核通过</span>";
 					}
-					html+='<a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">'+status+'</a>';
+					html+='<div>'+status+'</div>';
 					html+='</div>';
+					
+					
+					html+=' <div class="weui-cell weui-cell_access">';
+					html+='<div class="weui-cell__bd">';
+					html+='<span style="vertical-align: middle">操作</span>';
 					html+='</div>';
-					html+='<br>';
-				} 
-				$(".page__bd").html(html);
+					html+='<div>'+dataObj.addDate.substring(0,19)+'</div>';
+					html+='</div>';
+					
+					html+='</div>';
+				 }
+				 
+				$("#content").html(html);
 				
 			} else {
 				weui.alert(data.msg);
@@ -130,9 +129,15 @@ $(document).ready(function() {
 		}
 	});
 	
+	
+	
+	
 });
 
 </script>
 
-</body>
+
+	</body>
 </html>
+   
+

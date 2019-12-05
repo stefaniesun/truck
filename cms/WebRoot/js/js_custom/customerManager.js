@@ -32,6 +32,35 @@ function initTable(){
 		columns : [ [
 			{field:'checkboxTemp',checkbox:true},
 			{field:'numberCode',title:'客户编号',hidden:true},
+			{field:'img',title:'',width:30,
+				 formatter:function(value ,row ,index){
+					 return "<img width='20px' height='20px' src='"+value+"'></img>";
+		        }
+			},
+			{field:'nameCn',title:'昵称',width:150,
+	        	  formatter:function(value ,row ,index){
+					return xyzGetDiv(value,0,150);
+	        	  }
+			},
+			{field:'sex',title:'性别',width:50,
+	        	  formatter:function(value ,row ,index){
+					if(value=="1"){
+						return "男";
+					}else if(value=="2"){
+						return "女";
+					}
+	        	  }
+			},
+			{field:'province',title:'省份',width:50,
+				 formatter:function(value ,row ,index){
+						return xyzGetDiv(value,0,150);
+		        	  }
+			},
+			{field:'city',title:'城市',width:50,
+				 formatter:function(value ,row ,index){
+						return xyzGetDiv(value,0,150);
+		        	  }
+			},
 			{field:'phone',title:'电话',width:150,
         	  formatter:function(value ,row ,index){
 				return xyzGetDiv(value,0,150);
@@ -66,7 +95,28 @@ function initTable(){
 					}
 				}
 			},
-		    {field:'addDate',title:'注册时间',width:150,
+			{field:'flagRegister',title:'注册',align:'center',
+				formatter: function(value,row,index){
+					if (value==1){
+						return '<span style="font-size:18px;font-weight:bold;">√';
+					} else {
+						return '<span style="font-size:18px;font-weight:bold;">×</span>';
+					}
+				},
+				styler : function(value,row,index){
+					if(value == 1){
+						return "background-color:green";
+					}else {
+						return "background-color:red";
+					}
+				}
+			},
+		  {field:'addDate',title:'添加时间',width:150,
+				formatter:function(value ,row ,index){
+					return xyzGetDivDate(value);
+				}
+			},
+		    {field:'registerDate',title:'注册时间',width:150,
 				formatter:function(value ,row ,index){
 					return xyzGetDivDate(value);
 				}

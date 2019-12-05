@@ -69,44 +69,44 @@ public class CustomerSvcImp implements CustomerSvc {
     }
 
 	@Override
-	public Map<String, Object> customerRegisterOper(String phone,String nameCn,String img,String openid) {
+	public Map<String, Object> customerRegisterOper(String phone,String customer,String img,String openid) {
 		
 	   if(StringTool.isEmpty(phone)){
             return ReturnUtil.returnMap(0, "手机号为空");
         }
 	   
-	   Customer customer=(Customer) commonDao.getObjectByUniqueCode("Customer", "phone", phone);
-	   if(customer!=null) {
+	   if(StringTool.isEmpty(customer)){
+           return ReturnUtil.returnMap(0, "用户信息为空");
+       }
+	   
+	   Customer customerObjTemp=(Customer) commonDao.getObjectByUniqueCode("Customer", "phone", phone);
+	   if(customerObjTemp!=null) {
 		   return ReturnUtil.returnMap(0, "该手机号已被注册");
 	   }
 	   
-	   Customer customerObj=new Customer();
-	   customerObj.setNumberCode(UUIDUtil.getUUIDStringFor32());
-	   customerObj.setAddDate(new Date());
+	   Customer customerObj=(Customer) commonDao.getObjectByUniqueCode("Customer", "numberCode", customer);
+	   if(customer==null) {
+		   return ReturnUtil.returnMap(0, "用户不存在");
+	   }
+	   
 	   customerObj.setPhone(phone);
-	   customerObj.setEnabled(1);
-	   customerObj.setOpenid(openid);
-		/*
-		 * customerObj.setImg(img); customerObj.setNameCn(nameCn);
-		 */
-	   customerObj.setImg("https://img2.woyaogexing.com/2019/11/16/fb312fc5738e414fa19ca6e435212ef0!400x400.jpeg");
-	   customerObj.setNameCn("注册用户");
+	   customerObj.setFlagRegister(1);
+	   customerObj.setRegisterDate(new Date());
 	   
-	   commonDao.save(customerObj);
+	   commonDao.update(customerObj);
 	   
 	   
-	   BizSecurityLogin securityLogin = new BizSecurityLogin();
-       Date currentDate = new Date();
-       Date expireDate = new Date(currentDate.getTime()+Constant.sessionTimes);
-       String apikey = UUIDUtil.getUUIDStringFor32();
-       securityLogin.setAddDate(currentDate);
-       securityLogin.setExpireDate(expireDate);
-       securityLogin.setNumberCode(customerObj.getNumberCode());
-       securityLogin.setApikey(apikey);
-       //securityLogin.setNameCn(nameCn);
-       securityLogin.setNameCn(phone);
-       commonDao.save(securityLogin);
+	   List<BizSecurityLogin> securityLoginList=commonDao.queryByHql("from BizSecurityLogin where numberCode='"+customer+"' order by addDate desc");
+	   
+		 if(securityLoginList.size()==0) {
+			   return ReturnUtil.returnMap(0, "登陆用户不存在");
+		   }
+		 
+		 BizSecurityLogin securityLogin=securityLoginList.get(0);
+
 		
+		securityLogin.setFlagRegister(1);
+	   
 	   return ReturnUtil.returnMap(1, securityLogin);
 	}
 

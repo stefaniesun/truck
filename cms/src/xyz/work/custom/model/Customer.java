@@ -36,8 +36,23 @@ public class Customer {
     @Column(name = "img")
     private String img;  
     
+    @Column(name = "sex")
+    private String sex;  
+    
+    @Column(name = "province")
+    private String province;
+    
+    @Column(name = "country")
+    private String country;
+    
+    @Column(name = "city")
+    private String city;
+    
     @Column(name = "openid")
     private String openid; 
+    
+    @Column(name = "flag_register")
+    private int flagRegister; 
     
     @Column(name = "enabled")
     private int enabled;  
@@ -47,6 +62,9 @@ public class Customer {
     
     @Column(name="add_date")
     private Date addDate;   //添加时间
+    
+    @Column(name="register_date")
+    private Date registerDate;   //添加时间
 
     @Column(name="alter_date")
     private Date alterDate;  //修改时间
@@ -129,6 +147,54 @@ public class Customer {
 
 	public void setOpenid(String openid) {
 		this.openid = openid;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public Date getRegisterDate() {
+		return registerDate;
+	}
+
+	public void setRegisterDate(Date registerDate) {
+		this.registerDate = registerDate;
+	}
+
+	public int getFlagRegister() {
+		return flagRegister;
+	}
+
+	public void setFlagRegister(int flagRegister) {
+		this.flagRegister = flagRegister;
 	}
     
 }

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/util.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
+</head>
+<body>
+
+
+<script>
+var code =getUrlParam("code");
+var page =getUrlParam("state");
+
+$.ajax({
+	url : "/WebWS/wechatOper.xyz",
+	type : "POST",
+	data : {
+		code : code
+	},
+	async : false,
+	dataType : "json",
+	success : function(data) {
+		
+		if (data.status == 1) {
+			var securityLogin=data.content;
+			localStorage.setItem("customer", JSON.stringify(data.content));
+			addCustomerLoginCookie(securityLogin);
+			if(page=="index"){
+				window.location.replace("index.html");
+			}else{
+				window.location.replace("my.html");
+			}
+		} else {
+			alert(data.msg);
+		}
+	}
+});
+
+
+
+//window.location.replace(url);
+</script>
+
+</body>
+</html>

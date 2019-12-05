@@ -29,6 +29,12 @@ public class BizSecurityLogin{
     @Column(name="name_cn")
     private String nameCn;
     
+    @Column(name="img")
+    private String img;
+    
+    @Column(name="flag_register")
+    private int flagRegister;
+    
     @Column(name="user_code")
     private String userCode;
     
@@ -92,6 +98,22 @@ public class BizSecurityLogin{
 
 	public void setNumberCode(String numberCode) {
 		this.numberCode = numberCode;
+	}
+
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
+	public int getFlagRegister() {
+		return flagRegister;
+	}
+
+	public void setFlagRegister(int flagRegister) {
+		this.flagRegister = flagRegister;
 	}
     
 }

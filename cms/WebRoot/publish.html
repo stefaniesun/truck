@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
-    <title>WeUI</title>
+    <title>发布车辆信息</title>
     <link rel="stylesheet" href="css/weui.css"/>
     <link rel="stylesheet" href="css/example.css"/>
       <script type="text/javascript" src="js/util.js"></script>
@@ -58,7 +58,7 @@
              <div class="weui-cell">
             <div class="weui-cell__hd"><label class="weui-label">行驶里程</label></div>
             <div class="weui-cell__bd">
-                <input id="mile" class="weui-input" placeholder="km">
+                <input id="mile" class="weui-input" placeholder="万公里">
             </div>
           </div>
               <div class="weui-cell">
@@ -166,11 +166,27 @@
     
     <script>
 	
+    var token="";
+    
+    $.ajax({
+		url : "/WebWS/getToken.xyz",
+		type : "POST",
+		async : false,
+		dataType : "json",
+		success : function(data) {
+			if (data.status == 1) {
+				token=data.content.upToken;
+			} else {
+				weui.alert(data.msg);
+			}
+		}
+	});
+    
     var images=[];
     
     $('#showDatePicker1').on('click', function () {
         weui.datePicker({
-            start: 2019,
+            start: 2000,
             end: new Date().getFullYear(),
             onChange: function (result) {
                 console.log(result);
@@ -185,7 +201,7 @@
     
     $('#showDatePicker2').on('click', function () {
         weui.datePicker({
-            start: 2019,
+            start: 2000,
             end: new Date().getFullYear(),
             onChange: function (result) {
                 console.log(result);
@@ -200,7 +216,7 @@
     
     $('#showDatePicker3').on('click', function () {
         weui.datePicker({
-            start: 2019,
+            start: 2000,
             end: new Date().getFullYear(),
             onChange: function (result) {
                 console.log(result);
@@ -261,7 +277,43 @@ $uploaderInput.on("change", function(e){
         }
         
         blobToBase64(file, function (data) {
-        	images.push(data)
+        	
+        	
+        	var pic=data.split("base64,")[1];
+        	
+        	  var domains = [
+        		                    'upload.qiniu.com',         // 华东
+        		                    'upload-z1.qiniu.com',      // 华北
+        		                    'upload-z2.qiniu.com',      // 华南
+        		                    'upload-na0.qiniu.com',     // 北美
+        		                ];
+        		            var url = 'http://' + domains[2] + '/putb64/-1';
+        	
+        		
+        			$.ajax({
+ 		                headers: {
+ 		                    'Content-Type': 'application/octet-stream',
+ 		                    'Authorization': 'UpToken ' + token,    // UpToken后必须有一个 ' '(空格)
+ 		                },
+ 		                async: false,
+ 		                type: 'POST',
+ 		                url: url,
+ 		                dataType: 'json',
+ 		                data: pic,
+ 		                success: function(data){
+ 			
+ 							console.log(data);
+ 							
+ 							var hash=data.hash;
+ 							
+ 							images.push("http://img.eshc88.com/"+hash);
+ 							
+ 		                },
+ 		                error: function(XMLHttpRequest, textStatus, errorThrown){
+ 		                    weui.alert('服务器上传图片异常！请及时联系技术人员！修复异常！');
+ 		                }
+ 		            });
+        	
         });
         
         $uploaderFiles.append($(tmpl.replace('#url#', src)));
@@ -288,6 +340,7 @@ $(".weui-icon-delete").click(function(){
 });
 
 $("#publish").click(function(){
+	
 	
 	var title=$("#nameTitle").val();
 	var price=$("#price").val();

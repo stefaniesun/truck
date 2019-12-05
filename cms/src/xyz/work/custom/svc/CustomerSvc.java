@@ -12,7 +12,7 @@ public interface CustomerSvc {
 
     public Map<String, Object> editCustomer(String numberCode,String nickName,String remark);
 
-	public Map<String, Object> customerRegisterOper(String phone,String nameCn,String img,String openid);
+	public Map<String, Object> customerRegisterOper(String phone,String customer,String img,String openid);
 
 	public Map<String, Object> editCustomerEnabled(String numberCode);
     

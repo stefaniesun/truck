@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/util.js"></script>
+</head>
+<body>
+
+
+<script>
+var page =getUrlParam("page");
+
+var openidUrl="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx06833e456d066236&redirect_uri=http%3a%2f%2feshc88.com%2fjump.html&response_type=code&scope=snsapi_userinfo&state="+page+"#wechat_redirect";
+window.location.replace(openidUrl);
+</script>
+
+</body>
+</html>
