@@ -23,5 +23,7 @@ public interface TruckSvc {
 
 	public Map<String, Object> getCollectionData(String customer, String truck);
 
+	public Map<String, Object> openOper(String truck,int isOpen);
+
 
 }

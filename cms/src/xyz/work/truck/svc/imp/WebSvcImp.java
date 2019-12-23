@@ -1,10 +1,12 @@
 package xyz.work.truck.svc.imp;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,8 @@ import xyz.filter.RmiUtil;
 import xyz.util.Constant;
 import xyz.util.StringTool;
 import xyz.util.UUIDUtil;
+import xyz.work.base.model.Cabin;
+import xyz.work.base.model.Cruise;
 import xyz.work.custom.model.BizSecurityLogin;
 import xyz.work.custom.model.Customer;
 import xyz.work.truck.model.Truck;
@@ -33,11 +37,27 @@ public class WebSvcImp implements WebSvc {
 	RmiUtil rmiUtil;
 	
 	@Override
-	public Map<String, Object> getIndexData() {
+	public Map<String, Object> getIndexData(int offset,int pageSize) {
 		
-		List<Truck> truckList=commonDao.queryByHql("from Truck where status=1 order by addDate desc");
 		
-		return ReturnUtil.returnMap(1, truckList);
+		String hql="from Truck where status=1 and isOpen=1 order by addDate desc";
+		
+		String countHql = "select count(*) " + hql;
+        Query countQuery = commonDao.getQuery(countHql);
+        Number countNum = (Number)countQuery.uniqueResult();
+        int count = countNum == null ? 0 : countNum.intValue();
+
+        Query query = commonDao.getQuery(hql.toString());
+        query.setMaxResults(pageSize);
+        query.setFirstResult(offset);
+        @SuppressWarnings("unchecked")
+        List<Truck> list = query.list();
+
+        Map<String, Object> mapContent = new HashMap<String, Object>();
+        mapContent.put("total", count);
+        mapContent.put("rows", list);
+
+        return ReturnUtil.returnMap(1, mapContent);
 	}
 
 	@Override
@@ -178,6 +198,77 @@ public class WebSvcImp implements WebSvc {
 	    System.out.println("初始化上传变量");
 	    Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
 	    return auth.uploadToken(bucketname);
+	}
+
+	@Override
+	public Map<String, Object> msgReciveOper() {
+		// TODO Auto-generated method stub
+		 return ReturnUtil.returnMap(1, null);
+	}
+
+	@Override
+	public Map<String, Object> xcxWechatOper(String code,String nickName,String img,String city,String gender,String province) {
+
+		
+		Customer customer=(Customer) commonDao.getObjectByUniqueCode("Customer", "code", code);
+		if(customer==null) {
+			
+			   Map<String, String> accessoryParam=new HashMap<>();
+				
+			   Map<String, Object> resultMap=(Map<String, Object>) rmiUtil.loadData("https://api.weixin.qq.com/sns/jscode2session?appid=wxea4ec34221d07858&secret=0db20fb87721fb353ec20fe1d296ae64&js_code="+code+"&grant_type=authorization_code",accessoryParam);
+			    
+			   System.out.println("11111111111111===="+code);
+			   System.out.println(JSON.toJson(resultMap));
+			   
+			   if(resultMap!=null){
+			    	
+			    	String openId=resultMap.get("openid")!=null?resultMap.get("openid").toString():"";
+			    	
+			    	customer=(Customer) commonDao.getObjectByUniqueCode("Customer", "openid", openId);
+			    	if(customer==null) {
+			 	 	   
+			 	
+				 	  customer=new Customer();
+				 	   
+				 	 customer.setNumberCode(UUIDUtil.getUUIDStringFor32());
+				 	customer.setAddDate(new Date());
+				 	customer.setEnabled(0);
+				 	customer.setImg(img);
+				 	customer.setNameCn(nickName);
+				 	customer.setOpenid(openId);
+				 	customer.setCity(city);
+				 	customer.setProvince(province);
+				 	customer.setSex(gender);
+				 	customer.setEnabled(1);
+				 	customer.setFlagRegister(0);
+				 	customer.setCode(code);
+				 	
+				 	commonDao.save(customer);
+				 	
+				 	
+			    	}
+			
+		}
+		
+		    	
+		    }
+		
+
+		BizSecurityLogin securityLogin = new BizSecurityLogin();
+       Date currentDate = new Date();
+       Date expireDate = new Date(currentDate.getTime()+Constant.sessionTimes);
+       String apikey = UUIDUtil.getUUIDStringFor32();
+       securityLogin.setAddDate(currentDate);
+       securityLogin.setExpireDate(expireDate);
+       securityLogin.setNumberCode(customer.getNumberCode());
+       securityLogin.setFlagRegister(customer.getFlagRegister());
+       securityLogin.setApikey(apikey);
+       securityLogin.setImg(customer.getImg());
+       securityLogin.setNameCn(customer.getNameCn());
+       commonDao.save(securityLogin);
+		
+	   return ReturnUtil.returnMap(1, securityLogin);
+		
 	}
 
 }

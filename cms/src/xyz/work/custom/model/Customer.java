@@ -39,6 +39,9 @@ public class Customer {
     @Column(name = "sex")
     private String sex;  
     
+    @Column(name = "code")
+    private String code;  
+    
     @Column(name = "province")
     private String province;
     
@@ -195,6 +198,14 @@ public class Customer {
 
 	public void setFlagRegister(int flagRegister) {
 		this.flagRegister = flagRegister;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
     
 }

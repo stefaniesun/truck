@@ -47,6 +47,9 @@ public class Truck implements Comparable<Truck>{
 	    @Column(name="status")
 	    private int status; //
 	    
+	    @Column(name="is_open")
+	    private int isOpen; //
+	    
 	    @Column(name="price")
 	    private String price;
 	    
@@ -279,6 +282,14 @@ public class Truck implements Comparable<Truck>{
 		@Override
 		public int compareTo(Truck o) {
 			return o.getViewDate().compareTo(viewDate);
+		}
+
+		public int getIsOpen() {
+			return isOpen;
+		}
+
+		public void setIsOpen(int isOpen) {
+			this.isOpen = isOpen;
 		}
 	    
 }

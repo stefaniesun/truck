@@ -54,6 +54,12 @@ public class TruckWS {
         return truckSvc.checkOper(numberCode);
     }
 	
+	@RequestMapping(value = "openOper")
+    @ResponseBody
+    public Map<String, Object> openOper(String truck,int isOpen){
+        return truckSvc.openOper(truck,isOpen);
+    }
+	
 	
 	@RequestMapping(value = "collectionOper")
     @ResponseBody

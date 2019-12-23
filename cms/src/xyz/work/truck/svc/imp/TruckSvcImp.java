@@ -158,6 +158,7 @@ public class TruckSvcImp implements TruckSvc {
 		
 		truck.setStatus(Truck.STATUS_CHECK);
 		truck.setPassDate(new Date());
+		truck.setIsOpen(1);
 		
 		commonDao.update(truck);
 		
@@ -252,6 +253,25 @@ public class TruckSvcImp implements TruckSvc {
 		List<Collect> collects=commonDao.queryByHql("from Collect where customer='"+customer+"' and truck='"+truck+"'");
 		
 		return ReturnUtil.returnMap(1, collects);
+	}
+
+	@Override
+	public Map<String, Object> openOper(String truck,int isOpen) {
+		
+		 if(StringTool.isEmpty(truck)){
+	            return ReturnUtil.returnMap(0, "参数为空");
+		 }
+		 
+		 Truck truckObj=(Truck) commonDao.getObjectByUniqueCode("Truck", "numberCode", truck);
+		 if(truckObj==null) {
+			 return ReturnUtil.returnMap(0, "车辆信息为空");
+		 }
+		 
+		 truckObj.setIsOpen(isOpen);
+		 
+		 commonDao.update(truckObj);
+		
+		 return ReturnUtil.returnMap(1, null);
 	}
 
 }

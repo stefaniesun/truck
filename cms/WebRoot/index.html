@@ -8,12 +8,13 @@
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<link rel="stylesheet" type="text/css" href="css/style-base.css">
-      <link rel="stylesheet" href="css/light7.min.css"/>
      <link rel="stylesheet" href="css/common.css"/>
-      <link rel="stylesheet" href="http://wx.yueyat.com/addons/weliam_merchant/app/resource/components/swiper/swiper.min.css">
-		   <link rel="stylesheet" href="css/weui.css"/>
-		     <link rel="stylesheet" href="css/example.css"/>
-		<script type="text/javascript" src="js/library/jquery-1.7.2.js"></script>
+     <link rel="stylesheet" href="http://wx.yueyat.com/addons/weliam_merchant/app/resource/components/swiper/swiper.min.css">
+	<link rel="stylesheet" href="css/weui.css"/>
+	<link rel="stylesheet" href="css/example.css"/>
+	<script type="text/javascript" src="js/library/jquery-1.7.2.js"></script>
+	<script type='text/javascript' src='http://jqweui.com/dist/js/jquery-weui.js'></script>
+		
 		<script type="text/javascript" src="js/jquery.cookie.js"></script>
 		<script type="text/javascript" src="js/jquery.lazyload.js"></script>
 			<script type="text/javascript" src="js/util.js"></script>
@@ -28,40 +29,48 @@
 		<!-- QQ全屏 -->
 		<meta name="x5-fullscreen" content="true">
 		<meta name="applicable-device" content="mobile">
+		
+		<style>
+		*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
+
+.card .list-block>ul:before,.cards-list>ul:before{display:none}
+.card .list-block>ul:after,.cards-list>ul:after{display:none}
+.card{background:#fff;margin:.15rem;position:relative;border-radius:.2rem;font-size:.3.2rem}
+.card .content-block,.card .list-block{margin:0}
+.row:not(.no-gutter) .col>.card{margin-left:0;margin-right:0}
+.card-content{position:relative}
+.card-content-inner{padding:.75rem;position:relative}
+.card-content-inner>p:first-child{margin-top:0}
+.card-content-inner>p:last-child{margin-bottom:0}
+.card-content-inner>.content-block,.card-content-inner>.list-block{margin:-.75rem}
+.card-footer,.card-header{position:relative;padding:.2rem .2rem;box-sizing:border-box;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-box-align:center;-webkit-align-items:center;align-items:center}
+.card-footer[valign=top],.card-header[valign=top]{-webkit-box-align:start;-webkit-align-items:flex-start;align-items:flex-start}
+.card-footer[valign=bottom],.card-header[valign=bottom]{-webkit-box-align:end;-webkit-align-items:flex-end;align-items:flex-end}
+.card-footer a.link,.card-header a.link{line-height:2.2rem;height:2.2rem;text-decoration:none;position:relative;margin-top:-.5rem;margin-bottom:-.5rem;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:start;-webkit-justify-content:flex-start;justify-content:flex-start;-webkit-box-align:center;-webkit-align-items:center;align-items:center;-webkit-transition-duration:.3s;transition-duration:.3s}
+.card-footer a.link.active-state,.card-header a.link.active-state,html:not(.watch-active-state) .card-footer a.link:active,html:not(.watch-active-state) .card-header a.link:active{opacity:.3;-webkit-transition-duration:0s;transition-duration:0s}
+.card-footer a.link i+i,.card-footer a.link i+span,.card-footer a.link span+i,.card-footer a.link span+span,.card-header a.link i+i,.card-header a.link i+span,.card-header a.link span+i,.card-header a.link span+span{margin-left:.35rem}
+.card-footer a.link i.icon,.card-header a.link i.icon{display:block}
+.card-footer a.icon-only,.card-header a.icon-only{min-width:2.2rem;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center;margin:0}
+.card-header{border-radius:.1rem .1rem 0 0;font-size:.85rem}
+.card-header:after{content:'';position:absolute;left:0;bottom:0;right:auto;top:auto;height:1px;width:100%;background-color:#e1e1e1;display:block;z-index:15;-webkit-transform-origin:50% 100%;transform-origin:50% 100%}
+@media only screen and (-webkit-min-device-pixel-ratio:2){.card-header:after{-webkit-transform:scaleY(.5);transform:scaleY(.5)}}@media only screen and (-webkit-min-device-pixel-ratio:3){.card-header:after{-webkit-transform:scaleY(.33);transform:scaleY(.33)}}.card-header .card-cover{width:100%;display:block}
+.card-header.no-border:after{display:none}
+.card-header.no-padding{padding:0}
+.card-footer{border-radius:0 0 .1rem .1rem;color:#5f646e}
+.card-footer:before{content:'';position:absolute;left:0;top:0;bottom:auto;right:auto;height:1px;width:100%;background-color:#e1e1e1;display:block;z-index:15;-webkit-transform-origin:50% 0;transform-origin:50% 0}
+		</style>
+		
 	<body>
 	
 	
+	
 
-	
-	
-	
-	<!-- <header class="home_nav flex row item">
-    <div class="logo">
-            <h1>
-                <p class="city" ttname="wap_nav_city" href="javascript:void(0);">雷锋货车网</p>
-            </h1>
-    </div>
-    </header>
-	
-	<section class="recomMod">
-	
-	 <ul id="content">
-                    
-                  
+ <div id="FL_detail"  style="margin-bottom:1.2rem;">
 	 
-	 </ul>
+	 
+	 <ul class="Tz_box" id="section-linemove" data-total-pages="0" data-page="0" data-s="0">
 	
-	</section> -->
-	
-	
-	
-	
-
-
-	 <ol id="FL_detail" >
-	<ul class="Tz_box" id="section-linemove" data-total-pages="0" data-page="0" data-s="0">
-	
-	<li class="Tz-change card">   <div class="Tz-c locationurl" data-url="http://wx.yueyat.com/app/index.php?i=1092&amp;c=entry&amp;m=weliam_merchant&amp;p=pocket&amp;ac=pocket&amp;do=detail&amp;id=8481">    <div class="Tz-c-t1" >     <div class="Tz-c-t1-l">      <img src="http://thirdwx.qlogo.cn/mmopen/vi_32/s9buOwLkibvzc6krVVvRIzuHeibEyFicdKRcPuKrdooJjBOv8C1CmUFPpxpjCSUgl38UwubBzD9GlDtLXluH9tHCg/132">     </div>     <div class="Tz-c-t1-c">      <h1>静观其变</h1>      <p>11-14发布</p>     </div>         
+	<!-- <li class="Tz-change card">   <div class="Tz-c locationurl" data-url="http://wx.yueyat.com/app/index.php?i=1092&amp;c=entry&amp;m=weliam_merchant&amp;p=pocket&amp;ac=pocket&amp;do=detail&amp;id=8481">    <div class="Tz-c-t1" >     <div class="Tz-c-t1-l">      <img src="http://thirdwx.qlogo.cn/mmopen/vi_32/s9buOwLkibvzc6krVVvRIzuHeibEyFicdKRcPuKrdooJjBOv8C1CmUFPpxpjCSUgl38UwubBzD9GlDtLXluH9tHCg/132">     </div>     <div class="Tz-c-t1-c">      <h1>静观其变</h1>      <p>11-14发布</p>     </div>         
 	 <div class="Tz-c-t1-r">      <a href="tel:13355222456"><i class="icon iconfont icon-dianhua1"></i>20万</a>     </div>         </div>    <div class="Tz-c-t2">          <p>重汽T740英尺集装箱挂车，6*4，440马力16挡箱，2017年1月落户，国5，全车险，12条新真空胎，青岛户，可提档，24万整车，可分开卖</p>    </div>        <div class="Tz-c-t3">     <div class="Tz-c-t3-list">                      
 	
 	 <a href="javascript:;" style="background-image:url(http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png);" class="imgloading" data-bgurl="http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png"></a>             
@@ -70,106 +79,192 @@
 	 
 	 
 	 
-	          </div>    </div>                 <div class="Tz-c-t5" >     <span style="display:flex;float:right;padding-right:0.1rem;">44阅读</span>    </div>      </div>  </li>
+	          </div>    </div>         <div class="Tz-c-t5" >     <span style="display:flex;float:right;padding-right:0.1rem;">44阅读</span>    </div>      </div>  </li> -->
 	
 	
 	</ul>
 	
+         <div class="weui-loadmore" id="loading">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips">正在加载</span>
+   </div>
 	
 	
-	<ul class="Tz_box" id="section-linemove" data-total-pages="0" data-page="0" data-s="0">
 	
-	<li class="Tz-change card">   <div class="Tz-c locationurl" data-url="http://wx.yueyat.com/app/index.php?i=1092&amp;c=entry&amp;m=weliam_merchant&amp;p=pocket&amp;ac=pocket&amp;do=detail&amp;id=8481">    <div class="Tz-c-t1" >     <div class="Tz-c-t1-l">      <img src="http://thirdwx.qlogo.cn/mmopen/vi_32/s9buOwLkibvzc6krVVvRIzuHeibEyFicdKRcPuKrdooJjBOv8C1CmUFPpxpjCSUgl38UwubBzD9GlDtLXluH9tHCg/132">     </div>     <div class="Tz-c-t1-c">      <h1>静观其变</h1>      <p>11-14发布</p>     </div>         
-	 <div class="Tz-c-t1-r">      <a href="tel:13355222456"><i class="icon iconfont icon-dianhua1"></i>20万</a>     </div>         </div>    <div class="Tz-c-t2">          <p>重汽T740英尺集装箱挂车，6*4，440马力16挡箱，2017年1月落户，国5，全车险，12条新真空胎，青岛户，可提档，24万整车，可分开卖</p>    </div>        <div class="Tz-c-t3">     <div class="Tz-c-t3-list">                      
+	</div>  
 	
-	 <a href="javascript:;" style="background-image:url(http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png);" class="imgloading" data-bgurl="http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png"></a>             
-	 	 <a href="javascript:;" style="background-image:url(http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png);" class="imgloading" data-bgurl="http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png"></a>             
-	 	 <a href="javascript:;" style="background-image:url(http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png);" class="imgloading" data-bgurl="http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png"></a>             
-	 
-	 
-	 
-	          </div>    </div>                 <div class="Tz-c-t5" >     <span style="display:flex;float:right;padding-right:0.1rem;">44阅读</span>    </div>      </div>  </li>
-	
-	
-	</ul>
-	
-	<ul class="Tz_box" id="section-linemove" data-total-pages="0" data-page="0" data-s="0">
-	
-	<li class="Tz-change card">   <div class="Tz-c locationurl" data-url="http://wx.yueyat.com/app/index.php?i=1092&amp;c=entry&amp;m=weliam_merchant&amp;p=pocket&amp;ac=pocket&amp;do=detail&amp;id=8481">    <div class="Tz-c-t1" >     <div class="Tz-c-t1-l">      <img src="http://thirdwx.qlogo.cn/mmopen/vi_32/s9buOwLkibvzc6krVVvRIzuHeibEyFicdKRcPuKrdooJjBOv8C1CmUFPpxpjCSUgl38UwubBzD9GlDtLXluH9tHCg/132">     </div>     <div class="Tz-c-t1-c">      <h1>静观其变</h1>      <p>11-14发布</p>     </div>         
-	 <div class="Tz-c-t1-r">      <a href="tel:13355222456"><i class="icon iconfont icon-dianhua1"></i>20万</a>     </div>         </div>    <div class="Tz-c-t2">          <p>重汽T740英尺集装箱挂车，6*4，440马力16挡箱，2017年1月落户，国5，全车险，12条新真空胎，青岛户，可提档，24万整车，可分开卖</p>    </div>        <div class="Tz-c-t3">     <div class="Tz-c-t3-list">                      
-	
-	 <a href="javascript:;" style="background-image:url(http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png);" class="imgloading" data-bgurl="http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png"></a>             
-	 	 <a href="javascript:;" style="background-image:url(http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png);" class="imgloading" data-bgurl="http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png"></a>             
-	 	 <a href="javascript:;" style="background-image:url(http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png);" class="imgloading" data-bgurl="http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png"></a>             
-	 
-	 
-	 
-	          </div>    </div>                 <div class="Tz-c-t5" >     <span style="display:flex;float:right;padding-right:0.1rem;">44阅读</span>    </div>      </div>  </li>
-	
-	
-	</ul>
-	
-	<ul class="Tz_box" id="section-linemove" data-total-pages="0" data-page="0" data-s="0">
-	
-	<li class="Tz-change card">   <div class="Tz-c locationurl" data-url="http://wx.yueyat.com/app/index.php?i=1092&amp;c=entry&amp;m=weliam_merchant&amp;p=pocket&amp;ac=pocket&amp;do=detail&amp;id=8481">    <div class="Tz-c-t1" >     <div class="Tz-c-t1-l">      <img src="http://thirdwx.qlogo.cn/mmopen/vi_32/s9buOwLkibvzc6krVVvRIzuHeibEyFicdKRcPuKrdooJjBOv8C1CmUFPpxpjCSUgl38UwubBzD9GlDtLXluH9tHCg/132">     </div>     <div class="Tz-c-t1-c">      <h1>静观其变</h1>      <p>11-14发布</p>     </div>         
-	 <div class="Tz-c-t1-r">      <a href="tel:13355222456"><i class="icon iconfont icon-dianhua1"></i>20万</a>     </div>         </div>    <div class="Tz-c-t2">          <p>重汽T740英尺集装箱挂车，6*4，440马力16挡箱，2017年1月落户，国5，全车险，12条新真空胎，青岛户，可提档，24万整车，可分开卖</p>    </div>        <div class="Tz-c-t3">     <div class="Tz-c-t3-list">                      
-	
-	 <a href="javascript:;" style="background-image:url(http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png);" class="imgloading" data-bgurl="http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png"></a>             
-	 	 <a href="javascript:;" style="background-image:url(http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png);" class="imgloading" data-bgurl="http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png"></a>             
-	 	 <a href="javascript:;" style="background-image:url(http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png);" class="imgloading" data-bgurl="http://wx.qiniu.yueyat.com/images/weliam_merchant/upload_img15737465673322.png"></a>             
-	 
-	 
-	 
-	          </div>    </div>                 <div class="Tz-c-t5" >     <span style="display:flex;float:right;padding-right:0.1rem;">44阅读</span>    </div>      </div>  </li>
-	
-	
-	</ul>
-	
-	</ol> 
 
 
-         
-
- <div class="c-footer-con br-t">
+    <div class="c-footer-con br-t">
         <a href="index.html" class="icon-home active">首页</a>
-    <a id="buy" class="icon-price">
-        买车</a>
+    <a id="buy" href="my.html" class="icon-price">买车</a>
         <a href="publish.html" rel="nofollow" class="icon-truck-btn truck" id="sale">
         <i class="car" style="top:32%;">
             <img src="image/truck/truck.png" alt="icon" />
         </i>卖车
     </a>
-        <a id="message" rel="nofollow" class="icon-msg login-check">
-        消息</a>
+        <a id="message" href="msg.html" rel="nofollow" class="icon-msg login-check">消息</a>
     <a href="my.html" rel="nofollow" class="icon-bottom-user  login-check">我的</a>
 </div> 
 
 
 
+
 <script>
 
-$(document).ready(function() {
-	
-	
-	
-	$(function() {
-		var swiper = new Swiper('.Fl_container', {
-			scrollbarHide: true,
-			slidesPerView: 'auto',
-			loop: true,
-			grabCursor: true,
-			autoplay: 2000,
-			autoplayDisableOnInteraction: false,
-			paginationClickable: true
+ $(document).ready(function() {
+	 
+	 
+	 var page =getUrlParam("page");
+	 var code =getUrlParam("code");
+	 var nickName =getUrlParam("nickName");
+	 var img =getUrlParam("img");
+	 var city =getUrlParam("city");
+	 var gender =getUrlParam("gender");
+	 var province =getUrlParam("province");
+	 
+	 //$("img.lazy").lazyload({effect: "fadeIn"});
+	 
+	 
+
+	 if(!xyzIsNull(code)){
+		 $.ajax({
+				url : "/WebWS/xcxWechatOper.xyz",
+				type : "POST",
+				data : {
+					code : code,
+					nickName:nickName,
+					img:img,
+					city:city,
+					gender:gender,
+					province:province
+				},
+				async : false,
+				dataType : "json",
+				success : function(data) {
+					
+					if (data.status == 1) {
+						var securityLogin=data.content;
+						localStorage.setItem("customer", JSON.stringify(data.content));
+						addCustomerLoginCookie(securityLogin);
+					} else {
+						alert(data.msg);
+					}
+				}
+			});
+	 }
+	 
+	  	var countPage=1;//总页数
+	    var page=1;//当前页
+	    var pageSize=10;//每页显示几条
+	 
+	 $.ajax({
+			url : "/WebWS/getIndexData.xyz",
+			type : "POST",
+			async : false,
+			data : {
+				page : 1,
+				rows:pageSize,
+			},
+			dataType : "json",
+			success : function(data) {
+				if (data.status == 1) {
+					console.log(data);
+					
+					
+					countPage=parseInt((data.content.total-1)/pageSize)+1;
+					var truckList=data.content.rows;
+					var html='';
+					 for(var i=0;i<truckList.length;i++){
+						var dataObj=truckList[i];
+						
+						html+='<li class="Tz-change card" data-url="'+dataObj.numberCode+'">';
+						html+='<div class="Tz-c locationurl">';
+						html+='<div class="Tz-c-t1" >';
+						html+='<div class="Tz-c-t1-l">';
+						html+='<img src="'+dataObj.customerImg+'"></div>';
+						html+='<div class="Tz-c-t1-c">';
+						html+='<h1>'+dataObj.customerName+'</h1>';
+						html+='<p>'+dataObj.passDate.substring(5,10)+'发布</p>';
+						html+='</div>';
+						html+='<div class="Tz-c-t1-r">';
+						html+='<a><i class="icon iconfont icon-dianhua1"></i>'+dataObj.price+'万</a>';
+						html+='</div>';
+						html+='</div>';
+						html+='<div class="Tz-c-t2">';
+						html+='<p>'+dataObj.title+'</p>';
+						html+='</div>';
+						html+='<div class="Tz-c-t3">';
+						html+='<div class="Tz-c-t3-list">';
+						var images=JSON.parse(dataObj.images);
+						for(var j=0;j<images.length;j++){
+							if(j<3){
+								html+='<a href="javascript:;"  class="imgloading lazy" data-original="'+images[j]+'?imageMogr2/thumbnail/640x640/format/webp/blur/1x0/quality/75|imageslim"></a>  ';
+							}
+						}
+						html+='</div>';
+						html+='</div>';
+						html+='<div class="Tz-c-t5" >';
+						html+='<span style="display:flex;float:right;padding-right:0.1rem;">'+dataObj.readCount+'阅读</span>';
+						html+='</div>';
+						html+='</div>';
+						html+='</li>';
+					 }
+				
+					$(".Tz_box").html(html);
+					$(".Tz-change").click(function(){
+						window.location.replace("detail.html?numberCode="+$(this).data("url"));
+					});
+					
+					$("a.lazy").lazyload({ threshold :180});
+					
+				} else {
+					weui.alert(data.msg);
+				}
+			}
 		});
-	})
+	 
 	
-	$("#buy").click(function(){
-		weui.alert("模块开发中");
-	});
-	$("#message").click(function(){
-		weui.alert("模块开发中");
-	});
+	var loading = false;  //状态标记 这个变量主要是用来控制触发次数，官网也有说明，事件可能会触发多次
+    $(document.body).infinite().on("infinite", function() {
+        $("#loading").css("display","block");//显示 加载中图标
+        if(loading) return;
+        loading = true;
+        if(page<=countPage){//如果当前页小于总页面
+            getbalancelist();
+        }else{
+            $(document.body).destroyInfinite();//到最后一页时，销毁它
+            $("#loading>i").css("display","none");
+            $("#loading>span").html("到底啦~").css("color","#BDBDBD");
+        }
+    });
+	
+  
+    //获取数据
+    function getbalancelist(){
+    	
+    	console.log("page===="+page);
+    	console.log("countPage===="+countPage);
+    	
+    	 if(page==countPage){//如果当前页小于总页面
+    		   $(document.body).destroyInfinite();//到最后一页时，销毁它
+               $("#loading>i").css("display","none");
+               $("#loading>span").html("到底啦~").css("color","#BDBDBD");
+         }
+    	
+       /*  init.Ajax("GET", "url", {page:page,num:pageSize}, function (res) {
+            //这里计算出总页数。。一般是后台给的
+            countPage=Math.ceil((res.data.totalCount)/pageSize);
+             
+            //处理数据部分 .......
+             
+             loading = false;//会多次触发，所以 需要请求完成数据 才能继续触发
+            
+            $("#loading").css("display","none");//数据加载完隐藏加载提示
+        })
+        page++; */
+    }
+	
 	
 	var customerObj=getCustomerLoginCookie();
 	if(xyzIsNull(customerObj)){
@@ -178,61 +273,8 @@ $(document).ready(function() {
 	
 	
 	
-	$.ajax({
-		url : "/WebWS/getIndexData.xyz",
-		type : "POST",
-		async : false,
-		dataType : "json",
-		success : function(data) {
-			if (data.status == 1) {
-				console.log(data);
-			
-				var html='';
-				 for(var i=0;i<data.content.length;i++){
-					var dataObj=data.content[i];
-					html+='<li class=" box tz-list" style="padding-bottom:2px">';
-					html+='<dl class="tz-author">';
-					html+='<dt><a><img src="'+dataObj.customerImg+'" alt=""></a></dt>';
-					html+='<dd><a>'+dataObj.customerName+'<span style="float:right;color:#f8ac59;font-size:20px;">'+dataObj.price+'w</span></a><p>'+dataObj.passDate+'</p></dd>';
-					//html+='<span style="float:right;">'+dataObj.price+'</span>';
-					html+='</dl>';
-					html+='<div class="tz-text">';
-					html+='<a href="detail.html?numberCode='+dataObj.numberCode+'" rel="nofollow">';
-					html+='<p>'+dataObj.title+'</p>';
-					html+='</a>';
-					html+='</div>';
-					html+='<div class="tz-img">';
-					html+='<div class="img-list">';
-					var images=JSON.parse(dataObj.images);
-					for(var j=0;j<images.length;j++){
-						if(j<3){
-			        		url='?imageMogr2/blur/1x0/quality/75|watermark/2/text/6Zu36ZSL6LSn6L2m572R/font/5b6u6L2v6ZuF6buR/fontsize/2000/fill/I0ZBRkFGQQ==/dissolve/30/gravity/Center/dx/10/dy/10|imageslim';
-							html+='<a href="'+images[j]+'" rel="nofollow">';
-							html+='<img class="lazy" style="width:113px;height:113px" data-original="'+images[j]+url+'" data-original="" class="img J_lazyImgs" style="display: block;">';
-	                        html+='</a>';
-						}
-					}
-					html+='</div>';
-					html+='</div>';
-					html+='<div class="tz-replay" style="margin-top:2px">';
-					html+='<span class="yd" ><i>&nbsp;</i>'+dataObj.readCount+'</span>';
-					html+='</div>';
-					html+='</li>';
-				} 
-				//$("#content").html(html);
-				
-				$("img.lazy").lazyload({effect: "fadeIn"});
-				
-			} else {
-				weui.alert(data.msg);
-			}
-		}
-	});
-	
-	
-	
-	
-});
+
+}); 
 
 </script>
 

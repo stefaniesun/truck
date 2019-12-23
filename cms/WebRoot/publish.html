@@ -21,14 +21,16 @@
       <div class="weui-cells__group weui-cells__group_form">
         <div class="weui-cells__title">
         
-        <p>平台严禁发布违法虚假信息，严重违反者冻结帐号处理！请您按照<a style="text-decoration:underline" href="publishXieyi.html">《发布信息协议》</a>发布您的信息</p>
+        <p>平台严禁发布违法虚假信息，严重违反者冻结帐号处理！请您按照<a style="text-decoration:underline" href="publishXieyi.html">《发布信息协议》</a>发布信息</p>
         
         </div>
         <div class="weui-cells weui-cells_form">
           <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">车辆名称</label></div>
+            <div class="weui-cell__hd"><label class="weui-label">车辆概况</label></div>
             <div class="weui-cell__bd">
-                <input id="nameTitle" class="weui-input" placeholder="品牌、车型描述" >
+            
+            <textarea class="weui-textarea" id="nameTitle" placeholder="品牌、车型描述" rows="3"></textarea>
+                <!-- <input id="nameTitle" class="weui-input" placeholder="品牌、车型描述" > -->
             </div>
           </div>
           <div class="weui-cell">
@@ -187,7 +189,7 @@
     $('#showDatePicker1').on('click', function () {
         weui.datePicker({
             start: 2000,
-            end: new Date().getFullYear(),
+            end: 2021,
             onChange: function (result) {
                 console.log(result);
             },
@@ -202,7 +204,7 @@
     $('#showDatePicker2').on('click', function () {
         weui.datePicker({
             start: 2000,
-            end: new Date().getFullYear(),
+            end: 2021,
             onChange: function (result) {
                 console.log(result);
             },
@@ -217,7 +219,7 @@
     $('#showDatePicker3').on('click', function () {
         weui.datePicker({
             start: 2000,
-            end: new Date().getFullYear(),
+            end: 2021,
             onChange: function (result) {
                 console.log(result);
             },

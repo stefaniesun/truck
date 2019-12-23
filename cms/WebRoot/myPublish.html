@@ -27,6 +27,9 @@
 		.c-index-search-con .city .text{
 			line-height: 1.2 !important;
 		}
+		.weui-btn{
+		width:90px;
+		}
 		</style>
 	<body style="padding-bottom: 57px;">
 	
@@ -89,12 +92,14 @@ $(document).ready(function() {
 					html+='<div>'+dataObj.price+'</div>';
 					html+='</div>';
 					
+				
+					
 					html+=' <div class="weui-cell weui-cell_access">';
 					html+='<div class="weui-cell__bd">';
-					html+='<span style="vertical-align: middle">发布时间</span>';
+					html+='<span style="vertical-align: middle">浏览量</span>';
 					//html+='<span class="weui-badge" style="margin-left: 5px;">8</span>';
 					html+='</div>';
-					html+='<div>'+dataObj.addDate.substring(0,19)+'</div>';
+					html+='<div>'+dataObj.readCount+'</div>';
 					html+='</div>';
 					
 					html+=' <div class="weui-cell weui-cell_access">';
@@ -103,25 +108,94 @@ $(document).ready(function() {
 					html+='</div>';
 					var status='';
 					if(dataObj.status==0){
-						status="<span>审核中</span>";
+						status="<span style='color:#f8ac59;'>审核中...</span>";
 					}else if(dataObj.status==1){
-						status="<span style='color:green;'>审核通过</span>";
+						if(dataObj.isOpen==1){
+							status="<span style='color:green;'>正常</span>";
+						}else{
+							status="<span style='color:red;'>已下架</span>";
+						}
 					}
 					html+='<div>'+status+'</div>';
 					html+='</div>';
 					
-					
+					if(dataObj.status==1){
+						html+=' <div class="weui-cell weui-cell_access">';
+						html+='<div class="weui-cell__bd">';
+						html+='<span style="vertical-align: middle">操作</span>';
+						html+='</div>';
+						if(dataObj.isOpen==1){
+							html+='<div><a date-numberCode="'+dataObj.numberCode+'" id="off" href="javascript:;" class="weui-btn weui-btn_primary" style="background-color:rgb(237, 85, 101);">下架</a></div>';
+						}else{
+							html+='<div><a date-numberCode="'+dataObj.numberCode+'" id="on" href="javascript:;" class="weui-btn weui-btn_primary">上架</a></div>';
+						}
+						html+='</div>';
+					}
+						
 					html+=' <div class="weui-cell weui-cell_access">';
 					html+='<div class="weui-cell__bd">';
-					html+='<span style="vertical-align: middle">操作</span>';
+					html+='<span style="vertical-align: middle">发布时间</span>';
+					//html+='<span class="weui-badge" style="margin-left: 5px;">8</span>';
 					html+='</div>';
 					html+='<div>'+dataObj.addDate.substring(0,19)+'</div>';
 					html+='</div>';
+					
 					
 					html+='</div>';
 				 }
 				 
 				$("#content").html(html);
+				
+				$("#on").click(function(){
+					
+					var truck=$(this).attr("date-numberCode");
+					
+					$.ajax({
+						url : "/TruckWS/openOper.cus",
+						type : "POST",
+						async : false,
+						data :{
+							truck:truck,
+							isOpen:1
+						},
+						dataType : "json",
+						success : function(data) {
+							if (data.status == 1) {
+								weui.alert("上架成功");
+								location.reload();
+							} else {
+								weui.alert(data.msg);
+							}
+						}
+					});
+				});
+				
+				
+				
+				$("#off").click(function(){
+					
+					var truck=$(this).attr("date-numberCode");
+					
+					$.ajax({
+						url : "/TruckWS/openOper.cus",
+						type : "POST",
+						async : false,
+						data :{
+							truck:truck,
+							isOpen:0
+						},
+						dataType : "json",
+						success : function(data) {
+							if (data.status == 1) {
+								weui.alert("下架成功");
+								location.reload();
+							} else {
+								weui.alert(data.msg);
+							}
+						}
+					});
+				});
+				
 				
 			} else {
 				weui.alert(data.msg);

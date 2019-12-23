@@ -912,11 +912,11 @@ https://weixin.weliam.cn/app/index.php?i=26&c=entry&m=weliam_merchant&p=pocket&a
 .Tz-change .Tz-c-t1-r {
 	width: 1.2rem;
 	position: absolute;
-	top: -0.4rem;
+	top: -0.1rem;
 	right: 0;
 }
 .Tz-change .Tz-c-t1-r a {
-	display: inline-block;
+	display: inline-grid;
 	width: 1rem;
 	height: 0.4rem;
 	line-height: 0.4rem;
@@ -1125,3 +1125,32 @@ div.global-lightbox .swiper-slide img{max-width:100%;max-height:100%;}
 .shop_info-com-r h4{font-weight: normal;font-size: .6rem;background-color: #f3f5f7;margin-top: .7rem;padding: .35rem;color: #666;border-radius: 3px;position: relative;}
 .shop_info-com-r h4:before{content: "";width: 0;height: 0;border-width: .5rem;border-style: solid;border-color: transparent transparent #f3f5f7 transparent;position: absolute;top: -0.84rem;left: .455rem;}
 .shop_info-com-r h4 span{color: #95b6ee;}
+
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
+
+.card .list-block>ul:before,.cards-list>ul:before{display:none}
+.card .list-block>ul:after,.cards-list>ul:after{display:none}
+.card{background:#fff;margin:.15rem;position:relative;border-radius:.2rem;font-size:.3.2rem}
+.card .content-block,.card .list-block{margin:0}
+.row:not(.no-gutter) .col>.card{margin-left:0;margin-right:0}
+.card-content{position:relative}
+.card-content-inner{padding:.75rem;position:relative}
+.card-content-inner>p:first-child{margin-top:0}
+.card-content-inner>p:last-child{margin-bottom:0}
+.card-content-inner>.content-block,.card-content-inner>.list-block{margin:-.75rem}
+.card-footer,.card-header{position:relative;padding:.2rem .2rem;box-sizing:border-box;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-box-align:center;-webkit-align-items:center;align-items:center}
+.card-footer[valign=top],.card-header[valign=top]{-webkit-box-align:start;-webkit-align-items:flex-start;align-items:flex-start}
+.card-footer[valign=bottom],.card-header[valign=bottom]{-webkit-box-align:end;-webkit-align-items:flex-end;align-items:flex-end}
+.card-footer a.link,.card-header a.link{line-height:2.2rem;height:2.2rem;text-decoration:none;position:relative;margin-top:-.5rem;margin-bottom:-.5rem;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:start;-webkit-justify-content:flex-start;justify-content:flex-start;-webkit-box-align:center;-webkit-align-items:center;align-items:center;-webkit-transition-duration:.3s;transition-duration:.3s}
+.card-footer a.link.active-state,.card-header a.link.active-state,html:not(.watch-active-state) .card-footer a.link:active,html:not(.watch-active-state) .card-header a.link:active{opacity:.3;-webkit-transition-duration:0s;transition-duration:0s}
+.card-footer a.link i+i,.card-footer a.link i+span,.card-footer a.link span+i,.card-footer a.link span+span,.card-header a.link i+i,.card-header a.link i+span,.card-header a.link span+i,.card-header a.link span+span{margin-left:.35rem}
+.card-footer a.link i.icon,.card-header a.link i.icon{display:block}
+.card-footer a.icon-only,.card-header a.icon-only{min-width:2.2rem;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center;margin:0}
+.card-header{border-radius:.1rem .1rem 0 0;font-size:.85rem}
+.card-header:after{content:'';position:absolute;left:0;bottom:0;right:auto;top:auto;height:1px;width:100%;background-color:#e1e1e1;display:block;z-index:15;-webkit-transform-origin:50% 100%;transform-origin:50% 100%}
+@media only screen and (-webkit-min-device-pixel-ratio:2){.card-header:after{-webkit-transform:scaleY(.5);transform:scaleY(.5)}}@media only screen and (-webkit-min-device-pixel-ratio:3){.card-header:after{-webkit-transform:scaleY(.33);transform:scaleY(.33)}}.card-header .card-cover{width:100%;display:block}
+.card-header.no-border:after{display:none}
+.card-header.no-padding{padding:0}
+.card-footer{border-radius:0 0 .1rem .1rem;color:#5f646e}
+.card-footer:before{content:'';position:absolute;left:0;top:0;bottom:auto;right:auto;height:1px;width:100%;background-color:#e1e1e1;display:block;z-index:15;-webkit-transform-origin:50% 0;transform-origin:50% 0}

@@ -7,8 +7,7 @@
 		<meta name="keywords" content="" />
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-		<!-- <link rel="stylesheet" type="text/css" href="http://192.168.250.212:8080/css/style-base.css"> -->
-		<link rel="stylesheet" type="text/css" href="css/style-base.css?v=2019-2-19">
+		<link rel="stylesheet" type="text/css" href="css/style-base.css">
 		   <link rel="stylesheet" href="css/weui.css"/>
 		<script type="text/javascript" src="js/library/jquery-1.7.2.js"></script>
 		    <script type="text/javascript" src="js/jquery.cookie.js"></script>
@@ -28,16 +27,10 @@
 			line-height: 1.2 !important;
 		}
 		</style>
-		<!-- Google Tag Manager -->
-		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-				new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-				j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-				'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-			})(window,document,'script','dataLayer','GTM-M4RRVZ');</script>
 	<body style="padding-bottom: 57px;">
 	<div class="c-user-background c-user-center-head">
 	<div class="c-user-photo">
-		<img id="headImg" src="https://i.kcimg.cn/data/avatar/noavatar_big.gif-80x80.jpg" alt="头像">
+		<img id="headImg" src="img/head.gif" alt="头像">
 	</div>
 	<div class="info">
 <div class="c-flex-center" style="align-items: flex-start; flex-direction: column;">
@@ -78,14 +71,13 @@
 </div>
 <div class="c-footer-con br-t" style="padding:0px;">
         <a href="index.html" class="icon-home">首页</a>
-    <a id="buy" class="icon-price">
-        买车</a>
+    <a id="buy" href="my.html" class="icon-price">买车</a>
         <a href="publish.html" rel="nofollow" class="icon-truck-btn truck" id="sale">
         <i class="car" style="top:32%;">
             <img src="image/truck/truck.png" alt="icon" />
         </i>卖车
     </a>
-        <a id="message" rel="nofollow" class="icon-msg login-check">
+        <a id="message" href="msg.html" rel="nofollow" class="icon-msg login-check">
         消息</a>
     <a href="my.html" rel="nofollow" class="icon-bottom-user active login-check">我的</a>
 </div>
@@ -94,13 +86,6 @@
 <script>
 
 $(document).ready(function() {
-	
-	$("#buy").click(function(){
-		weui.alert("模块开发中");
-	});
-	$("#messagebuy").click(function(){
-		weui.alert("模块开发中");
-	});
 	
 	var customerObj=getLoginCustomer();
 	console.log(customerObj);

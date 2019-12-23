@@ -8,9 +8,12 @@
     <link rel="stylesheet" href="css/swiper.min.css?v=ae0552c54e">
     <link href="css/iconfont.css?v=d875809ed5" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="css/wapLogin.css?v=9040b76fb2">
-    <link rel="stylesheet" href="css/mdetails.css?v=53984ec96e">
+    <link rel="stylesheet" href="css/mdetails.css">
      <link rel="stylesheet" href="css/jquery.bxslider.css">
      <link rel="stylesheet" href="css/weui.css"/>
+      <link rel="stylesheet" href="http://www.jq22.com/demo/jqueryYdtpck201804031502/css/photoswipe.css"/>
+            <link rel="stylesheet" href="http://www.jq22.com/demo/jqueryYdtpck201804031502/css/default-skin/default-skin.css"/>
+      
      
     <script type="text/javascript" src="js/jquery.min.js"></script>
      <script type="text/javascript" src="js/util.js"></script>
@@ -24,8 +27,12 @@
     <script type="text/javascript" src="js/mobBigpic.js?v=80b165f10c"></script>
     <script type="text/javascript" src="js/clipboard.min.js"></script>
     <script type="text/javascript" src="js/WebViewJavascriptBridge.js?v=8c468b8572"></script>
-  <!--   <script type="text/javascript" src="js/mdetail.js"></script> -->
        <script type="text/javascript" src="js/jquery.bxslider.min.js"></script>
+       
+            <script type="text/javascript" src="js/photoswipe.js"></script>
+           <script type="text/javascript" src="http://www.jq22.com/demo/jqueryYdtpck201804031502/js/photoswipe-ui-default.min.js"></script>
+            
+            
     
 </head>
 <iframe style="display: none;"></iframe>
@@ -34,23 +41,6 @@
 <input id="carid" type="hidden" value="171539162">
 <input id="phoneSub" type="hidden" value="">
 <section class="detail">
-    <div class="modelTest">
-        <div class="info">
-            <div class="infoTitle">申请购前检测 <i class="closejc"></i></div>
-            <p class="jcjg">检测价格：<span class="jcmoney">368元</span></p>
-            <div class="infoContent">
-                <h3>什么是购前检测?</h3>
-                <div class="infoTxt">
-                    <p>专业的检测师，携带检测仪器上门，提供全面的二手车检测服务，呈现真实车况，出具检测报告，让消费者买车更放心，用车有保障！</p>
-                    <p>服务包括：三大类（大事故车、火烧车、水泡车）排除，对车身外观、内饰、电器设配、底盘、发动机、路试等进行全面检测。</p>
-                </div>
-            </div>
-            <div class="infoBtn">
-                <p><label><input class="noWarncheck" type="checkbox" name="noWarncheck" value="">不再提醒</label></p>
-                <button class="yesClose">确定</button>
-            </div>
-        </div>
-    </div>
      <div class="mlTopBox">
         <div class="mlTop">
                 <!-- <div class="mltSearch" id="mltSearch"><span>我要找车</span></div> -->
@@ -99,7 +89,7 @@
             
             
             <div style="width:100%; height:300px;overflow:hidden; ">
-  <ul class="bxslider">
+  <ul class="bxslider" id="imgShow">
 </ul>
 </div>
             
@@ -410,64 +400,70 @@
 <button id="onloadLogin" style="visibility: hidden;"></button>
 <section class="modeling4" style="display:none;"></section>
 <section class="modeling3" style="display:none;"></section>
-<section class="fsreturn fly-right2" style="display: none; transition: all 0.3s; left: auto; right: 0px; position: fixed; transform: translate(100%, 0px); z-index: 100;">
-    <div class="mlTop">
-        <div class="mltTitle">条件订阅</div>
-        <i class=" leftarrow" id="frBack"></i>
-        <div class="mltRight bigbox">
-            <a class="modify" href="/quanguo/soa1t514j5-10" data-track="WAP详情页-修改订阅">修改订阅</a>
-        </div>
-    </div>
-    <div class="bigchoosebox">
-        <p class="haschoose">已选条件</p>
-        <div class="choosebox">
-            <span id="brand" data-id="大众-途安">大众 途安</span>
-            <span id="money" data-id="5-10">5-10万</span>
-        </div>
-    </div>
-    <div class="bigchoosebox">
-        <p class="haschoose">联系方式：<span class="tels"></span></p>
-    </div>
-    <div class="noticeme">上新通知我</div>
-    <p class="tip">您订阅的车源信息会通过华夏二手车app免费发送给您</p>
-    <img class="choose_img" src="http://static.hx2cars.com/resource/web/dist/static/mobile/mindex/images/Banner.jpg">
-</section>
-<div class="fsreturn_success" style="display:none;">
-    <span class="fsreturn_success_close"></span>
-    <h3>订阅成功</h3>
-    <p>使用华夏找车服务，找车更容易</p>
-    <div class="fsreturn_success_btnbox">
-        <div class="fsreturn_success_cancel">
-            再想想
-        </div>
-        <div class="fsreturn_success_require">
-            了解一下
-        </div>
-    </div>
-</div>
 
 
-<!-- <div class="mfzxauto" style="display: none;">
-    <p class="mfzxtitle">对车辆感兴趣？</p>
-    <p class="mfzxdes">电话沟通效率更高，议价空间更大哦！</p>
-    <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mfzxbanner.png" class="mfzxbanner">
-    <div class="mfzxtel" id="mfzxteldl" data-track="弹框拨打电话wap">拨打电话</div>
-    <p class="mfzxclick" data-track="商家联系wap">让商家联系我</p>
-    <img src="http://static.hx2cars.com/resource/web/dist/static/mobpages/images/mfzxclose.png" class="mfzxclose">
-</div> -->
-<div class="configurationModel">
-    <div class="configurationHead">
-        参数配置
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+              
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="configurationWrap">
-        <div class="configurationTitleBox">
-            <p class="configurationTitle">大众 途安  2011款 1.4T DSG智雅版</p>
-            <p class="cf60">6.8万</p>
-        </div>
-        <div class="configurationContent " id="configurationContent">
-        <div class="NewcarBox"><div class="info s1"><p class="iTitle">基本配置</p><ul><li><span class="left">车身结构</span><span class="right">五门5座MPV</span></li><li><span class="left">变速箱（器）类型</span><span class="right">双离合变速器</span></li><li><span class="left">车型分类名称</span><span class="right">旅行车类</span></li><li><span class="left">配置等级</span><span class="right">智雅版</span></li><li><span class="left">变速箱</span><span class="right">7档双离合变速箱</span></li><li><span class="left">新车购置价</span><span class="right">158800</span></li><li><span class="left">整备质量（千克）</span><span class="right">1550</span></li><li><span class="left">风险标识</span><span class="right">正常车型</span></li><li><span class="left">最大整备质量（千克）</span><span class="right">1550</span></li><li><span class="left">安全气囊数</span><span class="right">4</span></li><li><span class="left">ABS标示</span><span class="right">是</span></li><li><span class="left">发动机描述</span><span class="right">1.4T</span></li><li><span class="left">最小整备质量（千克）</span><span class="right">1550</span></li><li><span class="left">上市年份</span><span class="right">201012</span></li><li><span class="left">长×宽×高(mm)</span><span class="right">4395*1794*1634;1658</span></li><li><span class="left">工信部综合油耗(L)</span><span class="right">6.9</span></li><li><span class="left">厂商指导价</span><span class="right">178800</span></li><li><span class="left">类比价</span><span class="right">0</span></li><li><span class="left">年款</span><span class="right">2011</span></li><li><span class="left">功率</span><span class="right">96</span></li><li><span class="left">排放标准</span><span class="right">国四</span></li><li><span class="left">座位数</span><span class="right">5</span></li><li><span class="left">别名</span><span class="right">途安1.4T DSG智雅版</span></li><li><span class="left">实测油耗(L)</span><span class="right">7.01</span></li><li><span class="left">备注</span><span class="right">双离合 智雅版 国Ⅳ(节能补贴)</span></li><li><span class="left">实测100-0km/h制动(m)</span><span class="right">10.9</span></li><li><span class="left">气缸排列形式</span><span class="right">L4</span></li><li><span class="left">防盗标识</span><span class="right">是</span></li><li><span class="left">总质量</span><span class="right">2060</span></li><li><span class="left">实测0-100km/h加速(s)</span><span class="right">11</span></li><li><span class="left">燃油喷射形式</span><span class="right">多点电喷</span></li><li><span class="left">标准名称</span><span class="right">大众汽车SVW6440JGD多用途乘用车</span></li><li><span class="left">国产/进口</span><span class="right">合资</span></li><li><span class="left">发动机型号</span><span class="right">上汽大众CFB</span></li><li><span class="left">整车质保</span><span class="right">两年或6万公里</span></li><li><span class="left">后轮距</span><span class="right">1508</span></li><li><span class="left">排量</span><span class="right">1.39</span></li><li><span class="left">驱动形式</span><span class="right">前置前驱</span></li><li><span class="left">购置价含税</span><span class="right">172373</span></li><li><span class="left">发动机气门数(单缸气门数)</span><span class="right">4</span></li><li><span class="left">排放依据标准</span><span class="right">GB18352.3-2005国IV</span></li><li><span class="left">轴距</span><span class="right">2678</span></li><li><span class="left">变速器档数</span><span class="right">7</span></li><li><span class="left">前轮距</span><span class="right">1535</span></li><li><span class="left">外形尺寸</span><span class="right">4395*1794*1634;1658</span></li><li><span class="left">VIN</span><span class="right"> </span></li><li><span class="left">动力类型</span><span class="right">汽油</span></li><li><span class="left">类比价含税</span><span class="right">0</span></li></ul></div><div class="info s2"><p class="iTitle">操控配置</p><ul><li><span class="left">前桥限滑差速器/差速锁</span><span class="right">无</span></li><li><span class="left">中央差速器锁止功能</span><span class="right">无</span></li><li><span class="left">陡坡缓降</span><span class="right">无</span></li><li><span class="left">车身稳定控制(ESC/ESP/DSC等)</span><span class="right">有</span></li><li><span class="left">空气悬架</span><span class="right">无</span></li><li><span class="left">ABS防抱死</span><span class="right">有</span></li><li><span class="left">刹车辅助(EBA/BAS/BA等)</span><span class="right">有</span></li><li><span class="left">后桥限滑差速器/差速锁</span><span class="right">无</span></li><li><span class="left">牵引力控制(ASR/TCS/TRC等)</span><span class="right">有</span></li><li><span class="left">可变悬架</span><span class="right">无</span></li><li><span class="left">制动力分配(EBD/CBC等)</span><span class="right">有</span></li><li><span class="left">自动驻车/上坡辅助</span><span class="right">有</span></li></ul></div><div class="info s3"><p class="iTitle">外部配置</p><ul><li><span class="left">方向盘上下调节</span><span class="right">有</span></li><li><span class="left">运动风格座椅</span><span class="right">无</span></li><li><span class="left">运动外观套件</span><span class="right">无</span></li><li><span class="left">后排座椅电动调节</span><span class="right">无</span></li><li><span class="left">真皮方向盘</span><span class="right">无</span></li><li><span class="left">前座中央扶手</span><span class="right">有</span></li><li><span class="left">电动后备厢</span><span class="right">无</span></li><li><span class="left">自动空调</span><span class="right">无</span></li><li><span class="left">前排座椅通风</span><span class="right">无</span></li><li><span class="left">后排独立空调</span><span class="right">无</span></li><li><span class="left">后座出风口</span><span class="right">有</span></li><li><span class="left">座椅高低调节</span><span class="right">有</span></li><li><span class="left">HUD抬头数字显示</span><span class="right">无</span></li><li><span class="left">定速巡航</span><span class="right">无</span></li><li><span class="left">前排座椅按摩</span><span class="right">无</span></li><li><span class="left">电动吸合门</span><span class="right">无</span></li><li><span class="left">方向盘前后调节</span><span class="right">有</span></li><li><span class="left">多功能方向盘</span><span class="right">无</span></li><li><span class="left">方向盘换挡</span><span class="right">无</span></li><li><span class="left">后排座椅整体放倒</span><span class="right">无</span></li><li><span class="left">方向盘电动调节</span><span class="right">无</span></li><li><span class="left">手动空调</span><span class="right">有</span></li><li><span class="left">后排座椅按摩</span><span class="right">无</span></li><li><span class="left">肩部支撑调节</span><span class="right">无</span></li><li><span class="left">电动座椅记忆</span><span class="right">无</span></li><li><span class="left">车内空气调节/花粉过滤</span><span class="right">有</span></li><li><span class="left">后倒车雷达</span><span class="right">有</span></li><li><span class="left">副驾驶位电动调节</span><span class="right">无</span></li><li><span class="left">车载冰箱</span><span class="right">无</span></li><li><span class="left">第二排座椅移动</span><span class="right">有</span></li><li><span class="left">倒车视频影像</span><span class="right">无</span></li><li><span class="left">后排座椅通风</span><span class="right">无</span></li><li><span class="left">铝合金轮毂</span><span class="right">有</span></li><li><span class="left">后排杯架</span><span class="right">无</span></li><li><span class="left">真皮/仿皮座椅</span><span class="right">有</span></li><li><span class="left">腰部支撑调节</span><span class="right">有</span></li><li><span class="left">全景天窗</span><span class="right">无</span></li><li><span class="left">方向盘加热</span><span class="right">无</span></li><li><span class="left">第二排靠背角度调节</span><span class="right">无</span></li><li><span class="left">后座中央扶手</span><span class="right">无</span></li><li><span class="left">第三排座椅</span><span class="right">选装</span></li><li><span class="left">后排座椅比例放倒</span><span class="right">有</span></li><li><span class="left">电动天窗</span><span class="right">有</span></li><li><span class="left">驾驶位电动调节</span><span class="right">无</span></li><li><span class="left">前雷达</span><span class="right">无</span></li><li><span class="left">前排座椅加热</span><span class="right">无</span></li><li><span class="left">行车电脑显示屏</span><span class="right">有</span></li><li><span class="left">后排座椅加热</span><span class="right">无</span></li></ul></div><div class="info s4"><p class="iTitle">变速箱/底盘/车轮配置</p><ul><li><span class="left">后轮胎规格</span><span class="right">205/55 R16</span></li><li><span class="left">后制动器类型</span><span class="right">盘式</span></li><li><span class="left">前轮胎规格</span><span class="right">205/55 R16</span></li><li><span class="left">备胎规格</span><span class="right">非全尺寸</span></li><li><span class="left">前悬架类型/前悬挂类型</span><span class="right">麦弗逊式独立悬架</span></li><li><span class="left">车体结构</span><span class="right">承载</span></li><li><span class="left">档位数</span><span class="right">7档</span></li><li><span class="left">前制动器类型</span><span class="right">通风盘式</span></li><li><span class="left">驱动方式</span><span class="right">前置前驱</span></li><li><span class="left">助力类型</span><span class="right">电子液压助力</span></li><li><span class="left">驻车制动类型</span><span class="right">手刹</span></li><li><span class="left">后悬架类型/后悬挂类型</span><span class="right">四连杆独立悬架</span></li><li><span class="left">变速箱类型</span><span class="right">双离合变速箱</span></li><li><span class="left">简称</span><span class="right">7档双离合变速箱</span></li></ul></div><div class="info s5"><p class="iTitle">高科技配置</p><ul><li><span class="left">主动刹车/主动安全系统</span><span class="right">无</span></li><li><span class="left">并线辅助</span><span class="right">无</span></li><li><span class="left">车道偏离预警系统</span><span class="right">无</span></li><li><span class="left">自动泊车入位</span><span class="right">无</span></li><li><span class="left">夜视系统</span><span class="right">无</span></li><li><span class="left">整体主动转向系统</span><span class="right">无</span></li><li><span class="left">中控液晶屏分屏显示</span><span class="right">无</span></li><li><span class="left">自适应巡航</span><span class="right">无</span></li><li><span class="left">发动机启停技术</span><span class="right">无</span></li><li><span class="left">全景摄像头</span><span class="right">无</span></li></ul></div><div class="info s6"><p class="iTitle">灯光配置</p><ul><li><span class="left">前电动车窗</span><span class="right">有</span></li><li><span class="left">氙气大灯</span><span class="right">无</span></li><li><span class="left">LED大灯</span><span class="right">无</span></li><li><span class="left">大灯清洗装置</span><span class="right">无</span></li><li><span class="left">后排侧遮阳帘</span><span class="right">无</span></li><li><span class="left">后排侧隐私玻璃</span><span class="right">无</span></li><li><span class="left">后雨刷</span><span class="right">有</span></li><li><span class="left">后电动车窗</span><span class="right">有</span></li><li><span class="left">日间行车灯</span><span class="right">无</span></li><li><span class="left">车窗防夹手功能</span><span class="right">有</span></li><li><span class="left">防紫外线/隔热玻璃</span><span class="right">有</span></li><li><span class="left">外后视镜自动防眩目</span><span class="right">无</span></li><li><span class="left">遮阳板化妆镜</span><span class="right">有</span></li><li><span class="left">后视镜电动折叠</span><span class="right">无</span></li><li><span class="left">后视镜记忆</span><span class="right">无</span></li><li><span class="left">内后视镜自动防眩目</span><span class="right">无</span></li><li><span class="left">后视镜加热</span><span class="right">有</span></li><li><span class="left">转向头灯(辅助灯)</span><span class="right">有</span></li><li><span class="left">后风挡遮阳帘</span><span class="right">无</span></li><li><span class="left">后视镜电动调节</span><span class="right">有</span></li><li><span class="left">自动头灯</span><span class="right">无</span></li><li><span class="left">大灯高度可调</span><span class="right">有</span></li><li><span class="left">前雾灯</span><span class="right">有</span></li><li><span class="left">车内氛围灯</span><span class="right">无</span></li><li><span class="left">感应雨刷</span><span class="right">无</span></li></ul></div><div class="info s7"><p class="iTitle">发动机配置</p><ul><li><span class="left">进气形式</span><span class="right">涡轮增压</span></li><li><span class="left">最大扭矩转速(rpm)</span><span class="right">1750-3500</span></li><li><span class="left">比功率(最大功率(kw)/整备质量(kg))</span><span class="right">0.06</span></li><li><span class="left">燃料形式</span><span class="right">汽油</span></li><li><span class="left">配气机构</span><span class="right">DOHC双顶置凸轮轴</span></li><li><span class="left">供油方式</span><span class="right">直喷</span></li><li><span class="left">每缸气门数(个)</span><span class="right">4气门</span></li><li><span class="left">最大扭矩(N·m)</span><span class="right">220</span></li><li><span class="left">环保标准</span><span class="right">国四</span></li><li><span class="left">最大功率(kW)</span><span class="right">96</span></li><li><span class="left">发动机描述</span><span class="right">1.4T</span></li><li><span class="left">最大功率转速(rpm)</span><span class="right">5000</span></li><li><span class="left">最大马力(Ps)</span><span class="right">131</span></li><li><span class="left">发动机型号</span><span class="right">上汽大众CFB</span></li><li><span class="left">排量(mL)</span><span class="right">1390</span></li><li><span class="left">缸体材料</span><span class="right">铁</span></li><li><span class="left">气缸数(个)</span><span class="right">4缸</span></li><li><span class="left">升功率比(最大功率(kw)/排量(L))</span><span class="right">69.06</span></li><li><span class="left">缸盖材料</span><span class="right">铝</span></li><li><span class="left">燃油标号</span><span class="right">93号(京92号)</span></li></ul></div><div class="info s8"><p class="iTitle">多媒体配置</p><ul><li><span class="left">后排液晶屏</span><span class="right">无</span></li><li><span class="left">蓝牙/车载电话</span><span class="right">无</span></li><li><span class="left">外接音源接口(AUX/USB/iPod等)</span><span class="right">有</span></li><li><span class="left">多碟CD</span><span class="right">1</span></li><li><span class="left">GPS导航系统</span><span class="right">无</span></li><li><span class="left">CD支持MP3/WMA</span><span class="right">有</span></li><li><span class="left">2-3喇叭扬声器系统</span><span class="right">无</span></li><li><span class="left">4-5喇叭扬声器系统</span><span class="right">有</span></li><li><span class="left">虚拟多碟CD</span><span class="right">无</span></li><li><span class="left">单碟DVD</span><span class="right">无</span></li><li><span class="left">单碟CD</span><span class="right">有</span></li><li><span class="left">内置硬盘</span><span class="right">无</span></li><li><span class="left">车载电视</span><span class="right">无</span></li><li><span class="left">人机交互系统</span><span class="right">无</span></li><li><span class="left">6-7喇叭扬声器系统</span><span class="right">无</span></li><li><span class="left">定位互动服务</span><span class="right">无</span></li><li><span class="left">多碟DVD系统</span><span class="right">无</span></li><li><span class="left">≥8喇叭扬声器系统</span><span class="right">无</span></li></ul></div><div class="info s9"><p class="iTitle">安全装备</p><ul><li><span class="left">副驾驶安全气囊</span><span class="right">有</span></li><li><span class="left">LATCH座椅接口(兼容ISOFIX)</span><span class="right">无</span></li><li><span class="left">无钥匙进入系统</span><span class="right">无</span></li><li><span class="left">前排侧气囊</span><span class="right">有</span></li><li><span class="left">后排头部气囊(气帘)</span><span class="right">无</span></li><li><span class="left">胎压监测装置</span><span class="right">有</span></li><li><span class="left">安全带未系提示</span><span class="right">有</span></li><li><span class="left">驾驶座安全气囊</span><span class="right">有</span></li><li><span class="left">后排侧气囊</span><span class="right">无</span></li><li><span class="left">零胎压继续行驶</span><span class="right">无</span></li><li><span class="left">ISOFIX儿童座椅接口</span><span class="right">有</span></li><li><span class="left">车内中控锁</span><span class="right">有</span></li><li><span class="left">发动机电子防盗</span><span class="right">有</span></li><li><span class="left">无钥匙启动系统</span><span class="right">无</span></li><li><span class="left">膝部气囊</span><span class="right">无</span></li><li><span class="left">遥控钥匙</span><span class="right">有</span></li><li><span class="left">前排头部气囊(气帘)</span><span class="right">无</span></li></ul></div><div class="info s10"><p class="iTitle">车身配置</p><ul><li><span class="left">车身结构</span><span class="right">MPV</span></li><li><span class="left">油箱容积(L)</span><span class="right">60</span></li><li><span class="left">整备质量(Kg)</span><span class="right">1550</span></li><li><span class="left">硬件特征</span><span class="right">196.70051</span></li><li><span class="left">轴距(mm)</span><span class="right">2678</span></li><li><span class="left">长度(mm)</span><span class="right">4395</span></li><li><span class="left">后轮距(mm)</span><span class="right">1508</span></li><li><span class="left">车门数(个)</span><span class="right">五门</span></li><li><span class="left">高度(mm)</span><span class="right">1634;1658</span></li><li><span class="left">座位数(个)</span><span class="right">5</span></li><li><span class="left">宽度(mm)</span><span class="right">1794</span></li><li><span class="left">前轮距(mm)</span><span class="right">1535</span></li><li><span class="left">行李厢容积(L)</span><span class="right">620-1900</span></li><li><span class="left">底盘面积</span><span class="right">7.88</span></li></ul></div></div></div>
-    </div>
 </div>
 
 
@@ -498,7 +494,7 @@ $(document).ready(function() {
 				
 				$("#title").html(truck.title);
 				$("#price").html(truck.price);
-				$("#addDate").html("更新  "+truck.addDate);
+				//$("#addDate").html("更新  "+truck.addDate);
 				$("#isGuohu").html(truck.isGuohu==0?"有":"无");
 				$("#cardDate").html(truck.cardDate.substring(0,10));
 				$("#checkDate").html(truck.checkDate.substring(0,10));
@@ -510,17 +506,43 @@ $(document).ready(function() {
 				var html="";
 				for(var j=0;j<images.length;j++){
 	        		url='?imageMogr2/blur/1x0/quality/75|watermark/2/text/6Zu36ZSL6LSn6L2m572R/font/5b6u6L2v6ZuF6buR/fontsize/2000/fill/I0ZBRkFGQQ==/dissolve/30/gravity/Center/dx/10/dy/10|imageslim';
-
-					html+='<li><img  src="'+images[j]+url+'" style="width:100%;height:100%;"></li>';
+					html+='<li class="imageLi" date-index="'+j+'" href="'+images[j]+url+'"><img  src="'+images[j]+url+'" style="width:100%;height:100%;"></li>';
 				}
 				$(".bxslider").html(html);
 				
 				 $('.bxslider').bxSlider({
 					 	pager:true,
 				        captions: true,//自动控制
-				        controls:true,
+				        fasle:false,
 				        auto: true,
 				  });
+				 
+				 
+				 var pswpElement = document.querySelectorAll('.pswp')[0];
+
+					// build items array
+				 	 var items = [];
+					for(var j=0;j<images.length;j++){
+						items.push({src: images[j]+url,w:1200,h:900});
+				    } 
+					
+					
+					
+					$(".imageLi").click(function(){
+						var index=parseInt($(this).attr("date-index"));
+						var options = {
+						    index: 0 // start at first slide
+						};
+
+						// Initializes and opens PhotoSwipe
+						var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+						gallery.init();
+					});
+					
+
+					
+				 
+				 
 				 
 				 //绑定电话
 			 	if(!xyzIsNull(customerObj)){
@@ -621,6 +643,10 @@ $(document).ready(function() {
 			window.location.replace("register.html");
 		}
 	});
+	
+	
+
+	
 	
 	
 	
