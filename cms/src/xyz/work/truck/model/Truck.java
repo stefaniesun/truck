@@ -19,6 +19,11 @@ public class Truck implements Comparable<Truck>{
 		public static int STATUS_SUBMIT=0;//已提交
 		public static int STATUS_CHECK=1;//已审核
 		public static int STATUS_UNCHECK=-1;//审核失败
+		
+		public static String TYPE_QYC="QYC";//牵引车
+		public static String TYPE_ZHC="ZHC";//载货车
+		public static String TYPE_ZXC="ZXC";//自卸车
+		public static String TYPE_OTHER="OTHER";//其他
 	
 	  	@Id
 	    @Column(name = "iidd" , unique = true , nullable = false)
@@ -76,6 +81,9 @@ public class Truck implements Comparable<Truck>{
 	    
 	    @Column(name="type")
 	    private String type;//0个人 1商家
+	    
+	    @Column(name="truck_type")
+	    private String truckType;//
 	    
 	    @Column(name="address")
 	    private String address;//联系地址
@@ -290,6 +298,14 @@ public class Truck implements Comparable<Truck>{
 
 		public void setIsOpen(int isOpen) {
 			this.isOpen = isOpen;
+		}
+
+		public String getTruckType() {
+			return truckType;
+		}
+
+		public void setTruckType(String truckType) {
+			this.truckType = truckType;
 		}
 	    
 }

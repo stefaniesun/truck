@@ -182,7 +182,7 @@
                 <li><span>车龄</span>：<span class="dvalue" id="year"></span></li>
                  <li><span>交强险</span>：<span class="dvalue" id="insuranceDate"></span></li>
                 <li><span>身份</span>：<span class="dvalue" id="type">能</span></li>
-          
+          		<li><span>车型</span>：<span class="dvalue" id="truckType"></span></li>
             </ul>
         </div>
 
@@ -258,43 +258,7 @@
         </div> -->
     </div>
 
-    <div class="vFail" style="display:none;">
-        <div style="position: relative;">
-            <p class="vfTitle">验证失败</p>
-            <div class="vfBox">
-                <div class="vfbTip"><span>您还不是买车vip，要查看批发车辆，须开通买车vip</span></div>
-                <div class="vfbBtn">
-                    <p class="vfbOk" id="vfbOk">去充值</p>
-                </div>
-            </div>
-            <a href="/" class="noPay"></a>
-        </div>
-    </div>
-    <!--<div class="mFloat">
-        <a class="mfGotop" id="mfGotop" style="display:none;"></a>
-        <a class="mfzx" id="mfzx" title="免费咨询" data-track="WAP详情页-免费咨询" data-show="WAP详情配置-免费咨询"></a>
-    </div>-->
 </div></section>
-<section class="map fly-right1" style="display: none; transition: all 0.3s; left: auto; right: 0px; position: fixed; transform: translate(100%, 0px); z-index: 100;">
-    <div class="mTop"><i class="leftArrow" id="leftArrow"></i>地图</div>
-    <div class="mMap" id="mMap"></div>
-</section>
-<!-- 登录成功后，降价成功的弹出框 -->
-<!-- 登录成功后，降价成功的弹出框 end-->
-<div class="modeljj" style="display: none;"></div>
-<div class="callPhoneModel hide">
-    <div class="modelBg"></div>
-    <div class="buyPhoneBox">
-        <div class="cbox">
-            <i class="colseBtn iconfont icon-cha"></i>
-        </div>
-        <div class="buyBoxOne">
-            <p class="text1">今日次数已达40次上限，继<br>续查看需要额外支付1元/次</p>
-            <p class="checkPhoneBtn" id="aliPay">继续支付</p>
-            <p class="checkPhoneBtn" id="weixiPay" style="display: none;">继续支付</p>
-        </div>
-    </div>
-</div>
 
 
 <section class="wap_typeB" id="kj_model">
@@ -502,6 +466,17 @@ $(document).ready(function() {
 				$("#mile").html(truck.mile+"万公里");
 				$("#year").html(truck.year);
 				$("#type").html(truck.type==0?"个人":"商家");
+				var truckType="";
+				if(truck.type="QYC"){
+					truckType="牵引车";
+				}else if(truck.type="ZHC"){
+					truckType="载货车";
+				}else if(truck.type="ZXC"){
+					truckType="自卸车";
+				}else{
+					truckType="其他";
+				}
+				$("#truckType").html(truckType);
 				var images=JSON.parse(truck.images);
 				var html="";
 				for(var j=0;j<images.length;j++){
@@ -539,11 +514,6 @@ $(document).ready(function() {
 						gallery.init();
 					});
 					
-
-					
-				 
-				 
-				 
 				 //绑定电话
 			 	if(!xyzIsNull(customerObj)){
 			 		$("#tel").attr("href","tel:"+truck.phone);

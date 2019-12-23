@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/example.css"/>
       <script type="text/javascript" src="js/util.js"></script>
 </head>
-<body ontouchstart>
+<body>
     <div class="weui-toptips weui-toptips_warn js_tooltips">错误提示</div>
 
     <div class="container" id="container">
@@ -38,6 +38,10 @@
             <div class="weui-cell__bd">
                 <input id="price" class="weui-input" placeholder="估价">
             </div>
+          </div>
+           <div class="weui-cell weui-cell_access weui-cell_select weui-cell_select-after">
+            <div class="weui-cell__hd"><label class="weui-label">类型</label></div>
+            <div class="weui-cell__bd" id="truckType"></div>
           </div>
           <div class="weui-cell weui-cell_switch">
                 <div class="weui-cell__bd">有无户</div>
@@ -250,6 +254,31 @@
         });
     });
     
+    $('#truckType').on('click', function () {
+        weui.picker([{
+            label: '牵引车',
+            value: 'QYC'
+        },{
+            label: '载货车',
+            value: 'ZHC'
+        },{
+            label: '自卸车',
+            value: 'ZXC'
+        },{
+            label: '其他',
+            value: 'OTHER'
+        }], {
+            onChange: function (result) {
+                console.log(result);
+            },
+            onConfirm: function (result) {
+                console.log(result);
+                $("#truckType").html(result[0].label);
+            },
+            title: '类型'
+        });
+    });
+    
     var tmpl = '<li class="weui-uploader__file" style="background-image:url(#url#)"></li>',
     $gallery = $("#gallery"), $galleryImg = $("#galleryImg"),
     $uploaderInput = $("#uploaderInput"),
@@ -354,6 +383,7 @@ $("#publish").click(function(){
 	var year=$("#year").val();
 	var phone=$("#phone").val();
 	var type=$("#showPicker").html()=="个人"?0:1;
+	var truckType=$("#truckType").html()
 	var address=$("#address").val();
 	var remark=$("#remark").val();
 	
@@ -405,6 +435,7 @@ $("#publish").click(function(){
 	map.year=year;
 	map.phone=phone;
 	map.type=type;
+	map.truckType=truckType;
 	map.address=address;
 	map.remark=remark;
 	map.images=images;

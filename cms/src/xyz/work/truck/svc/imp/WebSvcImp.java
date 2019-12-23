@@ -271,4 +271,35 @@ public class WebSvcImp implements WebSvc {
 		
 	}
 
+	@Override
+	public Map<String, Object> getSearchData(int offset, int pageSize, String truckType) {
+		
+		String hql="from Truck where status=1 and isOpen=1 ";
+		
+		if(StringTool.isNotNull(truckType)) {
+			hql+=" and truckType='"+truckType+"' ";
+		}
+		
+		hql+=" order by addDate desc";
+		
+		String countHql = "select count(*) " + hql;
+        Query countQuery = commonDao.getQuery(countHql);
+        Number countNum = (Number)countQuery.uniqueResult();
+        int count = countNum == null ? 0 : countNum.intValue();
+
+        Query query = commonDao.getQuery(hql.toString());
+        query.setMaxResults(pageSize);
+        query.setFirstResult(offset);
+        @SuppressWarnings("unchecked")
+        List<Truck> list = query.list();
+
+        Map<String, Object> mapContent = new HashMap<String, Object>();
+        mapContent.put("total", count);
+        mapContent.put("rows", list);
+
+        return ReturnUtil.returnMap(1, mapContent);
+	
+		
+	}
+
 }

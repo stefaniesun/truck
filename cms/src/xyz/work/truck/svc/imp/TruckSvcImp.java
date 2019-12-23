@@ -50,6 +50,7 @@ public class TruckSvcImp implements TruckSvc {
 		 String year=map.get("year")==null?"":map.get("year").toString();
 		 String phone=map.get("phone")==null?"":map.get("phone").toString();
 		 String type=map.get("type")==null?"":map.get("type").toString();
+		 String truckType=map.get("truckType")==null?"":map.get("truckType").toString();
 		 String address=map.get("address")==null?"":map.get("address").toString();
 		 String remark=map.get("remark")==null?"":map.get("remark").toString();
 		 List<String> images= new ArrayList<String>();
@@ -101,6 +102,7 @@ public class TruckSvcImp implements TruckSvc {
 		 truck.setRemark(remark);
 		 truck.setTitle(title);
 		 truck.setType(type);
+		 truck.setTruckType(truckType);
 		 truck.setYear(year);
 		 truck.setCustomer(customer);
 		 truck.setCustomerImg(customerObj.getImg());
