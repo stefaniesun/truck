@@ -71,7 +71,7 @@
 </div>
 <div class="c-footer-con br-t" style="padding:0px;">
         <a href="index.html" class="icon-home">首页</a>
-    <a id="buy" href="my.html" class="icon-price">买车</a>
+    <a  href="query.html" class="icon-price">买车</a>
         <a href="publish.html" rel="nofollow" class="icon-truck-btn truck" id="sale">
         <i class="car" style="top:32%;">
             <img src="image/truck/truck.png" alt="icon" />
@@ -108,11 +108,19 @@ $(document).ready(function() {
 	}
 
 	$("#viewHistory").click(function(){
-		window.location.replace("myView.html");
+		if(customerObj.flagRegister==0){
+			window.location.replace("register.html");
+		}else{
+			window.location.replace("myView.html");
+		}
 	});
 	
 	$("#collection").click(function(){
-		window.location.replace("myCollection.html");
+		if(customerObj.flagRegister==0){
+			window.location.replace("register.html");
+		}else{
+			window.location.replace("myCollection.html");
+		}
 	});
 	
 	$("#publish").click(function(){

@@ -104,6 +104,21 @@ function listClick() {
 					 }
 					 $(".c-buy-car-list").html(html);
 					 
+					 console.log("111111111");
+					 
+					 var queryHtml='';
+					 if($(".c-list-nav-con")){
+						 console.log("2222222");
+					 }else{
+						 console.log("3333333333");
+						 queryHtml+='<div class="c-handle-tips-con">';
+						 queryHtml+='<div style="width: 1000%;">';
+						 queryHtml+='<a class="icon-handle-tips">最新上架</a>';
+						 queryHtml+='</div>';
+						 queryHtml+='<a href="/" class="init-btn br-l">重置</a></div>';
+					 }
+					 $(".c-list-nav-con").after(queryHtml);
+					 
 					 $(".c-fixed").removeClass("active");
 					 $(".c-right-handle").removeClass("active");
 				} else {

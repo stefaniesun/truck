@@ -4,8 +4,6 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>雷锋货车网</title>
-		<meta name="keywords" content="重庆二手货车,重庆二手小货车,重庆二手大货车,重庆二手货车价格,二手货车报价,二手货车交易网,二手货车交易市场,二手货车出售,二手货车转让" />
-		<meta name="description" content="卡家二手车专业帮助卡友选购优质重庆二手小货车,重庆二手大货车,免费发布二手货车出售转让,是诚信二手货车交易市场,二手货车交易网." />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<!-- <link rel="stylesheet" type="text/css" href="http://192.168.250.212:8080/css/style-base.css"> -->
 		<link rel="stylesheet" type="text/css" href="css/style-base.css">
@@ -63,10 +61,10 @@ var keys = "all";
 		</h1>
     </a>
     <a class="search-con c-box-flex icon-search" href="#search">搜索二手车</a>
-    <a class="city c-flex-center br-r" href="/static/morelist/?key=jump#/cities">
+ <!--    <a class="city c-flex-center br-r" href="/static/morelist/?key=jump#/cities">
         <div class="text">重庆</div>
         <div class="icon-down-copy"></div>
-    </a>
+    </a> -->
 </div>
 	<div class="c-sticky">
 		<div class="c-list-nav-con br-b">
@@ -197,7 +195,7 @@ var keys = "all";
 		</div>
 		<div class="orange init" onclick="history.go(-1);">取消</div>
 	</form>
-	<div class="c-list-cells c-search-word">
+<!-- 	<div class="c-list-cells c-search-word">
 		<div class="title">热门搜索</div>
 		<div class="word-con">
 						    <a href="/chongqingshi/all_se冷藏车se/" class="word">冷藏车</a>
@@ -209,7 +207,7 @@ var keys = "all";
 						    <a href="/chongqingshi/all_se牵引车se/" class="word">牵引车</a>
 						    <a href="/chongqingshi/all_se搅拌车se/" class="word">搅拌车</a>
 					</div>
-	</div>
+	</div> -->
 </div>
 <!-- 城市弹出 -->
 <div class="c-right-city c-direction-column" data-hash="city">
@@ -230,7 +228,7 @@ var keys = "all";
 			</div>
 		</form>
 	</div>
-	<div class="c-page c-box-flex">
+	<!-- <div class="c-page c-box-flex">
 		<div class="c-list-cells">
 			<div class="c-list-cell c-flex-center">
 				<div class="c-box-flex">当前定位城市：重庆</div>
@@ -240,13 +238,13 @@ var keys = "all";
 		<div class="c-small-title-con">热门城市</div>
 		<div class="c-list-cells">
 			<div class="c-list-cell hot-city-con">
-				<!-- js循环热门城市 -->
+				js循环热门城市
 			</div>
 		</div>
-		<!-- 循环字母城市开始 -->
+		循环字母城市开始
 		<div class="c-city-con"></div>
-		<!-- 循环字母城市结束 -->
-	</div>
+		循环字母城市结束
+	</div> -->
 </div>
 <!-- 字母 -->
 <div class="c-letters-list">
@@ -295,47 +293,6 @@ var provincePinyin = 'chongqingshi';
 			});
 		});
 	</script>
-    <script>
-		//brage方法 调用app原生的方法
-		function sendData2Native(data, callback) {
-			window.WebViewJavascriptBridge.send(data, callback);
-		}
-
-        function callNativeMethod(method, param, callback) {
-            window.WebViewJavascriptBridge.callHandler(method, param,callback);
-        }
-
-        function connectWebViewJavascriptBridge(callback) {
-            if (window.WebViewJavascriptBridge) {
-                callback(WebViewJavascriptBridge);
-            } else {
-                document.addEventListener('WebViewJavascriptBridgeReady', function() {
-                    callback(WebViewJavascriptBridge)
-                }, false);
-            }
-        }
-        connectWebViewJavascriptBridge(function(bridge) {
-                        $('.login-check').unbind('click').on('click', function(e) {
-                e.preventDefault();
-                callNativeMethod('onLogin');
-            });
-                        bridge.init(function(message, responseCallback) {
-            });
-            bridge.registerHandler("onLoginCallback", function(data, responseCallback) {
-                location.reload();
-            });
-            bridge.registerHandler("onPayCallback", function(response, responseCallback) {
-                response == 'success' ? onPaySuccess() :  onPayFail();
-            });
-        });
-    </script>
-<script type="text/javascript">
-if (!accessToken && !$sq.isApp()){
-	$('.login-check').unbind('click').on('click', function() {
-		window.location.href = 'https://sso.360che.com/?c=login&referer=' + window.location.href;
-	});
-}
-</script>
 <script>
 
 
@@ -365,7 +322,7 @@ $(document).ready(function() {
 						
 						html+='<a class="c-list-cell c-flex c-truck-list" href="detail.html?numberCode='+dataObj.numberCode+'">';
 						html+='<div class="photo">';
-						html+='<img class="truck-photo-load" src="'+images[0]+'" data-src="'+images[0]+'">';
+						html+='<img class="truck-photo-load" src="'+images[0]+'?imageMogr2/thumbnail/640x640/format/webp/blur/1x0/quality/75|imageslim" data-src="'+images[0]+'">';
 						html+='</div>';
 						html+='<div class="c-box-flex content">';
 						html+=' <div class="title">';
@@ -393,6 +350,8 @@ $(document).ready(function() {
 			}
 		});
 });
+
+
 
 </script>
 
