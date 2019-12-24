@@ -21,6 +21,6 @@ public interface WebSvc {
 
 	public Map<String, Object> xcxWechatOper(String code,String nickName,String img,String city,String gender,String province);
 
-	public Map<String, Object> getSearchData(int offset, int pageSize, String query);
+	public Map<String, Object> getSearchData(int offset, int pageSize, String query,String queryStr);
 
 }

@@ -1,4 +1,4 @@
-package xyz.work.resources.model;
+package xyz.work.security.model;
 
 import java.util.Date;
 

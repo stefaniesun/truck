@@ -116,44 +116,7 @@
 	 
 	 
 	 var page =getUrlParam("page");
-	 var code =getUrlParam("code");
-	 var nickName =getUrlParam("nickName");
-	 var img =getUrlParam("img");
-	 var city =getUrlParam("city");
-	 var gender =getUrlParam("gender");
-	 var province =getUrlParam("province");
-	 
-	 //$("img.lazy").lazyload({effect: "fadeIn"});
-	 
-	 
 
-	 if(!xyzIsNull(code)){
-		 $.ajax({
-				url : "/WebWS/xcxWechatOper.xyz",
-				type : "POST",
-				data : {
-					code : code,
-					nickName:nickName,
-					img:img,
-					city:city,
-					gender:gender,
-					province:province
-				},
-				async : false,
-				dataType : "json",
-				success : function(data) {
-					
-					if (data.status == 1) {
-						var securityLogin=data.content;
-						localStorage.setItem("customer", JSON.stringify(data.content));
-						addCustomerLoginCookie(securityLogin);
-					} else {
-						alert(data.msg);
-					}
-				}
-			});
-	 }
-	 
 	  	var countPage=1;//总页数
 	    var page=1;//当前页
 	    var pageSize=10;//每页显示几条

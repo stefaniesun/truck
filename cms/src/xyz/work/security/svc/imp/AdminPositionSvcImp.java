@@ -23,7 +23,7 @@ import xyz.util.Constant;
 import xyz.util.PossessorUtil;
 import xyz.util.StringTool;
 import xyz.util.UUIDUtil;
-import xyz.work.resources.model.Provider;
+import xyz.work.security.model.Provider;
 import xyz.work.security.model.SecurityApi;
 import xyz.work.security.model.SecurityFunction;
 import xyz.work.security.model.SecurityPosition;

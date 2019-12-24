@@ -19,8 +19,6 @@ import xyz.filter.RmiUtil;
 import xyz.util.Constant;
 import xyz.util.StringTool;
 import xyz.util.UUIDUtil;
-import xyz.work.base.model.Cabin;
-import xyz.work.base.model.Cruise;
 import xyz.work.custom.model.BizSecurityLogin;
 import xyz.work.custom.model.Customer;
 import xyz.work.truck.model.Truck;
@@ -272,9 +270,13 @@ public class WebSvcImp implements WebSvc {
 	}
 
 	@Override
-	public Map<String, Object> getSearchData(int offset, int pageSize, String query) {
+	public Map<String, Object> getSearchData(int offset, int pageSize, String query,String queryStr) {
 		
 		String hql="from Truck where status=1 and isOpen=1 ";
+		
+		if(StringTool.isNotNull(queryStr)) {
+			hql+=" and title like '%"+queryStr+"%' ";
+		}
 		
 		if(StringTool.isNotNull(query)) {
 			
