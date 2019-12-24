@@ -32,6 +32,7 @@ public class MySpecialFilter implements Filter{
 		"/WebWS/getToken.xyz",
 		"/WebWS/msgReciveOper.xyz",
 		"/WebWS/xcxWechatOper.xyz",
+		"/WebWS/getSearchData.xyz",
 		
 		"/CustomerWS/customerRegisterOper.xyz",
 		"/FileWS/uploadFileOper.xyz",

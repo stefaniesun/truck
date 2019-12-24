@@ -272,26 +272,49 @@ public class WebSvcImp implements WebSvc {
 	}
 
 	@Override
-	public Map<String, Object> getSearchData(int offset, int pageSize, String truckType) {
+	public Map<String, Object> getSearchData(int offset, int pageSize, String query) {
 		
 		String hql="from Truck where status=1 and isOpen=1 ";
 		
-		if(StringTool.isNotNull(truckType)) {
-			hql+=" and truckType='"+truckType+"' ";
+		if(StringTool.isNotNull(query)) {
+			
+			if(query.contains("QYC")) {
+				hql+=" and truckType='QYC' ";
+			}else if(query.contains("ZHC")) {
+				hql+=" and truckType='ZHC' ";
+			}else if(query.contains("ZXC")) {
+				hql+=" and truckType='ZXC' ";
+			}else {
+				hql+=" and truckType='OTHER' ";
+			}
+			
+			
+			if(query.contains("sortNew")) {
+				hql+=" order by addDate desc";
+			}else if(query.contains("sortMinPrice")) {
+				hql+=" order by price asc";
+			}else if(query.contains("sortMaxPrice")) {
+				hql+=" order by price desc";
+			}else {
+				hql+=" order by addDate desc";
+			}
+			
+		}else {
+			hql+=" order by addDate desc";
 		}
 		
-		hql+=" order by addDate desc";
+	
 		
 		String countHql = "select count(*) " + hql;
         Query countQuery = commonDao.getQuery(countHql);
         Number countNum = (Number)countQuery.uniqueResult();
         int count = countNum == null ? 0 : countNum.intValue();
 
-        Query query = commonDao.getQuery(hql.toString());
-        query.setMaxResults(pageSize);
-        query.setFirstResult(offset);
+        Query queryObj = commonDao.getQuery(hql.toString());
+        queryObj.setMaxResults(pageSize);
+        queryObj.setFirstResult(offset);
         @SuppressWarnings("unchecked")
-        List<Truck> list = query.list();
+        List<Truck> list = queryObj.list();
 
         Map<String, Object> mapContent = new HashMap<String, Object>();
         mapContent.put("total", count);

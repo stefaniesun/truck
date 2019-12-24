@@ -1,200 +1,415 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>邮轮资源查询</title>
-    <link rel="stylesheet" type="text/css" href="js/library/layui/css/layui.css">
-    <link rel="stylesheet" type="text/css" href="css/simple-calendar.css"></link>
-    
-    <script type="text/javascript" src="js/library/jquery-1.7.2.js"></script>
-    <script type="text/javascript" src="js/library/common/common.js"></script>
-    <script type="text/javascript" src="js/library/layui/layui.js"></script>
-    <script type="text/javascript" src="js/library/layer/layer.min.js"></script>
-    <script type="text/javascript" src="js/library/md5/jquery.md5.js"></script>
-    <script type="text/javascript" src="js/library/cookie/jquery.cookie.js"></script>
-	<script type="text/javascript" src="js/library/common/cookie.js"></script>
-    <script type="text/javascript" src="js/calendar.js" ></script>
-    
-    <script type="text/javascript" src="js/query.js" defer="defer"></script>
-    <style>
-    .sc-price {font-size: 13px;}
-	.sc-item .lunar-day {float: left;}
-	.cruise-select,.cruise-select:hover{border-color:#21A1CA;}
-	.cruise-select span,.cruise-select:hover span{background-color:#21A1CA;}
-	.cruise-select i,.cruise-select:hover i{color:#21A1CA;}
-	.provider-select,.provider-select:hover{border-color:#FF9C07;}
-	.provider-select span,.provider-select:hover span{background-color:#FF9C07;}
-	.provider-select i,.provider-select:hover i{color:#FF9C07;}
-	.place-select,.place-select:hover{border-color:#FF5722;}
-	.place-select span,.place-select:hover span{background-color:#FF5722;}
-	.place-select i,.place-select:hover i{color:#FF5722;}
-    </style>
-</head>
-<body>
-   
- 
-<fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;">
-  <legend>CMS邮轮资源查询</legend>
-  
-  
-  <div class="layui-form" action="" style="padding:30px">
-  
-  
-   <div class="layui-form-item">
-   
-   
-    <div class="layui-inline">
-      <label class="layui-form-label"><img src="image/query/price.png" style="width:22px;margin-right:5px;">价格区间</label>
-      <div class="layui-input-inline" style="width: 100px;">
-        <input type="text" id="min" name="price_min" placeholder="￥" autocomplete="off" class="layui-input">
-      </div>
-      <div class="layui-form-mid">-</div>
-      <div class="layui-input-inline" style="width: 100px;">
-        <input type="text" id="max" name="price_max" placeholder="￥" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    
-    
-     <div class="layui-inline">
-      <label class="layui-form-label"><img src="image/query/date.png" style="width:22px;margin-right:5px;">出发时间</label>
-      <div class="layui-input-inline">
-        <input type="text" id="startDate" class="layui-input" id="startDate" placeholder="yyyy-MM-dd">
-      </div>
-      <div class="layui-form-mid">-</div>
-       <div class="layui-input-inline">
-        <input type="text" id="endDate"  class="layui-input" id="endDate" placeholder="yyyy-MM-dd">
-      </div>
-      
-      <button id="queryButton" class="layui-btn layui-btn-warm" style="margin-left:10px"><i class="layui-icon">&#xe615;</i></i>搜索</button>
-    
-      <button id="clearButton" class="layui-btn layui-btn-danger" style="margin-left:10px"><i class="layui-icon">&#x1006;</i></i>清除</button>
-    
-      <button id="windowButton" class="layui-btn layui-btn-normal" style="margin-left:10px"><i class="layui-icon">&#xe638;</i></i>全屏</button>
-    
-    
-<!--    	  <button id="excelButton" class="layui-btn" style="margin-left:10px"><i class="layui-icon">&#xe62d;</i></i>下载Excel</button>
- -->    
-    
-  </div>
-      
-    </div>
-    
-    <div class="layui-form-item">
-    <div class="layui-inline" >
-      <label class="layui-form-label"><img src="image/query/cruise.png" width="28px;">邮轮<span style="color:#f60;" id="cruiseCount"><span></label>
-       <div class="layui-input-inline layui-select" style="border:1px solid #fff">
-       <select name="modules" id="cruiseSelect" lay-verify="required" lay-search="">
-		</select>     
-      </div>
-    </div>
-    
-     <div class="layui-inline" style="margin-left:-10px;">
-      <label class="layui-form-label"><img src="image/query/cabin.png" width="25px;">舱型<span style="color:#f60;" id="cabinCount"><span></label>
-      <div class="layui-input-inline layui-select" style="border:1px solid #fff">
-       <select name="modules" id="cabinSelect" lay-verify="required" lay-search="">
-		</select>     
-      </div>
-    </div>
-    
-    <div class="layui-inline " >
-      <label class="layui-form-label"><img src="image/query/provider.png" width="30px;">供应商<span style="color:#f60;" id="providerCount"><span></label>
-      <div class="layui-input-inline layui-select" style="border:1px solid #fff">
-       <select name="modules" id="providerSelect" lay-verify="" lay-search="">
-		</select>     
-      </div>
-    </div>
-    
-    
-     <div class="layui-inline " >
-      <label class="layui-form-label"><img src="image/query/place.png" width="30px;">出发地<span style="color:#f60;" id="placeCount"><span></label>
-      <div class="layui-input-inline layui-select" style="border:1px solid #fff">
-       <select name="modules" id="placeSelect" lay-verify="" lay-search="">
-		</select>     
-      </div>
-    </div>
-    
-  </div>
-  
-  
-   <div class="layui-form-item">
-    <label class="layui-form-label">附加搜索条件</label>
-    <div class="layui-input-block" id="extraQueryInfo">
-    <span id="cruiseQuery"></span>
-    <span id="cabinQuery"></span>
-    <span id="providerQuery"></span>
-    <span id="placeQuery"></span>
-    </div>
-  </div>
-  
-  
-  </div>
-  
-  
-    <div class="layui-row" style="margin-top:-60px">
-    <div class="layui-col-xs6">
-      <div class="grid-demo grid-demo-bg1" style="padding: 0px 50px 0px 50px;">
-      
-   <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
-  <ul class="layui-tab-title" style="width:700px">
-  </ul>
-  
-  
-  <div id='container'></div>
-  
-</div> 
-      
-      
-      
-      
-      </div>
-    </div>
-    <div class="layui-col-xs6" id="stockTable">
-      <div id="extraInfo" class="grid-demo" style="padding: 0px 50px 0px 50px;margin-top:-30px;display:none;">
-      
- <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-  <legend>邮轮资源</legend>
-</fieldset>
 
-
-<blockquote class="layui-elem-quote layui-quote-nm" id="resourceInfo">
-</blockquote>
- 
-      
-      <div class="layui-form">
-      <div style="max-height:500px;overflow:auto;">
-  <table class="layui-table">
-    <colgroup>
-      <col width="150">
-      <col width="150">
-      <col width="200">
-      <col>
-    </colgroup>
-    <thead>
-      <tr>
-        <th width="18%">邮轮</th>
-        <th width="22%" >单品</th>
-        <th width="18%">供应商</th>
-        <th width="20%">航线</th>
-        <th width="12%">结算价</th>
-        <th width="10%">库存(间)</th>
-      </tr> 
-    </thead>
-    <tbody id="resourceTable">
-    </tbody>
-  </table>
-  </div>
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>雷锋货车网</title>
+		<meta name="keywords" content="重庆二手货车,重庆二手小货车,重庆二手大货车,重庆二手货车价格,二手货车报价,二手货车交易网,二手货车交易市场,二手货车出售,二手货车转让" />
+		<meta name="description" content="卡家二手车专业帮助卡友选购优质重庆二手小货车,重庆二手大货车,免费发布二手货车出售转让,是诚信二手货车交易市场,二手货车交易网." />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<!-- <link rel="stylesheet" type="text/css" href="http://192.168.250.212:8080/css/style-base.css"> -->
+		<link rel="stylesheet" type="text/css" href="css/style-base.css">
+		<script src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/truckhome-1.1.js" defer></script>
+		<script type="text/javascript" src="js/zhugeIo.js" defer></script>
+						<script>
+			var accessToken = '';
+			var apiUrl = 'https://tao-api.m.360che.com/v1/';
+            var uid = '0';
+			var preUrl = 'https://tao.m.360che.com/static/morelist/?key=jump';
+		</script>
+		<script src="js/base.js"></script>
+		<link rel="stylesheet" href="https://at.alicdn.com/t/font_496733_w0e5vjuelgsw0zfr.css">
+		<link rel="canonical" media="only screen and (max-width: 640px)" href="https://tao.360che.com/chongqingshi/all/">
+		<meta name = "format-detection" content = "telephone=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta content="yes" name="apple-touch-fullscreen">
+		<!-- UC全屏 -->
+		<meta name="full-screen" content="yes">
+		<!-- QQ全屏 -->
+		<meta name="x5-fullscreen" content="true">
+		<meta name="applicable-device" content="mobile">
+		<style>
+		.c-index-search-con .city .text{
+			line-height: 1.2 !important;
+		}
+		</style>
+		<!-- Google Tag Manager -->
+		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+				new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+				j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+				'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+			})(window,document,'script','dataLayer','GTM-M4RRVZ');</script>
+		<!-- End Google Tag Manager -->
+        <script type="application/ld+json">
+{
+    "@context": "https://ziyuan.baidu.com/contexts/cambrian.jsonld",
+    "@id": "https://tao.m.360che.com/chongqingshi/all/",
+    "appid": "1607671858050948",
+    "title": "重庆二手大小货车价格_二手货车交易网_卡家二手车",
+        "description": "卡家二手车专业帮助卡友选购优质重庆二手小货车,重庆二手大货车,免费发布二手货车出售转让,是诚信二手货车交易市场,二手货车交易网.",
+            "upDate": "2019-12-23T21:51:08"
+    }
+</script>	</head>
+	
+	<script>
+var keys = "all";
+</script>
+<style>
+.c-handle-tips-con .scroll{
+	overflow: hidden;
+	overflow-x: auto;
+	display: block;
+}
+.c-handle-tips-con .scroll .icon-handle-tips{
+	display: flex;
+    display: -ms-flexbox;
+    white-space: nowrap;
+    float: left;
+}
+.logo h1{
+	line-height: 0;
+}
+</style>
+<!-- <div class="c-header-con c-list-header"> -->
+<div class="c-index-search-con c-flex-center">
+    <a class="logo" href="/">
+        <h1>
+			<img src="/image/truck/logo.png" alt="雷锋货车网" />
+		</h1>
+    </a>
+    <a class="search-con c-box-flex icon-search" href="#search">搜索二手车</a>
+    <a class="city c-flex-center br-r" href="/static/morelist/?key=jump#/cities">
+        <div class="text">重庆</div>
+        <div class="icon-down-copy"></div>
+    </a>
 </div>
-      
-      </div>
+	<div class="c-sticky">
+		<div class="c-list-nav-con br-b">
+			<div class="icon-list-nav" data-type="order">排序</div>
+			<div class="icon-list-nav" data-type="cat">车型</div>
+		<!-- 	<div class="icon-list-nav" data-type="brand">品牌</div> -->
+			<!-- <div class="icon-list-nav" data-type="series">车系</div> -->
+			<a class="icon-list-nav to-react-page" href="/static/morelist/?key=all">筛选</a>
+		</div>
+		<!-- 这块去掉之后，看下面 ↓ -->
+			</div>
+<!-- </div> -->
+<!-- 上面如果没有条件不显示之后，下面要加上mt20, "c-list-cells mt20" -->
+<div class="c-list-cells c-buy-car-list">
+
+
+		<!-- 	<a class="c-list-cell c-flex c-truck-list" href="/m305896_index.html"
+   >
+    <div class="photo">
+        <img class="truck-photo-load" src="/m/project/dist/images/error_img.jpg" data-src="https://img7.kcimg.cn/uploads/0a/08/0a08e06f090cbef057b55bd726b12b4f.jpg_375x250.jpg" alt="二手自卸车 上汽红岩 450马力图片">
     </div>
-  </div>
-  
-  
-  
-</fieldset>
+    <div class="c-box-flex content">
+        <div class="title">
+                        <div class="text">自卸车 上汽红岩 450马力</div>
+        </div>
+        <div class="info">2018年3月/3.5万公里/国五/8X4</div>
+        <div class="c-align-center">
+            <div class="price">25.00万</div>
+        </div>
+    </div>
+</a>	 -->	
+
+																				<div class="c-list-cell c-d-loading-cell">
+		 <p class="c-d-loading c-flex-center icon-loading" data-text="加载中..."></p>
+	</div>
+</div>
+<style>
+[class*=c-right]{
+	transition: none;
+	display: -ms-flexbox;
+    display: flex;
+    flex-direction: column;
+}
+.c-return-noclick{
+	position: absolute;
+    left: .28rem;
+    bottom: .28rem;
+    top: .28rem;
+    font-size: .32rem;
+    line-height: 1;
+    color: #666;
+}
+.icon-return{
+	font-size: .46rem;
+}
+</style>
+<div class="c-fixed" type="keys"></div>
+<div class="c-right-handle" type="keys">
+    <div class="c-header-right c-list-cells br-b">
+        <div class="c-list-cell">
+            <div class="c-return-noclick c-align-center">
+                <div class="icon-return"></div>
+            </div>
+            <div class="c-title" type="keys">选择</div>
+        </div>
+    </div>
+    <div class="c-page c-box-flex" data-type="right-scroll">
+        <div class="c-list-cells" type="keys">
+            
+        </div>
+    </div>
+</div>
+<div class="c-letters-list">
+	<!-- 字母排序 -->
+</div>
+<a class="go-demand-icon" href="/personal/demand"></a>
 
 
-   
-   
-</body>
-</html>
+
+<div class="c-footer-con br-t" style="padding:0px;">
+        <a href="index.html" class="icon-home">首页</a>
+    <a id="buy" href="my.html" class="icon-price active">买车</a>
+        <a href="publish.html" rel="nofollow" class="icon-truck-btn truck" id="sale">
+        <i class="car" style="top:32%;">
+            <img src="image/truck/truck.png" alt="icon" />
+        </i>卖车
+    </a>
+        <a id="message" href="msg.html" rel="nofollow" class="icon-msg login-check">
+        消息</a>
+    <a href="my.html" rel="nofollow" class="icon-bottom-user  login-check">我的</a>
+</div>
+
+
+
+
+
+<script>
+    var allowPublish = false;
+    var inApp = $sq.isApp();
+    var logon = false;
+
+    $(document).ready(function() {
+        if (logon) {
+            publishProcess();
+        }
+    });
+    function publishProcess() {
+        $('.icon-truck-btn').on('click', function(e){
+            if (true !== allowPublish){
+                e.preventDefault();
+                $sq.conFirm({
+                    left: 'no',
+                    text: '',
+                    callback: function(){
+                        // 如果是卖家未通过状态 跳转 申请卖家页面 如果是 通过状态跳转 vip申请页
+                                                    location.href = '/personal/intermediary-apply';
+                                            }
+                })
+            }
+        });
+    }
+</script><!-- 城市、搜索、回顶部 -->
+<div class="c-right-search c-direction-column" data-hash="search">
+	<form class="c-search-class icon-search c-align-center" data-role="searchForm" action>
+		<div class="c-list-cells c-flex-center c-box-flex">
+			<input type="search" name="search" data-role="input" placeholder="搜索二手车" value="">
+			<div class="icon-right-close mr20"></div>
+		</div>
+		<div class="orange init" onclick="history.go(-1);">取消</div>
+	</form>
+	<div class="c-list-cells c-search-word">
+		<div class="title">热门搜索</div>
+		<div class="word-con">
+						    <a href="/chongqingshi/all_se冷藏车se/" class="word">冷藏车</a>
+						    <a href="/chongqingshi/all_se4.2se/" class="word">4.2</a>
+						    <a href="/chongqingshi/all_se前四后八se/" class="word">前四后八</a>
+						    <a href="/chongqingshi/all_se自卸车se/" class="word">自卸车</a>
+						    <a href="/chongqingshi/all_se6.8se/" class="word">6.8</a>
+						    <a href="/chongqingshi/all_se货车se/" class="word">货车</a>
+						    <a href="/chongqingshi/all_se牵引车se/" class="word">牵引车</a>
+						    <a href="/chongqingshi/all_se搅拌车se/" class="word">搅拌车</a>
+					</div>
+	</div>
+</div>
+<!-- 城市弹出 -->
+<div class="c-right-city c-direction-column" data-hash="city">
+	<div class="c-header-right c-list-cells" style="background-color: #F5F5F5;">
+		<div class="c-list-cell br-b bgf">
+			<div class="c-return c-align-center">
+				<div class="icon-return"></div>
+			</div>
+			<div class="c-title">城市选择</div>
+		</div>
+		<form class="c-search-class icon-search" data-role="cityForm">
+			<div class="c-list-cells c-flex-center c-box-flex">
+				<input type="search" name="city" class="c-box-flex" placeholder="请输入城市名称或首字母查询">
+				<div class="icon-right-close mr20"></div>
+			</div>
+			<div class="city-search-con c-list-cells c-page" style="display: none;">
+				<!-- js循环 -->
+			</div>
+		</form>
+	</div>
+	<div class="c-page c-box-flex">
+		<div class="c-list-cells">
+			<div class="c-list-cell c-flex-center">
+				<div class="c-box-flex">当前定位城市：重庆</div>
+								<div class="orange small mr15" onclick="unsearchProvince();">全国　</div>
+							</div>
+		</div>
+		<div class="c-small-title-con">热门城市</div>
+		<div class="c-list-cells">
+			<div class="c-list-cell hot-city-con">
+				<!-- js循环热门城市 -->
+			</div>
+		</div>
+		<!-- 循环字母城市开始 -->
+		<div class="c-city-con"></div>
+		<!-- 循环字母城市结束 -->
+	</div>
+</div>
+<!-- 字母 -->
+<div class="c-letters-list">
+	<!-- js循环 -->
+</div>
+<!-- 提示框 -->
+<div class="c-toast-con"></div>
+<!-- 回顶部 -->
+<div class="c-go-top icon-go-top">回顶部</div><script type="text/javascript" src="/js/truckhome.app.min.js"></script>
+<script type="text/javascript">
+var initUrl = '/list/';
+var provincePinyin = 'chongqingshi';
+// app下载
+// if (window.sessionStorage.getItem('truckhomeapp') !== 'hide' && !$sq.isApp()) {
+//     if(window.location.pathname !== '/list/'){
+//         $('.c-index-search-con').before($sq.downLoadApp('position: static;'));
+//         $('#thappclose').click(function () {
+//             $('.truckhomeapp-box').hide();
+//             window.sessionStorage.setItem('truckhomeapp', 'hide');
+//         })
+//     }
+// }
+</script>
+<script type="text/javascript" src="/js/cities.js"></script>
+ <script src="/js/index.js?v=2018-12-13"></script>
+ <script src="/js/list.js"></script> 
+		</body>
+    	</html>
+	<style type="text/css">
+		/*阻止文字选择*/
+		.c-footer-con{
+			-webkit-touch-callout: none; /* iOS Safari */
+			-webkit-user-select: none; /* Chrome/Safari/Opera */
+			-khtml-user-select: none; /* Konqueror */
+		}
+	</style>
+	<script>
+		//GA 统计操作
+		function gacode(ec, ea, el) {
+			ga('send', 'event', ec, ea, el);
+		}
+		//360che统计
+		$(document).ready(function(){
+            Truckhome_pv({
+				cityno: $sq.getCookie('tao_privite_prov_no') || 0
+			});
+		});
+	</script>
+    <script>
+		//brage方法 调用app原生的方法
+		function sendData2Native(data, callback) {
+			window.WebViewJavascriptBridge.send(data, callback);
+		}
+
+        function callNativeMethod(method, param, callback) {
+            window.WebViewJavascriptBridge.callHandler(method, param,callback);
+        }
+
+        function connectWebViewJavascriptBridge(callback) {
+            if (window.WebViewJavascriptBridge) {
+                callback(WebViewJavascriptBridge);
+            } else {
+                document.addEventListener('WebViewJavascriptBridgeReady', function() {
+                    callback(WebViewJavascriptBridge)
+                }, false);
+            }
+        }
+        connectWebViewJavascriptBridge(function(bridge) {
+                        $('.login-check').unbind('click').on('click', function(e) {
+                e.preventDefault();
+                callNativeMethod('onLogin');
+            });
+                        bridge.init(function(message, responseCallback) {
+            });
+            bridge.registerHandler("onLoginCallback", function(data, responseCallback) {
+                location.reload();
+            });
+            bridge.registerHandler("onPayCallback", function(response, responseCallback) {
+                response == 'success' ? onPaySuccess() :  onPayFail();
+            });
+        });
+    </script>
+<script type="text/javascript">
+if (!accessToken && !$sq.isApp()){
+	$('.login-check').unbind('click').on('click', function() {
+		window.location.href = 'https://sso.360che.com/?c=login&referer=' + window.location.href;
+	});
+}
+</script>
+<script>
+
+
+var countPage=1;//总页数
+var page=1;//当前页
+var pageSize=10;//每页显示几条
+
+$(document).ready(function() {
+	 $.ajax({
+			url : "/WebWS/getSearchData.xyz",
+			type : "POST",
+			data : {
+				page : 1,
+				rows:pageSize,
+			},
+			async : false,
+			dataType : "json",
+			success : function(data) {
+				
+				if (data.status == 1) {
+					countPage=parseInt((data.content.total-1)/pageSize)+1;
+					var truckList=data.content.rows;
+					var html='';
+					 for(var i=0;i<truckList.length;i++){
+						var dataObj=truckList[i];
+						var images=JSON.parse(dataObj.images);
+						
+						html+='<a class="c-list-cell c-flex c-truck-list" href="detail.html?numberCode='+dataObj.numberCode+'">';
+						html+='<div class="photo">';
+						html+='<img class="truck-photo-load" src="'+images[0]+'" data-src="'+images[0]+'">';
+						html+='</div>';
+						html+='<div class="c-box-flex content">';
+						html+=' <div class="title">';
+						var type="其他";
+						if(dataObj.truckType=="QYC"){
+							type="牵引车";
+						}else if(dataObj.truckType=="ZHC"){
+							type="载货车";
+						}else if(dataObj.truckType=="ZXC"){
+							type="自卸车";
+						}
+						html+='<div class="text">'+type+' 上汽红岩 450马力</div>';
+						html+='</div>';
+						html+='<div class="info">'+dataObj.cardDate.substring(0,7)+'月/'+dataObj.mile+'万公里/'+dataObj.year+'年</div>';
+						html+='<div class="c-align-center">';
+						html+='<div class="price">'+dataObj.price+'万</div>';
+						html+='</div>';
+						html+='</div>';
+						html+='</a>	';
+					 }
+					 $(".c-buy-car-list").html(html);
+				} else {
+					alert(data.msg);
+				}
+			}
+		});
+});
+
+</script>
+
+

@@ -28,10 +28,10 @@ public class WebWS {
 	
 	@RequestMapping(value = "getSearchData")
     @ResponseBody
-    public Map<String, Object> getIndexData(int page, int rows,String truckType){
+    public Map<String, Object> getIndexData(int page, int rows,String query){
 		int pageSize = rows;
 		int offset = (page - 1) * pageSize;
-        return webSvc.getSearchData(offset,pageSize,truckType);
+        return webSvc.getSearchData(offset,pageSize,query);
     }
 	
 	@RequestMapping(value = "truckDetail")
