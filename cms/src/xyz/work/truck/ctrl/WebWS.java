@@ -52,6 +52,12 @@ public class WebWS {
         return webSvc.wechatOper(code);
     }
 	
+	@RequestMapping(value = "xcxOper")
+    @ResponseBody
+    public Map<String, Object> xcxOper(String code,String nickName,String img,String city,String gender,String province) {
+        return webSvc.xcxOper(code,nickName,img,city,gender,province);
+    }
+	
 	@RequestMapping(value = "xcxWechatOper")
     @ResponseBody
     public Map<String, Object> xcxWechatOper(String code,String nickName,String img,String city,String gender,String province) {
@@ -62,6 +68,18 @@ public class WebWS {
     @ResponseBody
     public Map<String, Object> getToken() {
         return webSvc.getToken();
+    }
+	
+	@RequestMapping(value = "accessToken")
+    @ResponseBody
+    public Map<String, Object> accessToken() {
+        return webSvc.accessToken();
+    }
+	
+	@RequestMapping(value = "getJsapi")
+    @ResponseBody
+    public Map<String, Object> getJsapi(String accessToken,String url) {
+        return webSvc.getJsapi(accessToken,url);
     }
 	
 	@RequestMapping(value = "msgReciveOper")

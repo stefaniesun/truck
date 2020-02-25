@@ -11,7 +11,7 @@
 	<function isApi="0" groupCn="车辆管理" numberCode="truckManager" nameCn="车辆" url="/jsp_truck/truckManager.html">
 		<api flagServer="0" isWork="0" buttonCode="buttonCode_201911090244" nameCn="查询车辆信息" url="/TruckWS/queryTruckList.do"/>
 		<api flagServer="0" isWork="1" buttonCode="buttonCode_201911090245" nameCn="审核车辆信息" url="/TruckWS/checkOper.do"/>
-	
+		<api flagServer="0" isWork="1" buttonCode="buttonCode_201911090246" nameCn="上下架车辆信息" url="/TruckWS/openOper.do"/>
 	</function>
 	
 	

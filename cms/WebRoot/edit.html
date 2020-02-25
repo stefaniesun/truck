@@ -4,13 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
-    <title>发布车辆信息</title>
+    <title>编辑车辆信息</title>
     <link rel="stylesheet" href="css/weui.css"/>
     <link rel="stylesheet" href="css/example.css"/>
       <script type="text/javascript" src="js/util.js"></script>
 <!--       <script src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
  --></head>
 <body>
+
+
+	<header class="home_nav flex row item">
+    <div class="logo">
+            <h1>
+                <img onclick="javascript:window.history.go(-1);" style="width:20px;height:20px;" src="image/truck/back.png"></img>
+                <p class="city" ttname="wap_nav_city" href="javascript:void(0);">编辑车辆信息</p>
+            </h1>
+    </div>
+    </header>
+
     <div class="weui-toptips weui-toptips_warn js_tooltips">错误提示</div>
 
     <div class="container" id="container">
@@ -22,7 +33,6 @@
       <div class="weui-cells__group weui-cells__group_form">
         <div class="weui-cells__title">
         
-        <p>平台严禁发布违法虚假信息，严重违反者冻结帐号处理！请您按照<a style="text-decoration:underline" href="publishXieyi.html">《发布信息协议》</a>发布信息</p>
         
         </div>
         <div class="weui-cells weui-cells_form">
@@ -128,35 +138,6 @@
             </div>
         </div>
           
-          <div class="weui-cell" style="background-color:#FFFFFF">
-                <div class="weui-cell__bd">
-                    <div class="weui-uploader">
-                        <div class="weui-uploader__hd">
-                            <p class="weui-uploader__title">图片上传</p>
-                            <div class="weui-uploader__info">0/0</div>
-                        </div>
-                        <div class="weui-uploader__bd">
-                            <ul class="weui-uploader__files" id="uploaderFiles">
-                           <!--      <li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>
-                                <li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>
-                                <li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>
-                                <li class="weui-uploader__file weui-uploader__file_status" style="background-image:url(./images/pic_160.png)">
-                                    <div class="weui-uploader__file-content">
-                                        <i class="weui-icon-warn"></i>
-                                    </div>
-                                </li>
-                                <li class="weui-uploader__file weui-uploader__file_status" style="background-image:url(./images/pic_160.png)">
-                                    <div class="weui-uploader__file-content">50%</div>
-                                </li> -->
-                            </ul>
-                            <div class="weui-uploader__input-box">
-                                <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" multiple="multiple">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-          
           
         </div>
       </div>
@@ -169,9 +150,18 @@
     </div>
     
     
-    <div class="weui-form__opr-area">
-      <a class="weui-btn weui-btn_primary weui-btn" href="javascript:" id="publish">发布</a>
+    <div class="button-sp-area" style="text-align:center;">
+            <a style="width:30%" class="weui-btn weui-btn_primary weui-btn_mini" href="javascript:" id="publish">保存</a>
+            <a style="width:30%" class="weui-btn weui-btn_primary weui-btn_mini" href="javascript:window.history.go(-1);" id="publish">返回</a>
+   
+        </div>
+    
+  <!--   <div class="weui-form__opr-area">
+      <a style="width:30%" class="weui-btn weui-btn_primary weui-btn" href="javascript:" id="publish">保存</a>
+
     </div>
+     -->
+   
     
   </div>
   <div id="js_toast" style="display: none;">
@@ -193,71 +183,85 @@
  
     
     <script>
-	
-    /* var customerObj=getLoginCustomer();
-	console.log(customerObj);
-	
-	
-	if(!xyzIsNull(customerObj)){
-		console.log(customerObj.accessToken);
-		 $.ajax({
-				url : "/WebWS/getJsapi.xyz",
-				type : "POST",
-				async : false,
-				dataType : "json",
-				success : function(data) {
-					if (data.status == 1) {
-						console.log(data);
-						var signature=data.content.signature;
-						wx.config({
-					        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，
-					        // 参数信息会通过log打出，仅在pc端时才会打印。
-					        appId: 'wx06833e456d066236', // 必填，公众号的唯一标识
-					        timestamp: data.content.timestamp, // 必填，生成签名的时间戳
-					        nonceStr: data.content.nonceStr, // 必填，生成签名的随机串
-					        signature: data.content.signature, // 必填，签名，见附录1
-					        jsApiList: [
-					          // 'checkJsApi',// 判断当前版本是否支持分享指定JS接口
-					          'chooseImage',
-					        ] 
-					      })
-					} else {
-						weui.alert(data.msg);
-					}
-				}
-			});
-	}
-     */
+    var numberCode="";
+
+    $(document).ready(function() {
+    	numberCode =getUrlParam("numberCode");
+    	
+    	$.ajax({
+    		url : "/WebWS/truckDetail.xyz",
+    		type : "POST",
+    		data : {
+    			numberCode : numberCode
+    		},
+    		async : false,
+    		dataType : "json",
+    		success : function(data) {
+    			if (data.status == 1) {
+    				console.log(data);
+    				var truckObj=data.content;
+    				$("#nameTitle").val(truckObj.title);
+    				$("#price").val(truckObj.price);
+    				$("#mile").val(truckObj.mile);
+    				$("#year").val(truckObj.year);
+    				$("#phone").val(truckObj.phone);
+    				$("#address").val(truckObj.address);
+    				$("#remark").val(truckObj.remark);
+    				$("#showDatePicker1").val("2020-01-01");
+    				
+    				if(truckObj.isGuohu==1){
+    					$("#isGuohu").attr("checked","checked");
+    				}
+    				if(truckObj.type==0){
+    					$("#showPicker").html("个人");
+    				}else{
+    					$("#showPicker").html("商家");
+    				}
+    				
+    				if(truckObj.truckType=="QYC"){
+    					$("#truckType").html("牵引车");
+    				}else if(truckObj.truckType=="ZHC"){
+    					$("#truckType").html("载货车");
+    				}else if(truckObj.truckType=="ZXC"){
+    					$("#truckType").html("自卸车");
+    				}else{
+    					$("#truckType").html("其他");
+    				}
+    				$("#truckLogo").html(truckObj.truckLogo);
+    				var date = new Date(truckObj.cardDate);
+    				$('#showDatePicker1').val(date .getFullYear()+"-"+(date .getMonth()+1)+"-"+date .getDate());
+                	$('#showDatePicker1 .weui-cell__bd').append("&nbsp;&nbsp;&nbsp;&nbsp;"+date .getFullYear()+"年"+(date .getMonth()+1)+"月"+date .getDate()+"日");
+    				
+                	date = new Date(truckObj.checkDate);
+                	$('#showDatePicker2').val(date .getFullYear()+"-"+(date .getMonth()+1)+"-"+date .getDate());
+                	$('#showDatePicker2 .weui-cell__bd').append("&nbsp;&nbsp;&nbsp;&nbsp;"+date .getFullYear()+"年"+(date .getMonth()+1)+"月"+date .getDate()+"日");
+    			 	
+    			 	date = new Date(truckObj.insuranceDate);
+    			 	$('#showDatePicker3').val(date .getFullYear()+"-"+(date .getMonth()+1)+"-"+date .getDate());
+                	$('#showDatePicker3 .weui-cell__bd').append("&nbsp;&nbsp;&nbsp;&nbsp;"+date .getFullYear()+"年"+(date .getMonth()+1)+"月"+date .getDate()+"日");
+    				
+    			} else {
+    				weui.alert(data.msg);
+    			}
+    		}
+    	});
+    	
+    });
     
-    
-    var token="";
-    
-    $.ajax({
-		url : "/WebWS/getToken.xyz",
-		type : "POST",
-		async : false,
-		dataType : "json",
-		success : function(data) {
-			if (data.status == 1) {
-				token=data.content.upToken;
-			} else {
-				weui.alert(data.msg);
-			}
-		}
-	});
-    
-    var images=[];
+
     
     $('#showDatePicker1').on('click', function () {
         weui.datePicker({
             start: 2000,
             end: 2050,
+            defaultValue:[2020-02-02],
             onChange: function (result) {
                 console.log(result);
             },
             onConfirm: function (result) {
             	$('#showDatePicker1').val(result[0].value+"-"+result[1].value+"-"+result[2].value);
-            	$('#showDatePicker1 .weui-cell__bd').append("&nbsp;&nbsp;&nbsp;&nbsp;"+result[0].value+"年"+result[1].value+"月"+result[2].value+"日");
+            	$('#showDatePicker1 .weui-cell__bd').html("");
+            	$('#showDatePicker1 .weui-cell__bd').append("上牌时间&nbsp;&nbsp;&nbsp;&nbsp;"+result[0].value+"年"+result[1].value+"月"+result[2].value+"日");
             },
             title: '上牌时间'
         });
@@ -272,7 +276,8 @@
             },
             onConfirm: function (result) {
             	$('#showDatePicker2').val(result[0].value+"-"+result[1].value+"-"+result[2].value);
-            	$('#showDatePicker2 .weui-cell__bd').append("&nbsp;&nbsp;&nbsp;&nbsp;"+result[0].value+"年"+result[1].value+"月"+result[2].value+"日");
+            	$('#showDatePicker2 .weui-cell__bd').html("");
+            	$('#showDatePicker2 .weui-cell__bd').append("年检时间&nbsp;&nbsp;&nbsp;&nbsp;"+result[0].value+"年"+result[1].value+"月"+result[2].value+"日");
             },
             title: '年检时间'
         });
@@ -287,7 +292,8 @@
             },
             onConfirm: function (result) {
             	$('#showDatePicker3').val(result[0].value+"-"+result[1].value+"-"+result[2].value);
-            	$('#showDatePicker3 .weui-cell__bd').append("&nbsp;&nbsp;&nbsp;&nbsp;"+result[0].value+"年"+result[1].value+"月"+result[2].value+"日");
+            	$('#showDatePicker3 .weui-cell__bd').html("");
+            	$('#showDatePicker3 .weui-cell__bd').append("交强险时间&nbsp;&nbsp;&nbsp;&nbsp;"+result[0].value+"年"+result[1].value+"月"+result[2].value+"日");
             },
             title: '交强险时间'
         });
@@ -374,108 +380,7 @@
         });
     });
     
-    $("#uploaderInput").click(function(){
-    	wx.chooseImage({
-    	    count: 9, // 默认9
-    	    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-    	    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-    	    success: function (res) {
-    	        var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-    	        console.log(localIds);
-    	    }
-    	});
-    });
-    
-    var tmpl = '<li class="weui-uploader__file" style="background-image:url(#url#)"></li>',
-    $gallery = $("#gallery"), $galleryImg = $("#galleryImg"),
-    $uploaderInput = $("#uploaderInput"),
-    $uploaderFiles = $("#uploaderFiles")
-    ;
 
-    var blobToBase64 = function (blob, callback) {
-        var a = new FileReader();
-        a.onload = function (e) {
-            callback(e.target.result);
-        }
-        a.readAsDataURL(blob);
-    };
-    
-
-    
-$uploaderInput.on("change", function(e){
-    var src, url = window.URL || window.webkitURL || window.mozURL, files = e.target.files;
-    
-    for (var i = 0, len = files.length; i < len; ++i) {
-        var file = files[i];
-
-        if (url) {
-            src = url.createObjectURL(file);
-        } else {
-            src = e.target.result;
-        }
-        
-        blobToBase64(file, function (data) {
-        	
-        	
-        	var pic=data.split("base64,")[1];
-        	
-        	  var domains = [
-        		                    'upload.qiniu.com',         // 华东
-        		                    'upload-z1.qiniu.com',      // 华北
-        		                    'upload-z2.qiniu.com',      // 华南
-        		                    'upload-na0.qiniu.com',     // 北美
-        		                ];
-        		            var url = 'http://' + domains[2] + '/putb64/-1';
-        	
-        		
-        			$.ajax({
- 		                headers: {
- 		                    'Content-Type': 'application/octet-stream',
- 		                    'Authorization': 'UpToken ' + token,    // UpToken后必须有一个 ' '(空格)
- 		                },
- 		                async: false,
- 		                type: 'POST',
- 		                url: url,
- 		                dataType: 'json',
- 		                data: pic,
- 		                success: function(data){
- 			
- 							console.log(data);
- 							
- 							var hash=data.hash;
- 							
- 							images.push("http://img.eshc88.com/"+hash);
- 							
- 		                },
- 		                error: function(XMLHttpRequest, textStatus, errorThrown){
- 		                    weui.alert('服务器上传图片异常！请及时联系技术人员！修复异常！');
- 		                }
- 		            });
-        	
-        });
-        
-        $uploaderFiles.append($(tmpl.replace('#url#', src)));
-        
-    }
-    var count=$(".weui-uploader__files li").length;
-    $(".weui-uploader__info").html(count+"/"+count);
-    
-});
-var index;
-$uploaderFiles.on("click", "li", function(){
-	index = $(".weui-uploader__files li").index(this);
-    $galleryImg.attr("style", this.getAttribute("style"));
-    $gallery.fadeIn(100);
-});
-$gallery.on("click", function(){
-    $gallery.fadeOut(100);
-});
-
-$(".weui-icon-delete").click(function(){
-	$(".weui-uploader__files li").eq(index).remove();
-    var count=$(".weui-uploader__files li").length;
-    $(".weui-uploader__info").html(count+"/"+count);
-});
 
 $("#publish").click(function(){
 	
@@ -540,10 +445,6 @@ $("#publish").click(function(){
 		weui.alert("联系电话不能为空");
 		return;
 	}
-	if(images.length==0){
-		weui.alert("请上传车辆图片");
-		return;
-	}
 	
 	var map={};
 	map.title=title;
@@ -560,23 +461,23 @@ $("#publish").click(function(){
 	map.truckLogo=truckLogo;
 	map.address=address;
 	map.remark=remark;
-	map.images=images;
 	
 	console.log(map);
 	
 	$.ajax({
-		url : "/TruckWS/addTruck.cus",
+		url : "/TruckWS/editTruck.cus",
 		type : "POST",
 		data : {
+			numberCode:numberCode,
 			dataJson : JSON.stringify(map)
 		},
 		async : false,
 		dataType : "json",
 		success : function(data) {
 			if (data.status == 1) {
-				weui.alert("提交成功,等待后台审核中");
+				weui.alert("编辑成功");
 				setTimeout(function(){
-					window.location.replace("my.html");
+					history.go(-1);
 				},"2000");
 			} else {
 				weui.alert(data.msg);

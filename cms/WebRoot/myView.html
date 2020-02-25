@@ -28,10 +28,18 @@
 			line-height: 1.2 !important;
 		}
 		</style>
-	<body style="padding-bottom: 57px;">
+	<body>
 	
 	
-	<header class="home_nav flex row item">
+	<div class="weui-panel weui-panel_access">
+            <div class="weui-panel__hd"> <img onclick="javascript:window.location.replace('my.html');" style="width:20px;height:20px;" src="image/truck/back.png"></img>浏览记录</div>
+            <div class="weui-panel__bd" id="content">
+                
+            </div>
+        </div>
+	
+	
+<!-- 	<header class="home_nav flex row item">
     <div class="logo">
             <h1>
                 <img onclick="javascript:window.location.replace('my.html');" style="width:20px;height:20px;" src="image/truck/back.png"></img>
@@ -47,7 +55,7 @@
 	 
 	 </ul>
 	
-	</section>
+	</section> -->
 	
 	
 
@@ -73,30 +81,26 @@ $(document).ready(function() {
 				var html='';
 				 for(var i=0;i<data.content.length;i++){
 					var dataObj=data.content[i];
-					html+='<li class=" box tz-list">';
-					html+='<dl class="tz-author">';
-					html+='<dt><a><img src="'+dataObj.customerImg+'" alt=""></a></dt>';
-					html+='<dd><a>'+dataObj.customerName+'</a><p>'+dataObj.passDate+'</p></dd>';
-					html+='</dl>';
-					html+='<div class="tz-text">';
-					html+='<a href="detail.html?numberCode='+dataObj.numberCode+'" rel="nofollow">';
-					html+='<p>'+dataObj.title+'</p>';
-					html+='</a>';
-					html+='</div>';
-					html+='<div class="tz-img">';
-					html+='<div class="img-list">';
+					html+='<a href="detail.html?numberCode='+dataObj.numberCode+'" class="weui-media-box weui-media-box_appmsg">';
+					html+='<div class="weui-media-box__hd">';
 					var images=JSON.parse(dataObj.images);
-					for(var j=0;j<images.length;j++){
-						html+='<a href="'+images[j]+'" rel="nofollow">';
-						html+='<img style="width:113px;height:113px" src="'+images[j]+'" data-original="" class="img J_lazyImgs" style="display: block;">';
-                        html+='</a>';
+					html+='<img class="weui-media-box__thumb" src="'+images[0]+'?imageMogr2/thumbnail/640x640/format/webp/blur/1x0/quality/75|imageslim" alt="">';
+					html+='</div>';
+					html+='<div class="weui-media-box__bd">';
+					var truckType="";
+					if(dataObj.type="QYC"){
+						truckType="牵引车";
+					}else if(dataObj.type="ZHC"){
+						truckType="载货车";
+					}else if(dataObj.type="ZXC"){
+						truckType="自卸车";
+					}else{
+						truckType="其他车型";
 					}
+					html+=' <h4 class="weui-media-box__title">'+truckType+' '+dataObj.truckLogo+'</h4>';
+					html+='<p class="weui-media-box__desc">'+dataObj.title+'</p>';
 					html+='</div>';
-					html+='</div>';
-					html+='<div class="tz-replay">';
-					html+='<span>浏览时间:  '+dataObj.viewDate.substring(0,19)+'</span>';
-					html+='</div>';
-					html+='</li>';
+					html+='</a>';
 				} 
 				$("#content").html(html);
 				
@@ -105,7 +109,6 @@ $(document).ready(function() {
 			}
 		}
 	});
-	
 	
 	
 	

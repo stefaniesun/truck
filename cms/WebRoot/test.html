@@ -1,135 +1,44 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" href="http://m.sui.taobao.org/dist/css/sm.css">
-<script type='text/javascript' src='http://m.sui.taobao.org/assets/js/zepto.js'></script>
-<script type='text/javascript' src='http://m.sui.taobao.org/dist/js/sm.js'></script>
-<script type='text/javascript' src='http://m.sui.taobao.org/dist/js/sm-extend.js'></script>
-</head>
-<body>
-
- <div class="page-group">
-    <div id="page-infinite-scroll-bottom" class="page">
-  <header class="bar bar-nav">
-    <a class="button button-link button-nav pull-left back" href="/demos/infinite-scroll">
-      <span class="icon icon-left"></span>
-      返回
-    </a>
-    <h1 class="title">底部无限滚动</h1>
-  </header>
-  <div class="content infinite-scroll" data-distance="100">
-    <div class="list-block">
-      <ul class="list-container">
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-         <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-         <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-        <li class="item-content"><div class="item-inner"><div class="item-title">条目</div></div></li>
-      </ul>
-    </div>
-    <!-- 加载提示符 -->
-    <div class="infinite-scroll-preloader">
-      <div class="preloader">
-      </div>
-    </div>
-  </div>
-</div>
-
-    </div>
-
-
-
-<script>
-$(function () {
-	$(document).on("pageInit", "#page-infinite-scroll-bottom", function(e, id, page) {
-	    var loading = false;
-	    // 姣忔鍔犺浇娣诲姞澶氬皯鏉＄洰
-	    var itemsPerLoad = 20;
-	    // 鏈€澶氬彲鍔犺浇鐨勬潯鐩�
-	    var maxItems = 100;
-	    var lastIndex = $('.list-container li').length;
-	    function addItems(number, lastIndex) {
-	      // 鐢熸垚鏂版潯鐩殑HTML
-	      var html = '';
-	      for (var i = lastIndex + 1; i <= lastIndex + number; i++) {
-	        html += '<li class="item-content"><div class="item-inner"><div class="item-title">鏂版潯鐩�</div></div></li>';
-	      }
-	      // 娣诲姞鏂版潯鐩�
-	      $('.infinite-scroll .list-container').append(html);
-	    }
-	    $(page).on('infinite', function() {
-	      // 濡傛灉姝ｅ湪鍔犺浇锛屽垯閫€鍑�
-	      if (loading) return;
-	      // 璁剧疆flag
-	      loading = true;
-	      // 妯℃嫙1s鐨勫姞杞借繃绋�
-	      setTimeout(function() {
-	        // 閲嶇疆鍔犺浇flag
-	        loading = false;
-	        if (lastIndex >= maxItems) {
-	          // 鍔犺浇瀹屾瘯锛屽垯娉ㄩ攢鏃犻檺鍔犺浇浜嬩欢锛屼互闃蹭笉蹇呰鐨勫姞杞�
-	          $.detachInfiniteScroll($('.infinite-scroll'));
-	          // 鍒犻櫎鍔犺浇鎻愮ず绗�
-	          $('.infinite-scroll-preloader').remove();
-	          return;
-	        }
-	        addItems(itemsPerLoad,lastIndex);
-	        // 鏇存柊鏈€鍚庡姞杞界殑搴忓彿
-	        lastIndex = $('.list-container li').length;
-	        $.refreshScroller();
-	      }, 1000);
-	    });
-	  });
-	
-	
-	 $.init();
-});
-
-
-
-
-</script>
-
-
-
-
-</body>
-
-
-
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Bootstrap 上传文件组件</title>
+        <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+        <link href="http://cdn.bootcss.com/bootstrap-fileinput/4.3.8/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+        <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+        <script src="http://cdn.bootcss.com/bootstrap-fileinput/4.3.8/js/fileinput.min.js" type="text/javascript"></script>
+        <script href="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js" type="text/javascript"></script>
+        <style> 
+            .col-center-block { 
+                float: none; 
+                display: block; 
+                margin-left: auto; 
+                margin-right: auto; 
+            } 
+        </style>
+    </head>
+    <body>
+        <div class="container"> 
+            <div class="row myCenter">
+                <div class="col-xs-6 col-md-6 col-center-block">
+                    <div class="container kv-main">
+                        <h4>Bootstrap 多文件上传实例</h4>
+                        <form enctype="multipart/form-data">
+                            <label>多文件预览上传实例</label>
+                            <input id="file-select" name="file-select[]" type="file" multiple>
+                        </form>
+                        <hr>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+    $('#file-select').fileinput({
+        language: 'fr',
+        uploadUrl: '#',
+        allowedFileExtensions : ['jpg', 'png','gif'],
+        'elErrorContainer': '#errorBlock'
+    });
+    </script>
 </html>

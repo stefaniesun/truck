@@ -25,5 +25,7 @@ public interface TruckSvc {
 
 	public Map<String, Object> openOper(String truck,int isOpen);
 
+	public Map<String, Object> editTruck(String numberCode, String dataJson);
+
 
 }

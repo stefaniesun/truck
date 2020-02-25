@@ -45,9 +45,27 @@ function initTable(){
 					return xyzGetDiv(value,0,150);
 	        	  }
 			},
-			{field:'year',title:'车龄',width:80,
+			{field:'year',title:'车龄',width:60,
 	        	  formatter:function(value ,row ,index){
 					return xyzGetDiv(value,0,150);
+	        	  }
+			},
+			{field:'truckLogo',title:'品牌',width:60,
+	        	  formatter:function(value ,row ,index){
+					return xyzGetDiv(value,0,150);
+	        	  }
+			},
+			{field:'truckType',title:'车型',width:60,
+	        	  formatter:function(value ,row ,index){
+					if(value=="QYC"){
+						return "牵引车";
+					}else if(value=="ZHC"){
+						return "载货车";
+					}else if(value=="ZXC"){
+						return "自卸车";
+					}else if(value=="OTHER"){
+						return "其他";
+					}
 	        	  }
 			},
 			{field:'cardDate',title:'上牌时间',width:100,
@@ -92,20 +110,26 @@ function initTable(){
 					var buttonTemp1 = "";
 					if(row.status==0){
 						buttonTemp1 =  xyzGetA("审核", "check", row.numberCode, "审核", "blue");
+					}else if(row.status==1){
+						if(row.isOpen==0){
+							buttonTemp1 =  xyzGetA("上架", "openOn", row.numberCode, "上架", "blue");
+						}else{
+							buttonTemp1 =  xyzGetA("下架", "openOff", row.numberCode, "下架", "blue");
+						}
 					}
 					return buttonTemp1;
 				}
 			},
 			{field:'enabled',title:'可见',align:'center',
 				formatter: function(value,row,index){
-					if (row.status>0){
+					if (row.status>0&&row.isOpen==1){
 						return '<span style="font-size:18px;font-weight:bold;">√';
 					} else {
 						return '<span style="font-size:18px;font-weight:bold;">×</span>';
 					}
 				},
 				styler : function(value,row,index){
-					if(row.status>0){
+					if(row.status>0&&row.isOpen==1){
 						return "background-color:green";
 					}else {
 						return "background-color:red";
@@ -203,6 +227,54 @@ function check(numberCode){
 		type : "POST",
 		data : {
 			numberCode : numberCode
+		},
+		async : false,
+		dataType : "json",
+		success : function(data) {
+			if(data.status==1){
+				$("#truckManagerTable").datagrid("reload");
+				top.$.messager.alert("提示","操作成功！","info");
+			}else{
+				top.$.messager.alert("警告",data.msg,"warning");
+			}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			top.window.AjaxError(XMLHttpRequest, textStatus, errorThrown);
+		}
+	});
+}
+
+function openOn(numberCode){
+	$.ajax({
+		url : "../TruckWS/openOper.do",
+		type : "POST",
+		data : {
+			truck : numberCode,
+			isOpen:1
+		},
+		async : false,
+		dataType : "json",
+		success : function(data) {
+			if(data.status==1){
+				$("#truckManagerTable").datagrid("reload");
+				top.$.messager.alert("提示","操作成功！","info");
+			}else{
+				top.$.messager.alert("警告",data.msg,"warning");
+			}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			top.window.AjaxError(XMLHttpRequest, textStatus, errorThrown);
+		}
+	});
+}
+
+function openOff(numberCode){
+	$.ajax({
+		url : "../TruckWS/openOper.do",
+		type : "POST",
+		data : {
+			truck : numberCode,
+			isOpen:0
 		},
 		async : false,
 		dataType : "json",

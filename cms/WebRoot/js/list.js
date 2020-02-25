@@ -1,4 +1,5 @@
 "use strict";
+var query="";
 function _toConsumableArray(t) {
     if (Array.isArray(t)) {
         for (var a = 0, e = Array(t.length); a < t.length; a++)
@@ -55,17 +56,115 @@ function listClick() {
           , e = a.attr("data-clickType")
           , i = a.attr("data-value");
         
+        var label="";
         
         console.log("i=="+i);
         
+        var type="";
+        if(i=="sortNew"||i=="sortMinPrice"||i=="sortMaxPrice"){
+        	type="sort";
+        }else if(i=="QYC"||i=="ZHC"||i=="ZXC"||i=="OTHER"){
+        	type="cartype";
+        }else if(i.indexOf("_")>0){
+        	type="price";
+        }else{
+        	type="logo";
+        }
         
+        if(i=="sortNew"){
+        	label="最新上架";
+        }else  if(i=="sortMinPrice"){
+        	label="价格最低";
+        }else  if(i=="sortMaxPrice"){
+        	label="价格最高";
+        }
+        
+        if(i=="解放"||i=="东风"||i=="重汽"||i=="上汽红岩"||i=="陕汽"||i=="大运"||i=="福田"){
+        	label=i;
+        }
+        
+        if(i=="QYC"){
+        	label="牵引车";
+        }else  if(i=="ZHC"){
+        	label="载货车";
+        }else  if(i=="ZXC"){
+        	label="自卸车";
+        }else  if(i=="OTHER"){
+        	label="其他";
+        }
+        
+        if(i=="0_5"){
+        	label="5W以下";
+        }else  if(i=="5_10"){
+        	label="5W-10W";
+        }else  if(i=="10_15"){
+        	label="10W-15W";
+        }else  if(i=="15_20"){
+        	label="15W-20W";
+        }else  if(i=="20_500"){
+        	label="20W以上";
+        }
+        
+        var queryHtml='';
+		 if($(".c-handle-tips-con").length>0){
+			if(type=="sort"){
+				if($("#sort").length>0){
+					$("#sort").html(label);
+					$("#sort").attr("value",i);
+				}else{
+					$(".icon-handle-tips:last").after("<a id='sort' class='icon-handle-tips' value='"+i+"'>"+label+"</a>");
+				}
+			}else if(type=="cartype"){
+				if($("#cartype").length>0){
+					$("#cartype").html(label);
+					$("#cartype").attr("value",i);
+				}else{
+					$(".icon-handle-tips:last").after("<a id='cartype' class='icon-handle-tips' value='"+i+"'>"+label+"</a>");
+				}
+			}else if(type=="price"){
+				if($("#price").length>0){
+					$("#price").html(label);
+					$("#price").attr("value",i);
+				}else{
+					$(".icon-handle-tips:last").after("<a id='price' class='icon-handle-tips' value='"+i+"'>"+label+"</a>");
+				}
+			}else if(type=="logo"){
+				if($("#logo").length>0){
+					$("#logo").html(label);
+					$("#logo").attr("value",i);
+				}else{
+					$(".icon-handle-tips:last").after("<a id='price' class='icon-handle-tips' value='"+i+"'>"+label+"</a>");
+				}
+			}
+		 }else{
+			 queryHtml+='<div class="c-handle-tips-con">';
+			 queryHtml+='<div class="c-flex c-box-flex scroll">';
+			 queryHtml+='<div style="width: 1000%;">';
+			 queryHtml+='<a class="icon-handle-tips" id="'+type+'" value="'+i+'">'+label+'</a>';
+			 queryHtml+='</div>';
+			 queryHtml+='<a href="/query.html" class="init-btn br-l" style="float:right">重置</a></div></div>';
+			 $(".c-list-nav-con").after(queryHtml);
+		 }
+		
+		 
+		 $(".c-fixed").removeClass("active");
+		 $(".c-right-handle").removeClass("active");
+        
+        
+		 query="";
+		 $(".icon-handle-tips").each(function(){
+			 query=query+$(this).attr("value")+"-";
+		 });
+		 
+		 page=1;
+		 
         $.ajax({
 			url : "/WebWS/getSearchData.xyz",
 			type : "POST",
 			data : {
 				page : 1,
 				rows:pageSize,
-				query:i
+				query:query
 			},
 			async : false,
 			dataType : "json",
@@ -73,6 +172,9 @@ function listClick() {
 				
 				if (data.status == 1) {
 					countPage=parseInt((data.content.total-1)/pageSize)+1;
+					
+					console.log("query  countPage=="+countPage);
+					
 					var truckList=data.content.rows;
 					var html='';
 					 for(var i=0;i<truckList.length;i++){
@@ -93,7 +195,7 @@ function listClick() {
 						}else if(dataObj.truckType=="ZXC"){
 							type="自卸车";
 						}
-						html+='<div class="text">'+type+' 上汽红岩 450马力</div>';
+						html+='<div class="text">'+type+' '+dataObj.truckLogo+' </div>';
 						html+='</div>';
 						html+='<div class="info">'+dataObj.cardDate.substring(0,7)+'月/'+dataObj.mile+'万公里/'+dataObj.year+'年</div>';
 						html+='<div class="c-align-center">';
@@ -102,30 +204,95 @@ function listClick() {
 						html+='</div>';
 						html+='</a>	';
 					 }
+					 $('html,body').animate({scrollTop: '0px'}, 200);
 					 $(".c-buy-car-list").html(html);
 					 
-					 console.log("111111111");
 					 
-					 var queryHtml='';
-					 if($(".c-list-nav-con")){
-						 console.log("2222222");
-					 }else{
-						 console.log("3333333333");
-						 queryHtml+='<div class="c-handle-tips-con">';
-						 queryHtml+='<div style="width: 1000%;">';
-						 queryHtml+='<a class="icon-handle-tips">最新上架</a>';
-						 queryHtml+='</div>';
-						 queryHtml+='<a href="/" class="init-btn br-l">重置</a></div>';
-					 }
-					 $(".c-list-nav-con").after(queryHtml);
-					 
-					 $(".c-fixed").removeClass("active");
-					 $(".c-right-handle").removeClass("active");
 				} else {
 					alert(data.msg);
 				}
+				
+				
 			}
 		});
+        
+       
+        
+        
+        $(".icon-handle-tips").click(function(){
+        	$(this).remove();
+        	if($(".icon-handle-tips").length==0){
+        		window.location.replace("query.html");
+        	}
+        	
+        	
+        	
+        	var query="";
+   		 $(".icon-handle-tips").each(function(){
+   			 query=query+$(this).attr("value")+"-";
+   		 });
+   		 
+           $.ajax({
+   			url : "/WebWS/getSearchData.xyz",
+   			type : "POST",
+   			data : {
+   				page : 1,
+   				rows:pageSize,
+   				query:query
+   			},
+   			async : false,
+   			dataType : "json",
+   			success : function(data) {
+   				
+   				if (data.status == 1) {
+   					countPage=parseInt((data.content.total-1)/pageSize)+1;
+   					
+   					
+   					console.log("lyddd==="+countPage);
+   					
+   					var truckList=data.content.rows;
+   					var html='';
+   					 for(var i=0;i<truckList.length;i++){
+   						var dataObj=truckList[i];
+   						var images=JSON.parse(dataObj.images);
+   						
+   						html+='<a class="c-list-cell c-flex c-truck-list" href="detail.html?numberCode='+dataObj.numberCode+'">';
+   						html+='<div class="photo">';
+   						html+='<img class="truck-photo-load" src="'+images[0]+'" data-src="'+images[0]+'">';
+   						html+='</div>';
+   						html+='<div class="c-box-flex content">';
+   						html+=' <div class="title">';
+   						var type="其他";
+   						if(dataObj.truckType=="QYC"){
+   							type="牵引车";
+   						}else if(dataObj.truckType=="ZHC"){
+   							type="载货车";
+   						}else if(dataObj.truckType=="ZXC"){
+   							type="自卸车";
+   						}
+   						html+='<div class="text">'+type+' '+dataObj.truckLogo+' </div>';
+   						html+='</div>';
+   						html+='<div class="info">'+dataObj.cardDate.substring(0,7)+'月/'+dataObj.mile+'万公里/'+dataObj.year+'年</div>';
+   						html+='<div class="c-align-center">';
+   						html+='<div class="price">'+dataObj.price+'万</div>';
+   						html+='</div>';
+   						html+='</div>';
+   						html+='</a>	';
+   					 }
+   					 $(".c-buy-car-list").html(html);
+   					 
+   					 
+   				} else {
+   					alert(data.msg);
+   				}
+   				
+   				
+   			}
+   		});
+        	
+        	
+        	
+        });
         
         return;
         
@@ -227,6 +394,50 @@ var selectData = {
         }, {
             name: "其他",
             value: "OTHER"
+        }]
+    },
+    logo: {
+        title: "选择品牌",
+        data: [{
+            name: "解放",
+            value: "解放"
+        }, {
+            name: "东风",
+            value: "东风"
+        }, {
+            name: "重汽",
+            value: "重汽"
+        }, {
+            name: "上汽红岩",
+            value: "上汽红岩"
+        }, {
+            name: "陕汽",
+            value: "陕汽"
+        }, {
+            name: "大运",
+            value: "大运"
+        }, {
+            name: "福田",
+            value: "福田"
+        }]
+    },
+    price: {
+        title: "选择价格",
+        data: [{
+            name: "5W以下",
+            value: "0_5"
+        }, {
+            name: "5W-10W",
+            value: "5_10"
+        }, {
+            name: "10W-15W",
+            value: "10_15"
+        }, {
+            name: "15W-20W",
+            value: "15_20"
+        }, {
+            name: "20W以上",
+            value: "20_500"
         }]
     },
     brand: {
@@ -397,60 +608,73 @@ var listCityId = $sq.getCookie("tao_privite_prov_no")
     },
     loadmore: function() {
         var t = this;
+        console.log("page==="+page);
+        console.log("countPage==="+countPage);
+        console.log("query==="+query);
+        
+        if(page==1){
+        	page++;
+        }
+        
+        if(page==(countPage+1)){
+        	 $("#loading>i").css("display","none");
+             $("#loading>span").html("到底啦~").css("color","#BDBDBD");
+        	return;
+        }
         return t.moreCityisOk ? (t.moreCity(),
         !1) : !t.ajaxIng && (t.ajaxIng = !0,
         void $sq.ajax({
-            url: "/WebWS/getSearchData?key=" + window.keys + "&city=" + listCityId,
+            url: "/WebWS/getSearchData.xyz",
             type: "GET",
             data: {
-                page: t.page
+            	page : page,
+   				rows:pageSize,
+   				query:query
             },
-            success: function(a) {
-                var e = ""
-                  , i = t.loading;
-                if (0 == a.status) {
-                    if (a.data.length < t.max)
-                        t.moreCity();
-                    else if (t.page >= 2 && !t.popular) {
-                        t.popular = !0;
-                        var n = ""
-                          , l = ""
-                          , s = "";
-                        for (var o in a.popular) {
-                            var r = a.popular[o];
-                            if (!(r instanceof Array)) {
-                                switch (o) {
-                                case "cat":
-                                    l = "车型",
-                                    s = "c";
-                                    break;
-                                case "brand":
-                                    l = "品牌",
-                                    s = "b";
-                                    break;
-                                case "series":
-                                    l = "车系",
-                                    s = "s"
-                                }
-                                for (var c in r) {
-                                    var d = r[c];
-                                    n += tipBox("" + s + c, d)
-                                }
-                            }
-                        }
-                        n && (e += '<div class="c-handle-tips-con c-more-city-handle-con" style="display: block; background-color: #f5f5f5;">\n\t\t\t\t\t\t\t\t\t\t\t<div style="color: #666; margin-bottom: .15rem; margin-top: .12rem;">推荐热门' + l + '</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class="c-flex c-box-flex" style="overflow: hidden; overflow-x: auto; display: block;">\n\t\t\t\t\t\t\t\t\t\t\t\t<div style="width: 10000%;">' + n + "</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>")
-                    }
-                    $.each(a.data, function(a, i) {
-                        e += t.template(i)
-                    }),
-                    i.before(e).find(".c-d-loading").addClass(a.data.length < t.max ? "no-more" : "active"),
-                    t.page++,
-                    i.find(".c-d-loading").hasClass("no-more") && setTimeout(function() {
-                        t.ajaxIng = !0
-                    }, 100)
-                } else
-                    $sq.handle(a.data);
-                $sq.photoLoad()
+            success: function(data) {
+            	
+            	
+            	if (data.status == 1) {
+					countPage=parseInt((data.content.total-1)/pageSize)+1;
+					var truckList=data.content.rows;
+					var html='';
+					 for(var i=0;i<truckList.length;i++){
+						var dataObj=truckList[i];
+						var images=JSON.parse(dataObj.images);
+						
+						html+='<a class="c-list-cell c-flex c-truck-list" href="detail.html?numberCode='+dataObj.numberCode+'">';
+						html+='<div class="photo">';
+						html+='<img class="truck-photo-load" src="'+images[0]+'" data-src="'+images[0]+'">';
+						html+='</div>';
+						html+='<div class="c-box-flex content">';
+						html+=' <div class="title">';
+						var type="其他";
+						if(dataObj.truckType=="QYC"){
+							type="牵引车";
+						}else if(dataObj.truckType=="ZHC"){
+							type="载货车";
+						}else if(dataObj.truckType=="ZXC"){
+							type="自卸车";
+						}
+						html+='<div class="text">'+type+' '+dataObj.truckLogo+' </div>';
+						html+='</div>';
+						html+='<div class="info">'+dataObj.cardDate.substring(0,7)+'月/'+dataObj.mile+'万公里/'+dataObj.year+'年</div>';
+						html+='<div class="c-align-center">';
+						html+='<div class="price">'+dataObj.price+'万</div>';
+						html+='</div>';
+						html+='</div>';
+						html+='</a>	';
+					 }
+					 
+					 $(".c-truck-list:last").after(html);
+					 page++;
+					 
+					 
+				} else {
+					alert(data.msg);
+				}
+            	
+            	
             },
             always: function() {
                 t.ajaxIng = !1
@@ -515,7 +739,7 @@ var listCityId = $sq.getCookie("tao_privite_prov_no")
         })
     },
     moreCity: function(t) {
-        var a = this;
+       /* var a = this;
         a.ajaxIng = !1,
         $(".c-d-loading").removeClass("no-more"),
         $sq.ajax({
@@ -568,7 +792,7 @@ var listCityId = $sq.getCookie("tao_privite_prov_no")
             always: function() {
                 a.ajaxIng = !1
             }
-        })
+        })*/
     }
 };
 $sq.timeout(list);

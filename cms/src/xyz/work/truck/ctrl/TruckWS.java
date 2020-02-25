@@ -22,6 +22,12 @@ public class TruckWS {
         return truckSvc.addTruck(dataJson);
     }
 	
+	@RequestMapping(value = "editTruck")
+    @ResponseBody
+    public Map<String, Object> editTruck(String numberCode,String dataJson){
+        return truckSvc.editTruck(numberCode,dataJson);
+    }
+	
 	@RequestMapping(value = "queryMyTruckList")
     @ResponseBody
     public Map<String, Object> queryMyTruckList(){

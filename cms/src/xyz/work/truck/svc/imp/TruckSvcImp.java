@@ -51,6 +51,7 @@ public class TruckSvcImp implements TruckSvc {
 		 String phone=map.get("phone")==null?"":map.get("phone").toString();
 		 String type=map.get("type")==null?"":map.get("type").toString();
 		 String truckType=map.get("truckType")==null?"":map.get("truckType").toString();
+		 String truckLogo=map.get("truckLogo")==null?"":map.get("truckLogo").toString();
 		 String address=map.get("address")==null?"":map.get("address").toString();
 		 String remark=map.get("remark")==null?"":map.get("remark").toString();
 		 List<String> images= new ArrayList<String>();
@@ -73,6 +74,9 @@ public class TruckSvcImp implements TruckSvc {
 		 }
 		 if(!StringTool.isNotNull(price)) {
 			 return ReturnUtil.returnMap(0, "车辆估价为空");
+		 }
+		 if(!StringTool.isNotNull(truckLogo)) {
+			 return ReturnUtil.returnMap(0, "车型为空");
 		 }
 		 if(images.size()==0) {
 			 return ReturnUtil.returnMap(0, "车辆图片为空");
@@ -108,6 +112,7 @@ public class TruckSvcImp implements TruckSvc {
 		 truck.setCustomerImg(customerObj.getImg());
 		 truck.setCustomerName(customerObj.getNameCn());
 		 truck.setStatus(Truck.STATUS_SUBMIT);
+		 truck.setTruckLogo(truckLogo);
 		 
 		 commonDao.save(truck);
 		
@@ -272,6 +277,74 @@ public class TruckSvcImp implements TruckSvc {
 		 truckObj.setIsOpen(isOpen);
 		 
 		 commonDao.update(truckObj);
+		
+		 return ReturnUtil.returnMap(1, null);
+	}
+
+	@Override
+	public Map<String, Object> editTruck(String numberCode, String dataJson) {
+		
+		 if(StringTool.isEmpty(dataJson)||StringTool.isEmpty(numberCode)){
+	            return ReturnUtil.returnMap(0, "参数为空");
+		 }
+		 
+		 Truck truck=(Truck) commonDao.getObjectByUniqueCode("Truck", "numberCode", numberCode);
+		 if(truck==null) {
+			  return ReturnUtil.returnMap(0, "对象为空");
+		 }
+		 
+		 Map<String, Object> map=JSON.toObject(dataJson, Map.class);
+		 
+		 String title=map.get("title")==null?"":map.get("title").toString();
+		 String price=map.get("price")==null?"":map.get("price").toString();
+		 String isGuohu=map.get("isGuohu")==null?"":map.get("isGuohu").toString();
+		 String cardDate=map.get("cardDate")==null?"":map.get("cardDate").toString();
+		 String checkDate=map.get("checkDate")==null?"":map.get("checkDate").toString();
+		 String insuranceDate=map.get("insuranceDate")==null?"":map.get("insuranceDate").toString();
+		 String mile=map.get("mile")==null?"":map.get("mile").toString();
+		 String year=map.get("year")==null?"":map.get("year").toString();
+		 String phone=map.get("phone")==null?"":map.get("phone").toString();
+		 String type=map.get("type")==null?"":map.get("type").toString();
+		 String truckType=map.get("truckType")==null?"":map.get("truckType").toString();
+		 String truckLogo=map.get("truckLogo")==null?"":map.get("truckLogo").toString();
+		 String address=map.get("address")==null?"":map.get("address").toString();
+		 String remark=map.get("remark")==null?"":map.get("remark").toString();
+		 
+		 
+		 if(!StringTool.isNotNull(title)) {
+			 return ReturnUtil.returnMap(0, "车辆名称为空");
+		 }
+		 if(!StringTool.isNotNull(price)) {
+			 return ReturnUtil.returnMap(0, "车辆估价为空");
+		 }
+		 if(!StringTool.isNotNull(truckLogo)) {
+			 return ReturnUtil.returnMap(0, "车型为空");
+		 }
+		 
+		 truck.setTitle(title);
+		 truck.setPrice(price);
+		 if(StringTool.isNotNull(isGuohu)) {
+			 truck.setIsGuohu(Integer.valueOf(isGuohu));
+		 }
+		 if(StringTool.isNotNull(cardDate)) {
+			 truck.setCardDate(DateUtil.shortStringToDate(cardDate));
+		 }
+		 if(StringTool.isNotNull(checkDate)) {
+			 truck.setCheckDate(DateUtil.shortStringToDate(checkDate));
+		 }
+		 if(StringTool.isNotNull(insuranceDate)) {
+			 truck.setInsuranceDate(DateUtil.shortStringToDate(insuranceDate));
+		 }
+		 truck.setMile(mile);
+		 truck.setYear(year);
+		 truck.setPhone(phone);
+		 truck.setType(type);
+		 truck.setAddress(address);
+		 truck.setRemark(remark);
+		 truck.setTruckLogo(truckLogo);
+		 truck.setTruckType(truckType);
+		 
+		 commonDao.update(truck);
 		
 		 return ReturnUtil.returnMap(1, null);
 	}

@@ -83,7 +83,10 @@ public class Truck implements Comparable<Truck>{
 	    private String type;//0个人 1商家
 	    
 	    @Column(name="truck_type")
-	    private String truckType;//
+	    private String truckType;
+	    
+	    @Column(name="truck_logo")
+	    private String truckLogo;
 	    
 	    @Column(name="address")
 	    private String address;//联系地址
@@ -306,6 +309,14 @@ public class Truck implements Comparable<Truck>{
 
 		public void setTruckType(String truckType) {
 			this.truckType = truckType;
+		}
+
+		public String getTruckLogo() {
+			return truckLogo;
+		}
+
+		public void setTruckLogo(String truckLogo) {
+			this.truckLogo = truckLogo;
 		}
 	    
 }

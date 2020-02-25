@@ -2,15 +2,35 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title></title>
-<script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/util.js"></script>
-<script type="text/javascript" src="js/jquery.cookie.js"></script>
+<title>雷锋货车网</title>
+<script type="text/javascript" src="https://eshc88.com/js/jquery.min.js"></script>
+<script type="text/javascript" src="https://eshc88.com/js/util.js"></script>
+<script type="text/javascript" src="https://eshc88.com/js/jquery.cookie.js"></script>
 </head>
 <body>
 
 
 <script>
+
+function getUrlParam(key) {
+
+	// 获取参数
+
+	var url = window.location.search;
+
+	// 正则筛选地址栏
+
+	var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+
+	// 匹配目标参数
+
+	var result = url.substr(1).match(reg);
+
+	//返回参数值
+
+	return result ? decodeURIComponent(result[2]) : null;
+
+	}
 
 var code =getUrlParam("code");
 var nickName =getUrlParam("nickName");
@@ -19,8 +39,12 @@ var city =getUrlParam("city");
 var gender =getUrlParam("gender");
 var province =getUrlParam("province");
 
-if(!xyzIsNull(code)){
-	 $.ajax({
+localStorage.removeItem("customer");
+localStorage.setItem("xcx",true);
+
+ if(!xyzIsNull(img)){
+	
+	  $.ajax({
 			url : "/WebWS/xcxWechatOper.xyz",
 			type : "POST",
 			data : {
@@ -39,12 +63,14 @@ if(!xyzIsNull(code)){
 					var securityLogin=data.content;
 					localStorage.setItem("customer", JSON.stringify(data.content));
 					addCustomerLoginCookie(securityLogin);
-					window.location.replace("index.html");
+					window.location.replace("https://eshc88.com/index.html");
 				} else {
 					alert(data.msg);
 				}
 			}
-		});
+		}); 
+}else{
+	window.location.replace("https://eshc88.com/index.html");
 }
 
 

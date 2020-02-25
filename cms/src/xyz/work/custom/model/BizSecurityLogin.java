@@ -32,6 +32,9 @@ public class BizSecurityLogin{
     @Column(name="img")
     private String img;
     
+    @Column(name="access_token")
+    private String accessToken;
+    
     @Column(name="flag_register")
     private int flagRegister;
     
@@ -114,6 +117,14 @@ public class BizSecurityLogin{
 
 	public void setFlagRegister(int flagRegister) {
 		this.flagRegister = flagRegister;
+	}
+
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
 	}
     
 }

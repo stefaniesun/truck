@@ -7,19 +7,21 @@
 		<meta name="keywords" content="" />
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-		<link rel="stylesheet" type="text/css" href="css/style-base.css">
-     <link rel="stylesheet" href="css/common.css"/>
+		<link rel="stylesheet" type="text/css" href="https://eshc88.com/css/style-base.css">
+     <link rel="stylesheet" href="https://eshc88.com/css/common.css"/>
      <link rel="stylesheet" href="http://wx.yueyat.com/addons/weliam_merchant/app/resource/components/swiper/swiper.min.css">
-	<link rel="stylesheet" href="css/weui.css"/>
-	<link rel="stylesheet" href="css/example.css"/>
-	<script type="text/javascript" src="js/library/jquery-1.7.2.js"></script>
-	<script type='text/javascript' src='http://jqweui.com/dist/js/jquery-weui.js'></script>
+	<link rel="stylesheet" href="https://eshc88.com/css/weui.css"/>
+	<link rel="stylesheet" href="https://eshc88.com/css/example.css"/>
+	<script type="text/javascript" src="https://eshc88.com/js/library/jquery-1.7.2.js"></script>
+	<script src="https://cdn.bootcss.com/jquery-weui/1.2.1/js/jquery-weui.min.js"></script>
+			<script src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
+	
 		
-		<script type="text/javascript" src="js/jquery.cookie.js"></script>
-		<script type="text/javascript" src="js/jquery.lazyload.js"></script>
-			<script type="text/javascript" src="js/util.js"></script>
-			  <script src="js/weui.min.js"></script>
-			  <script type="text/javascript" src="js/swiper.min.js"></script>
+		<script type="text/javascript" src="https://eshc88.com/js/jquery.cookie.js"></script>
+		<script type="text/javascript" src="https://eshc88.com/js/jquery.lazyload.js"></script>
+			<script type="text/javascript" src="https://eshc88.com/js/util.js"></script>
+			  <script src="https://eshc88.com/js/weui.min.js"></script>
+			  <script type="text/javascript" src="https://eshc88.com/js/swiper.min.js"></script>
 		<link rel="stylesheet" href="https://at.alicdn.com/t/font_496733_w0e5vjuelgsw0zfr.css">
 		<meta name = "format-detection" content = "telephone=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -96,15 +98,15 @@
 
 
     <div class="c-footer-con br-t">
-        <a href="index.html" class="icon-home active">首页</a>
-    <a id="buy" href="query.html" class="icon-price">买车</a>
-        <a href="publish.html" rel="nofollow" class="icon-truck-btn truck" id="sale">
+        <a href="index.html?t=12312312" class="icon-home active">首页</a>
+    <a id="buy" onclick="javascript:window.location.replace('query.html');" class="icon-price">买车</a>
+        <a href="#"  rel="nofollow" class="icon-truck-btn truck" id="sale">
         <i class="car" style="top:32%;">
             <img src="image/truck/truck.png" alt="icon" />
         </i>卖车
     </a>
-        <a id="message" href="msg.html" rel="nofollow" class="icon-msg login-check">消息</a>
-    <a href="my.html" rel="nofollow" class="icon-bottom-user  login-check">我的</a>
+        <a id="message" onclick="javascript:window.location.replace('msg.html');" rel="nofollow" class="icon-msg login-check">消息</a>
+    <a onclick="javascript:window.location.replace('my.html');" rel="nofollow" class="icon-bottom-user  login-check">我的</a>
 </div> 
 
 
@@ -120,6 +122,9 @@
 	  	var countPage=1;//总页数
 	    var page=1;//当前页
 	    var pageSize=10;//每页显示几条
+	    
+	    var xcxFlag=localStorage.getItem("xcx");
+	    
 	 
 	 $.ajax({
 			url : "/WebWS/getIndexData.xyz",
@@ -176,7 +181,8 @@
 				
 					$(".Tz_box").html(html);
 					$(".Tz-change").click(function(){
-						window.location.replace("detail.html?numberCode="+$(this).data("url"));
+						var url="detail.html?numberCode="+$(this).data("url")
+						window.location.href=url;
 					});
 					
 					$("a.lazy").lazyload({ threshold :180});
@@ -194,6 +200,7 @@
         if(loading) return;
         loading = true;
         if(page<=countPage){//如果当前页小于总页面
+        	page=page+1;
             getbalancelist();
         }else{
             $(document.body).destroyInfinite();//到最后一页时，销毁它
@@ -209,11 +216,82 @@
     	console.log("page===="+page);
     	console.log("countPage===="+countPage);
     	
+    	loading = false;
+    	
     	 if(page==countPage){//如果当前页小于总页面
     		   $(document.body).destroyInfinite();//到最后一页时，销毁它
                $("#loading>i").css("display","none");
                $("#loading>span").html("到底啦~").css("color","#BDBDBD");
          }
+    	 
+    	 
+    	 $.ajax({
+ 			url : "/WebWS/getIndexData.xyz",
+ 			type : "POST",
+ 			async : false,
+ 			data : {
+ 				page : page,
+ 				rows:pageSize,
+ 			},
+ 			dataType : "json",
+ 			success : function(data) {
+ 				if (data.status == 1) {
+ 					console.log(data);
+ 					
+ 					
+ 					countPage=parseInt((data.content.total-1)/pageSize)+1;
+ 					var truckList=data.content.rows;
+ 					var html='';
+ 					 for(var i=0;i<truckList.length;i++){
+ 						var dataObj=truckList[i];
+ 						
+ 						html+='<li class="Tz-change card" data-url="'+dataObj.numberCode+'">';
+ 						html+='<div class="Tz-c locationurl">';
+ 						html+='<div class="Tz-c-t1" >';
+ 						html+='<div class="Tz-c-t1-l">';
+ 						html+='<img src="'+dataObj.customerImg+'"></div>';
+ 						html+='<div class="Tz-c-t1-c">';
+ 						html+='<h1>'+dataObj.customerName+'</h1>';
+ 						html+='<p>'+dataObj.passDate.substring(5,10)+'发布</p>';
+ 						html+='</div>';
+ 						html+='<div class="Tz-c-t1-r">';
+ 						html+='<a><i class="icon iconfont icon-dianhua1"></i>'+dataObj.price+'万</a>';
+ 						html+='</div>';
+ 						html+='</div>';
+ 						html+='<div class="Tz-c-t2">';
+ 						html+='<p>'+dataObj.title+'</p>';
+ 						html+='</div>';
+ 						html+='<div class="Tz-c-t3">';
+ 						html+='<div class="Tz-c-t3-list">';
+ 						var images=JSON.parse(dataObj.images);
+ 						for(var j=0;j<images.length;j++){
+ 							if(j<3){
+ 								html+='<a href="javascript:;"  class="imgloading lazy" data-original="'+images[j]+'?imageMogr2/thumbnail/640x640/format/webp/blur/1x0/quality/75|imageslim"></a>  ';
+ 							}
+ 						}
+ 						html+='</div>';
+ 						html+='</div>';
+ 						html+='<div class="Tz-c-t5" >';
+ 						html+='<span style="display:flex;float:right;padding-right:0.1rem;">'+dataObj.readCount+'阅读</span>';
+ 						html+='</div>';
+ 						html+='</div>';
+ 						html+='</li>';
+ 					 }
+ 				
+ 					$(".Tz_box .Tz-change:last").after(html);
+ 					$(".Tz-change").click(function(){
+ 						var url="detail.html?numberCode="+$(this).data("url")
+ 						window.location.href=url;
+ 					});
+ 					
+ 					$("a.lazy").lazyload({ threshold :180});
+ 					
+ 				} else {
+ 					weui.alert(data.msg);
+ 				}
+ 			}
+ 		});
+    	 
     	
        /*  init.Ajax("GET", "url", {page:page,num:pageSize}, function (res) {
             //这里计算出总页数。。一般是后台给的
@@ -234,6 +312,41 @@
 		$("#sale").attr("href","register.html");
 	}
 	
+	$("#publish").click(function(){
+		if(customerObj.flagRegister==0){
+			window.location.replace("register.html");
+		}else{
+			window.location.replace("myPublish.html");
+		}
+	});
+	
+	$("#sale").click(function(){
+		
+		if(xcxFlag){
+			if(xyzIsNull(customerObj)){
+				 wx.miniProgram.navigateTo({
+	          	      url: '../reg/reg'
+	          		});
+			}else{
+				if(customerObj.flagRegister==0){
+					window.location.replace("register.html");
+				}else{
+					window.location.replace("publish.html");
+				}
+			}
+		}else{
+			if(xyzIsNull(customerObj)){
+				window.location.replace("register.html");
+			}else{
+				if(customerObj.flagRegister==0){
+					window.location.replace("register.html");
+				}else{
+					window.location.replace("publish.html");
+				}
+			}
+		}
+		
+	});
 	
 	
 

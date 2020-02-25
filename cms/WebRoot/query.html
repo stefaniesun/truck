@@ -5,11 +5,13 @@
 		<meta charset="UTF-8">
 		<title>雷锋货车网</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-		<!-- <link rel="stylesheet" type="text/css" href="http://192.168.250.212:8080/css/style-base.css"> -->
-		<link rel="stylesheet" type="text/css" href="css/style-base.css">
-		<script src="js/jquery.min.js"></script>
-		<script type="text/javascript" src="js/truckhome-1.1.js" defer></script>
-		<script type="text/javascript" src="js/zhugeIo.js" defer></script>
+		<link rel="stylesheet" type="text/css" href="https://eshc88.com/css/style-base.css">
+		<link rel="stylesheet" href="https://eshc88.com/css/weui.css"/>
+		<script src="https://eshc88.com/js/jquery.min.js"></script>
+		<script type="text/javascript" src="https://eshc88.com/js/truckhome-1.1.js" defer></script>
+		<script src="https://cdn.bootcss.com/jquery-weui/1.2.1/js/jquery-weui.min.js"></script>
+					<script src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
+		
 						<script>
 			var accessToken = '';
 			var apiUrl = 'https://tao-api.m.360che.com/v1/';
@@ -18,7 +20,6 @@
 		</script>
 		<script src="js/base.js"></script>
 		<link rel="stylesheet" href="https://at.alicdn.com/t/font_496733_w0e5vjuelgsw0zfr.css">
-		<link rel="canonical" media="only screen and (max-width: 640px)" href="https://tao.360che.com/chongqingshi/all/">
 		<meta name = "format-detection" content = "telephone=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta content="yes" name="apple-touch-fullscreen">
@@ -55,24 +56,24 @@ var keys = "all";
 </style>
 <!-- <div class="c-header-con c-list-header"> -->
 <div class="c-index-search-con c-flex-center">
-    <a class="logo" href="/">
+    <a class="logo" href="index.html">
         <h1>
 			<img src="/image/truck/logo.png" alt="雷锋货车网" />
 		</h1>
     </a>
-    <a class="search-con c-box-flex icon-search" href="#search">搜索二手车</a>
- <!--    <a class="city c-flex-center br-r" href="/static/morelist/?key=jump#/cities">
-        <div class="text">重庆</div>
-        <div class="icon-down-copy"></div>
-    </a> -->
+    <a class="search-con c-box-flex icon-search" href="#search" id="search">搜索二手车</a>
+   <a class="city c-flex-center br-r" >
+        <div class="text"></div>
+        <img id="searchButton" src="/image/search.png" style="width:20px;height:20px;"/>
+    </a> 
 </div>
 	<div class="c-sticky">
 		<div class="c-list-nav-con br-b">
 			<div class="icon-list-nav" data-type="order">排序</div>
 			<div class="icon-list-nav" data-type="cat">车型</div>
-		<!-- 	<div class="icon-list-nav" data-type="brand">品牌</div> -->
+			<div class="icon-list-nav" data-type="logo">品牌</div>
 			<!-- <div class="icon-list-nav" data-type="series">车系</div> -->
-			<a class="icon-list-nav to-react-page" href="/static/morelist/?key=all">筛选</a>
+			<div class="icon-list-nav" data-type="price">价格</div>
 		</div>
 		<!-- 这块去掉之后，看下面 ↓ -->
 			</div>
@@ -97,10 +98,16 @@ var keys = "all";
     </div>
 </a>	 -->	
 
-																				<div class="c-list-cell c-d-loading-cell">
+	<!-- <div class="c-list-cell c-d-loading-cell">
 		 <p class="c-d-loading c-flex-center icon-loading" data-text="加载中..."></p>
-	</div>
+	</div> -->
 </div>
+
+ <div class="weui-loadmore" id="loading">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips">正在加载</span>
+   </div>
+
 <style>
 [class*=c-right]{
 	transition: none;
@@ -140,14 +147,14 @@ var keys = "all";
 <div class="c-letters-list">
 	<!-- 字母排序 -->
 </div>
-<a class="go-demand-icon" href="/personal/demand"></a>
 
 
 
-<div class="c-footer-con br-t" style="padding:0px;">
+
+<div class="c-footer-con br-t" >
         <a href="index.html" class="icon-home">首页</a>
     <a id="buy" href="my.html" class="icon-price active">买车</a>
-        <a href="publish.html" rel="nofollow" class="icon-truck-btn truck" id="sale">
+        <a href="#" rel="nofollow" class="icon-truck-btn truck" id="sale">
         <i class="car" style="top:32%;">
             <img src="image/truck/truck.png" alt="icon" />
         </i>卖车
@@ -160,37 +167,10 @@ var keys = "all";
 
 
 
-
-<script>
-    var allowPublish = false;
-    var inApp = $sq.isApp();
-    var logon = false;
-
-    $(document).ready(function() {
-        if (logon) {
-            publishProcess();
-        }
-    });
-    function publishProcess() {
-        $('.icon-truck-btn').on('click', function(e){
-            if (true !== allowPublish){
-                e.preventDefault();
-                $sq.conFirm({
-                    left: 'no',
-                    text: '',
-                    callback: function(){
-                        // 如果是卖家未通过状态 跳转 申请卖家页面 如果是 通过状态跳转 vip申请页
-                                                    location.href = '/personal/intermediary-apply';
-                                            }
-                })
-            }
-        });
-    }
-</script><!-- 城市、搜索、回顶部 -->
 <div class="c-right-search c-direction-column" data-hash="search">
-	<form class="c-search-class icon-search c-align-center" data-role="searchForm" action>
+	<form id="searchForm" class="c-search-class icon-search c-align-center" data-role="searchForm" action>
 		<div class="c-list-cells c-flex-center c-box-flex">
-			<input type="search" name="search" data-role="input" placeholder="搜索二手车" value="">
+			<input type="search" name="search" data-role="input" placeholder="搜索二手车" value="" id="searchInput">
 			<div class="icon-right-close mr20"></div>
 		</div>
 		<div class="orange init" onclick="history.go(-1);">取消</div>
@@ -253,46 +233,14 @@ var keys = "all";
 <!-- 提示框 -->
 <div class="c-toast-con"></div>
 <!-- 回顶部 -->
-<div class="c-go-top icon-go-top">回顶部</div><script type="text/javascript" src="/js/truckhome.app.min.js"></script>
-<script type="text/javascript">
-var initUrl = '/list/';
-var provincePinyin = 'chongqingshi';
-// app下载
-// if (window.sessionStorage.getItem('truckhomeapp') !== 'hide' && !$sq.isApp()) {
-//     if(window.location.pathname !== '/list/'){
-//         $('.c-index-search-con').before($sq.downLoadApp('position: static;'));
-//         $('#thappclose').click(function () {
-//             $('.truckhomeapp-box').hide();
-//             window.sessionStorage.setItem('truckhomeapp', 'hide');
-//         })
-//     }
-// }
-</script>
-<script type="text/javascript" src="/js/cities.js"></script>
- <script src="/js/index.js?v=2018-12-13"></script>
- <script src="/js/list.js"></script> 
+<div class="c-go-top icon-go-top">回顶部</div>
+
+
+ <!-- <script src="/js/index.js?v=2018-12-13"></script> -->
+ <script src="/js/list.js"></script>  
 		</body>
     	</html>
-	<style type="text/css">
-		/*阻止文字选择*/
-		.c-footer-con{
-			-webkit-touch-callout: none; /* iOS Safari */
-			-webkit-user-select: none; /* Chrome/Safari/Opera */
-			-khtml-user-select: none; /* Konqueror */
-		}
-	</style>
-	<script>
-		//GA 统计操作
-		function gacode(ec, ea, el) {
-			ga('send', 'event', ec, ea, el);
-		}
-		//360che统计
-		$(document).ready(function(){
-            Truckhome_pv({
-				cityno: $sq.getCookie('tao_privite_prov_no') || 0
-			});
-		});
-	</script>
+
 <script>
 
 
@@ -301,12 +249,15 @@ var page=1;//当前页
 var pageSize=10;//每页显示几条
 
 $(document).ready(function() {
+	
+	var xcxFlag=localStorage.getItem("xcx");
+	
 	 $.ajax({
 			url : "/WebWS/getSearchData.xyz",
 			type : "POST",
 			data : {
 				page : 1,
-				rows:pageSize,
+				rows:pageSize
 			},
 			async : false,
 			dataType : "json",
@@ -334,7 +285,7 @@ $(document).ready(function() {
 						}else if(dataObj.truckType=="ZXC"){
 							type="自卸车";
 						}
-						html+='<div class="text">'+type+' 上汽红岩 450马力</div>';
+						html+='<div class="text">'+type+' '+dataObj.truckLogo+' </div>';
 						html+='</div>';
 						html+='<div class="info">'+dataObj.cardDate.substring(0,7)+'月/'+dataObj.mile+'万公里/'+dataObj.year+'年</div>';
 						html+='<div class="c-align-center">';
@@ -349,6 +300,111 @@ $(document).ready(function() {
 				}
 			}
 		});
+	 
+	 
+	 $("#publish").click(function(){
+			if(customerObj.flagRegister==0){
+				window.location.replace("register.html");
+			}else{
+				window.location.replace("myPublish.html");
+			}
+		});
+	 
+		
+	 $("#sale").click(function(){
+			
+			if(xcxFlag){
+				if(xyzIsNull(customerObj)){
+					 wx.miniProgram.navigateTo({
+		          	      url: '../reg/reg'
+		          		});
+				}else{
+					if(customerObj.flagRegister==0){
+						window.location.replace("register.html");
+					}else{
+						window.location.replace("publish.html");
+					}
+				}
+			}else{
+				if(xyzIsNull(customerObj)){
+					window.location.replace("register.html");
+				}else{
+					if(customerObj.flagRegister==0){
+						window.location.replace("register.html");
+					}else{
+						window.location.replace("publish.html");
+					}
+				}
+			}
+			
+		});
+	 
+	 
+	 $("#searchForm").submit(function(e){
+		  var value=$("#searchInput").val();
+		  
+		  $.ajax({
+	   			url : "/WebWS/getSearchData.xyz",
+	   			type : "POST",
+	   			data : {
+	   				page : 1,
+	   				rows:pageSize,
+	   				queryStr:value
+	   			},
+	   			async : false,
+	   			dataType : "json",
+	   			success : function(data) {
+	   				
+	   				if (data.status == 1) {
+	   					countPage=parseInt((data.content.total-1)/pageSize)+1;
+	   					var truckList=data.content.rows;
+	   					var html='';
+	   					 for(var i=0;i<truckList.length;i++){
+	   						var dataObj=truckList[i];
+	   						var images=JSON.parse(dataObj.images);
+	   						
+	   						html+='<a class="c-list-cell c-flex c-truck-list" href="detail.html?numberCode='+dataObj.numberCode+'">';
+	   						html+='<div class="photo">';
+	   						html+='<img class="truck-photo-load" src="'+images[0]+'?imageMogr2/thumbnail/640x640/format/webp/blur/1x0/quality/75|imageslim" data-src="'+images[0]+'">';
+	   						html+='</div>';
+	   						html+='<div class="c-box-flex content">';
+	   						html+=' <div class="title">';
+	   						var type="其他";
+	   						if(dataObj.truckType=="QYC"){
+	   							type="牵引车";
+	   						}else if(dataObj.truckType=="ZHC"){
+	   							type="载货车";
+	   						}else if(dataObj.truckType=="ZXC"){
+	   							type="自卸车";
+	   						}
+	   						html+='<div class="text">'+type+' '+dataObj.truckLogo+' </div>';
+	   						html+='</div>';
+	   						html+='<div class="info">'+dataObj.cardDate.substring(0,7)+'月/'+dataObj.mile+'万公里/'+dataObj.year+'年</div>';
+	   						html+='<div class="c-align-center">';
+	   						html+='<div class="price">'+dataObj.price+'万</div>';
+	   						html+='</div>';
+	   						html+='</div>';
+	   						html+='</a>	';
+	   					 }
+	   					 $(".c-buy-car-list").html(html);
+	   					window.history.go(-1);
+	   					 
+	   				} else {
+	   					alert(data.msg);
+	   				}
+	   				
+	   				
+	   			}
+	   		});
+		  
+		  
+		});
+	 
+	 
+
+	 
+	 
+	 
 });
 
 

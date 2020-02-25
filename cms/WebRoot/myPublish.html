@@ -31,7 +31,7 @@
 		width:90px;
 		}
 		</style>
-	<body style="padding-bottom: 57px;">
+	<body>
 	
 	
 	<header class="home_nav flex row item">
@@ -129,6 +129,8 @@ $(document).ready(function() {
 						}else{
 							html+='<div><a date-numberCode="'+dataObj.numberCode+'" id="on" href="javascript:;" class="weui-btn weui-btn_primary">上架</a></div>';
 						}
+						html+='<div style="margin-left:5px;"><a style="background-color:#f37b1d" href="edit.html?numberCode='+dataObj.numberCode+'" class="weui-btn weui-btn_primary">编辑</a></div>';
+						
 						html+='</div>';
 					}
 						
